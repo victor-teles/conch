@@ -73,7 +73,7 @@ bun run --cwd apps/app test              # all tests — REQUIRED before declari
 
 ## Conventions
 
-- **Bun** v1.3.9. **Turborepo** for builds.
+- **Bun** v1.4.4. **Turborepo** for builds.
 - **Formatting** (Oxfmt): double quotes, semicolons, 2-space indent, ES5 trailing commas, sorted imports.
 - **Linting** (Oxlint + Ultracite core/React presets).
 - **TypeScript**: strict, `noUncheckedIndexedAccess`, `verbatimModuleSyntax`. No `any`, no unsafe casts, no `// @ts-expect-error` without a one-line _why_.

@@ -122,7 +122,7 @@ Grab the latest installer from the [GitHub Releases](https://github.com/victor-t
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) v1.3.9+
+- [Bun](https://bun.sh) v1.4.4+
 
 ### Getting started
 
