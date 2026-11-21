@@ -10,6 +10,8 @@ import type { LookupValue, ParamValues } from "@/lib/ipc";
 import type { RootItem } from "./root-items";
 import type { RootAskActions } from "./root-view";
 
+import { isShownAnswer } from "./root-items";
+
 export interface PreviewTarget {
   connectionId: string;
   dialect: DialectType;
@@ -24,6 +26,7 @@ interface UseRootRunOptions {
   openBoard: (boardId: string) => void;
   openAlert: (alert: RootAlert) => void;
   onActivate: (connection: DatabaseConnection) => void;
+  openDraft: () => void;
 }
 
 const targetOf = (connectionId: string, database: string | null = null) => ({
@@ -40,8 +43,9 @@ export const useRootRun = ({
   openBoard,
   openAlert,
   onActivate,
+  openDraft,
 }: UseRootRunOptions) => {
-  const { start, startSql } = ask;
+  const { start, startSql, reopen, lastAnswerId } = ask;
   const runItem = useCallback(
     (item: RootItem | null | undefined) => {
       switch (item?.kind) {
@@ -81,6 +85,10 @@ export const useRootRun = ({
           return;
         }
         case "recent": {
+          if (reopen && isShownAnswer(item, lastAnswerId)) {
+            reopen();
+            return;
+          }
           start(
             item.ask.prompt,
             targetOf(item.ask.connectionId, item.ask.database)
@@ -95,16 +103,23 @@ export const useRootRun = ({
           item.command.run();
           break;
         }
+        case "draft": {
+          openDraft();
+          break;
+        }
         default: {
           break;
         }
       }
     },
     [
+      lastAnswerId,
       onActivate,
       openAlert,
       openBoard,
+      openDraft,
       preview,
+      reopen,
       runWidget,
       start,
       startLookup,

@@ -10,6 +10,7 @@ import type { Widget, WidgetTrend as WidgetTrendData } from "@/lib/ipc";
 import { ConnectionGlyph } from "@/components/launcher/connections/connection-glyph";
 import { KeyCombo } from "@/components/launcher/key-combo";
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { RowTrailing } from "@/components/launcher/row-trailing";
 import { FreshPulse } from "@/components/motion/fresh-pulse";
 import { WatchGlyph } from "@/components/watches/watch-glyph";
 import { WidgetTrend } from "@/components/watches/widget-trend";
@@ -109,12 +110,14 @@ export function WidgetRow({
         trend={watching.trend}
         widgetId={widget.id}
       />
-      {selected && hasInputs ? (
-        <span className="relative flex shrink-0 items-center gap-1.5 type-meta text-panel-muted">
-          Inputs
-          <KeyCombo keys={["⇥"]} />
-        </span>
-      ) : null}
+      <RowTrailing kind="Widget">
+        {selected && hasInputs ? (
+          <span className="flex items-center gap-1.5">
+            Inputs
+            <KeyCombo keys={["⇥"]} />
+          </span>
+        ) : null}
+      </RowTrailing>
     </LauncherRow>
   );
 }

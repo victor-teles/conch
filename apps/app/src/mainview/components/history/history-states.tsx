@@ -18,12 +18,18 @@ export function HistorySkeleton() {
       transition={fadeIn}
     >
       {SKELETON_WIDTHS.map((width) => (
-        <div className="flex h-10 items-center gap-3 px-2.5" key={width}>
+        <div className="flex h-14 items-center gap-3 px-2.5" key={width}>
           <span className="size-6 rounded-[7px] bg-foreground/[0.06]" />
-          <span
-            className="h-3 rounded-full bg-foreground/[0.06]"
-            style={{ width: `${width}%` }}
-          />
+          <span className="flex flex-1 flex-col gap-1.5">
+            <span
+              className="h-3 rounded-full bg-foreground/[0.06]"
+              style={{ width: `${width}%` }}
+            />
+            <span
+              className="h-2.5 rounded-full bg-foreground/[0.04]"
+              style={{ width: `${width - 20}%` }}
+            />
+          </span>
         </div>
       ))}
     </motion.div>
@@ -51,6 +57,15 @@ export function HistoryEmpty() {
     <HistoryMessage
       detail="Ask a question from the launcher and it shows up here."
       title="No asks yet."
+    />
+  );
+}
+
+export function HistoryScopeEmpty({ name }: { name: string }) {
+  return (
+    <HistoryMessage
+      detail="Choose All connections with ⌘P to see every ask."
+      title={`No asks on ${name} yet.`}
     />
   );
 }

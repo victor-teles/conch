@@ -1,6 +1,8 @@
+import { useCallback, useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { userEvent } from "vitest/browser";
 
+import { useConnections } from "@/components/launcher/connections/connections-provider";
 import { makeConnection } from "@/test/connection-fixture";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
 
@@ -96,5 +98,91 @@ describe.each([
     await expect
       .poll(() => onBack.mock.calls.length, { timeout: popDelay + 1000 })
       .toBe(1);
+  });
+});
+
+function DraftHarness() {
+  const [open, setOpen] = useState(true);
+  const { state, discardDraft } = useConnections();
+  const close = useCallback(() => setOpen(false), []);
+  const reopen = useCallback(() => setOpen(true), []);
+  if (open) {
+    return <ConnectionEditView connectionId={null} onBack={close} />;
+  }
+  return (
+    <>
+      <p data-testid="draft">{state.draft?.host ?? "no draft"}</p>
+      <button onClick={reopen} type="button">
+        Reopen
+      </button>
+      <button onClick={discardDraft} type="button">
+        Discard
+      </button>
+    </>
+  );
+}
+
+const renderDraft = () => {
+  const store = mockLauncherIpc({ connections: [analytics] });
+  const screen = renderWithConnections(<DraftHarness />);
+  return { screen, store };
+};
+
+describe("new connection drafts", () => {
+  beforeEach(() => {
+    reduced.value = true;
+  });
+
+  it("keeps an abandoned form and restores every field", async () => {
+    const { screen } = renderDraft();
+    await screen.getByLabelText("Connection name").fill("billing");
+    await screen.getByLabelText("Host").fill("db.internal");
+    await screen.getByRole("button", { name: "Back" }).click();
+
+    await expect
+      .element(screen.getByTestId("draft"))
+      .toHaveTextContent("db.internal");
+    await screen.getByRole("button", { name: "Reopen" }).click();
+    await expect
+      .element(screen.getByLabelText("Host"))
+      .toHaveValue("db.internal");
+    await expect
+      .element(screen.getByLabelText("Connection name"))
+      .toHaveValue("billing");
+  });
+
+  it("leaves no draft for an untouched form", async () => {
+    const { screen } = renderDraft();
+    await expect.element(screen.getByLabelText("Host")).toBeVisible();
+    await screen.getByRole("button", { name: "Back" }).click();
+    await expect
+      .element(screen.getByTestId("draft"))
+      .toHaveTextContent("no draft");
+  });
+
+  it("clears the draft once the connection is saved", async () => {
+    const { screen, store } = renderDraft();
+    await screen.getByLabelText("Connection name").fill("billing");
+    await screen.getByLabelText("Host").fill("db.internal");
+    await screen.getByLabelText("Database", { exact: true }).fill("billing");
+    await userEvent.keyboard("{Meta>}{Enter}{/Meta}");
+
+    await expect
+      .element(screen.getByTestId("draft"))
+      .toHaveTextContent("no draft");
+    expect(store.connections.map((connection) => connection.name)).toContain(
+      "billing"
+    );
+  });
+
+  it("opens clean after the draft is discarded", async () => {
+    const { screen } = renderDraft();
+    await screen.getByLabelText("Host").fill("db.internal");
+    await screen.getByRole("button", { name: "Back" }).click();
+    await screen.getByRole("button", { name: "Discard" }).click();
+    await screen.getByRole("button", { name: "Reopen" }).click();
+    await expect
+      .element(screen.getByLabelText("Host"))
+      .toHaveValue("localhost");
   });
 });

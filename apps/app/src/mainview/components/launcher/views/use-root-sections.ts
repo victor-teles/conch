@@ -6,6 +6,7 @@ import { useConnections } from "@/components/launcher/connections/connections-pr
 import { parseLauncherInput } from "@/components/launcher/input-mode";
 import {
   aiSetupCommand,
+  fallbackCommands,
   rootCommands,
 } from "@/components/launcher/root-commands";
 import {
@@ -33,7 +34,7 @@ type CommandNavigation = Pick<
   | "editConnection"
   | "newBoard"
   | "openImport"
-> & { exportAll: () => void };
+> & { exportAll: () => void; startMode: (prefix: string) => void };
 
 interface UseRootSectionsOptions {
   query: string;
@@ -59,6 +60,7 @@ export const useRootSections = ({
     newBoard,
     openImport,
     exportAll,
+    startMode,
   } = navigate;
   const { alerts } = useAlerts();
 
@@ -72,6 +74,7 @@ export const useRootSections = ({
         openHistory,
         openImport,
         openSettings,
+        startMode,
       }),
     [
       dismiss,
@@ -81,6 +84,7 @@ export const useRootSections = ({
       openHistory,
       openImport,
       openSettings,
+      startMode,
     ]
   );
 
@@ -90,6 +94,15 @@ export const useRootSections = ({
       ? activeConnection
       : null;
   const tableConnection = input.mode === "table" ? sqlConnection : null;
+  const canFindTable = sqlConnection !== null;
+  const fallbacks = useMemo(
+    () =>
+      fallbackCommands(query, {
+        findTable: canFindTable ? (text) => startMode(`#${text}`) : null,
+        searchHistory: openHistory,
+      }),
+    [canFindTable, openHistory, query, startMode]
+  );
   const { catalog, retry } = useTableCatalog(tableConnection);
   const peek = catalog.status === "ready" ? catalog.peek : null;
   const tables = useMemo(
@@ -111,6 +124,8 @@ export const useRootSections = ({
             boards,
             commands,
             connections: state.connections,
+            draft: state.draft,
+            fallbacks,
             lookup: input.lookup,
             lookupWith: sqlConnection,
             offer,

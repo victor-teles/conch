@@ -85,6 +85,43 @@ export const useCatalogMenu = ({
     [disarm]
   );
 
+  const runOn = useCallback(
+    async (target: CatalogItem, action: CatalogAction) => {
+      if (target.kind === "widget") {
+        await runWidgetAction(action, target.widget, navigate, toggleMenuBar);
+        return;
+      }
+      switch (action.id) {
+        case "open-board": {
+          navigate.openBoard(target.board.id);
+          break;
+        }
+        case "rename-board": {
+          navigate.renameBoard(target.board);
+          break;
+        }
+        case "export-board": {
+          navigate.exportScope({ boardId: target.board.id, kind: "board" });
+          break;
+        }
+        case "duplicate-board": {
+          await saveBoard(duplicateOf(target.board));
+          onChanged();
+          break;
+        }
+        case "delete-board": {
+          await deleteBoard(target.board.id);
+          onChanged();
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
+    [navigate, onChanged, toggleMenuBar]
+  );
+
   const run = useCallback(
     async (action: CatalogAction) => {
       if (!item) {
@@ -95,40 +132,10 @@ export const useCatalogMenu = ({
         return;
       }
       close();
-      if (item.kind === "widget") {
-        await runWidgetAction(action, item.widget, navigate, toggleMenuBar);
-        return;
-      }
-      switch (action.id) {
-        case "open-board": {
-          navigate.openBoard(item.board.id);
-          break;
-        }
-        case "rename-board": {
-          navigate.renameBoard(item.board);
-          break;
-        }
-        case "export-board": {
-          navigate.exportScope({ boardId: item.board.id, kind: "board" });
-          break;
-        }
-        case "duplicate-board": {
-          await saveBoard(duplicateOf(item.board));
-          onChanged();
-          break;
-        }
-        case "delete-board": {
-          await deleteBoard(item.board.id);
-          onChanged();
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      await runOn(item, action);
     },
-    [arm, armed, close, item, navigate, onChanged, toggleMenuBar]
+    [arm, armed, close, item, runOn]
   );
 
-  return { armed, close, item, open, run };
+  return { armed, close, item, open, run, runOn };
 };

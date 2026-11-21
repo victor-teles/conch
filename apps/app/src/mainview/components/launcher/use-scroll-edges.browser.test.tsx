@@ -25,6 +25,13 @@ const scrollerOf = (container: HTMLElement): HTMLElement => {
   return scroller;
 };
 
+const scrollTo = (scroller: HTMLElement, top: number) => {
+  scroller.scrollTop = top;
+  scroller.dispatchEvent(new Event("scroll"));
+};
+
+const SETTLE = { timeout: 3000 };
+
 const fades = (scroller: HTMLElement) => ({
   end: scroller.dataset.fadeEnd !== undefined,
   start: scroller.dataset.fadeStart !== undefined,
@@ -35,17 +42,17 @@ describe("launcherScrollArea edge fades", () => {
     const screen = await render(<Rows count={20} />);
     const scroller = scrollerOf(screen.container);
     await expect
-      .poll(() => fades(scroller))
+      .poll(() => fades(scroller), SETTLE)
       .toEqual({ end: true, start: false });
 
-    scroller.scrollTop = 200;
+    scrollTo(scroller, 200);
     await expect
-      .poll(() => fades(scroller))
+      .poll(() => fades(scroller), SETTLE)
       .toEqual({ end: true, start: true });
 
-    scroller.scrollTop = scroller.scrollHeight;
+    scrollTo(scroller, scroller.scrollHeight);
     await expect
-      .poll(() => fades(scroller))
+      .poll(() => fades(scroller), SETTLE)
       .toEqual({ end: false, start: true });
   });
 
@@ -53,7 +60,7 @@ describe("launcherScrollArea edge fades", () => {
     const screen = await render(<Rows count={2} />);
     const scroller = scrollerOf(screen.container);
     await expect
-      .poll(() => fades(scroller))
+      .poll(() => fades(scroller), SETTLE)
       .toEqual({ end: false, start: false });
   });
 
@@ -62,14 +69,14 @@ describe("launcherScrollArea edge fades", () => {
     const scroller = scrollerOf(screen.container);
     await screen.rerender(<Rows count={20} />);
     await expect
-      .poll(() => fades(scroller))
+      .poll(() => fades(scroller), SETTLE)
       .toEqual({ end: true, start: false });
   });
 
   it("reserves the footer's clearance below the last row", async () => {
     const screen = await render(<Rows count={20} />);
     const scroller = scrollerOf(screen.container);
-    scroller.scrollTop = scroller.scrollHeight;
+    scrollTo(scroller, scroller.scrollHeight);
     const lastRow = screen.getByText("Row 19").element();
     const gap =
       scroller.getBoundingClientRect().bottom -

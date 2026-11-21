@@ -1,7 +1,12 @@
 import { SlidersHorizontalIcon } from "lucide-react";
 import { describe, expect, it, vi } from "vitest";
 
-import { aiSetupCommand, filterCommands, rootCommands } from "./root-commands";
+import {
+  aiSetupCommand,
+  fallbackCommands,
+  filterCommands,
+  rootCommands,
+} from "./root-commands";
 
 const handlers = () => ({
   addConnection: vi.fn(),
@@ -11,6 +16,7 @@ const handlers = () => ({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  startMode: vi.fn(),
 });
 
 const commands = () => rootCommands(handlers());
@@ -21,9 +27,11 @@ describe("rootCommands", () => {
     for (const command of rootCommands(wired)) {
       command.run();
     }
-    for (const handler of Object.values(wired)) {
+    const { startMode, ...rest } = wired;
+    for (const handler of Object.values(rest)) {
       expect(handler).toHaveBeenCalledOnce();
     }
+    expect(startMode.mock.calls).toStrictEqual([["> "], ["#"], ["@"]]);
   });
 
   it("offers export and import of widgets and boards", () => {
@@ -56,8 +64,8 @@ describe("rootCommands", () => {
 
 describe("filterCommands", () => {
   it("returns every command for an empty or blank query", () => {
-    expect(filterCommands(commands(), "")).toHaveLength(7);
-    expect(filterCommands(commands(), "   ")).toHaveLength(7);
+    expect(filterCommands(commands(), "")).toHaveLength(10);
+    expect(filterCommands(commands(), "   ")).toHaveLength(10);
   });
 
   it("matches titles fuzzily", () => {
@@ -102,5 +110,51 @@ describe("filterCommands", () => {
       "data"
     );
     expect(ranked.map((c) => c.id)).toStrictEqual(["exact", "loose"]);
+  });
+});
+
+describe("fallbackCommands", () => {
+  it("offers nothing for a blank query", () => {
+    expect(
+      fallbackCommands("  ", { findTable: vi.fn(), searchHistory: vi.fn() })
+    ).toStrictEqual([]);
+  });
+
+  it("searches History with the trimmed text", () => {
+    const searchHistory = vi.fn();
+    const [history] = fallbackCommands(" signups ", {
+      findTable: null,
+      searchHistory,
+    });
+    history?.run();
+    expect(history?.title).toBe("Search History");
+    expect(searchHistory).toHaveBeenCalledWith("signups");
+  });
+
+  it("offers Find Table only when a SQL connection can answer", () => {
+    expect(
+      fallbackCommands("orders", { findTable: null, searchHistory: vi.fn() })
+    ).toHaveLength(1);
+    const findTable = vi.fn();
+    const table = fallbackCommands("orders", {
+      findTable,
+      searchHistory: vi.fn(),
+    }).at(-1);
+    table?.run();
+    expect(table?.title).toBe("Find Table");
+    expect(findTable).toHaveBeenCalledWith("orders");
+  });
+});
+
+describe("input mode commands", () => {
+  it("teach the >, # and @ prefixes", () => {
+    const prefixes = commands()
+      .filter((command) => command.prefix)
+      .map((command) => [command.title, command.prefix]);
+    expect(prefixes).toStrictEqual([
+      ["Run SQL", ">"],
+      ["Browse Tables", "#"],
+      ["Switch Connection", "@"],
+    ]);
   });
 });

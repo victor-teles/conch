@@ -1,4 +1,10 @@
-import { useCallback, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from "react";
 
 import type {
   ConnectionColor,
@@ -13,7 +19,11 @@ import {
   updateConnection,
 } from "@/lib/connections";
 
-import type { FormState, TestStatus } from "./connection-form-state";
+import type {
+  ConnectionDraft,
+  FormState,
+  TestStatus,
+} from "./connection-form-state";
 
 import { INITIAL_STATE, connectionToFormState } from "./connection-form-state";
 import { NEEDS_HOST, NEEDS_USERNAME } from "./constants";
@@ -21,19 +31,35 @@ import { attemptTestConnection, buildConnection, validate } from "./lib";
 
 export const useConnectionForm = (
   connection: DatabaseConnection | undefined,
-  onSuccess?: (connection: DatabaseConnection) => void
+  onSuccess?: (connection: DatabaseConnection) => void,
+  draft?: ConnectionDraft
 ) => {
-  const [form, setForm] = useState<FormState>(
-    connection ? connectionToFormState(connection) : INITIAL_STATE
+  const [initial] = useState<FormState>(() =>
+    connection
+      ? connectionToFormState(connection)
+      : (draft?.initial ?? INITIAL_STATE)
   );
+  const [form, setForm] = useState<FormState>(initial);
   const [testStatus, setTestStatus] = useState<TestStatus>({ state: "idle" });
   const [formError, setFormError] = useState<string | null>(null);
   const [appearanceOpen, setAppearanceOpen] = useState(
-    Boolean(connection?.emoji || connection?.color)
+    Boolean(initial.emoji || initial.color)
   );
   const [aiContextOpen, setAiContextOpen] = useState(
-    Boolean(connection?.piiRedaction)
+    Boolean(initial.piiRedaction)
   );
+
+  const latestForm = useRef(form);
+  const savedForm = useRef(false);
+  useEffect(() => {
+    latestForm.current = form;
+  }, [form]);
+  const leave = useEffectEvent(() => {
+    if (!savedForm.current) {
+      draft?.onLeave(latestForm.current);
+    }
+  });
+  useEffect(() => () => leave(), []);
 
   const hasHost = NEEDS_HOST.has(form.type);
   const hasUsername = NEEDS_USERNAME.has(form.type);
@@ -135,10 +161,12 @@ export const useConnectionForm = (
           runConfig: connection.runConfig,
         };
         await updateConnection(updated);
+        savedForm.current = true;
         onSuccess?.(updated);
       } else {
         const newConn = buildConnection(form);
         await saveConnection(newConn);
+        savedForm.current = true;
         onSuccess?.(newConn);
       }
     },

@@ -13,6 +13,7 @@ import {
   HistoryEmpty,
   HistoryError,
   HistoryNoMatches,
+  HistoryScopeEmpty,
   HistorySkeleton,
 } from "./history-states";
 
@@ -23,6 +24,7 @@ export interface HistoryListView {
   sections: readonly HistorySection[];
   query: string;
   total: number;
+  scopeName: string | null;
 }
 
 const sectionStarts = (sections: readonly HistorySection[]) => {
@@ -66,7 +68,11 @@ export function HistoryList({
     return <HistoryEmpty />;
   }
   if (view.sections.length === 0) {
-    return <HistoryNoMatches query={view.query} />;
+    return view.scopeName && !view.query.trim() ? (
+      <HistoryScopeEmpty name={view.scopeName} />
+    ) : (
+      <HistoryNoMatches query={view.query} />
+    );
   }
   const { starts, count } = sectionStarts(view.sections);
   return (

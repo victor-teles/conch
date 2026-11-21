@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { INITIAL_STATE } from "@/components/connection-form/connection-form-state";
 import { makeConnection } from "@/test/connection-fixture";
 
 import type { ConnectionsState } from "./connections-reducer";
@@ -178,5 +179,26 @@ describe("connectionsReducer", () => {
   it("ignores unknown actions", () => {
     const state = loaded();
     expect(connectionsReducer(state, { type: "noop" } as never)).toBe(state);
+  });
+
+  it("keeps and clears a New Connection draft", () => {
+    const draft = { ...INITIAL_STATE, host: "db.internal" };
+    const kept = connectionsReducer(loaded(), { draft, type: "draft" });
+    expect(kept.draft).toBe(draft);
+    const cleared = connectionsReducer(kept, { draft: null, type: "draft" });
+    expect(cleared.draft).toBeNull();
+    expect(connectionsReducer(cleared, { draft: null, type: "draft" })).toBe(
+      cleared
+    );
+  });
+
+  it("leaves a draft alone when another connection is saved", () => {
+    const draft = { ...INITIAL_STATE, host: "db.internal" };
+    const state = connectionsReducer(loaded({ draft }), {
+      connection: alpha,
+      stale: false,
+      type: "saved",
+    });
+    expect(state.draft).toBe(draft);
   });
 });

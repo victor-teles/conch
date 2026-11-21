@@ -63,3 +63,15 @@ export const connectionToFormState = (conn: DatabaseConnection): FormState => ({
   type: conn.type,
   username: conn.username,
 });
+
+const FORM_FIELDS = Object.keys(INITIAL_STATE) as (keyof FormState)[];
+
+export const isDirtyForm = (form: FormState): boolean =>
+  FORM_FIELDS.some((field) => form[field] !== INITIAL_STATE[field]);
+
+// A New Connection form the user left before saving; it lives in renderer
+// memory only, never in storage, because it can hold a password.
+export interface ConnectionDraft {
+  initial: FormState | null;
+  onLeave: (form: FormState) => void;
+}

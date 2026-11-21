@@ -50,11 +50,17 @@ const CHURN = makeRecent({
 });
 const ASKS = [SIGNUPS, REVENUE, CHURN];
 
-function Harness({ ask }: { ask: HistoryAskActions }) {
+function Harness({
+  ask,
+  initialQuery,
+}: {
+  ask: HistoryAskActions;
+  initialQuery?: string;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div data-testid="history-harness" style={{ width: 760 }}>
-      <HistoryView ask={ask} inputRef={inputRef} />
+      <HistoryView ask={ask} initialQuery={initialQuery} inputRef={inputRef} />
     </div>
   );
 }
@@ -63,12 +69,14 @@ interface SetupOptions {
   asks?: RecentAsk[] | (() => unknown);
   connections?: DatabaseConnection[];
   handlers?: Record<string, (payload: Record<string, unknown>) => unknown>;
+  initialQuery?: string;
 }
 
 const setup = ({
   asks = ASKS,
   connections = [analytics],
   handlers = {},
+  initialQuery,
 }: SetupOptions = {}) => {
   const ipc = {
     clearRecentAsks: vi.fn(() => null),
@@ -87,7 +95,7 @@ const setup = ({
       ? { connectionId: "analytics", database: null }
       : null;
   const ask = { start: vi.fn(), startSql: vi.fn() };
-  renderWithConnections(<Harness ask={ask} />);
+  renderWithConnections(<Harness ask={ask} initialQuery={initialQuery} />);
   const screen = page.getByTestId("history-harness");
   return {
     ask,
@@ -96,6 +104,14 @@ const setup = ({
     screen,
   };
 };
+
+const scopeOption = (
+  screen: ReturnType<typeof setup>["screen"],
+  name: string
+) =>
+  screen
+    .getByRole("listbox", { name: "Connections" })
+    .getByRole("option", { name });
 
 const ready = async (screen: ReturnType<typeof setup>["screen"]) => {
   await expect
@@ -121,11 +137,13 @@ describe("historyView", () => {
     await expect
       .element(screen.getByRole("group", { name: "Today" }))
       .toHaveTextContent(
-        "Signups by plan, EU onlyanalytics · Signups by plan · 14:05"
+        "Signups by plan, EU only14:05analytics·select plan, count(*) from signups where region = 'EU' group by 1"
       );
     await expect
       .element(screen.getByRole("group", { name: "Yesterday" }))
-      .toHaveTextContent("connection removed · Monthly recurring revenue");
+      .toHaveTextContent(
+        "connection removed·select * from accounts where churned_at is not null"
+      );
     expect(
       screen.getByRole("listbox", { name: "Past asks" }).element()
     ).toMatchSnapshot();
@@ -150,6 +168,56 @@ describe("historyView", () => {
       ...option.element().querySelectorAll("span.font-medium"),
     ].map((span) => span.textContent);
     expect(strong.join("")).toBe("Sign");
+  });
+
+  it("starts from the query the root handed over", async () => {
+    const { input, screen } = setup({ initialQuery: "billing" });
+    await expect.element(input).toHaveValue("billing");
+    await expect
+      .element(screen.getByRole("group", { name: "Matches" }))
+      .toHaveTextContent("Revenue for Europe");
+  });
+
+  it("narrows to one connection with ⌘P", async () => {
+    const { input, screen } = setup();
+    await ready(screen);
+    await input.click();
+    await userEvent.keyboard("{Meta>}p{/Meta}");
+    const field = screen.getByRole("textbox", { name: "Filter connections" });
+    await expect.element(field).toHaveFocus();
+    await scopeOption(screen, "analytics").click();
+
+    await expect
+      .element(screen.getByRole("button", { name: "Scope: analytics" }))
+      .toBeVisible();
+    await expect.element(input).toHaveFocus();
+    await expect
+      .poll(() =>
+        screen.getByRole("option", { name: /Churned accounts/ }).query()
+      )
+      .toBeNull();
+    await expect
+      .element(screen.getByRole("option", { name: /Signups by plan/ }))
+      .toBeVisible();
+  });
+
+  it("says when the chosen connection has no asks left", async () => {
+    const warehouse = makeConnection({ id: "warehouse", name: "warehouse" });
+    const { input, screen } = setup({
+      asks: [SIGNUPS, CHURN],
+      connections: [analytics, warehouse],
+    });
+    await ready(screen);
+    await input.click();
+    await userEvent.keyboard("{Meta>}p{/Meta}");
+    await scopeOption(screen, "warehouse").click();
+    await expect
+      .element(screen.getByRole("option", { name: /Churned accounts/ }))
+      .toHaveAttribute("aria-selected", "true");
+    await userEvent.keyboard("{Control>}x{/Control}");
+    await expect
+      .element(screen.getByText("No asks on warehouse yet."))
+      .toBeVisible();
   });
 
   it("says when nothing matches", async () => {
@@ -363,6 +431,10 @@ describe.each([
   it("clears every ask only after a second press", async () => {
     const { ipc, screen } = setup();
     await ready(screen);
+    // Frozen timers keep the confirm window open however far apart the two
+    // presses land; its lapse is covered by useArmedConfirm's own test.
+    vi.useFakeTimers({ toFake: ["Date", "setTimeout", "clearTimeout"] });
+    vi.setSystemTime(NOW);
     await userEvent.keyboard("{Meta>}k{/Meta}");
     const clear = page.getByRole("menuitem", { name: /Clear History/ });
     await clear.click();

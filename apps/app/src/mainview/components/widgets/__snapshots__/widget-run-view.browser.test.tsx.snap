@@ -2,11 +2,9 @@
 
 exports[`widgetRunView actions > lists the shared export actions before the widget's own 1`] = `
 <div
-  aria-activedescendant="launcher-action-copy-sql"
   aria-label="Actions for Revenue by region"
-  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  id="_r_id_"
   role="menu"
-  tabindex="-1"
 >
   <div
     aria-hidden="true"
@@ -569,6 +567,10 @@ exports[`widgetRunView actions > lists the shared export actions before the widg
     </span>
   </div>
   <div
+    class="mx-2.5 my-1 h-px bg-panel-border"
+    role="separator"
+  />
+  <div
     class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-danger-ink"
     id="launcher-action-delete"
     role="menuitem"
@@ -632,7 +634,7 @@ exports[`widgetRunView states > explains an empty result 1`] = `
       id="widget-run-header"
     >
       <div
-        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+        class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
       >
         <div
           class="flex min-w-0 flex-1 items-center"
@@ -922,7 +924,7 @@ exports[`widgetRunView states > maps a database error and retries 1`] = `
       id="widget-run-header"
     >
       <div
-        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+        class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
       >
         <div
           class="flex min-w-0 flex-1 items-center"
@@ -1240,7 +1242,7 @@ exports[`widgetRunView states > matches the snapshot for a populated run 1`] = `
       id="widget-run-header"
     >
       <div
-        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+        class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
       >
         <div
           class="flex min-w-0 flex-1 items-center"
@@ -1927,7 +1929,7 @@ exports[`widgetRunView states > shows a skeleton only when the first run takes l
       id="widget-run-header"
     >
       <div
-        class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+        class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
       >
         <div
           class="flex min-w-0 flex-1 items-center"

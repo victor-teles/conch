@@ -9,7 +9,7 @@ exports[`lookupView states > renders doneEmpty > doneEmpty 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -239,7 +239,7 @@ exports[`lookupView states > renders doneHits > doneHits 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -358,7 +358,7 @@ exports[`lookupView states > renders doneHits > doneHits 1`] = `
         >
           <div
             aria-selected="true"
-            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
             data-tone="default"
             id="launcher-option-lookup-hit-0"
             role="option"
@@ -429,7 +429,7 @@ exports[`lookupView states > renders doneHits > doneHits 1`] = `
           </div>
           <div
             aria-selected="false"
-            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
             data-tone="default"
             id="launcher-option-lookup-hit-1"
             role="option"
@@ -497,7 +497,7 @@ exports[`lookupView states > renders doneHits > doneHits 1`] = `
           </div>
           <div
             aria-selected="false"
-            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
             data-tone="default"
             id="launcher-option-lookup-hit-2"
             role="option"
@@ -695,7 +695,7 @@ exports[`lookupView states > renders error > error 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -915,7 +915,7 @@ exports[`lookupView states > renders planning > planning 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1137,7 +1137,7 @@ exports[`lookupView states > renders probing > probing 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1261,7 +1261,7 @@ exports[`lookupView states > renders probing > probing 1`] = `
         >
           <div
             aria-selected="true"
-            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
             data-tone="default"
             id="launcher-option-lookup-hit-0"
             role="option"
@@ -1462,7 +1462,7 @@ exports[`lookupView states > renders stopped > stopped 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"

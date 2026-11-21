@@ -207,6 +207,21 @@ describe("launcherPanel", () => {
     vi.restoreAllMocks();
   });
 
+  it("keeps a recent query and selects it when summoned again", async () => {
+    const screen = renderLauncher();
+    const input = screen.getByRole("combobox", { name: "Search commands" });
+    await input.fill("hid");
+
+    emitIpcMessage("launcherDismiss");
+    await expect.poll(() => hideLauncher.mock.calls.length).toBe(1);
+    emitIpcMessage("launcherShown");
+
+    await expect.element(input).toHaveValue("hid");
+    await expect.element(input).toHaveFocus();
+    const field = input.element() as HTMLInputElement;
+    expect([field.selectionStart, field.selectionEnd]).toStrictEqual([0, 3]);
+  });
+
   it("adds a connection in the editor and selects it back at root", async () => {
     const screen = renderLauncher();
     const input = screen.getByRole("combobox", { name: "Search commands" });

@@ -9,7 +9,7 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -456,7 +456,7 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1014,7 +1014,7 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1452,7 +1452,7 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1979,7 +1979,7 @@ exports[`askView designed states > matches the snapshot for the populated line c
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -3063,7 +3063,7 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -4234,7 +4234,7 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"

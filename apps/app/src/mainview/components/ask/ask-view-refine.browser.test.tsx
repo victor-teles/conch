@@ -163,7 +163,8 @@ describe.each([
     await expect.element(search).toBeVisible();
     await search.fill("");
     await userEvent.keyboard("{ArrowUp}");
-    await expect.element(heading(EUROPE_TITLE)).toBeVisible();
+    await expect.element(search).toBeVisible();
+    expect(heading(EUROPE_TITLE).query()).toBeNull();
     expect(asked).toHaveLength(2);
   });
 

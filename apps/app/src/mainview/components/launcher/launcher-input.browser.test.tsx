@@ -7,6 +7,11 @@ import { LauncherInput } from "./launcher-input";
 
 const inputProps = { "aria-label": "Search commands", placeholder: "Search…" };
 
+const CHIP_AND_TRAILING = {
+  chip: <span>analytics</span>,
+  trailing: <span>All connections</span>,
+};
+
 describe("launcherInput", () => {
   it("renders the search field and a run button", async () => {
     const onSubmit = vi.fn();
@@ -38,15 +43,19 @@ describe("launcherInput", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it("renders the context chip slot before the field", async () => {
+  it("renders the chip before the field and the trailing slot after it", async () => {
     const screen = render(
       <LauncherInput
-        chip={<span>analytics</span>}
         inputProps={inputProps}
         onSubmit={vi.fn()}
+        slots={CHIP_AND_TRAILING}
       />
     );
     await expect.element(screen.getByText("analytics")).toBeVisible();
+    const field = screen.getByRole("textbox").element();
+    const trailing = screen.getByText("All connections").element();
+    const order = [...screen.container.querySelectorAll("input, span")];
+    expect(order.indexOf(field)).toBeLessThan(order.indexOf(trailing));
   });
 
   it("flattens pasted multi-line SQL so it stays runnable", async () => {

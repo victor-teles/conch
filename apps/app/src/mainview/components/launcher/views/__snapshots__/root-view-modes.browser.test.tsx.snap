@@ -19,7 +19,7 @@ exports[`connection mode > dims the active chip while choosing 1`] = `
     </div>
     <div
       aria-selected="true"
-      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
       data-tone="default"
       id="launcher-option-analytics"
       role="option"
@@ -61,10 +61,13 @@ exports[`connection mode > dims the active chip while choosing 1`] = `
       <span
         class="relative grid size-4 shrink-0 place-items-center"
       />
+      <span
+        class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+      />
     </div>
     <div
       aria-selected="false"
-      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
       data-tone="default"
       id="launcher-option-billing"
       role="option"
@@ -103,10 +106,13 @@ exports[`connection mode > dims the active chip while choosing 1`] = `
       <span
         class="relative grid size-4 shrink-0 place-items-center"
       />
+      <span
+        class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+      />
     </div>
     <div
       aria-selected="false"
-      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
       data-tone="default"
       id="launcher-option-billing-staging"
       role="option"
@@ -145,10 +151,13 @@ exports[`connection mode > dims the active chip while choosing 1`] = `
       <span
         class="relative grid size-4 shrink-0 place-items-center"
       />
+      <span
+        class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+      />
     </div>
     <div
       aria-selected="false"
-      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
       data-tone="default"
       id="launcher-option-cache"
       role="option"
@@ -187,6 +196,9 @@ exports[`connection mode > dims the active chip while choosing 1`] = `
       <span
         class="relative grid size-4 shrink-0 place-items-center"
       />
+      <span
+        class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+      />
     </div>
   </div>
 </div>
@@ -220,7 +232,7 @@ exports[`sQL mode > offers one read-only SQL row and runs it without the model 1
     </div>
     <div
       aria-selected="true"
-      class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
       data-tone="default"
       id="launcher-option-sql"
       role="option"
@@ -335,7 +347,7 @@ exports[`table mode > lists tables and shows the selected one's columns 1`] = `
         <div
           aria-describedby="launcher-table-summary"
           aria-selected="true"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
           data-tone="default"
           id="launcher-option-table-public.orders"
           role="option"

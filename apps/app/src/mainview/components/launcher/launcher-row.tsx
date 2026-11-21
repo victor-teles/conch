@@ -11,11 +11,15 @@ import { useRowInView } from "./use-row-in-view";
 export const optionId = (id: string) => `launcher-option-${id}`;
 
 export type RowTone = "default" | "destructive";
+export type RowSize = "default" | "tall";
+
+const ROW_HEIGHT: Record<RowSize, string> = { default: "h-10", tall: "h-14" };
 
 interface LauncherRowProps {
   id: string;
   selected: boolean;
   tone?: RowTone;
+  size?: RowSize;
   describedBy?: string;
   onHover: (id: string) => void;
   onRun: (id: string) => void;
@@ -26,6 +30,7 @@ export function LauncherRow({
   id,
   selected,
   tone = "default",
+  size = "default",
   describedBy,
   onHover,
   onRun,
@@ -42,7 +47,10 @@ export function LauncherRow({
       animate={{ opacity: 1 }}
       aria-describedby={describedBy}
       aria-selected={selected}
-      className="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+      className={cn(
+        "relative flex cursor-default items-center gap-3 px-2.5",
+        ROW_HEIGHT[size]
+      )}
       data-tone={tone}
       exit={{ opacity: 0, transition: fadeOut }}
       id={optionId(id)}

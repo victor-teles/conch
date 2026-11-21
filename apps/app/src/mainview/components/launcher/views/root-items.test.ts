@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { INITIAL_STATE } from "@/components/connection-form/connection-form-state";
 import {
   aiSetupCommand,
+  fallbackCommands,
   rootCommands,
 } from "@/components/launcher/root-commands";
 import { makeConnection } from "@/test/connection-fixture";
@@ -17,6 +19,7 @@ const commands = rootCommands({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  startMode: vi.fn(),
 });
 const aiSetup = aiSetupCommand(vi.fn());
 const connections = [
@@ -44,6 +47,9 @@ describe("buildRootSections", () => {
       "a",
       "add-connection",
       "new-board",
+      "run-sql",
+      "browse-tables",
+      "switch-connection",
       "history",
       "settings",
       "export-bundle",
@@ -245,5 +251,139 @@ describe("lookup rows", () => {
     expect(
       sectionIds(build({ offer: UUID, query: "rev", recents }))
     ).not.toContain("clipboard");
+  });
+});
+
+describe("typed results", () => {
+  const weakWidget = makeWidget({
+    id: "w-bookings",
+    name: "Bookings and refunds daily",
+    prompt: "bookings",
+  });
+
+  it("ranks every kind in one Results list, best match first", () => {
+    const sections = buildRootSections({
+      aiSetup: null,
+      commands,
+      connections,
+      query: "board",
+      widgets: [weakWidget],
+    });
+    expect(sectionIds(sections)).toStrictEqual(["results"]);
+    expect(sections[0]?.label).toBe("Results");
+    const order = ids(sections);
+    expect(order.indexOf("new-board")).toBeLessThan(
+      order.indexOf("widget-w-bookings")
+    );
+  });
+
+  it("keeps the Ask row ahead of the results and the fallbacks last", () => {
+    const fallbacks = fallbackCommands("billing", {
+      findTable: vi.fn(),
+      searchHistory: vi.fn(),
+    });
+    const sections = buildRootSections({
+      aiSetup: null,
+      askWith: connections[0],
+      commands,
+      connections,
+      fallbacks,
+      query: "billing",
+    });
+    expect(sectionIds(sections)).toStrictEqual(["ask", "results", "fallbacks"]);
+    expect(sections[2]?.label).toBe("Use “billing” with…");
+    expect(ids(sections)).toStrictEqual([
+      "ask",
+      "a",
+      "fallback-history",
+      "fallback-table",
+    ]);
+  });
+
+  it("never dead-ends: nothing matched still offers the fallbacks", () => {
+    const fallbacks = fallbackCommands("zzz", {
+      findTable: null,
+      searchHistory: vi.fn(),
+    });
+    const setup = buildRootSections({
+      aiSetup,
+      commands,
+      connections,
+      fallbacks,
+      query: "zzz",
+    });
+    expect(ids(setup)).toStrictEqual(["ai-setup", "fallback-history"]);
+    const ready = buildRootSections({
+      aiSetup: null,
+      askWith: connections[0],
+      commands,
+      connections,
+      fallbacks,
+      query: "zzz",
+    });
+    expect(ids(ready)).toStrictEqual(["ask", "fallback-history"]);
+  });
+
+  it("matches boards by fuzzy name", () => {
+    const sections = buildRootSections({
+      aiSetup: null,
+      boards: [
+        {
+          createdAt: "2026-11-01T00:00:00.000Z",
+          id: "ops",
+          name: "Morning ops",
+          refresh: "off",
+          sharedValues: {},
+          tiles: [],
+          updatedAt: "2026-11-01T00:00:00.000Z",
+        },
+      ],
+      commands,
+      connections,
+      query: "mops",
+    });
+    expect(ids(sections)).toContain("board-ops");
+  });
+});
+
+describe("connection drafts", () => {
+  const draft = { ...INITIAL_STATE, host: "db.internal", name: "" };
+
+  it("leads the resting root with the draft", () => {
+    const sections = buildRootSections({
+      aiSetup: null,
+      commands,
+      connections,
+      draft,
+      query: "",
+    });
+    expect(sections[0]).toStrictEqual({
+      id: "drafts",
+      items: [{ draft, id: "draft-connection", kind: "draft" }],
+      label: "Drafts",
+    });
+  });
+
+  it("ranks the draft among the results while typing, never above Ask", () => {
+    const sections = buildRootSections({
+      aiSetup: null,
+      askWith: connections[0],
+      commands,
+      connections,
+      draft,
+      query: "internal",
+    });
+    expect(ids(sections)).toStrictEqual(["ask", "draft-connection"]);
+  });
+
+  it("does not count the draft as a match that hides AI setup", () => {
+    const sections = buildRootSections({
+      aiSetup,
+      commands,
+      connections,
+      draft,
+      query: "internal",
+    });
+    expect(ids(sections)).toStrictEqual(["ai-setup", "draft-connection"]);
   });
 });

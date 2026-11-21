@@ -13,7 +13,7 @@ exports[`root view watching with full motion > lists unseen alerts first and ope
   </div>
   <div
     aria-selected="true"
-    class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+    class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
     data-tone="default"
     id="launcher-option-alert-watch-mrr"
     role="option"
@@ -78,7 +78,7 @@ exports[`root view watching with reduced motion > lists unseen alerts first and 
   </div>
   <div
     aria-selected="true"
-    class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+    class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
     data-tone="default"
     id="launcher-option-alert-watch-mrr"
     role="option"

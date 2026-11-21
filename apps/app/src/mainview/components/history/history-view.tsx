@@ -1,7 +1,7 @@
 import type { ChangeEvent, RefObject } from "react";
 
 import { AnimatePresence } from "motion/react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import {
   ActionsMenu,
@@ -10,6 +10,10 @@ import {
 import { LauncherInput } from "@/components/launcher/launcher-input";
 import { optionId } from "@/components/launcher/launcher-row";
 import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
+import {
+  ScopeFilter,
+  scopePopoverHeight,
+} from "@/components/launcher/scope-filter";
 import { useListSelection } from "@/components/launcher/use-list-selection";
 import { useSteadyHeight } from "@/components/launcher/use-steady-height";
 import { useMotionPreset } from "@/lib/motion";
@@ -30,17 +34,22 @@ import { useHistoryResults } from "./use-history-results";
 interface HistoryViewProps {
   ask: HistoryAskActions;
   inputRef: RefObject<HTMLInputElement | null>;
+  initialQuery?: string;
 }
 
-export function HistoryView({ ask, inputRef }: HistoryViewProps) {
+export function HistoryView({
+  ask,
+  inputRef,
+  initialQuery = "",
+}: HistoryViewProps) {
   const { reduced } = useMotionPreset();
   const history = useHistory({ clearOutMs: clearOutMs(reduced) });
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [typed, setTyped] = useState(false);
-  const { connections, items, now, sections } = useHistoryResults(
-    history.asks,
-    query
-  );
+  const [scope, setScope] = useState<string | null>(null);
+  const [scopeOpen, setScopeOpen] = useState(false);
+  const { connections, items, now, scopeName, scopeOptions, sections } =
+    useHistoryResults(history.asks, query, scope);
   const { move, select, selected } = useListSelection(items);
   const steady = useSteadyHeight(query);
 
@@ -53,6 +62,41 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
     selected,
   });
   const focusInput = useCallback(() => inputRef.current?.focus(), [inputRef]);
+  const handleScopeOpen = useCallback(
+    (open: boolean) => {
+      setScopeOpen(open);
+      if (!open) {
+        focusInput();
+      }
+    },
+    [focusInput]
+  );
+  const toggleScope = useCallback(
+    () => handleScopeOpen(!scopeOpen),
+    [handleScopeOpen, scopeOpen]
+  );
+  const handleScopeChange = useCallback(
+    (next: string | null) => {
+      setScope(next);
+      select(null);
+    },
+    [select]
+  );
+  const inputSlots = useMemo(
+    () => ({
+      trailing: (
+        <ScopeFilter
+          label="All connections"
+          onChange={handleScopeChange}
+          onOpenChange={handleScopeOpen}
+          open={scopeOpen}
+          options={scopeOptions}
+          value={scope}
+        />
+      ),
+    }),
+    [handleScopeChange, handleScopeOpen, scope, scopeOpen, scopeOptions]
+  );
   const menu = useHistoryMenu({
     canOpen: selected !== null,
     commands,
@@ -62,6 +106,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
     commands,
     move,
     onToggleMenu: menu.toggle,
+    onToggleScope: toggleScope,
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +138,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
           value: query,
         }}
         onSubmit={handleSubmit}
+        slots={inputSlots}
       />
       <HistoryNameField onDone={focusInput} save={commands.save} />
       <div
@@ -101,6 +147,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
         style={{
           minHeight: Math.max(
             menu.open ? actionsMenuHeight(actions.length) : 0,
+            scopeOpen ? scopePopoverHeight(scopeOptions.length + 1) : 0,
             steady.minHeight
           ),
         }}
@@ -117,6 +164,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
             }}
             view={{
               query,
+              scopeName,
               sections,
               status: history.status,
               total: history.asks.length,

@@ -14,6 +14,7 @@ const commands = rootCommands({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  startMode: vi.fn(),
 });
 
 const renderList = (selectedId: string, onHover = vi.fn(), onRun = vi.fn()) =>
@@ -43,7 +44,7 @@ describe("launcher list", () => {
     await expect
       .element(screen.getByRole("group", { name: "Commands" }))
       .toBeVisible();
-    expect(screen.getByRole("option").all()).toHaveLength(7);
+    expect(screen.getByRole("option").all()).toHaveLength(10);
     expect(screen.getByRole("option", { name: /Settings/ }).element().id).toBe(
       optionId("settings")
     );

@@ -77,8 +77,13 @@ function LauncherStackView() {
       if (hiddenForMs > RESET_AFTER_HIDDEN_MS) {
         stack.reset();
         setQuery("");
+        inputRef.current?.focus();
+        return;
       }
       inputRef.current?.focus();
+      if (stack.current.kind === "root") {
+        inputRef.current?.select();
+      }
     },
   });
 
@@ -176,7 +181,8 @@ function LauncherStackView() {
       editConnection: handleEditConnection,
       newBoard: () => handleNewBoard(null),
       openBoard: handleOpenBoard,
-      openHistory: () => push(HISTORY),
+      openHistory: (search?: string) =>
+        push(search ? { kind: "history", query: search } : HISTORY),
       openImport: () => push(IMPORT),
       openSettings: handleOpenSettings,
       renameBoard: (board: Board) =>
@@ -258,7 +264,17 @@ function LauncherStackView() {
                 session={session}
               />
             ),
-            history: <HistoryView ask={rootAsk} inputRef={inputRef} />,
+            history: (
+              <HistoryView
+                ask={rootAsk}
+                initialQuery={
+                  stack.current.kind === "history"
+                    ? (stack.current.query ?? "")
+                    : ""
+                }
+                inputRef={inputRef}
+              />
+            ),
             lookup: (
               <LookupView
                 inputRef={inputRef}

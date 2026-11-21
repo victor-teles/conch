@@ -88,6 +88,9 @@ const combobox = (screen: Screen) =>
 const option = (screen: Screen, name: RegExp) =>
   screen.getByRole("option", { name });
 
+const resultRows = (screen: Screen) =>
+  screen.getByRole("group", { name: /^Results/ }).getByRole("option");
+
 const rootBody = (): HTMLElement => {
   const body = document
     .querySelector("#launcher-root-list")
@@ -134,10 +137,8 @@ describe("rootView without connections", () => {
     mockLauncherIpc();
     const onOpenHistory = vi.fn();
     const screen = renderRoot({ initialQuery: "past", onOpenHistory });
-    const history = option(screen, /Search History/);
-    await expect
-      .element(history)
-      .toHaveTextContent("Every question you've asked");
+    const history = option(screen, /Search History.*Every question/);
+    await expect.element(history).toBeVisible();
     await history.click();
     expect(onOpenHistory).toHaveBeenCalledOnce();
   });
@@ -168,7 +169,7 @@ describe("rootView without connections", () => {
     expect(onOpenSettings).toHaveBeenCalledOnce();
   });
 
-  it("explains an empty result once AI is configured", async () => {
+  it("still offers Search History when nothing matches", async () => {
     mockLauncherIpc({
       handlers: {
         getAiSettings: () => ({
@@ -180,12 +181,15 @@ describe("rootView without connections", () => {
         }),
       },
     });
-    const screen = renderRoot({ initialQuery: "zzz" });
+    const onOpenHistory = vi.fn();
+    const screen = renderRoot({ initialQuery: "zzz", onOpenHistory });
 
     await expect
-      .element(screen.getByRole("status"))
-      .toHaveTextContent("No matches for “zzz”");
-    expect(screen.getByRole("listbox").query()).toBeNull();
+      .element(screen.getByRole("group", { name: "Use “zzz” with…" }))
+      .toBeVisible();
+    expect(screen.getByRole("group", { name: /^Results/ }).query()).toBeNull();
+    await option(screen, /Search History/).click();
+    expect(onOpenHistory).toHaveBeenCalledWith("zzz");
   });
 });
 
@@ -255,7 +259,7 @@ describe("rootView with connections", () => {
     await expect.element(option(screen, /scratch/)).toBeVisible();
 
     await combobox(screen).fill("duck");
-    await expect.poll(() => screen.getByRole("option").all().length).toBe(1);
+    await expect.poll(() => resultRows(screen).all().length).toBe(1);
     await expect
       .element(option(screen, /scratch/))
       .toHaveAttribute("aria-selected", "true");
@@ -269,11 +273,33 @@ describe("rootView with connections", () => {
     const resting = body.offsetHeight;
 
     await combobox(screen).fill("duck");
-    await expect.poll(() => screen.getByRole("option").all().length).toBe(1);
+    await expect.poll(() => resultRows(screen).all().length).toBe(1);
     expect(body.offsetHeight).toBe(resting);
 
     await combobox(screen).fill("");
     await expect.poll(() => body.style.minHeight).toBe("0px");
+  });
+
+  it("offers the SQL and table prefixes only while the field is empty", async () => {
+    mockLauncherIpc({ connections: [analytics] });
+    const screen = renderRoot();
+    const sql = screen.getByRole("button", { name: "SQL mode (type >)" });
+    await expect.element(sql).toBeVisible();
+
+    await sql.click();
+    await expect.element(combobox(screen)).toHaveValue("> ");
+    await expect.element(combobox(screen)).toHaveFocus();
+    await expect
+      .element(screen.getByText("SQL", { exact: true }))
+      .toBeVisible();
+    await expect
+      .poll(() => screen.getByRole("button", { name: /mode \(type/ }).query())
+      .toBeNull();
+
+    await combobox(screen).fill("");
+    await expect
+      .element(screen.getByRole("button", { name: "Tables mode (type #)" }))
+      .toBeVisible();
   });
 
   it("moves the selection with the arrow keys and wraps", async () => {

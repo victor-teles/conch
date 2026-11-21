@@ -10,8 +10,10 @@ import {
   useState,
 } from "react";
 
+import type { FormState } from "@/components/connection-form/connection-form-state";
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { isDirtyForm } from "@/components/connection-form/connection-form-state";
 import { getConnections } from "@/lib/connections";
 import { getErrorMessage } from "@/lib/error-message";
 import { getActiveConnection } from "@/lib/ipc";
@@ -29,6 +31,8 @@ interface ConnectionsContextValue extends ConnectionOperations {
   state: ConnectionsState;
   activeConnection: DatabaseConnection | null;
   reload: () => void;
+  keepDraft: (form: FormState) => void;
+  discardDraft: () => void;
 }
 
 const ConnectionsContext = createContext<ConnectionsContextValue | null>(null);
@@ -83,15 +87,25 @@ export function ConnectionsProvider({ children }: ConnectionsProviderProps) {
     setAttempt((value) => value + 1);
   }, []);
 
+  const keepDraft = useCallback((form: FormState) => {
+    dispatch({ draft: isDirtyForm(form) ? form : null, type: "draft" });
+  }, []);
+  const discardDraft = useCallback(
+    () => dispatch({ draft: null, type: "draft" }),
+    []
+  );
+
   const value = useMemo(
     () => ({
       ...operations,
       activeConnection:
         state.connections.find((c) => c.id === state.activeId) ?? null,
+      discardDraft,
+      keepDraft,
       reload,
       state,
     }),
-    [operations, reload, state]
+    [discardDraft, keepDraft, operations, reload, state]
   );
 
   return <ConnectionsContext value={value}>{children}</ConnectionsContext>;

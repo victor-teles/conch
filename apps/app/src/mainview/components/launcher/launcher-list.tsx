@@ -24,10 +24,15 @@ export function LauncherListbox({ id, label, children }: LauncherListboxProps) {
 
 interface LauncherSectionProps {
   label: string;
+  count?: number;
   children: ReactNode;
 }
 
-export function LauncherSection({ label, children }: LauncherSectionProps) {
+export function LauncherSection({
+  label,
+  count,
+  children,
+}: LauncherSectionProps) {
   const headingId = useId();
   return (
     <div aria-labelledby={headingId} role="group">
@@ -36,6 +41,9 @@ export function LauncherSection({ label, children }: LauncherSectionProps) {
         id={headingId}
       >
         {label}
+        {count === undefined ? null : (
+          <span className="ml-1.5 tabular-nums">{count}</span>
+        )}
       </div>
       <AnimatePresence initial={false}>{children}</AnimatePresence>
     </div>

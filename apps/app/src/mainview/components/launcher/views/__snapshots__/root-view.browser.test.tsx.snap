@@ -28,7 +28,7 @@ exports[`activating a connection with full motion > shows a failed connection in
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -45,12 +45,46 @@ exports[`activating a connection with full motion > shows a failed connection in
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -95,6 +129,10 @@ exports[`activating a connection with full motion > shows a failed connection in
       <div
         class="flex min-h-full launcher-body flex-col"
       >
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -113,7 +151,7 @@ exports[`activating a connection with full motion > shows a failed connection in
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-analytics"
               role="option"
@@ -160,6 +198,9 @@ exports[`activating a connection with full motion > shows a failed connection in
               <span
                 class="relative grid size-4 shrink-0 place-items-center"
               />
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
           </div>
           <div
@@ -174,7 +215,7 @@ exports[`activating a connection with full motion > shows a failed connection in
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -218,10 +259,13 @@ exports[`activating a connection with full motion > shows a failed connection in
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -287,10 +331,202 @@ exports[`activating a connection with full motion > shows a failed connection in
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -337,28 +573,32 @@ exports[`activating a connection with full motion > shows a failed connection in
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -423,28 +663,32 @@ exports[`activating a connection with full motion > shows a failed connection in
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -491,10 +735,13 @@ exports[`activating a connection with full motion > shows a failed connection in
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -541,10 +788,13 @@ exports[`activating a connection with full motion > shows a failed connection in
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -594,18 +844,22 @@ exports[`activating a connection with full motion > shows a failed connection in
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -723,7 +977,7 @@ exports[`activating a connection with reduced motion > shows a failed connection
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -740,12 +994,46 @@ exports[`activating a connection with reduced motion > shows a failed connection
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -790,6 +1078,10 @@ exports[`activating a connection with reduced motion > shows a failed connection
       <div
         class="flex min-h-full launcher-body flex-col"
       >
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -808,7 +1100,7 @@ exports[`activating a connection with reduced motion > shows a failed connection
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-analytics"
               role="option"
@@ -855,6 +1147,9 @@ exports[`activating a connection with reduced motion > shows a failed connection
               <span
                 class="relative grid size-4 shrink-0 place-items-center"
               />
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
           </div>
           <div
@@ -869,7 +1164,7 @@ exports[`activating a connection with reduced motion > shows a failed connection
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -913,10 +1208,13 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -982,10 +1280,202 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -1032,28 +1522,32 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -1118,28 +1612,32 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -1186,10 +1684,13 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -1236,10 +1737,13 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -1289,18 +1793,22 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -1418,7 +1926,7 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -1435,12 +1943,46 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -1531,6 +2073,10 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
             Retry
           </button>
         </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -1549,7 +2095,7 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -1596,10 +2142,13 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -1665,10 +2214,202 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -1715,28 +2456,32 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -1801,28 +2546,32 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -1869,10 +2618,13 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -1919,10 +2671,13 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -1972,18 +2727,22 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -2043,6 +2802,31 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
           </kbd>
         </kbd>
       </div>
+      <div
+        class="flex items-center gap-2 border-l border-panel-border pl-3"
+      >
+        <span>
+          Actions
+        </span>
+        <kbd
+          aria-label="⌘ K"
+          class="inline-flex items-center gap-0.5"
+          data-slot="kbd-group"
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            ⌘
+          </kbd>
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            K
+          </kbd>
+        </kbd>
+      </div>
     </div>
   </footer>
 </div>
@@ -2076,7 +2860,7 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -2093,12 +2877,46 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -2174,6 +2992,10 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
             />
           </div>
         </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -2192,7 +3014,7 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -2239,10 +3061,13 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -2308,10 +3133,202 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -2358,28 +3375,32 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -2444,28 +3465,32 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -2512,10 +3537,13 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -2562,10 +3590,13 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -2615,18 +3646,22 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -2686,6 +3721,31 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
           </kbd>
         </kbd>
       </div>
+      <div
+        class="flex items-center gap-2 border-l border-panel-border pl-3"
+      >
+        <span>
+          Actions
+        </span>
+        <kbd
+          aria-label="⌘ K"
+          class="inline-flex items-center gap-0.5"
+          data-slot="kbd-group"
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            ⌘
+          </kbd>
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            K
+          </kbd>
+        </kbd>
+      </div>
     </div>
   </footer>
 </div>
@@ -2719,7 +3779,7 @@ exports[`rootView with connections > lists connections first, most recent first,
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -2736,12 +3796,46 @@ exports[`rootView with connections > lists connections first, most recent first,
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -2786,6 +3880,10 @@ exports[`rootView with connections > lists connections first, most recent first,
       <div
         class="flex min-h-full launcher-body flex-col"
       >
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -2804,7 +3902,7 @@ exports[`rootView with connections > lists connections first, most recent first,
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-scratch"
               role="option"
@@ -2846,10 +3944,13 @@ exports[`rootView with connections > lists connections first, most recent first,
               <span
                 class="relative grid size-4 shrink-0 place-items-center"
               />
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-analytics"
               role="option"
@@ -2893,6 +3994,9 @@ exports[`rootView with connections > lists connections first, most recent first,
               <span
                 class="relative grid size-4 shrink-0 place-items-center"
               />
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
           </div>
           <div
@@ -2907,7 +4011,7 @@ exports[`rootView with connections > lists connections first, most recent first,
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -2951,10 +4055,13 @@ exports[`rootView with connections > lists connections first, most recent first,
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -3020,10 +4127,202 @@ exports[`rootView with connections > lists connections first, most recent first,
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -3070,28 +4369,32 @@ exports[`rootView with connections > lists connections first, most recent first,
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -3156,28 +4459,32 @@ exports[`rootView with connections > lists connections first, most recent first,
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -3224,10 +4531,13 @@ exports[`rootView with connections > lists connections first, most recent first,
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -3274,10 +4584,13 @@ exports[`rootView with connections > lists connections first, most recent first,
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -3327,18 +4640,22 @@ exports[`rootView with connections > lists connections first, most recent first,
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -3461,7 +4778,7 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
   <div
-    class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+    class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
     <span
       aria-live="polite"
@@ -3478,12 +4795,46 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
         aria-label="Search commands"
         autocomplete="off"
         class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
-        placeholder="Search or ask… > SQL · # table · @ connection"
+        placeholder="Search or ask…"
         role="combobox"
         spellcheck="false"
         type="text"
         value=""
       />
+    </div>
+    <div
+      class="flex shrink-0 items-center gap-0.5"
+    >
+      <button
+        aria-label="SQL mode (type >)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="> "
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          &gt;
+        </kbd>
+        SQL
+      </button>
+      <button
+        aria-label="Tables mode (type #)"
+        class="flex h-6.5 items-center gap-1.5 rounded-[7px] pr-2 pl-1 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+        data-prefix="#"
+        tabindex="-1"
+        type="button"
+      >
+        <kbd
+          class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+          data-slot="kbd"
+        >
+          #
+        </kbd>
+        Tables
+      </button>
     </div>
     <button
       aria-label="Run"
@@ -3542,6 +4893,10 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
             Add one and it stays a keystroke away.
           </p>
         </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+        />
         <div
           aria-label="Results"
           class="flex flex-col px-2"
@@ -3560,7 +4915,7 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
             </div>
             <div
               aria-selected="true"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-add-connection"
               role="option"
@@ -3607,10 +4962,13 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   PostgreSQL, MySQL, SQLite and more
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-new-board"
               role="option"
@@ -3676,10 +5034,202 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   A live grid of widgets with shared inputs
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-run-sql"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-square-terminal size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m7 11 2-2-2-2"
+                  />
+                  <path
+                    d="M11 13h4"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Run SQL
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  &gt;
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Read-only, without the AI
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-browse-tables"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-table size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 3v18"
+                  />
+                  <rect
+                    height="18"
+                    rx="2"
+                    width="18"
+                    x="3"
+                    y="3"
+                  />
+                  <path
+                    d="M3 9h18"
+                  />
+                  <path
+                    d="M3 15h18"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Browse Tables
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  #
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Columns, keys and a row preview
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-switch-connection"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-arrow-left-right size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3 4 7l4 4"
+                  />
+                  <path
+                    d="M4 7h16"
+                  />
+                  <path
+                    d="m16 21 4-4-4-4"
+                  />
+                  <path
+                    d="M20 17H4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Switch Connection
+                </span>
+                <span
+                  class="shrink-0 font-mono text-[12px] text-foreground/80"
+                >
+                  @
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Ask or browse another database
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-history"
               role="option"
@@ -3726,28 +5276,32 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   Every question you've asked
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ Y"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ Y"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    Y
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  Y
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-settings"
               role="option"
@@ -3812,28 +5366,32 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   AI provider, hotkey and appearance
                 </span>
               </span>
-              <kbd
-                aria-label="⌘ ,"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="⌘ ,"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  ⌘
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ⌘
+                  </kbd>
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    ,
+                  </kbd>
                 </kbd>
-                <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
-                >
-                  ,
-                </kbd>
-              </kbd>
+              </span>
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-export-bundle"
               role="option"
@@ -3880,10 +5438,13 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   Saves a .conch.json to Downloads
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-import-bundle"
               role="option"
@@ -3930,10 +5491,13 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   From the clipboard or a .conch.json file
                 </span>
               </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
-              class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
               id="launcher-option-hide"
               role="option"
@@ -3983,18 +5547,22 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   Return to what you were doing
                 </span>
               </span>
-              <kbd
-                aria-label="esc"
-                class="inline-flex items-center gap-0.5 relative opacity-70"
-                data-slot="kbd-group"
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
               >
                 <kbd
-                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
-                  data-slot="kbd"
+                  aria-label="esc"
+                  class="inline-flex items-center gap-0.5 opacity-70"
+                  data-slot="kbd-group"
                 >
-                  esc
+                  <kbd
+                    class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                    data-slot="kbd"
+                  >
+                    esc
+                  </kbd>
                 </kbd>
-              </kbd>
+              </span>
             </div>
           </div>
         </div>
@@ -4051,6 +5619,31 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
             data-slot="kbd"
           >
             ↩
+          </kbd>
+        </kbd>
+      </div>
+      <div
+        class="flex items-center gap-2 border-l border-panel-border pl-3"
+      >
+        <span>
+          Actions
+        </span>
+        <kbd
+          aria-label="⌘ K"
+          class="inline-flex items-center gap-0.5"
+          data-slot="kbd-group"
+        >
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            ⌘
+          </kbd>
+          <kbd
+            class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+            data-slot="kbd"
+          >
+            K
           </kbd>
         </kbd>
       </div>

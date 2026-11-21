@@ -9,14 +9,15 @@ import type { RootAlert } from "@/components/watches/use-alerts";
 
 import type { RootItem } from "./root-items";
 
+import { isShownAnswer } from "./root-items";
+import { SHOW_ANSWER_LABEL } from "./row-actions";
+
 const ACTIONS_HINT: FooterHint = { keys: ["⌘", "K"], label: "Actions" };
 const INPUTS_HINT: FooterHint = { keys: ["⇥"], label: "Inputs" };
 const COLUMNS_HINT: FooterHint = { keys: ["⌘", "↓"], label: "Columns" };
 const DISMISS_HINT: FooterHint = { keys: ["⌫"], label: "Dismiss" };
-export const LAST_ANSWER_HINT: FooterHint = {
-  keys: ["↑"],
-  label: "Last answer",
-};
+const DISCARD_HINT: FooterHint = { keys: ["⌃", "X"], label: "Discard" };
+const REMOVE_KEYS = ["⌃", "X"] as const;
 
 const movementFor = (event: KeyboardEvent<HTMLInputElement>): number => {
   if (event.key === "ArrowDown" || (event.ctrlKey && event.key === "n")) {
@@ -39,9 +40,10 @@ interface UseRootKeyboardOptions {
   onRun: (item: RootItem | null) => void;
   onOpenActions: (item: RootItem) => void;
   onOpenInputs: (widgetId: string) => void;
-  onReopen: (() => void) | null;
   onOpenHistory: () => void;
   onDismissAlert: (alert: RootAlert) => void;
+  onRowShortcut: (item: RootItem, keys: readonly string[]) => void;
+  onRunSecond: (item: RootItem) => void;
   modeKeys: ModeKeys;
 }
 
@@ -62,6 +64,22 @@ const dismissibleAlert = (
   selected?.kind === "alert"
     ? selected.alert
     : null;
+
+// ↵ runs the row, ⌘↵ its second action (the one its menu labels ⌘↩).
+const runEnter = (
+  withCommand: boolean,
+  selected: RootItem | null,
+  onRun: (item: RootItem | null) => void,
+  onRunSecond: (item: RootItem) => void
+) => {
+  if (!withCommand) {
+    onRun(selected);
+    return;
+  }
+  if (selected) {
+    onRunSecond(selected);
+  }
+};
 
 const runMetaShortcut = (
   event: KeyboardEvent<HTMLInputElement>,
@@ -85,9 +103,10 @@ export const useRootKeyboard = ({
   onRun,
   onOpenActions,
   onOpenInputs,
-  onReopen,
   onOpenHistory,
   onDismissAlert,
+  onRowShortcut,
+  onRunSecond,
   modeKeys,
 }: UseRootKeyboardOptions) =>
   useCallback(
@@ -97,6 +116,11 @@ export const useRootKeyboard = ({
       if (alert) {
         event.preventDefault();
         onDismissAlert(alert);
+        return;
+      }
+      if (event.ctrlKey && event.key === "x" && selected) {
+        event.preventDefault();
+        onRowShortcut(selected, REMOVE_KEYS);
         return;
       }
       if (event.key === "ArrowDown" && event.metaKey && focusDetail) {
@@ -109,11 +133,6 @@ export const useRootKeyboard = ({
         commit(selected);
         return;
       }
-      if (event.key === "ArrowUp" && onReopen) {
-        event.preventDefault();
-        onReopen();
-        return;
-      }
       const delta = movementFor(event);
       if (delta !== 0) {
         event.preventDefault();
@@ -122,7 +141,7 @@ export const useRootKeyboard = ({
       }
       if (event.key === "Enter") {
         event.preventDefault();
-        onRun(selected);
+        runEnter(event.metaKey, selected, onRun, onRunSecond);
         return;
       }
       if (event.key === "Tab" && !event.shiftKey && hasInputs(selected)) {
@@ -147,8 +166,9 @@ export const useRootKeyboard = ({
       onOpenActions,
       onOpenHistory,
       onOpenInputs,
-      onReopen,
+      onRowShortcut,
       onRun,
+      onRunSecond,
       selected,
     ]
   );
@@ -158,47 +178,67 @@ interface RootFooter {
   hints: FooterHint[];
 }
 
+const footerBase = (
+  selected: RootItem,
+  liveIds: readonly string[],
+  mode: InputMode
+): RootFooter => {
+  switch (selected.kind) {
+    case "sql": {
+      return { actionLabel: "Run", hints: [] };
+    }
+    case "lookup": {
+      return { actionLabel: "Find", hints: [] };
+    }
+    case "table": {
+      return { actionLabel: "Preview rows", hints: [COLUMNS_HINT] };
+    }
+    case "ask": {
+      return { actionLabel: "Ask", hints: [] };
+    }
+    case "recent": {
+      return { actionLabel: "Ask again", hints: [] };
+    }
+    case "board": {
+      return { actionLabel: "Open", hints: [] };
+    }
+    case "alert": {
+      return { actionLabel: "Open", hints: [DISMISS_HINT] };
+    }
+    case "widget": {
+      return {
+        actionLabel: "Run",
+        hints: hasInputs(selected) ? [INPUTS_HINT] : [],
+      };
+    }
+    case "draft": {
+      return { actionLabel: "Open Draft", hints: [DISCARD_HINT] };
+    }
+    case "command": {
+      return { actionLabel: selected.command.actionLabel, hints: [] };
+    }
+    default: {
+      if (mode === "connection") {
+        return { actionLabel: "Switch", hints: [] };
+      }
+      const live = liveIds.includes(selected.id);
+      return { actionLabel: live ? "Use" : "Connect", hints: [] };
+    }
+  }
+};
+
+// Every row has actions, so ⌘K is always on offer while a row is selected.
 export const footerFor = (
   selected: RootItem | null,
   liveIds: readonly string[],
-  mode: InputMode = "search"
+  mode: InputMode = "search",
+  lastAnswerId: string | null = null
 ): RootFooter => {
   if (!selected) {
     return { actionLabel: null, hints: [] };
   }
-  if (selected.kind === "sql") {
-    return { actionLabel: "Run", hints: [] };
-  }
-  if (selected.kind === "lookup") {
-    return { actionLabel: "Find", hints: [] };
-  }
-  if (selected.kind === "table") {
-    return { actionLabel: "Preview rows", hints: [COLUMNS_HINT] };
-  }
-  if (selected.kind === "connection" && mode === "connection") {
-    return { actionLabel: "Switch", hints: [] };
-  }
-  if (selected.kind === "ask") {
-    return { actionLabel: "Ask", hints: [] };
-  }
-  if (selected.kind === "recent") {
-    return { actionLabel: "Ask again", hints: [] };
-  }
-  if (selected.kind === "board") {
-    return { actionLabel: "Open", hints: [ACTIONS_HINT] };
-  }
-  if (selected.kind === "alert") {
-    return { actionLabel: "Open", hints: [DISMISS_HINT] };
-  }
-  if (selected.kind === "widget") {
-    return {
-      actionLabel: "Run",
-      hints: hasInputs(selected) ? [INPUTS_HINT, ACTIONS_HINT] : [ACTIONS_HINT],
-    };
-  }
-  if (selected.kind === "command") {
-    return { actionLabel: selected.command.actionLabel, hints: [] };
-  }
-  const live = liveIds.includes(selected.id);
-  return { actionLabel: live ? "Use" : "Connect", hints: [ACTIONS_HINT] };
+  const base = isShownAnswer(selected, lastAnswerId)
+    ? { actionLabel: SHOW_ANSWER_LABEL, hints: [] }
+    : footerBase(selected, liveIds, mode);
+  return { ...base, hints: [...base.hints, ACTIONS_HINT] };
 };

@@ -14,6 +14,8 @@ import { WidgetRow } from "@/components/widgets/widget-row";
 
 import type { RootItem } from "./root-items";
 
+import { DraftRow } from "./draft-row";
+
 export interface RootRowContext {
   selectedId: string | null;
   armedId: string | null;
@@ -135,6 +137,18 @@ export function RootItemRow({ item, context }: RootItemRowProps) {
           onRun={onRun}
           selected={selected}
           variant={item.origin}
+        />
+      );
+    }
+    case "draft": {
+      return (
+        <DraftRow
+          draft={item.draft}
+          id={item.id}
+          onHover={onHover}
+          onRun={onRun}
+          selected={selected}
+          tone={tone}
         />
       );
     }

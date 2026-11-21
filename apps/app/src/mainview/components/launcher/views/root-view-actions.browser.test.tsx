@@ -68,9 +68,21 @@ type Screen = Awaited<ReturnType<typeof setup>>["screen"];
 
 const menu = (screen: Screen) => screen.getByRole("menu");
 
+const menuLabels = (screen: Screen) =>
+  screen
+    .getByRole("menuitem")
+    .all()
+    .map(
+      (item) =>
+        item.element().querySelector('[data-slot="swap-text"]')?.textContent
+    );
+
 const openActions = async (screen: Screen) => {
   await userEvent.keyboard("{Meta>}k{/Meta}");
-  await expect.element(menu(screen)).toHaveFocus();
+  await expect.element(menu(screen)).toBeVisible();
+  await expect
+    .element(screen.getByRole("textbox", { name: "Filter actions" }))
+    .toHaveFocus();
 };
 
 const resetMotion = () => {
@@ -92,12 +104,13 @@ describe.each([
     await expect
       .element(menu(screen))
       .toHaveAccessibleName("Actions for analytics");
-    expect(
-      screen
-        .getByRole("menuitem")
-        .all()
-        .map((item) => item.element().textContent)
-    ).toStrictEqual(["Edit", "Test Connection", "Pin", "Delete"]);
+    expect(menuLabels(screen)).toStrictEqual([
+      "Connect",
+      "Edit",
+      "Test Connection",
+      "Pin",
+      "Delete",
+    ]);
     expect(menu(screen).element()).toMatchSnapshot();
 
     await userEvent.keyboard("{Escape}");
@@ -152,14 +165,14 @@ describe("connection actions", () => {
   it("opens the editor for the row", async () => {
     const { onEditConnection, screen } = await setup();
     await openActions(screen);
-    await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{ArrowDown}{Enter}");
     expect(onEditConnection).toHaveBeenCalledWith("analytics");
   });
 
   it("tests the connection and reports latency in the row", async () => {
     const { screen } = await setup();
     await openActions(screen);
-    await userEvent.keyboard("{ArrowDown}{Enter}");
+    await userEvent.keyboard("{ArrowDown}{ArrowDown}{Enter}");
     await expect.element(screen.getByText("Reachable · 12 ms")).toBeVisible();
   });
 
@@ -170,7 +183,7 @@ describe("connection actions", () => {
       .toHaveAttribute("aria-activedescendant", optionId("billing"));
     await userEvent.keyboard("{ArrowDown}");
     await openActions(screen);
-    await userEvent.keyboard("{ArrowDown}{ArrowDown}{Enter}");
+    await userEvent.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{Enter}");
 
     await expect
       .element(screen.getByRole("img", { name: "Pinned" }))
@@ -199,10 +212,10 @@ describe("connection actions", () => {
       .toBeNull();
   });
 
-  it("ignores Command-K on a command row", async () => {
+  it("opens a menu on a command row too, led by its own action", async () => {
     const { screen } = await setup([]);
-    await userEvent.keyboard("{Meta>}k{/Meta}");
-    expect(screen.getByRole("menu").query()).toBeNull();
+    await openActions(screen);
+    expect(menuLabels(screen)[0]).toBe("Add");
   });
 
   it("closes when focus leaves the menu", async () => {

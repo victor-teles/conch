@@ -2,11 +2,9 @@
 
 exports[`ask view actions > the answer's actions menu > leaves out the chart on a table view 1`] = `
 <div
-  aria-activedescendant="launcher-action-copy-sql"
   aria-label="Actions for Monthly recurring revenue by region"
-  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  id="_r_id_"
   role="menu"
-  tabindex="-1"
 >
   <div
     aria-hidden="true"
@@ -397,11 +395,9 @@ exports[`ask view actions > the answer's actions menu > leaves out the chart on 
 
 exports[`ask view actions > the answer's actions menu > only offers Copy SQL after an error 1`] = `
 <div
-  aria-activedescendant="launcher-action-copy-sql"
   aria-label="Actions for SQL"
-  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  id="_r_id_"
   role="menu"
-  tabindex="-1"
 >
   <div
     aria-hidden="true"
@@ -792,11 +788,9 @@ exports[`ask view actions > the answer's actions menu > only offers Copy SQL aft
 
 exports[`ask view actions > the answer's actions menu > opens with ⌘K and returns focus to the input on Escape 1`] = `
 <div
-  aria-activedescendant="launcher-action-copy-sql"
   aria-label="Actions for Monthly recurring revenue by region"
-  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  id="_r_id_"
   role="menu"
-  tabindex="-1"
 >
   <div
     aria-hidden="true"

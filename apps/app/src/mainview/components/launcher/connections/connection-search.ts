@@ -1,6 +1,7 @@
 import type { DatabaseConnection, DatabaseType } from "@/lib/connections";
+import type { Ranked } from "@/lib/fuzzy-match";
 
-import { fuzzyMatch } from "@/lib/fuzzy-match";
+import { rankByTerms } from "@/lib/fuzzy-match";
 
 const TYPE_LABELS: Record<DatabaseType, string> = {
   clickhouse: "ClickHouse",
@@ -60,38 +61,14 @@ const searchTerms = (connection: DatabaseConnection): string[] => [
   connection.environment ?? "",
 ];
 
-const bestScore = (
-  connection: DatabaseConnection,
+export const rankConnections = (
+  connections: readonly DatabaseConnection[],
   query: string
-): number | null => {
-  let best: number | null = null;
-  for (const term of searchTerms(connection)) {
-    const match = term ? fuzzyMatch(term, query) : null;
-    if (match && (best === null || match.score > best)) {
-      best = match.score;
-    }
-  }
-  return best;
-};
+): Ranked<DatabaseConnection>[] =>
+  rankByTerms(sortConnections(connections), query, searchTerms);
 
 export const filterConnections = (
   connections: readonly DatabaseConnection[],
   query: string
-): DatabaseConnection[] => {
-  const sorted = sortConnections(connections);
-  const trimmed = query.trim();
-  if (!trimmed) {
-    return sorted;
-  }
-  return sorted
-    .map((connection) => ({
-      connection,
-      score: bestScore(connection, trimmed),
-    }))
-    .filter(
-      (entry): entry is { connection: DatabaseConnection; score: number } =>
-        entry.score !== null
-    )
-    .toSorted((a, b) => b.score - a.score)
-    .map((entry) => entry.connection);
-};
+): DatabaseConnection[] =>
+  rankConnections(connections, query).map((entry) => entry.item);

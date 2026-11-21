@@ -9,7 +9,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1261,7 +1261,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -2446,7 +2446,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -3627,7 +3627,7 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"

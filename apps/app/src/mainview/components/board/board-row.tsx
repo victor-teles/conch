@@ -4,6 +4,7 @@ import type { RowTone } from "@/components/launcher/launcher-row";
 import type { Board } from "@/lib/ipc";
 
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { RowTrailing } from "@/components/launcher/row-trailing";
 
 interface BoardRowProps {
   id: string;
@@ -36,12 +37,10 @@ export function BoardRow({
       <span className="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-[13px] leading-none text-panel-muted">
         {board.emoji ?? <LayoutGridIcon aria-hidden className="size-3.5" />}
       </span>
-      <span className="relative flex min-w-0 flex-1 items-baseline gap-2">
-        <span className="truncate type-body text-foreground">{board.name}</span>
-        <span className="truncate type-meta text-panel-muted">
-          {tileCount(board.tiles.length)}
-        </span>
+      <span className="relative min-w-0 flex-1 truncate type-body text-foreground">
+        {board.name}
       </span>
+      <RowTrailing kind="Board">{tileCount(board.tiles.length)}</RowTrailing>
     </LauncherRow>
   );
 }

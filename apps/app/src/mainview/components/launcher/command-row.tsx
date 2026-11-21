@@ -4,6 +4,7 @@ import type { LauncherCommand } from "./root-commands";
 
 import { KeyCombo } from "./key-combo";
 import { LauncherRow } from "./launcher-row";
+import { RowTrailing } from "./row-trailing";
 
 interface CommandRowProps {
   command: LauncherCommand;
@@ -33,16 +34,23 @@ export function CommandRow({
         <span className="truncate type-body text-foreground">
           {command.title}
         </span>
+        {command.prefix ? (
+          <span className="shrink-0 font-mono text-[12px] text-foreground/80">
+            {command.prefix}
+          </span>
+        ) : null}
         <span className="truncate type-meta text-panel-muted">
           {command.subtitle}
         </span>
       </span>
-      {command.shortcut ? (
-        <KeyCombo
-          className={cn("relative", !selected && "opacity-70")}
-          keys={command.shortcut}
-        />
-      ) : null}
+      <RowTrailing kind="Command">
+        {command.shortcut ? (
+          <KeyCombo
+            className={cn(!selected && "opacity-70")}
+            keys={command.shortcut}
+          />
+        ) : null}
+      </RowTrailing>
     </LauncherRow>
   );
 }

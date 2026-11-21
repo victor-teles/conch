@@ -2,11 +2,12 @@ import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { mockIpc } from "@/test/ipc-mock";
-import { nextFrame } from "@/test/wait";
+import { nextFrame, wait } from "@/test/wait";
 
 import { useWindowHeightSync } from "./use-window-height-sync";
 
 const resize = vi.fn();
+const SHRINK_WAIT_MS = 600;
 
 function Probe({ height, reduced }: { height: number; reduced: boolean }) {
   const { panelRef, settle } = useWindowHeightSync({ margin: 20, reduced });
@@ -56,6 +57,23 @@ describe("useWindowHeightSync", () => {
 
     await screen.rerender(<Probe height={120} reduced={false} />);
     await expect.poll(lastHeight, { timeout: 2000 }).toBe(160);
+  });
+
+  it("drops a pending shrink when the content grows back first", async () => {
+    resize.mockReset();
+    mockIpc({ resizeLauncher: (payload) => resize(payload) });
+    const screen = render(<Probe height={300} reduced={false} />);
+    await expect.poll(lastHeight).toBe(340);
+
+    await screen.rerender(<Probe height={100} reduced={false} />);
+    await wait(100);
+    expect(lastHeight()).toBe(340);
+    await screen.rerender(<Probe height={300} reduced={false} />);
+    await wait(SHRINK_WAIT_MS);
+    expect(lastHeight()).toBe(340);
+
+    await screen.getByRole("button", { name: "settle" }).click();
+    expect(lastHeight()).toBe(340);
   });
 
   it("follows the content immediately under reduced motion", async () => {

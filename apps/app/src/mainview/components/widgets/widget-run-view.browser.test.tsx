@@ -369,7 +369,7 @@ describe("widgetRunView actions", () => {
       .element(menu.getByText("Press ↵ again to delete"))
       .toBeVisible();
     await menu
-      .getByRole("menuitem", { name: "Press ↵ again to delete" })
+      .getByRole("menuitem", { name: /Press ↵ again to delete/ })
       .click();
     await expect.poll(() => onClose.mock.calls.length).toBe(1);
     expect(calls.deleteWidget).toHaveBeenCalledWith({ widgetId: "w-revenue" });

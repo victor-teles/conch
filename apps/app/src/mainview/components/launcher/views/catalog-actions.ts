@@ -12,6 +12,10 @@ import type { MenuAction } from "@/components/launcher/actions/menu-action";
 import type { WatchActionId } from "@/components/watches/watch-actions";
 import type { Watch } from "@/lib/ipc";
 
+import {
+  PRIMARY_KEYS,
+  SECOND_KEYS,
+} from "@/components/launcher/actions/menu-action";
 import { watchActions } from "@/components/watches/watch-actions";
 
 import type { RootItem } from "./root-items";
@@ -45,12 +49,14 @@ export const catalogActions = (
         {
           icon: SquareArrowOutUpRightIcon,
           id: "open-board",
+          keys: PRIMARY_KEYS,
           label: "Open",
           tone: "default",
         },
         {
           icon: PencilIcon,
           id: "rename-board",
+          keys: SECOND_KEYS,
           label: "Rename",
           tone: "default",
         },
@@ -74,10 +80,17 @@ export const catalogActions = (
         },
       ]
     : [
-        { icon: PlayIcon, id: "run-widget", label: "Run", tone: "default" },
+        {
+          icon: PlayIcon,
+          id: "run-widget",
+          keys: PRIMARY_KEYS,
+          label: "Run",
+          tone: "default",
+        },
         {
           icon: LayoutGridIcon,
           id: "add-to-board",
+          keys: SECOND_KEYS,
           label: "Add to Board…",
           tone: "default",
         },
@@ -92,17 +105,3 @@ export const catalogActions = (
 
 export const catalogTitle = (item: CatalogItem): string =>
   item.kind === "board" ? item.board.name : item.widget.name;
-
-interface ArmedSource {
-  armed: boolean;
-}
-
-export const armedRowId = (
-  menu: ArmedSource & { openId: string | null },
-  catalog: ArmedSource & { item: { id: string } | null }
-) => {
-  if (menu.armed) {
-    return menu.openId;
-  }
-  return catalog.armed ? (catalog.item?.id ?? null) : null;
-};

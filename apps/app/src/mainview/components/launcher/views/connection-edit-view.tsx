@@ -1,7 +1,8 @@
 import type { KeyboardEvent } from "react";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import type { ConnectionDraft } from "@/components/connection-form/connection-form-state";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { ConnectionForm } from "@/components/connection-form";
@@ -41,7 +42,7 @@ export function ConnectionEditView({
   connectionId,
   onBack,
 }: ConnectionEditViewProps) {
-  const { state, saved } = useConnections();
+  const { state, saved, keepDraft, discardDraft } = useConnections();
   const { reduced } = useMotionPreset();
   const [isSaved, setIsSaved] = useState(false);
   const formHost = useRef<HTMLDivElement>(null);
@@ -50,12 +51,23 @@ export function ConnectionEditView({
     : undefined;
   const missing = connectionId !== null && !connection;
 
+  const draft = useMemo<ConnectionDraft | undefined>(
+    () =>
+      connectionId === null
+        ? { initial: state.draft, onLeave: keepDraft }
+        : undefined,
+    [connectionId, keepDraft, state.draft]
+  );
+
   const handleSuccess = useCallback(
     (next: DatabaseConnection) => {
       saved(next, connection);
+      if (!connection) {
+        discardDraft();
+      }
       setIsSaved(true);
     },
-    [connection, saved]
+    [connection, discardDraft, saved]
   );
 
   useEffect(() => {
@@ -89,6 +101,7 @@ export function ConnectionEditView({
         ) : (
           <ConnectionForm
             connection={connection}
+            draft={draft}
             key={connectionId ?? "new"}
             onSuccess={handleSuccess}
           />

@@ -152,12 +152,16 @@ export function AskView({
   const turn = shownTurn(state);
   const kind = queryKindOf(state.dialect, activeConnection?.type);
   const save = saveAvailabilityOf(answered !== null, unavailable);
+  const { overlay } = input;
+  const inputSlots = useMemo(
+    () => ({ chip: CHIP, overlay: <RefineOverlay {...overlay} /> }),
+    [overlay]
+  );
 
   return (
     <div className="flex min-h-0 flex-col" onKeyDown={handleKeyDown}>
       <LauncherInput
         busy={busy}
-        chip={CHIP}
         inputProps={{
           "aria-label": "Ask a question",
           "aria-placeholder": input.placeholder,
@@ -169,7 +173,7 @@ export function AskView({
         }}
         onStop={cancel}
         onSubmit={input.handleSubmit}
-        overlay={<RefineOverlay {...input.overlay} />}
+        slots={inputSlots}
       />
       <div
         className="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"

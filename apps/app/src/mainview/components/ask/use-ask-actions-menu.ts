@@ -17,7 +17,7 @@ import { isWorking, shownTurn } from "./ask-reducer";
 export const ASK_ACTIONS_ANCHOR_ID = "ask-card-actions";
 
 const menuHasFocus = (): boolean =>
-  Boolean(document.activeElement?.closest('[role="menu"]'));
+  Boolean(document.activeElement?.closest('[data-slot="actions-panel"]'));
 
 interface UseAskActionsMenuOptions {
   state: AskState;

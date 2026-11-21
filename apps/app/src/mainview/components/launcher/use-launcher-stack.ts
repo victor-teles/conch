@@ -7,7 +7,7 @@ export type LauncherView =
   | { kind: "root" }
   | { kind: "settings" }
   | { kind: "ask" }
-  | { kind: "history" }
+  | { kind: "history"; query?: string }
   | { kind: "lookup"; value: LookupValue; connectionId: string }
   | { kind: "connection-edit"; connectionId: string | null }
   | { kind: "widget-run"; widgetId: string; values: ParamValues }

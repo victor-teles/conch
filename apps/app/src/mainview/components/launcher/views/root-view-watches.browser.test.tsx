@@ -186,12 +186,17 @@ describe.each([
       );
     await userEvent.keyboard("{Meta>}k{/Meta}");
     const menu = screen.getByRole("menu");
-    await expect.element(menu).toHaveFocus();
+    await expect
+      .element(screen.getByRole("textbox", { name: "Filter actions" }))
+      .toHaveFocus();
     expect(
       menu
         .getByRole("menuitem")
         .all()
-        .map((item) => item.element().textContent)
+        .map(
+          (item) =>
+            item.element().querySelector('[data-slot="swap-text"]')?.textContent
+        )
     ).toStrictEqual([
       "Run",
       "Add to Board…",

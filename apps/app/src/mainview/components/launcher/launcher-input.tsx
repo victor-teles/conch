@@ -14,23 +14,28 @@ const pasteFlattened = (event: ClipboardEvent<HTMLInputElement>) => {
   document.execCommand("insertText", false, flattenPastedSql(text));
 };
 
+export interface LauncherInputSlots {
+  chip?: ReactNode;
+  overlay?: ReactNode;
+  trailing?: ReactNode;
+}
+
 interface LauncherInputProps {
   inputProps: ComponentProps<"input">;
   busy?: boolean;
-  chip?: ReactNode;
+  slots?: LauncherInputSlots;
   onSubmit: () => void;
   onStop?: () => void;
-  overlay?: ReactNode;
 }
 
 export function LauncherInput({
   inputProps,
   busy = false,
-  chip,
+  slots = {},
   onSubmit,
   onStop,
-  overlay,
 }: LauncherInputProps) {
+  const { chip, overlay, trailing } = slots;
   const field = (
     <input
       autoComplete="off"
@@ -47,6 +52,7 @@ export function LauncherInput({
       chip={chip}
       onStop={onStop}
       onSubmit={onSubmit}
+      trailing={trailing}
     >
       {overlay ? (
         <div className="relative flex min-w-0 flex-1 items-center">

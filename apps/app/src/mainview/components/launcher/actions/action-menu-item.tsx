@@ -1,3 +1,5 @@
+import type { MouseEvent } from "react";
+
 import { motion } from "motion/react";
 import { useCallback } from "react";
 
@@ -52,12 +54,20 @@ export function ActionMenuItem<A extends MenuAction>({
     () => onHighlight(action.id),
     [onHighlight, action.id]
   );
+  // Keeps focus in the filter field, so typing still filters after a click.
+  const keepFocus = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => event.preventDefault(),
+    []
+  );
   const destructive = action.tone === "destructive";
   const Icon = action.icon;
 
   return (
     <motion.div
       aria-disabled={action.disabled}
+      aria-label={
+        armed ? `${action.label}: ${DELETE_CONFIRM_LABEL}` : undefined
+      }
       className={cn(
         "relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body",
         destructive ? "text-danger-ink" : "text-foreground",
@@ -65,6 +75,7 @@ export function ActionMenuItem<A extends MenuAction>({
       )}
       id={actionItemId(action.id)}
       onClick={handleClick}
+      onMouseDown={keepFocus}
       onPointerMove={handlePointerMove}
       role="menuitem"
       whileTap={{ ...pressed, transition: press }}
