@@ -1,0 +1,24 @@
+{"file": "apps/app/src/bun/mcp-server/socket-listener.ts", "focus": "handshake, dir checks, token compare, client cap", "status": "reviewed", "candidates": ["SEC-005"]}
+{"file": "apps/app/src/bun/mcp-server/socket-transport.ts", "focus": "framing, buffer cap", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/mcp-server/tools.ts", "focus": "tool inputs, exposure, timeouts", "status": "reviewed", "candidates": ["SEC-001"]}
+{"file": "apps/app/src/bun/mcp-server/tool-call.ts", "focus": "limits, error mapping, audit, scrubbing", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/mcp-server/mcp-policy.ts", "focus": "exposure resolution, shaping, redaction, scrubbing", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/mcp-server/index.ts", "focus": "settings, rotation, clipboard copy in bun", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/mcp-server/client-config.ts", "focus": "shell quoting of copied command", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/mcp-bridge/main.ts", "focus": "node-only bridge, launch path, stdout discipline", "status": "reviewed", "candidates": []}
+{"file": "packages/core/src/mcp-store.ts", "focus": "encrypted settings and audit", "status": "reviewed", "candidates": []}
+{"file": "packages/agent/src/read-only-guard.ts", "focus": "read-only contract for AI and widget SQL", "status": "reviewed", "candidates": ["SEC-002"]}
+{"file": "packages/drivers-duckdb/src/pool.ts", "focus": "read-only execution", "status": "reviewed", "candidates": ["SEC-001"]}
+{"file": "packages/drivers-mssql/src/pool.ts", "focus": "read-only execution", "status": "reviewed", "candidates": ["SEC-002"]}
+{"file": "packages/drivers-pg/src/pool.ts", "focus": "read-only transaction", "status": "reviewed", "candidates": []}
+{"file": "packages/drivers-mysql/src/pool.ts", "focus": "read-only transaction", "status": "reviewed", "candidates": []}
+{"file": "packages/drivers-sqlite/src/pool.ts", "focus": "read-only execution", "status": "reviewed", "candidates": []}
+{"file": "packages/drivers-clickhouse/src/pool.ts", "focus": "readonly=1 setting", "status": "reviewed", "candidates": []}
+{"file": "packages/core/src/mongo-read-query.ts", "focus": "allow-listed pipeline, $function/$accumulator/$where denied", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/ask-ports.ts", "focus": "ask ports, history, redaction options", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/widget-service.ts", "focus": "template guard, bound params, options SQL guard", "status": "reviewed", "candidates": ["SEC-001"]}
+{"file": "apps/app/src/bun/downloads.ts", "focus": "slugged names, exclusive create, extension allow-list", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/bun/rpc.ts", "focus": "request handlers, openExternal", "status": "reviewed", "candidates": ["SEC-003"]}
+{"file": "apps/app/src/mainview/components/ui/chart.tsx", "focus": "dangerouslySetInnerHTML style block", "status": "reviewed", "candidates": ["SEC-004"]}
+{"file": "apps/app/src/mainview/components/ask/card-chart.tsx", "focus": "chart config keys", "status": "reviewed", "candidates": []}
+{"file": "apps/app/src/mainview/components/ask/card-pie.tsx", "focus": "chart config keys", "status": "reviewed", "candidates": []}

@@ -1,0 +1,18 @@
+{
+  "id": "SEC-003",
+  "title": "openExternal RPC opens any URL",
+  "affected_locations": [
+    {
+      "file": "apps/app/src/bun/rpc.ts",
+      "line": 511,
+      "label": "sink"
+    }
+  ],
+  "attacker_source": "none found: no renderer caller and no XSS sink",
+  "sink_or_broken_control": "Utils.openExternal(url) without scheme check",
+  "impact": "would open file:// or custom schemes if reachable",
+  "plausibility": "no attacker-controlled path",
+  "closest_control": "renderer never calls it",
+  "cwe": ["CWE-939"],
+  "validation_recommended": false
+}

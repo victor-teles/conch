@@ -1,0 +1,18 @@
+{
+  "id": "SEC-004",
+  "title": "Chart style block built with dangerouslySetInnerHTML",
+  "affected_locations": [
+    {
+      "file": "apps/app/src/mainview/components/ui/chart.tsx",
+      "line": 90,
+      "label": "sink"
+    }
+  ],
+  "attacker_source": "series labels from query results",
+  "sink_or_broken_control": "CSS text interpolation",
+  "impact": "CSS/HTML injection in the renderer",
+  "plausibility": "keys interpolated into CSS",
+  "closest_control": "config keys are synthetic s0..sN and colors come from seriesColor; labels are not interpolated",
+  "cwe": ["CWE-79"],
+  "validation_recommended": true
+}

@@ -1,0 +1,8 @@
+{
+  "scan_id": "20261121-repo",
+  "scope": "repository, prioritising the read-only SQL contract and the Agents (MCP) local interface",
+  "commit": "5a36121",
+  "date": "2026-11-21",
+  "mode": "secure (audit + fix)",
+  "delegation": "none; inspected sequentially"
+}

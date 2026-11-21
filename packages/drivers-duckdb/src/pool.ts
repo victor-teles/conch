@@ -24,6 +24,8 @@ import { readFile, unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+import { assertReadsOwnTables } from "./read-only-sources.ts";
+
 type ReaderLike = Awaited<ReturnType<DuckDBConnection["runAndReadAll"]>>;
 
 export class DuckdbPool implements Pool {
@@ -112,7 +114,10 @@ export class DuckdbPool implements Pool {
       }
       const run = () => runStatement(conn, sql, options.params);
       const reader = options.readOnly
-        ? await readOnly(conn, signal, run)
+        ? await readOnly(conn, signal, async () => {
+            await assertReadsOwnTables(conn, sql);
+            return run();
+          })
         : await run();
       const allRows = reader.getRowsJson() as unknown[][];
       const isTruncated = allRows.length > maxRows;

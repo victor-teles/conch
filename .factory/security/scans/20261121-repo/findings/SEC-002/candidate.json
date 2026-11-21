@@ -1,0 +1,28 @@
+{
+  "id": "SEC-002",
+  "title": "T-SQL batches bypass the single-statement guard",
+  "affected_locations": [
+    {
+      "file": "packages/agent/src/read-only-guard.ts",
+      "line": 251,
+      "label": "root_control"
+    },
+    {
+      "file": "packages/drivers-mssql/src/pool.ts",
+      "line": 263,
+      "label": "wrapper"
+    },
+    {
+      "file": "apps/app/src/bun/widget-service.ts",
+      "line": 129,
+      "label": "entrypoint"
+    }
+  ],
+  "attacker_source": "AI-written SQL or an imported widget template on an MSSQL connection",
+  "sink_or_broken_control": "single-statement check relies on ';'; T-SQL runs semicolon-free batches; MSSQL read-only is a rolled-back transaction",
+  "impact": "server-side effects outside the rollback (SHUTDOWN, external reads through OPENROWSET/OPENQUERY, long WAITFOR); transactional writes are rolled back",
+  "plausibility": "assertReadOnly('select 1 shutdown','tsql') returned ok",
+  "closest_control": "forbidden-word list and the MSSQL rollback wrapper",
+  "cwe": ["CWE-89", "CWE-863"],
+  "validation_recommended": true
+}

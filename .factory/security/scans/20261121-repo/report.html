@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Security scan 20261121-repo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fbfaf8;
+        --fg: #1d1b18;
+        --muted: #6b665e;
+        --line: #e4e0d9;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #171513;
+          --fg: #ece8e2;
+          --muted: #a39d93;
+          --line: #34302b;
+        }
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          15px/1.6 -apple-system,
+          system-ui,
+          sans-serif;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 32px 16px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+        display: block;
+        overflow-x: auto;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      code {
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 13px;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Security scan 20261121-repo</h1>
+    <p>
+      Commit <code>5a36121</code>, 2026-11-21. Mode: <code>secure</code> (audit
+      and fix). Scope: the repository, with priority on the read-only SQL
+      contract and the Agents (MCP) local interface. Inspected sequentially,
+      without independent reviewers.
+    </p>
+    <h2>Executive summary</h2>
+    <p>
+      Two findings were reportable, one high and one medium. Both are fixed in
+      source and covered by regression tests.
+    </p>
+    <p>
+      Both break the same promise: SQL that Conch runs &quot;read-only&quot; for
+      an untrusted author stays inside the database. The untrusted authors are
+      the AI model, local agents and imported bundles. Before the fix,
+      DuckDB&#39;s read-only mode still let that SQL read any local file. On SQL
+      Server, a single SELECT could carry a second statement past the guard.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Severity</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SEC-001</td>
+          <td>DuckDB read-only execution reads local files and remote URLs</td>
+          <td>High</td>
+          <td>Fixed</td>
+        </tr>
+        <tr>
+          <td>SEC-002</td>
+          <td>T-SQL batches bypass the single-statement guard</td>
+          <td>Medium</td>
+          <td>Fixed</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Threat model summary</h2>
+    <p>
+      Conch is a single-user desktop client. It holds encrypted credentials for
+      many databases and runs SQL written by untrusted authors: the AI model
+      (steerable by data or questions), local MCP agents, and bundles from other
+      people. All of it runs under a read-only contract enforced twice: by
+      <code>assertReadOnly</code>, and by each driver&#39;s
+      <code>readOnly</code> execution. Other local users and the content Conch
+      renders are untrusted; same-user malware is out of scope. The full model
+      is in <code>threat-model.md</code>.
+    </p>
+    <h2>Findings</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Severity</th>
+          <th>Evidence</th>
+          <th>Impact</th>
+          <th>Remediation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SEC-001</td>
+          <td>DuckDB read-only execution reads local files and remote URLs</td>
+          <td>High</td>
+          <td>
+            PoC: guard returned ok, and the read-only pool returned a canary
+            file&#39;s contents
+          </td>
+          <td>
+            Any user-readable file, including the Conch key and the encrypted
+            credentials
+          </td>
+          <td>
+            DuckDB-parser check on read-only execution: no file/network table
+            functions, no path sources, one SELECT
+          </td>
+        </tr>
+        <tr>
+          <td>SEC-002</td>
+          <td>T-SQL batches bypass the single-statement guard</td>
+          <td>Medium</td>
+          <td>Unit tests: 7 semicolon-free batches passed the old guard</td>
+          <td>Non-transactional server effects and external reads on MSSQL</td>
+          <td>T-SQL reserved statement words forbidden in the guard</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>
+      SEC-001: DuckDB read-only execution reads local files and remote URLs
+    </h3>
+    <ul>
+      <li>
+        <strong>Affected code:</strong>
+        <ul>
+          <li>
+            <code>packages/drivers-duckdb/src/pool.ts:117</code>: read-only
+            execution
+          </li>
+          <li><code>packages/agent/src/read-only-guard.ts:271</code>: guard</li>
+          <li>
+            <code>apps/app/src/bun/mcp-server/tools.ts:257</code>: MCP
+            <code>ask</code>
+          </li>
+          <li>
+            <code>apps/app/src/bun/widget-service.ts:254</code>: widget runs
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Root cause:</strong> read-only mode was
+        <code>BEGIN TRANSACTION READ ONLY</code>, and the guard has no rule for
+        table functions. <code>read_text</code>, <code>read_blob</code>,
+        <code>read_csv</code>, <code>query()</code>, <code>httpfs</code> readers
+        and quoted paths in <code>FROM</code> all ran.
+      </li>
+      <li>
+        <strong>Attack:</strong> an exposed DuckDB connection plus an agent
+        question, or an imported widget, reads
+        <code>~/.config/conch/.key</code> and <code>connections.json</code> from
+        the Conch process.
+      </li>
+      <li>
+        <strong>Fix:</strong>
+        <code>packages/drivers-duckdb/src/read-only-sources.ts</code> checks the
+        statement with DuckDB&#39;s own parser before running it. Only
+        <code>range</code>, <code>generate_series</code> and
+        <code>unnest</code> remain as table functions, and the user&#39;s own
+        editor SQL is unchanged.
+      </li>
+      <li>
+        <strong>Evidence:</strong> the original PoC reproduces as tests in
+        <code>packages/drivers-duckdb/src/read-only.test.ts</code>, which now
+        refuse it.
+      </li>
+    </ul>
+    <h3>SEC-002: T-SQL batches bypass the single-statement guard</h3>
+    <ul>
+      <li>
+        <strong>Affected code:</strong>
+        <ul>
+          <li><code>packages/agent/src/read-only-guard.ts:251</code>: guard</li>
+          <li>
+            <code>packages/drivers-mssql/src/pool.ts:263</code>: rollback
+            wrapper
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Root cause:</strong> &quot;no <code>;</code> means one
+        statement&quot; does not hold for T-SQL. The MSSQL read-only mode is a
+        rolled-back transaction, which does not contain <code>SHUTDOWN</code>,
+        <code>OPENROWSET</code>/<code>OPENQUERY</code> reads or long
+        <code>WAITFOR</code>s.
+      </li>
+      <li>
+        <strong>Preconditions:</strong> a privileged login or non-default server
+        features.
+      </li>
+      <li>
+        <strong>Fix:</strong> for <code>tsql</code>, the guard forbids the
+        reserved words that start those statements. Valid T-SQL can&#39;t use
+        them as unquoted identifiers.
+      </li>
+      <li>
+        <strong>Evidence:</strong> the server-side effect was not run against
+        SQL Server; see <code>findings/SEC-002/validation.md</code>.
+      </li>
+    </ul>
+    <h2>Suppressed and not applicable</h2>
+    <ul>
+      <li>
+        <strong>SEC-003, <code>openExternal</code> opens any URL:</strong> not
+        applicable. It has no caller and no attacker source reaches it. If a
+        caller is added, restrict it to <code>https:</code>.
+      </li>
+      <li>
+        <strong
+          >SEC-004, chart <code>&lt;style&gt;</code> built with
+          <code>dangerouslySetInnerHTML</code>:</strong
+        >
+        suppressed. Keys and colors are synthetic, never data.
+      </li>
+      <li>
+        <strong>SEC-005, MCP client cap race:</strong> not applicable. It
+        affects availability only and needs the token.
+      </li>
+    </ul>
+    <h2>Deferred and coverage limits</h2>
+    <ul>
+      <li>
+        ClickHouse table functions (<code>url()</code>, <code>file()</code>)
+        under <code>readonly=1</code>: needs a running server.
+      </li>
+      <li>SQL Server execution of SEC-002 payloads.</li>
+      <li>Redis allow-list depth.</li>
+      <li>Electrobun updater verification.</li>
+      <li>Driver internals outside the read-only path.</li>
+    </ul>
+    <h2>Verification</h2>
+    <ul>
+      <li>
+        <code>packages/drivers-duckdb</code>: 77 tests pass, 8 of them new.
+      </li>
+      <li><code>packages/agent</code>: 243 tests pass, 9 of them new.</li>
+      <li><code>packages/core</code>: 591 tests pass.</li>
+      <li><code>packages/drivers</code>: 10 tests pass.</li>
+      <li><code>bun run check-types</code>: 15/15.</li>
+      <li><code>bun run check</code>: 0 errors.</li>
+      <li>
+        <code>bun run --cwd apps/app test</code>: 209 files, 1828 tests pass.
+      </li>
+    </ul>
+  </body>
+</html>
