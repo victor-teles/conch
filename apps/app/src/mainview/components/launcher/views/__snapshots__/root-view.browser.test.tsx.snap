@@ -887,6 +887,11 @@ exports[`activating a connection with full motion > shows a failed connection in
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
@@ -1836,6 +1841,11 @@ exports[`activating a connection with reduced motion > shows a failed connection
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
@@ -2770,6 +2780,11 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
@@ -3689,6 +3704,11 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
@@ -4683,6 +4703,11 @@ exports[`rootView with connections > lists connections first, most recent first,
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
@@ -4696,11 +4721,6 @@ exports[`rootView with connections > lists connections first, most recent first,
           class="text-foreground"
           data-slot="swap-text"
         >
-          <span
-            class="inline-block"
-          >
-            Add
-          </span>
           <span
             class="inline-block"
           >
@@ -5590,6 +5610,11 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
           No connection
         </span>
       </span>
+      <span
+        aria-live="polite"
+        class="flex min-w-0 items-center gap-2 empty:hidden"
+        data-slot="agent-activity"
+      />
     </div>
     <div
       class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"

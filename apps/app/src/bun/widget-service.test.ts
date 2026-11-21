@@ -564,6 +564,19 @@ describe("runDetached", () => {
     await expect(service.lastSampleFor("gone", {})).resolves.toBeNull();
   });
 
+  it("can run without recording a sample", async () => {
+    const { runLog, service } = setup({
+      pool: mrrPool(5),
+      widgets: [kpiWidget()],
+    });
+    const outcome = await service.runDetached("w1", {}, signal(), {
+      record: false,
+    });
+    expect(outcome.sample.value).toBe(5);
+    expect(outcome.previous).toBeNull();
+    await expect(runLog.latestFor(["w1"])).resolves.toStrictEqual({});
+  });
+
   it("runs read-only with bound parameters", async () => {
     const { pool, service } = setup();
     await service.runDetached("w1", {}, signal());

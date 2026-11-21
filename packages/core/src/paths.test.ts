@@ -18,6 +18,9 @@ const {
   historyDir,
   historyPath,
   keyPath,
+  mcpAuditPath,
+  mcpRunDir,
+  mcpSettingsPath,
   tabsPath,
   updateChannelPath,
 } = await import("./paths.ts");
@@ -31,6 +34,9 @@ describe("paths", () => {
     ["connectionsPath", () => connectionsPath(), `${ROOT}/connections.json`],
     ["keyPath", () => keyPath(), `${ROOT}/.key`],
     ["historyDir", () => historyDir(), `${ROOT}/history`],
+    ["mcpSettingsPath", () => mcpSettingsPath(), `${ROOT}/mcp.enc`],
+    ["mcpAuditPath", () => mcpAuditPath(), `${ROOT}/mcp-audit.enc`],
+    ["mcpRunDir", () => mcpRunDir(), `${ROOT}/run`],
     [
       "updateChannelPath",
       () => updateChannelPath(),

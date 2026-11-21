@@ -8,16 +8,22 @@ export const useCopyFeedback = () => {
   const [copied, setCopied] = useState(false);
   const timer = useRef(0);
 
-  const copy = useCallback(async (text: string) => {
-    if (!(await copyText(text))) {
-      return;
-    }
+  const flash = useCallback(() => {
     window.clearTimeout(timer.current);
     setCopied(true);
     timer.current = window.setTimeout(() => setCopied(false), COPIED_FOR_MS);
   }, []);
 
+  const copy = useCallback(
+    async (text: string) => {
+      if (await copyText(text)) {
+        flash();
+      }
+    },
+    [flash]
+  );
+
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
-  return { copied, copy };
+  return { copied, copy, flash };
 };

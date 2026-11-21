@@ -117,7 +117,13 @@ const setup = () => {
         return resolved({
           compiledSql: "select 1",
           previous,
-          result: { columns: [], isTruncated: false, rowCount: 1, rows: [] },
+          result: {
+            columns: [],
+            executionTimeMs: 5,
+            isTruncated: false,
+            rowCount: 1,
+            rows: [],
+          },
           sample,
           values: runValues,
           valuesKey: "0123456789abcdef",

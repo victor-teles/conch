@@ -29,6 +29,13 @@ import type {
   ImportSource,
 } from "./bundle.ts";
 import type { LookupEventMessage, LookupRequest } from "./lookup.ts";
+import type {
+  McpActivity,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettingsUpdate,
+  RedactedMcpSettings,
+} from "./mcp.ts";
 import type { RunSqlParams, SchemaPeek } from "./sql-run.ts";
 import type { Watch, WatchDraft, WatchStatus, WidgetTrend } from "./watch.ts";
 import type {
@@ -251,6 +258,24 @@ export interface RpcSchema {
     acknowledgeAlert: { params: { watchId: string }; response: void };
     setWatchingPaused: { params: { paused: boolean }; response: void };
     getWatchingPaused: { params: Record<string, never>; response: boolean };
+    getMcpSettings: {
+      params: Record<string, never>;
+      response: RedactedMcpSettings;
+    };
+    saveMcpSettings: {
+      params: McpSettingsUpdate;
+      response: RedactedMcpSettings;
+    };
+    rotateMcpToken: {
+      params: Record<string, never>;
+      response: RedactedMcpSettings;
+    };
+    copyMcpClientConfig: {
+      params: { client: McpClientKind };
+      response: void;
+    };
+    listMcpAudit: { params: { limit?: number }; response: McpAuditEntry[] };
+    clearMcpAudit: { params: Record<string, never>; response: void };
   };
   messages: {
     launcherShown: { clipboard: LookupValue | null };
@@ -263,5 +288,6 @@ export interface RpcSchema {
     boardChanged: { boardId: string };
     watchesChanged: Record<string, never>;
     widgetSampled: { widgetId: string; valuesKey: string };
+    mcpActivity: { active: McpActivity[] };
   };
 }

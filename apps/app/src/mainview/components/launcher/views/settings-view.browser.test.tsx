@@ -7,6 +7,7 @@ import { userEvent } from "vitest/browser";
 import type { CommandHandlers } from "@/test/ipc-mock";
 
 import { AppProviders } from "@/components/app-providers";
+import { ConnectionsProvider } from "@/components/launcher/connections/connections-provider";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
 
 import { SettingsView } from "./settings-view";
@@ -30,7 +31,13 @@ const renderSettings = (handlers: CommandHandlers = {}, onBack = vi.fn()) => {
   mockLauncherIpc({ handlers });
   return render(
     <AppProviders>
-      <SettingsView onBack={onBack} onOpenWatches={vi.fn()} />
+      <ConnectionsProvider>
+        <SettingsView
+          onBack={onBack}
+          onOpenAgents={vi.fn()}
+          onOpenWatches={vi.fn()}
+        />
+      </ConnectionsProvider>
     </AppProviders>
   );
 };
@@ -356,7 +363,13 @@ describe("settings view — background", () => {
     const onOpenWatches = vi.fn();
     const screen = render(
       <AppProviders>
-        <SettingsView onBack={vi.fn()} onOpenWatches={onOpenWatches} />
+        <ConnectionsProvider>
+          <SettingsView
+            onBack={vi.fn()}
+            onOpenAgents={vi.fn()}
+            onOpenWatches={onOpenWatches}
+          />
+        </ConnectionsProvider>
       </AppProviders>
     );
     await expect
@@ -364,5 +377,32 @@ describe("settings view — background", () => {
       .toBeVisible();
     await screen.getByRole("button", { name: "Open watched widgets" }).click();
     expect(onOpenWatches).toHaveBeenCalledOnce();
+  });
+});
+
+describe("settings view — agents", () => {
+  beforeEach(resetMotion);
+
+  it("opens Agents (MCP) from its own group", async () => {
+    mockLauncherIpc();
+    const onOpenAgents = vi.fn();
+    const screen = render(
+      <AppProviders>
+        <ConnectionsProvider>
+          <SettingsView
+            onBack={vi.fn()}
+            onOpenAgents={onOpenAgents}
+            onOpenWatches={vi.fn()}
+          />
+        </ConnectionsProvider>
+      </AppProviders>
+    );
+    const open = screen.getByRole("button", { name: "Open Agents (MCP)" });
+    await expect
+      .element(screen.getByRole("region", { name: "Agents" }))
+      .toBeVisible();
+    await expect.element(open).toHaveTextContent("Off");
+    await open.click();
+    expect(onOpenAgents).toHaveBeenCalledOnce();
   });
 });

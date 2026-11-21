@@ -8,6 +8,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
+import { resetPointer } from "./src/mainview/test/browser-commands";
+
 const dirname =
   typeof __dirname !== "undefined"
     ? __dirname
@@ -93,6 +95,7 @@ export default defineConfig({
         extends: true,
         test: {
           browser: {
+            commands: { resetPointer },
             enabled: true,
             headless: true,
             instances: [{ browser: "chromium" }],

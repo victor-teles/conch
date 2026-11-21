@@ -220,6 +220,7 @@ export function AskView({
             <AnimatePresence initial={false} mode="popLayout">
               <motion.div
                 animate={{ opacity: 1 }}
+                data-slot="ask-body"
                 exit={{ opacity: 0, transition: fadeOut }}
                 initial={{ opacity: 0 }}
                 key={bodyKeyOf(body)}

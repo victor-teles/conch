@@ -22,3 +22,4 @@ export * from "./widgets.ts";
 export * from "./boards.ts";
 export * from "./watches.ts";
 export * from "./types.ts";
+export * from "./mcp-store.ts";

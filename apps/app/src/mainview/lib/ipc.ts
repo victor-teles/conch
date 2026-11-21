@@ -53,6 +53,10 @@ import type {
   LookupErrorCode,
   LookupEvent,
   LookupHit,
+  McpActivity,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettingsUpdate,
   ParamDef,
   ParamType,
   ParamValue,
@@ -60,6 +64,7 @@ import type {
   ProposeParamsResult,
   RecentAsk,
   RedactedAiSettings,
+  RedactedMcpSettings,
   RefineContext,
   RefreshInterval,
   RpcSchema,
@@ -171,6 +176,13 @@ export type {
   ImportSource,
   WidgetPlan,
 };
+export type {
+  McpActivity,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettingsUpdate,
+  RedactedMcpSettings,
+};
 
 const IOS_UA_RE = /iPhone|iPad|iPod/i;
 const MAC_UA_RE = /Mac/i;
@@ -202,6 +214,7 @@ const messageHandlers: {
   launcherShown: new Set(),
   launcherToggle: new Set(),
   lookupEvent: new Set(),
+  mcpActivity: new Set(),
   updateProgress: new Set(),
   watchesChanged: new Set(),
   widgetSampled: new Set(),
@@ -240,6 +253,7 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
       launcherShown: (payload) => dispatchMessage("launcherShown", payload),
       launcherToggle: (payload) => dispatchMessage("launcherToggle", payload),
       lookupEvent: (payload) => dispatchMessage("lookupEvent", payload),
+      mcpActivity: (payload) => dispatchMessage("mcpActivity", payload),
       updateProgress: (payload) => dispatchMessage("updateProgress", payload),
       watchesChanged: (payload) => dispatchMessage("watchesChanged", payload),
       widgetSampled: (payload) => dispatchMessage("widgetSampled", payload),
@@ -359,6 +373,11 @@ export const onUpdateProgress = (
 
 export const onWatchesChanged = (handler: () => void): (() => void) =>
   subscribe("watchesChanged", handler);
+
+export const onMcpActivity = (
+  handler: (active: McpActivity[]) => void
+): (() => void) =>
+  subscribe("mcpActivity", (payload) => handler(payload.active));
 
 export const onWidgetSampled = (
   handler: (sampled: RpcMessages["widgetSampled"]) => void
@@ -648,3 +667,23 @@ export const setWatchingPaused = (paused: boolean): Promise<void> =>
 
 export const getWatchingPaused = (): Promise<boolean> =>
   callRpc(() => request.getWatchingPaused({} as never));
+
+export const getMcpSettings = (): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.getMcpSettings({} as never));
+
+export const saveMcpSettings = (
+  update: McpSettingsUpdate
+): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.saveMcpSettings(update));
+
+export const rotateMcpToken = (): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.rotateMcpToken({} as never));
+
+export const copyMcpClientConfig = (client: McpClientKind): Promise<void> =>
+  callRpc(() => request.copyMcpClientConfig({ client }));
+
+export const listMcpAudit = (limit?: number): Promise<McpAuditEntry[]> =>
+  callRpc(() => request.listMcpAudit(limit === undefined ? {} : { limit }));
+
+export const clearMcpAudit = (): Promise<void> =>
+  callRpc(() => request.clearMcpAudit({} as never));

@@ -84,4 +84,25 @@ describe("lookup view", () => {
       launcherStackReducer(initialStackState, { type: "push", view }).stack
     ).toStrictEqual([ROOT_VIEW, view]);
   });
+
+  it("stacks the agents view and its activity under settings", () => {
+    const views = [
+      SETTINGS,
+      { kind: "agents" },
+      { kind: "agents-audit" },
+    ] as const;
+    let state = initialStackState;
+    for (const view of views) {
+      state = launcherStackReducer(state, { type: "push", view });
+    }
+    expect(state.stack.map((view) => view.kind)).toStrictEqual([
+      "root",
+      "settings",
+      "agents",
+      "agents-audit",
+    ]);
+    expect(
+      launcherStackReducer(state, { type: "pop" }).stack.at(-1)
+    ).toStrictEqual({ kind: "agents" });
+  });
 });

@@ -9,6 +9,7 @@ import type {
   BoardDraft,
   ImportSource,
   LookupRequest,
+  McpSettingsUpdate,
   RunSqlParams,
   RunWidgetRequest,
   WatchDraft,
@@ -24,6 +25,7 @@ import {
   createClipboardEmulator,
   createLookupEmulator,
 } from "@/lib/browser-lookup-stub";
+import { createMcpEmulator } from "@/lib/browser-mcp-stub";
 import { recordedAssumptions } from "@/lib/browser-refine-stub";
 import { demoSchemaPeek } from "@/lib/browser-schema-stub";
 import { createWatchEmulator } from "@/lib/browser-watch-stub";
@@ -205,6 +207,10 @@ const createDispatcher = (emit: EmitMessage) => {
     widgetById: (widgetId) =>
       widgets.listWidgets().find((widget) => widget.id === widgetId) ?? null,
   });
+  const mcp = createMcpEmulator({
+    now: () => new Date(),
+    onActivity: (active) => emit("mcpActivity", { active }),
+  });
   const asks = createAskEmulator((payload) => emit("askEvent", payload), {
     labelFor: (connectionId) =>
       readConnections().find((connection) => connection.id === connectionId)
@@ -229,9 +235,11 @@ const createDispatcher = (emit: EmitMessage) => {
       lookups.cancel((payload as { lookupId: string }).lookupId),
     cancelWidgetRun: noop,
     clearAiKey: () => ai.clearKey(),
+    clearMcpAudit: () => mcp.clearMcpAudit(),
     clearRecentAsks: () => widgets.clearRecentAsks(),
     connectToDatabase: noop,
     copyImage: noop,
+    copyMcpClientConfig: () => mcp.copyMcpClientConfig(),
     deleteBoard: (payload) =>
       boards.deleteBoard(payload as { boardId: string }),
     deleteRecentAsk: (payload) =>
@@ -257,10 +265,12 @@ const createDispatcher = (emit: EmitMessage) => {
     getConnections: () => readConnections(),
     getHistory: () => [],
     getLauncherHotkey: () => DEFAULT_LAUNCHER_HOTKEY,
+    getMcpSettings: () => mcp.getMcpSettings(),
     getUpdateChannel: () => "stable",
     getWatchingPaused: () => watches.getWatchingPaused(),
     hideLauncher: () => launcher.hide(),
     listBoards: () => boards.listBoards(),
+    listMcpAudit: (payload) => mcp.listMcpAudit(payload as { limit?: number }),
     listRecentAsks: (payload) =>
       widgets.listRecentAsks(payload as { limit?: number }),
     listWatchStatuses: () => watches.listWatchStatuses(),
@@ -283,6 +293,7 @@ const createDispatcher = (emit: EmitMessage) => {
     rendererReady: noop,
     resizeLauncher: noop,
     revealSaved: noop,
+    rotateMcpToken: () => mcp.rotateMcpToken(),
     runSql: (payload) => asks.runSql(payload as RunSqlParams),
     runWidget: async (payload) => {
       const request = payload as RunWidgetRequest;
@@ -295,6 +306,8 @@ const createDispatcher = (emit: EmitMessage) => {
       writeConnections(
         (payload as { connections: DatabaseConnection[] }).connections
       ),
+    saveMcpSettings: (payload) =>
+      mcp.saveMcpSettings(payload as McpSettingsUpdate),
     saveToDownloads: (payload) => ({
       fileName: `${(payload as { baseName: string }).baseName}.csv`,
       savedId: "stub",

@@ -237,8 +237,9 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
         </div>
       </div>
       <div>
-        <div />
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="flex items-start gap-2.5 px-4 pt-3 pb-2"
           >
@@ -716,7 +717,9 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -1270,7 +1273,9 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="px-4 pt-1 pb-4"
           >
@@ -1774,7 +1779,9 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="px-4 pt-1 pb-4"
           >
@@ -2239,7 +2246,9 @@ exports[`askView designed states > matches the snapshot for the populated line c
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -3323,7 +3332,9 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -4462,8 +4473,9 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
         </div>
       </div>
       <div>
-        <div />
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="flex items-start gap-2.5 px-4 pt-3 pb-2"
           >

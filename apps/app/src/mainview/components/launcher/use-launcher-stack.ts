@@ -16,7 +16,9 @@ export type LauncherView =
   | { kind: "board-name"; target: BoardNameTarget }
   | { kind: "import" }
   | { kind: "watch"; widgetId: string }
-  | { kind: "watches" };
+  | { kind: "watches" }
+  | { kind: "agents" }
+  | { kind: "agents-audit" };
 
 export type StackDirection = 1 | -1;
 

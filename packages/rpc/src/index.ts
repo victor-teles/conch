@@ -1,4 +1,17 @@
-export * from "./ai-providers.ts";
+export {
+  AI_PROVIDER_INFO,
+  AI_PROVIDERS,
+  isAiConfigured,
+  isAiProvider,
+} from "./ai-providers.ts";
+export type {
+  ActiveConnection,
+  AiProvider,
+  AiProviderInfo,
+  AiSettingsInput,
+  AiTestResult,
+  RedactedAiSettings,
+} from "./ai-providers.ts";
 export type {
   AskErrorCode,
   AskEvent,
@@ -31,7 +44,7 @@ export {
   TableView,
 } from "./card-spec.ts";
 export type { ColumnFormatKind } from "./card-spec.ts";
-export * from "./error.ts";
+export { decodeRpcError, encodeRpcError } from "./error.ts";
 export { LookupRequest, LookupValueSchema } from "./lookup.ts";
 export type {
   LookupErrorCode,
@@ -195,3 +208,28 @@ export {
   toNumber,
 } from "./card-format.ts";
 export type { CardResult, FormatContext, Scalar } from "./card-format.ts";
+export {
+  DEFAULT_MCP_ROW_LIMIT,
+  ListMcpAuditRequest,
+  MAX_MCP_AUDIT_LIST,
+  MAX_MCP_EXPOSED,
+  MCP_CLIENT_KINDS,
+  MCP_OUTCOMES,
+  MCP_ROW_LIMITS,
+  MCP_SETTINGS_VERSION,
+  MCP_TOOLS,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettings,
+  McpSettingsUpdate,
+  McpToken,
+  McpTool,
+  mcpActivityPhrase,
+  mcpTokenPreview,
+} from "./mcp.ts";
+export type {
+  McpActivity,
+  McpClientInfo,
+  McpOutcome,
+  RedactedMcpSettings,
+} from "./mcp.ts";

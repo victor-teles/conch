@@ -17,6 +17,7 @@ import type {
   WidgetDraft,
 } from "@/lib/ipc";
 
+import { AgentActivityProvider } from "@/components/agents/agent-activity-provider";
 import { AskView } from "@/components/ask/ask-view";
 import { HistoryView } from "@/components/history/history-view";
 import { LookupView } from "@/components/lookup/lookup-view";
@@ -47,13 +48,17 @@ const SETTINGS = { kind: "settings" } as const;
 const HISTORY = { kind: "history" } as const;
 const IMPORT = { kind: "import" } as const;
 const WATCHES = { kind: "watches" } as const;
+const AGENTS = { kind: "agents" } as const;
+const AGENTS_AUDIT = { kind: "agents-audit" } as const;
 
 export function LauncherPanel() {
   return (
     <ConnectionsProvider>
       <WidgetsProvider>
         <WatchesProvider>
-          <LauncherStackView />
+          <AgentActivityProvider>
+            <LauncherStackView />
+          </AgentActivityProvider>
         </WatchesProvider>
       </WidgetsProvider>
     </ConnectionsProvider>
@@ -143,6 +148,8 @@ function LauncherStackView() {
     [push]
   );
   const handleOpenWatches = useCallback(() => push(WATCHES), [push]);
+  const handleOpenAgents = useCallback(() => push(AGENTS), [push]);
+  const handleOpenAgentsAudit = useCallback(() => push(AGENTS_AUDIT), [push]);
   const handleNewBoard = useCallback(
     (widgetId: string | null) =>
       push({
@@ -289,6 +296,8 @@ function LauncherStackView() {
             onImportDone: handleImportDone,
             onInputsSaved: handleInputsSaved,
             onNewBoard: handleNewBoard,
+            onOpenAgents: handleOpenAgents,
+            onOpenAgentsAudit: handleOpenAgentsAudit,
             onOpenWatches: handleOpenWatches,
             onWatch: handleWatch,
             root: (

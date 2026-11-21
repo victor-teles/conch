@@ -374,7 +374,9 @@ exports[`refine states > matches the refine error over the restored card snapsho
         </li>
       </ul>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div>
             <div
               class="px-4 pt-1 pb-4"
@@ -1681,7 +1683,9 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
         </li>
       </ul>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -2850,7 +2854,9 @@ exports[`refine states > matches the refining snapshot 1`] = `
         </li>
       </ul>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -3991,7 +3997,9 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >

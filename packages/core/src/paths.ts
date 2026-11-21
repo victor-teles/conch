@@ -62,3 +62,15 @@ export function watchesPath(): string {
 export function runLogPath(): string {
   return path.join(appDir(), "widget-runs.enc");
 }
+
+export function mcpSettingsPath(): string {
+  return path.join(appDir(), "mcp.enc");
+}
+
+export function mcpAuditPath(): string {
+  return path.join(appDir(), "mcp-audit.enc");
+}
+
+export function mcpRunDir(): string {
+  return path.join(appDir(), "run");
+}

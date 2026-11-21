@@ -5,6 +5,11 @@ import { userEvent } from "vitest/browser";
 import { AppProviders } from "@/components/app-providers";
 import { emitIpcMessage } from "@/test/ipc-mock";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
+import {
+  makeActivity,
+  makeAuditEntry,
+  makeMcpSettings,
+} from "@/test/mcp-fixtures";
 import { wait } from "@/test/wait";
 import { makeKpiWidget, makeWatch } from "@/test/watch-fixtures";
 
@@ -115,6 +120,46 @@ describe("launcherPanel", () => {
       await expect.element(search).not.toBeInTheDocument();
     }
   );
+
+  it("walks settings → Agents (MCP) → activity and back", async () => {
+    mockLauncherIpc({
+      handlers: {
+        getMcpSettings: () =>
+          makeMcpSettings({ enabled: true, listening: true }),
+        listMcpAudit: () => [makeAuditEntry()],
+      },
+    });
+    const screen = renderLauncher();
+
+    emitIpcMessage("launcherNavigate", { view: "settings" });
+    await screen.getByRole("button", { name: "Open Agents (MCP)" }).click();
+    await expect
+      .element(screen.getByRole("heading", { name: "Agents (MCP)" }))
+      .toBeVisible();
+    await screen.getByRole("button", { name: "Open agent activity" }).click();
+    await expect
+      .element(screen.getByRole("heading", { name: "Agent activity" }))
+      .toBeVisible();
+
+    await userEvent.keyboard("{Escape}");
+    await expect
+      .element(screen.getByRole("heading", { name: "Agents (MCP)" }))
+      .toBeVisible();
+  });
+
+  it("shows agent activity in the root footer instead of the connection", async () => {
+    const screen = renderLauncher();
+    await expect
+      .element(screen.getByRole("combobox", { name: "Search commands" }))
+      .toBeVisible();
+
+    emitIpcMessage("mcpActivity", { active: [makeActivity()] });
+
+    await expect
+      .element(screen.getByText("Claude Code is asking analytics"))
+      .toBeVisible();
+    expect(screen.getByText("No connection").query()).toBeNull();
+  });
 
   it("follows navigate messages from the tray and menu", async () => {
     const screen = renderLauncher();

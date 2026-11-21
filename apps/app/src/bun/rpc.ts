@@ -1,8 +1,11 @@
 import type { RpcSchema } from "@conch/rpc";
 
+import { runAsk } from "@conch/agent";
 import {
   appendHistory,
+  appendMcpAudit,
   CancellationRegistry,
+  clearMcpAudit,
   createBoardStore,
   createWatchStore,
   DbError,
@@ -11,10 +14,14 @@ import {
   getAllHistory,
   getConnections,
   getHistory,
+  listMcpAudit,
+  mcpRunDir,
   raceWithCancel,
+  readMcpSettings,
   resetSecrets,
   saveConnections,
   transpileSql,
+  writeMcpSettings,
 } from "@conch/core";
 import { ConnectionPoolManager, getDriver } from "@conch/drivers";
 import {
@@ -24,9 +31,12 @@ import {
   Dialect,
   encodeRpcError,
   MAX_REFINE_SQL,
+  McpAuditEntry,
+  McpSettings,
   Watch,
 } from "@conch/rpc";
-import { defineElectrobunRPC, Updater, Utils } from "electrobun/main";
+import { defineElectrobunRPC, PATHS, Updater, Utils } from "electrobun/main";
+import path from "node:path";
 import { z } from "zod";
 
 import type { BoardWindows } from "./board-windows.ts";
@@ -40,12 +50,17 @@ import {
   writeAiSettings,
 } from "./ai-settings-service.ts";
 import { createAlertNotifier } from "./alert-notifier.ts";
+import { buildAskPorts } from "./ask-ports.ts";
 import { createAskService } from "./ask-service.ts";
 import { createBoardService } from "./board-service.ts";
 import { createBundleService, readTextUpTo } from "./bundle-service.ts";
 import { decodePng } from "./clipboard-image.ts";
 import { createClipboardOffer } from "./clipboard-offer.ts";
-import { findConnection } from "./connection-access.ts";
+import {
+  ensurePool,
+  findConnection,
+  resolveSchemaName,
+} from "./connection-access.ts";
 import { createDownloads, writeExclusive } from "./downloads.ts";
 import {
   readActiveConnection,
@@ -57,6 +72,8 @@ import {
   writeWatchingPaused,
 } from "./launcher-config.ts";
 import { createLookupService } from "./lookup-service.ts";
+import { createActivityTracker } from "./mcp-server/activity.ts";
+import { createMcpServerHost } from "./mcp-server/index.ts";
 import { createPasteboardTypes } from "./pasteboard-types-native.ts";
 import { createPowerProbe } from "./power-native.ts";
 import { createSchemaCache } from "./schema-cache.ts";
@@ -272,6 +289,66 @@ export function createAppRpcs(host: AppHost) {
     readFile: readTextUpTo,
     widgets,
   });
+  const broadcastMcpActivity = () => {
+    for (const rpc of live) {
+      rpc.send.mcpActivity({ active: mcpActivity.active() });
+    }
+  };
+  const mcpActivity = createActivityTracker({
+    clearTimer: clearTimeout,
+    now: () => new Date(),
+    publish: broadcastMcpActivity,
+    setTimer: setTimeout,
+    setTray: (line) => host.launcher()?.setTrayActivity(line),
+  });
+  const mcp = createMcpServerHost({
+    activity: mcpActivity,
+    audit: {
+      append: appendMcpAudit,
+      clear: clearMcpAudit,
+      list: (limit) => listMcpAudit(limit, parseWith(McpAuditEntry)),
+    },
+    listConnections: getConnections,
+    now: () => new Date(),
+    onClientsChanged: broadcastMcpActivity,
+    paths: {
+      bridgePath: path.join(PATHS.RESOURCES_FOLDER, "app/bun/mcp-bridge.js"),
+      bunPath: process.execPath,
+      runDir: mcpRunDir(),
+      socketPath: path.join(mcpRunDir(), "mcp.sock"),
+    },
+    serverVersion: readAppVersion,
+    settings: {
+      read: () => readMcpSettings(parseWith(McpSettings)),
+      write: writeMcpSettings,
+    },
+    supported: process.platform === "darwin",
+    tools: {
+      askPorts: (target) =>
+        buildAskPorts({ loadModel: loadAskModel, pools, schemas }, target),
+      hasAiModel: async () => (await loadAskModel()) !== null,
+      listWidgets: widgets.listWidgets,
+      loadSchema: (connectionId, database) =>
+        schemas.get(connectionId, database),
+      resolveDatabase: async (connection, requested) =>
+        resolveSchemaName(
+          await ensurePool(pools, connection),
+          requested,
+          connection
+        ),
+      runAsk,
+      runWidget: (widgetId, values, signal) =>
+        widgets.runDetached(widgetId, values, signal, { record: false }),
+    },
+    writeClipboard: (text) => Utils.clipboardWriteText(text),
+  });
+  const stopAgents = async () => {
+    try {
+      await mcp.stop();
+    } catch (error) {
+      console.error(`[mcp] could not stop: ${String(error)}`);
+    }
+  };
   let launcherRpc: AppRpc | null = null;
   const asks = createAskService({
     loadModel: loadAskModel,
@@ -317,6 +394,7 @@ export function createAppRpcs(host: AppHost) {
     cancelWidgetRun: ({ runId }) => widgets.cancelRun(runId),
     checkForUpdate: () => doCheckForUpdate(),
     clearAiKey: () => removeAiKey(),
+    clearMcpAudit: () => mcp.clearAudit(),
     clearRecentAsks: () => widgets.clearRecentAsks(),
     connectToDatabase: async ({ connectionId, params }) => {
       schemas.invalidate(connectionId);
@@ -326,6 +404,7 @@ export function createAppRpcs(host: AppHost) {
     copyImage: ({ pngBase64 }) => {
       Utils.clipboardWriteImage(decodePng(pngBase64));
     },
+    copyMcpClientConfig: ({ client }) => mcp.copyClientConfig(client),
     deleteBoard: async ({ boardId }) => {
       await boards.deleteBoard(boardId);
       host.boardWindows()?.close(boardId);
@@ -399,6 +478,7 @@ export function createAppRpcs(host: AppHost) {
     getHistory: ({ connectionId, limit, offset }) =>
       getHistory(connectionId, limit ?? null, offset ?? null),
     getLauncherHotkey: () => readLauncherHotkey(),
+    getMcpSettings: () => mcp.getSettings(),
     getSchema: ({ connectionId, databaseName, force }) =>
       schemas.get(connectionId, databaseName, force),
     getServerVersion: ({ connectionId }) =>
@@ -412,6 +492,7 @@ export function createAppRpcs(host: AppHost) {
     listBoards: () => boards.listBoards(),
     listConnectionDatabases: ({ connectionId }) =>
       pools.getPool(connectionId).listDatabases(),
+    listMcpAudit: (request) => mcp.listAudit(request),
     listRecentAsks: (request) => widgets.listRecentAsks(request),
     listWatchStatuses: () => watches.statuses(),
     listWatches: () => watches.list(),
@@ -447,6 +528,7 @@ export function createAppRpcs(host: AppHost) {
       getLauncher()?.resize(height);
     },
     revealSaved: ({ savedId }) => downloads.reveal(savedId),
+    rotateMcpToken: () => mcp.rotateToken(),
     runSql: (params) => {
       watches.connectionUsed(params.connectionId);
       return asks.startSqlRun(params);
@@ -466,6 +548,7 @@ export function createAppRpcs(host: AppHost) {
       await saveConnections(connections);
       watches.connectionsChanged();
     },
+    saveMcpSettings: (update) => mcp.saveSettings(update),
     saveToDownloads: (params) => downloads.save(params, ["csv"]),
     saveWatch: ({ watch }) => watches.save(watch),
     saveWidget: ({ widget }) => widgets.saveWidget(widget),
@@ -502,10 +585,18 @@ export function createAppRpcs(host: AppHost) {
           console.error(`[watch] could not acknowledge ${watchId}`, error);
         }
       },
-      start: () => watches.start(),
+      start: async () => {
+        try {
+          await mcp.start();
+        } catch (error) {
+          console.error(`[mcp] could not start: ${String(error)}`);
+        }
+        await watches.start();
+      },
       stop: () => {
         watches.stop();
         notifier.dispose();
+        stopAgents();
       },
     },
     createWindowRpc,

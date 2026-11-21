@@ -24,6 +24,7 @@ import {
 import { summonPayload } from "./summon-payload.ts";
 import {
   EMPTY_TRAY_STATUS,
+  TRAY_IMAGES,
   trayActionOf,
   trayMenu,
   trayTitle,
@@ -36,6 +37,7 @@ export interface LauncherController {
   resize(height: number): void;
   runModal<T>(openPanel: () => Promise<T>): Promise<T>;
   setTrayStatus(status: TrayStatus): void;
+  setTrayActivity(line: string | null): void;
   show(): void;
   toggle(): void;
 }
@@ -66,7 +68,11 @@ export function createLauncher({
   let contentHeight = LAUNCHER_MIN_HEIGHT;
   let rendererReady = false;
   let modal = false;
-  const shownTray = { menu: "", title: "" };
+  const shownTray = { image: TRAY_IMAGES.idle as string, menu: "", title: "" };
+  const trayState = {
+    agentLine: null as string | null,
+    status: EMPTY_TRAY_STATUS,
+  };
 
   const window = new BrowserWindow({
     frame: launcherFrame(cursorWorkArea(), contentHeight),
@@ -89,15 +95,17 @@ export function createLauncher({
 
   const tray = new Tray({
     height: 18,
-    image: "views://assets/tray-template.png",
+    image: TRAY_IMAGES.idle,
     template: true,
     width: 18,
   });
   // Native menu rebuilds are not free; skip them when nothing visible changed.
-  const setTrayStatus = (status: TrayStatus) => {
+  const renderTray = () => {
+    const { status, agentLine } = trayState;
     const title = trayTitle(status);
-    const menu = trayMenu(status);
+    const menu = trayMenu(status, agentLine);
     const menuKey = JSON.stringify(menu);
+    const image = agentLine ? TRAY_IMAGES.active : TRAY_IMAGES.idle;
     if (title !== shownTray.title) {
       tray.setTitle(title);
       shownTray.title = title;
@@ -106,8 +114,20 @@ export function createLauncher({
       tray.setMenu(menu);
       shownTray.menu = menuKey;
     }
+    if (image !== shownTray.image) {
+      tray.setImage(image);
+      shownTray.image = image;
+    }
   };
-  setTrayStatus(EMPTY_TRAY_STATUS);
+  const setTrayStatus = (status: TrayStatus) => {
+    trayState.status = status;
+    renderTray();
+  };
+  const setTrayActivity = (line: string | null) => {
+    trayState.agentLine = line;
+    renderTray();
+  };
+  renderTray();
 
   const controller: LauncherController = {
     hide: () => {
@@ -139,6 +159,7 @@ export function createLauncher({
         modal = false;
       }
     },
+    setTrayActivity,
     setTrayStatus,
     show,
     toggle: () => {

@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from "lucide-react";
 
+import { AgentsSettingRow } from "@/components/agents/agents-setting-row";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { ViewHeader } from "@/components/launcher/view-header";
 import { Pressable } from "@/components/motion/pressable";
@@ -18,9 +19,14 @@ const STATUS = <span>Conch</span>;
 interface SettingsViewProps {
   onBack: () => void;
   onOpenWatches: () => void;
+  onOpenAgents: () => void;
 }
 
-export function SettingsView({ onBack, onOpenWatches }: SettingsViewProps) {
+export function SettingsView({
+  onBack,
+  onOpenWatches,
+  onOpenAgents,
+}: SettingsViewProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Settings" />
@@ -52,6 +58,9 @@ export function SettingsView({ onBack, onOpenWatches }: SettingsViewProps) {
               <ChevronRightIcon aria-hidden className="size-3" />
             </Pressable>
           </SettingRow>
+        </SettingsGroup>
+        <SettingsGroup title="Agents">
+          <AgentsSettingRow onOpen={onOpenAgents} />
         </SettingsGroup>
         <AboutSection />
       </div>

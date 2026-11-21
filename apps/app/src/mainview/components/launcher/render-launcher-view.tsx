@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import type { Widget, WidgetDraft } from "@/lib/ipc";
 
+import { AgentsView } from "@/components/agents/agents-view";
+import { AuditView } from "@/components/agents/audit-view";
 import { ImportView } from "@/components/bundle/import-view";
 import { WatchView } from "@/components/watches/watch-view";
 import { WatchesView } from "@/components/watches/watches-view";
@@ -29,6 +31,8 @@ export interface ViewSlots {
   onImportDone: (firstWidgetId: string | null) => void;
   onWatch: (widgetId: string) => void;
   onOpenWatches: () => void;
+  onOpenAgents: () => void;
+  onOpenAgentsAudit: () => void;
 }
 
 export const renderView = (view: LauncherView, slots: ViewSlots) => {
@@ -46,6 +50,8 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
     onImportDone,
     onWatch,
     onOpenWatches,
+    onOpenAgents,
+    onOpenAgentsAudit,
   } = slots;
   switch (view.kind) {
     case "ask": {
@@ -104,7 +110,19 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
       );
     }
     case "settings": {
-      return <SettingsView onBack={onBack} onOpenWatches={onOpenWatches} />;
+      return (
+        <SettingsView
+          onBack={onBack}
+          onOpenAgents={onOpenAgents}
+          onOpenWatches={onOpenWatches}
+        />
+      );
+    }
+    case "agents": {
+      return <AgentsView onBack={onBack} onOpenAudit={onOpenAgentsAudit} />;
+    }
+    case "agents-audit": {
+      return <AuditView onBack={onBack} />;
     }
     case "connection-edit": {
       return (

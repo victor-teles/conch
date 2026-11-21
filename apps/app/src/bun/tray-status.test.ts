@@ -72,6 +72,32 @@ describe("trayMenu", () => {
     ]);
   });
 
+  it("leads with a disabled line while an agent call runs", () => {
+    const menu = trayMenu(
+      status({ pinned: pinned() }),
+      "Claude Code · asking analytics…"
+    );
+    expect(menu[0]).toStrictEqual({
+      enabled: false,
+      label: "Claude Code · asking analytics…",
+      type: "normal",
+    });
+    expect(labels(menu).slice(1, 3)).toStrictEqual([
+      "MRR · $12.4k · 2m ago",
+      "Open MRR",
+    ]);
+    expect(
+      labels(trayMenu(status(), "Cursor · listing widgets…"))
+    ).toStrictEqual([
+      "Cursor · listing widgets…",
+      "—",
+      "Open Launcher",
+      "Settings…",
+      "—",
+      "Quit Conch",
+    ]);
+  });
+
   it("lists the pinned KPI, unseen alerts and the watch count", () => {
     const menu = trayMenu(
       status({

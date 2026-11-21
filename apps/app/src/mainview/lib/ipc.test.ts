@@ -452,3 +452,57 @@ describe("ask", () => {
     expect(cancelled).toHaveBeenCalledWith({ askId: "a1" });
   });
 });
+
+describe("agents (MCP) requests", () => {
+  const loadIpc = async (handlers: Parameters<typeof mockIpc>[0] = {}) => {
+    vi.resetModules();
+    mockIpc({ rendererReady: vi.fn(), ...handlers });
+    return await import("@/lib/ipc");
+  };
+
+  it("forwards settings, token, copy and audit requests to bun", async () => {
+    const calls: [string, unknown][] = [];
+    const record = (name: string, response: unknown) => (payload: unknown) => {
+      calls.push([name, payload]);
+      return response;
+    };
+    const ipc = await loadIpc({
+      clearMcpAudit: record("clearMcpAudit", null),
+      copyMcpClientConfig: record("copyMcpClientConfig", null),
+      getMcpSettings: record("getMcpSettings", { enabled: false }),
+      listMcpAudit: record("listMcpAudit", []),
+      rotateMcpToken: record("rotateMcpToken", { enabled: true }),
+      saveMcpSettings: record("saveMcpSettings", { enabled: true }),
+    });
+
+    await ipc.getMcpSettings();
+    await ipc.saveMcpSettings({ enabled: true });
+    await ipc.rotateMcpToken();
+    await ipc.copyMcpClientConfig("claude-code");
+    await ipc.listMcpAudit();
+    await ipc.listMcpAudit(20);
+    await ipc.clearMcpAudit();
+
+    expect(calls).toStrictEqual([
+      ["getMcpSettings", {}],
+      ["saveMcpSettings", { enabled: true }],
+      ["rotateMcpToken", {}],
+      ["copyMcpClientConfig", { client: "claude-code" }],
+      ["listMcpAudit", {}],
+      ["listMcpAudit", { limit: 20 }],
+      ["clearMcpAudit", {}],
+    ]);
+  });
+
+  it("unwraps mcpActivity payloads", async () => {
+    const ipc = await loadIpc();
+    const handler = vi.fn();
+    const unsubscribe = ipc.onMcpActivity(handler);
+
+    emitIpcMessage("mcpActivity", { active: [] });
+    unsubscribe();
+    emitIpcMessage("mcpActivity", { active: [] });
+
+    expect(handler).toHaveBeenCalledExactlyOnceWith([]);
+  });
+});

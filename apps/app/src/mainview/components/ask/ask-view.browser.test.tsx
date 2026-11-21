@@ -10,6 +10,7 @@ import {
 } from "@/test/ask-fixtures";
 import { renderAskView as renderAsk } from "@/test/ask-view-harness";
 import { kpi } from "@/test/card-fixtures";
+import { swapsSettled } from "@/test/wait";
 
 import type { AskState } from "./ask-reducer";
 
@@ -202,11 +203,12 @@ describe("askView designed states", () => {
     await expect
       .element(screen.getByText(marker, { exact: false }).first())
       .toBeVisible();
+    await expect.poll(() => swapsSettled(screen.element())).toBe(true);
     await expect
-      .poll(() =>
-        screen.element().querySelector('[data-slot="swap-text"] > span + span')
+      .poll(
+        () => screen.element().querySelectorAll('[data-slot="ask-body"]').length
       )
-      .toBeNull();
+      .toBe(1);
     expect(screen.element()).toMatchSnapshot();
   });
 });

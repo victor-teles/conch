@@ -89,9 +89,11 @@ test.describe("refine flow", () => {
 
     const assumptions = page.getByRole("list", { name: "Assumptions" });
     await assumptions
-      .getByRole("button", { name: "Refine without s.status = 'active'" })
+      .getByRole("button", {
+        name: "Refine without the “status is active” filter",
+      })
       .click();
-    await expect(input).toHaveValue("without s.status = 'active'");
+    await expect(input).toHaveValue("drop the “status is active” filter");
     await expect(input).toBeFocused();
 
     await input.fill("");

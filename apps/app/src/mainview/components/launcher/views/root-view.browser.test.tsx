@@ -7,6 +7,7 @@ import type { ParamValues } from "@/lib/ipc";
 import { optionId } from "@/components/launcher/launcher-row";
 import { makeConnection } from "@/test/connection-fixture";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
+import { swapsSettled } from "@/test/wait";
 
 import { resetFirstRunReveal } from "./first-run-note";
 import { RootView } from "./root-view";
@@ -250,6 +251,7 @@ describe("rootView with connections", () => {
       .element(screen.getByText("Connect", { exact: true }))
       .toBeVisible();
     await expect.element(screen.getByText("Actions")).toBeVisible();
+    await expect.poll(() => swapsSettled(screen.container)).toBe(true);
     expect(screen.container).toMatchSnapshot();
   });
 

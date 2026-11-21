@@ -24,6 +24,9 @@ export default {
     },
     copy: {
       ...bunAssetCopy,
+      "assets/bun/mcp-bridge.js": "bun/mcp-bridge.js",
+      "assets/tray-active-template.png":
+        "views/assets/tray-active-template.png",
       "assets/tray-template.png": "views/assets/tray-template.png",
       dist: "views/mainview",
     },

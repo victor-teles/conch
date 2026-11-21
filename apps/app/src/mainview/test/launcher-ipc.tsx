@@ -12,6 +12,7 @@ import { WidgetsProvider } from "@/components/widgets/widgets-provider";
 import type { CommandHandlers } from "./ipc-mock";
 
 import { mockIpc } from "./ipc-mock";
+import { makeMcpSettings } from "./mcp-fixtures";
 
 interface LauncherIpcOptions {
   connections?: DatabaseConnection[];
@@ -35,6 +36,7 @@ export const mockLauncherIpc = ({
     getClipboardLookups: () => ({ enabled: false }),
     getConnections: () => store.connections,
     getLauncherHotkey: () => "Option+Shift+Space",
+    getMcpSettings: () => makeMcpSettings(),
     getUpdateChannel: () => "stable",
     getWatchingPaused: () => false,
     hideLauncher: () => null,

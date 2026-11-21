@@ -105,9 +105,20 @@ const BASE_MENU: MenuItemConfig[] = [
   { action: TRAY_ACTIONS.quit, label: "Quit Conch", type: "normal" },
 ];
 
-export const trayMenu = (status: TrayStatus): MenuItemConfig[] => {
+export const TRAY_IMAGES = {
+  active: "views://assets/tray-active-template.png",
+  idle: "views://assets/tray-template.png",
+} as const;
+
+export const trayMenu = (
+  status: TrayStatus,
+  agentLine: string | null = null
+): MenuItemConfig[] => {
   const { pinned, alerts, now } = status;
   const watchItems: MenuItemConfig[] = [];
+  if (agentLine) {
+    watchItems.push({ enabled: false, label: agentLine, type: "normal" });
+  }
   if (pinned) {
     watchItems.push(
       {

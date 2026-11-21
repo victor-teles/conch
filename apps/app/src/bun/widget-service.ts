@@ -115,7 +115,7 @@ export interface WidgetServiceDeps {
 
 export interface DetachedRun {
   widget: WidgetRecord;
-  result: CardResult;
+  result: CardResult & { executionTimeMs: number };
   compiledSql: string;
   values: ParamValues;
   valuesKey: string;
@@ -464,7 +464,8 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     async runDetached(
       widgetId: string,
       values: ParamValues,
-      signal: AbortSignal
+      signal: AbortSignal,
+      { record = true }: { record?: boolean } = {}
     ): Promise<DetachedRun> {
       const widget = await requireWidget(widgetId);
       const now = deps.now();
@@ -476,7 +477,9 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
       );
       const valuesKey = valuesKeyOf(resolved);
       const sample = sampleOf(widget.spec, result, now);
-      const entry = await appendSample(widget, valuesKey, sample);
+      const entry = record
+        ? await appendSample(widget, valuesKey, sample)
+        : null;
       return {
         compiledSql,
         previous: entry?.samples.at(-2) ?? null,
