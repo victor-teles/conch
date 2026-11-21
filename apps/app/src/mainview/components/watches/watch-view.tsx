@@ -18,7 +18,7 @@ function WatchMessage({ text, onBack }: { text: string; onBack: () => void }) {
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Watch" />
       <p
-        className="border-t border-panel-border px-4 py-6 type-body text-panel-muted"
+        className="launcher-body px-4 pt-6 type-body text-panel-muted"
         role="status"
       >
         {text}

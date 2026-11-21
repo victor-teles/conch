@@ -88,6 +88,16 @@ const combobox = (screen: Screen) =>
 const option = (screen: Screen, name: RegExp) =>
   screen.getByRole("option", { name });
 
+const rootBody = (): HTMLElement => {
+  const body = document
+    .querySelector("#launcher-root-list")
+    ?.closest<HTMLElement>('[style*="min-height"]');
+  if (!body) {
+    throw new Error("missing root body");
+  }
+  return body;
+};
+
 const resetMotion = () => {
   reduced.value = false;
   resetFirstRunReveal();
@@ -249,6 +259,21 @@ describe("rootView with connections", () => {
     await expect
       .element(option(screen, /scratch/))
       .toHaveAttribute("aria-selected", "true");
+  });
+
+  it("keeps its height while a query narrows the results", async () => {
+    mockLauncherIpc({ connections: [analytics, scratch] });
+    const screen = renderRoot();
+    await expect.element(option(screen, /scratch/)).toBeVisible();
+    const body = rootBody();
+    const resting = body.offsetHeight;
+
+    await combobox(screen).fill("duck");
+    await expect.poll(() => screen.getByRole("option").all().length).toBe(1);
+    expect(body.offsetHeight).toBe(resting);
+
+    await combobox(screen).fill("");
+    await expect.poll(() => body.style.minHeight).toBe("0px");
   });
 
   it("moves the selection with the arrow keys and wraps", async () => {

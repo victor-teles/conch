@@ -156,14 +156,18 @@ describe("askReducer", () => {
     });
   });
 
+  it("keeps the SQL collapsed while it streams", () => {
+    expect(run(HAPPY.slice(0, 4)).sqlExpanded).toBeFalsy();
+    expect(run(HAPPY).sqlExpanded).toBeFalsy();
+  });
+
   it("keeps the SQL expanded on a result when the user expanded it", () => {
-    const toggledTwice = run([
+    const toggled = run([
       ...HAPPY.slice(0, 4),
-      { type: "toggleSql" },
       { type: "toggleSql" },
       ...HAPPY.slice(4, 8),
     ]);
-    expect(toggledTwice.sqlExpanded).toBeTruthy();
+    expect(toggled.sqlExpanded).toBeTruthy();
   });
 
   it("records a failure with its SQL and expands the SQL", () => {
@@ -249,7 +253,7 @@ describe("askReducer", () => {
         { askId: "a1", prompt: "q", source: "question", type: "start" },
         { type: "toggleSql" },
       ]).sqlExpanded
-    ).toBeTruthy();
+    ).toBeFalsy();
     expect(run([...HAPPY, { type: "toggleSql" }])).toMatchObject({
       sqlExpanded: true,
       sqlToggled: true,

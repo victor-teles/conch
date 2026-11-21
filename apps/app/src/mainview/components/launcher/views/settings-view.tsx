@@ -24,7 +24,7 @@ export function SettingsView({ onBack, onOpenWatches }: SettingsViewProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Settings" />
-      <div className="min-h-0 flex-1 overflow-y-auto border-t border-panel-border pb-2">
+      <div className="min-h-0 flex-1 launcher-body overflow-y-auto">
         <SettingsGroup title="AI">
           <AiSettingsSection />
         </SettingsGroup>

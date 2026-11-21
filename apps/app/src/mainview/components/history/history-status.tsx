@@ -1,3 +1,6 @@
+import { HistoryIcon } from "lucide-react";
+
+import { FooterLocation } from "@/components/launcher/footer-location";
 import { SwapText } from "@/components/motion/swap-text";
 
 interface HistoryStatusProps {
@@ -15,7 +18,9 @@ export function HistoryStatus({ failure, message, hint }: HistoryStatusProps) {
           className={failure ? "truncate text-danger-ink" : "truncate"}
           value={text}
         />
-      ) : null}
+      ) : (
+        <FooterLocation icon={HistoryIcon} label="History" />
+      )}
     </span>
   );
 }

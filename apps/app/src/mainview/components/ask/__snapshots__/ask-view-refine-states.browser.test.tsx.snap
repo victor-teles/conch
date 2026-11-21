@@ -91,7 +91,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -129,13 +129,8 @@ exports[`refine states > matches the refine error over the restored card snapsho
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -144,11 +139,6 @@ exports[`refine states > matches the refine error over the restored card snapsho
             >
               PostgreSQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -312,7 +302,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
               <span
                 class="inline-block"
               >
-                subscriptions.billed_at · by month
+                subscriptions.billed_at by month
               </span>
             </span>
           </button>
@@ -321,9 +311,10 @@ exports[`refine states > matches the refine error over the restored card snapsho
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            aria-label="Refine without the “billed_at since 2026-01-01” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.billed_at >= CAST('2026-01-01' AS DATE)"
             type="button"
           >
             <span
@@ -333,7 +324,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
               <span
                 class="inline-block"
               >
-                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+                billed_at since 2026-01-01
               </span>
             </span>
           </button>
@@ -342,9 +333,10 @@ exports[`refine states > matches the refine error over the restored card snapsho
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.status = 'active'"
+            aria-label="Refine without the “status is active” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.status = 'active'"
             type="button"
           >
             <span
@@ -354,7 +346,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
               <span
                 class="inline-block"
               >
-                s.status = 'active'
+                status is active
               </span>
             </span>
           </button>
@@ -1127,10 +1119,11 @@ exports[`refine states > matches the refine error over the restored card snapsho
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -1148,7 +1141,9 @@ exports[`refine states > matches the refine error over the restored card snapsho
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1359,7 +1354,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <nav
@@ -1447,13 +1442,8 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -1464,11 +1454,6 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -1476,11 +1461,6 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
             >
               9 rows
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -1628,7 +1608,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
               <span
                 class="inline-block"
               >
-                subscriptions.billed_at · by month
+                subscriptions.billed_at by month
               </span>
             </span>
           </button>
@@ -1637,9 +1617,10 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
           class="max-w-full"
         >
           <button
-            aria-label="Refine without r.name = 'Europe'"
+            aria-label="Refine without the “name is Europe” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="r.name = 'Europe'"
             type="button"
           >
             <span
@@ -1649,7 +1630,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
               <span
                 class="inline-block"
               >
-                r.name = 'Europe'
+                name is Europe
               </span>
             </span>
           </button>
@@ -1658,9 +1639,10 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            aria-label="Refine without the “billed_at since 2026-01-01” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.billed_at >= CAST('2026-01-01' AS DATE)"
             type="button"
           >
             <span
@@ -1670,7 +1652,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
               <span
                 class="inline-block"
               >
-                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+                billed_at since 2026-01-01
               </span>
             </span>
           </button>
@@ -1679,9 +1661,10 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.billed_at < CAST('2026-10-01' AS DATE)"
+            aria-label="Refine without the “billed_at before 2026-10-01” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.billed_at < CAST('2026-10-01' AS DATE)"
             type="button"
           >
             <span
@@ -1691,7 +1674,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
               <span
                 class="inline-block"
               >
-                s.billed_at &lt; CAST('2026-10-01' AS DATE)
+                billed_at before 2026-10-01
               </span>
             </span>
           </button>
@@ -2296,10 +2279,11 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
       </p>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -2317,7 +2301,9 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -2554,7 +2540,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <nav
@@ -2639,13 +2625,8 @@ exports[`refine states > matches the refining snapshot 1`] = `
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -2656,11 +2637,6 @@ exports[`refine states > matches the refining snapshot 1`] = `
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -2668,11 +2644,6 @@ exports[`refine states > matches the refining snapshot 1`] = `
             >
               Writing SQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -2807,7 +2778,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
               <span
                 class="inline-block"
               >
-                subscriptions.billed_at · by month
+                subscriptions.billed_at by month
               </span>
             </span>
           </button>
@@ -2816,9 +2787,10 @@ exports[`refine states > matches the refining snapshot 1`] = `
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.billed_at >= CAST('2026-01-01' AS DATE)"
+            aria-label="Refine without the “billed_at since 2026-01-01” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.billed_at >= CAST('2026-01-01' AS DATE)"
             type="button"
           >
             <span
@@ -2828,7 +2800,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
               <span
                 class="inline-block"
               >
-                s.billed_at &gt;= CAST('2026-01-01' AS DATE)
+                billed_at since 2026-01-01
               </span>
             </span>
           </button>
@@ -2837,9 +2809,10 @@ exports[`refine states > matches the refining snapshot 1`] = `
           class="max-w-full"
         >
           <button
-            aria-label="Refine without s.status = 'active'"
+            aria-label="Refine without the “status is active” filter"
             class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
             tabindex="0"
+            title="s.status = 'active'"
             type="button"
           >
             <span
@@ -2849,7 +2822,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
               <span
                 class="inline-block"
               >
-                s.status = 'active'
+                status is active
               </span>
             </span>
           </button>
@@ -3568,10 +3541,11 @@ exports[`refine states > matches the refining snapshot 1`] = `
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -3589,7 +3563,9 @@ exports[`refine states > matches the refining snapshot 1`] = `
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -3744,7 +3720,7 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <nav
@@ -3886,13 +3862,8 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -3903,11 +3874,6 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -3915,11 +3881,6 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
             >
               27 rows
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -4713,10 +4674,11 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
       </p>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -4734,10 +4696,12 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
-          class="flex items-center gap-2 border-l border-panel-border pl-3"
+          class="flex items-center gap-2"
         >
           <span>
             New question

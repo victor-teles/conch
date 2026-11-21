@@ -88,7 +88,7 @@ export function BoardNameView({ target, onBack, onDone }: BoardNameViewProps) {
         onBack={onBack}
         title={creating ? "New Board" : "Rename Board"}
       />
-      <div className="flex flex-col gap-2 border-t border-panel-border px-4 py-4">
+      <div className="flex launcher-body flex-col gap-2 px-4 pt-4">
         <label className="flex items-center gap-3">
           <span className="w-12 shrink-0 type-meta text-panel-muted">Name</span>
           <input

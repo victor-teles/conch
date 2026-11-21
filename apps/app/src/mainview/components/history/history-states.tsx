@@ -12,7 +12,7 @@ export function HistorySkeleton() {
     <motion.div
       animate={{ opacity: 1 }}
       aria-hidden
-      className="flex flex-col gap-1 px-2 pt-7 pb-2"
+      className="flex flex-col px-2 pt-7"
       data-testid="history-skeleton"
       initial={reduced ? false : { opacity: 0 }}
       transition={fadeIn}

@@ -6,7 +6,7 @@ exports[`root view watching with full motion > lists unseen alerts first and ope
   role="group"
 >
   <div
-    class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+    class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
     id="_r_id_"
   >
     Alerts
@@ -71,7 +71,7 @@ exports[`root view watching with reduced motion > lists unseen alerts first and 
   role="group"
 >
   <div
-    class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+    class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
     id="_r_id_"
   >
     Alerts

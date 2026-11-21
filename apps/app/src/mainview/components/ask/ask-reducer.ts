@@ -100,7 +100,7 @@ export const initialAskState: AskState = {
   source: "question",
   sql: "",
   sqlComplete: false,
-  sqlExpanded: true,
+  sqlExpanded: false,
   sqlToggled: false,
   status: "idle",
   transition: "fresh",
@@ -126,6 +126,11 @@ export const shownTurn = (state: AskState): AskTurn | null =>
 export const isRefining = (state: AskState): boolean =>
   isWorking(state.status) && state.turns.length > 0;
 
+// The query only shows when the user asked for it; an error opens it on its
+// own, and that must not carry over to the next turn.
+const chosenSqlExpanded = (state: AskState): boolean =>
+  state.sqlToggled && state.sqlExpanded;
+
 const showTurn = (state: AskState, position: number): AskState => {
   const turn = state.turns[position];
   if (!turn) {
@@ -143,6 +148,7 @@ const showTurn = (state: AskState, position: number): AskState => {
     repairs: 0,
     sql: turn.sql,
     sqlComplete: true,
+    sqlExpanded: chosenSqlExpanded(state),
     status: "done",
     view: turn.view,
   };
@@ -220,11 +226,7 @@ const applyEvent = (state: AskState, event: AskEvent): AskState => {
     }
     case "result": {
       const { type: _type, ...result } = event;
-      return {
-        ...state,
-        answer: { result, spec: null },
-        sqlExpanded: state.sqlToggled ? state.sqlExpanded : false,
-      };
+      return { ...state, answer: { result, spec: null } };
     }
     case "card": {
       return completeTurn(state, event.spec);
@@ -282,6 +284,7 @@ const refine = (state: AskState, prompt: string): AskState => {
     schemaDetail: null,
     sql: "",
     sqlComplete: false,
+    sqlExpanded: chosenSqlExpanded(state),
     status: "schema",
     turns: state.turns.slice(0, state.position + 1),
     view: null,

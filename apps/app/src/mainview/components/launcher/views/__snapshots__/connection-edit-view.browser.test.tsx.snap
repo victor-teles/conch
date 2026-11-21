@@ -64,7 +64,7 @@ exports[`connectionEditView > edits an existing connection 1`] = `
       </h1>
     </header>
     <div
-      class="min-h-0 flex-1 overflow-y-auto border-t border-panel-border px-4 pt-3 pb-4"
+      class="min-h-0 flex-1 launcher-body overflow-y-auto px-4 pt-3"
     >
       <form
         class="grid gap-4"
@@ -433,17 +433,20 @@ exports[`connectionEditView > edits an existing connection 1`] = `
       </form>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span>
           esc to go back
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"

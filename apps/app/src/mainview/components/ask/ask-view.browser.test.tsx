@@ -6,6 +6,7 @@ import {
   REFUSED,
   REVENUE,
   withShownTurn,
+  withSqlShown,
 } from "@/test/ask-fixtures";
 import { renderAskView as renderAsk } from "@/test/ask-view-harness";
 import { kpi } from "@/test/card-fixtures";
@@ -27,10 +28,26 @@ describe.each([
   ["full motion", false],
   ["reduced motion", true],
 ])("askView with %s", (_label, isReduced) => {
-  it("streams the SQL with the working state below it", async () => {
+  it("keeps the streaming SQL hidden until the user opens it", async () => {
     reduced.value = isReduced;
     const { screen } = await renderAsk(
       askStateAfter(REVENUE, { nth: 20, type: "sqlDelta" })
+    );
+    await expect
+      .element(screen.getByRole("status"))
+      .toHaveTextContent("Writing SQL");
+    expect(
+      screen.getByRole("region", { name: "Generated SQL" }).query()
+    ).toBeNull();
+    await expect
+      .element(screen.getByRole("button", { name: "Show SQL" }))
+      .toBeEnabled();
+  });
+
+  it("streams the opened SQL with the working state below it", async () => {
+    reduced.value = isReduced;
+    const { screen } = await renderAsk(
+      withSqlShown(askStateAfter(REVENUE, { nth: 20, type: "sqlDelta" }))
     );
     await expect
       .element(screen.getByRole("status"))
@@ -181,6 +198,7 @@ describe("askView designed states", () => {
   ])("matches the snapshot for %s", async (_label, state, marker) => {
     reduced.value = true;
     const { screen } = await renderAsk(state());
+    await userEvent.unhover(screen);
     await expect
       .element(screen.getByText(marker, { exact: false }).first())
       .toBeVisible();

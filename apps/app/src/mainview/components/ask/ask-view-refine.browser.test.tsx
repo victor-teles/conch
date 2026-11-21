@@ -295,6 +295,27 @@ describe("assumptions and drill-down", () => {
     expect(asked).toHaveLength(1);
   });
 
+  it("pre-fills a filter chip as words, with no visible copy over the input", async () => {
+    reduced.value = false;
+    const { asked } = setup();
+    await askFirst(asked);
+    const line = page.getByRole("list", { name: "Assumptions" });
+    const chip = line.getByRole("button", {
+      name: "Refine without the “status is active” filter",
+    });
+    await expect.element(chip).toHaveTextContent("status is active");
+    await expect.element(chip).toHaveAttribute("title", "s.status = 'active'");
+
+    await chip.click();
+    await expect
+      .element(input())
+      .toHaveValue("drop the “status is active” filter");
+    const ghost = page.getByTestId("refine-ghost");
+    await expect.element(ghost).toBeInTheDocument();
+    expect(ghost).not.toBeVisible();
+    expect(asked).toHaveLength(1);
+  });
+
   it("pre-fills a drill from a table row and from the ⌘D list", async () => {
     const { asked } = setup();
     await askFirst(asked);

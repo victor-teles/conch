@@ -9,7 +9,9 @@ import {
 } from "@/components/launcher/actions/actions-menu";
 import { LauncherInput } from "@/components/launcher/launcher-input";
 import { optionId } from "@/components/launcher/launcher-row";
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { useListSelection } from "@/components/launcher/use-list-selection";
+import { useSteadyHeight } from "@/components/launcher/use-steady-height";
 import { useMotionPreset } from "@/lib/motion";
 
 import type { HistoryAskActions } from "./use-history-commands";
@@ -24,7 +26,6 @@ import { useHistoryCommands } from "./use-history-commands";
 import { useHistoryKeyboard } from "./use-history-keyboard";
 import { useHistoryMenu } from "./use-history-menu";
 import { useHistoryResults } from "./use-history-results";
-import { useSelectedInView } from "./use-selected-in-view";
 
 interface HistoryViewProps {
   ask: HistoryAskActions;
@@ -41,7 +42,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
     query
   );
   const { move, select, selected } = useListSelection(items);
-  useSelectedInView(selected?.id ?? null);
+  const steady = useSteadyHeight(query);
 
   const commands = useHistoryCommands({
     ask,
@@ -64,6 +65,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    steady.onInput(event.target.value);
     setQuery(event.target.value);
     setTyped(true);
     select(null);
@@ -94,10 +96,16 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
       />
       <HistoryNameField onDone={focusInput} save={commands.save} />
       <div
-        className="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
-        style={{ minHeight: menu.open ? actionsMenuHeight(actions.length) : 0 }}
+        className="relative flex min-h-0 flex-1 flex-col"
+        ref={steady.bodyRef}
+        style={{
+          minHeight: Math.max(
+            menu.open ? actionsMenuHeight(actions.length) : 0,
+            steady.minHeight
+          ),
+        }}
       >
-        <div className="min-h-0 flex-1 overflow-y-auto pt-2">
+        <LauncherScrollArea className="flex-1 pt-1">
           <HistoryList
             motion={{ clearing: history.clearing, intro: !typed }}
             onRetry={handleRetry}
@@ -114,7 +122,7 @@ export function HistoryView({ ask, inputRef }: HistoryViewProps) {
               total: history.asks.length,
             }}
           />
-        </div>
+        </LauncherScrollArea>
         <AnimatePresence>
           {menu.open && selected ? (
             <ActionsMenu

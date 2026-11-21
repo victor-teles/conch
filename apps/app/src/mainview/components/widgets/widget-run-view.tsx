@@ -204,7 +204,7 @@ function WidgetRunPanel({
         ) : null}
       </AnimatePresence>
       <div
-        className="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+        className="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
         style={{ minHeight: bodyMinHeight }}
       >
         <WidgetRunMeta connection={connection} outcome={state.outcome} />

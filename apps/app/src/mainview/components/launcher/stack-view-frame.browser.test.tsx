@@ -11,11 +11,15 @@ const variants = stackVariants(motionPreset(false));
 
 function Stack({ view }: { view: string }) {
   return (
-    <AnimatePresence initial={false} mode="popLayout">
-      <StackViewFrame direction={1} key={view} variants={variants}>
-        <button type="button">{view}</button>
-      </StackViewFrame>
-    </AnimatePresence>
+    <div className="relative flex flex-col">
+      <AnimatePresence initial={false} mode="popLayout">
+        <StackViewFrame direction={1} key={view} variants={variants}>
+          <button style={{ height: 120 }} type="button">
+            {view}
+          </button>
+        </StackViewFrame>
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -41,6 +45,23 @@ describe("stackViewFrame", () => {
     expect(
       screen.getByText("settings").element().closest("[inert]")
     ).toBeNull();
+  });
+
+  it("lifts the leaving view out of the flow so the next view starts at the top", async () => {
+    const screen = render(<Stack view="root" />);
+    await expect
+      .element(screen.getByRole("button", { name: "root" }))
+      .toBeVisible();
+    const top = (label: string) =>
+      screen.getByText(label).element().getBoundingClientRect().top;
+    const rootTop = top("root");
+
+    await screen.rerender(<Stack view="settings" />);
+
+    const leaving = screen.getByText("root").element().parentElement;
+    expect(leaving).toHaveAttribute("data-leaving", "true");
+    expect(leaving).toHaveStyle({ position: "absolute" });
+    expect(top("settings")).toBeCloseTo(rootTop, 0);
   });
 
   it("still removes the leaving view once its exit settles", async () => {

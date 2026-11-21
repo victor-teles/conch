@@ -1,0 +1,14 @@
+{
+  "extends": "@conch/config/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "remotion.config.ts", "vitest.config.ts"]
+}

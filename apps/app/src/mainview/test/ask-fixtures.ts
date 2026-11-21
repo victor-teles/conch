@@ -96,6 +96,10 @@ export const withRecordedAssumptions = (from: AskState): AskState => {
   return state;
 };
 
+// The generated query stays collapsed until the user opens it.
+export const withSqlShown = (from: AskState): AskState =>
+  askReducer(from, { type: "toggleSql" });
+
 export const REVENUE = "Revenue by region";
 export const SIGNUPS = "Weekly signups by plan";
 export const REFUSED = "delete all users";

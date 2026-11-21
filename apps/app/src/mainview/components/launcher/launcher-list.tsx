@@ -13,7 +13,7 @@ export function LauncherListbox({ id, label, children }: LauncherListboxProps) {
   return (
     <div
       aria-label={label}
-      className="flex flex-col gap-1 px-2 pb-2"
+      className="flex flex-col px-2"
       id={id}
       role="listbox"
     >
@@ -32,7 +32,7 @@ export function LauncherSection({ label, children }: LauncherSectionProps) {
   return (
     <div aria-labelledby={headingId} role="group">
       <div
-        className="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        className="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id={headingId}
       >
         {label}

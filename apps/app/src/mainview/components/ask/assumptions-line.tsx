@@ -58,7 +58,12 @@ function Chip({ chip, interactive, onPrefill }: ChipProps) {
   }, [onPrefill, prefill]);
   if (!(interactive && prefill)) {
     return (
-      <span className={cn(CHIP_CLASS, "text-panel-muted")}>{content}</span>
+      <span
+        className={cn(CHIP_CLASS, "text-panel-muted")}
+        title={chip.detail ?? undefined}
+      >
+        {content}
+      </span>
     );
   }
   return (
@@ -69,6 +74,7 @@ function Chip({ chip, interactive, onPrefill }: ChipProps) {
         "text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
       )}
       onClick={handleClick}
+      title={chip.detail ?? undefined}
     >
       {content}
     </Pressable>

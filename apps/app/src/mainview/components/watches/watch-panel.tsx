@@ -105,7 +105,7 @@ export function WatchPanel({
       aria-label={`Watch ${widget.name}`}
     >
       <ViewHeader onBack={onDone} title={`Watch ${widget.name}`} />
-      <div className="min-h-0 flex-1 divide-y divide-panel-border overflow-y-auto border-t border-panel-border pb-2">
+      <div className="min-h-0 flex-1 launcher-body divide-y divide-panel-border overflow-y-auto">
         <SettingRow
           description="Runs read-only in the background. On battery, at most every 15 minutes."
           label="Check"

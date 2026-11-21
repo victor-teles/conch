@@ -4,7 +4,7 @@ exports[`widgetRunView actions > lists the shared export actions before the widg
 <div
   aria-activedescendant="launcher-action-copy-sql"
   aria-label="Actions for Revenue by region"
-  class="absolute right-3 bottom-3 z-10 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
   role="menu"
   tabindex="-1"
 >
@@ -761,7 +761,7 @@ exports[`widgetRunView states > explains an empty result 1`] = `
       </div>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -814,13 +814,16 @@ exports[`widgetRunView states > explains an empty result 1`] = `
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       />
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1048,7 +1051,7 @@ exports[`widgetRunView states > maps a database error and retries 1`] = `
       </div>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -1129,13 +1132,16 @@ exports[`widgetRunView states > maps a database error and retries 1`] = `
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       />
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1363,7 +1369,7 @@ exports[`widgetRunView states > matches the snapshot for a populated run 1`] = `
       </div>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -1813,13 +1819,16 @@ exports[`widgetRunView states > matches the snapshot for a populated run 1`] = `
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       />
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -2048,7 +2057,7 @@ exports[`widgetRunView states > shows a skeleton only when the first run takes l
       </div>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -2146,13 +2155,16 @@ exports[`widgetRunView states > shows a skeleton only when the first run takes l
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       />
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"

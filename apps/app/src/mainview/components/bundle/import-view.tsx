@@ -88,7 +88,7 @@ export function ImportView({ onBack, onDone }: ImportViewProps) {
   return (
     <div className="flex min-h-0 flex-col" onKeyDown={handleKeyDown}>
       <ViewHeader onBack={onBack} title="Import Widgets and Boards" />
-      <div className="relative flex min-h-0 flex-1 flex-col border-t border-panel-border">
+      <div className="relative flex min-h-0 flex-1 launcher-body flex-col">
         <AnimatePresence initial={false} mode="popLayout">
           <motion.div
             animate={{ opacity: 1 }}

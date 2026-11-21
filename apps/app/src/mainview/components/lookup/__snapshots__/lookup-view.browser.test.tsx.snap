@@ -84,80 +84,104 @@ exports[`lookupView states > renders doneEmpty > doneEmpty 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
+          class="relative px-4 pt-3 pb-1.5"
         >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
+          <div
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="inline-block"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              No matches · 96ms
+              <span
+                class="inline-block"
+              >
+                No matches · 96ms
+              </span>
             </span>
+          </div>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          >
+            No matches in 14 tables
           </span>
         </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
+        <div
+          class="flex flex-col gap-1 px-4 pt-2 pb-5"
         >
-          No matches in 14 tables
-        </span>
-      </div>
-      <div
-        class="flex flex-col gap-1 px-4 pt-2 pb-5"
-      >
-        <p
-          class="type-body text-foreground"
-          role="status"
-        >
-          No rows match 3f2a1b…c91e in 14 tables.
-        </p>
-        <p
-          class="type-meta text-panel-muted"
-        >
-          Exact match only.
-        </p>
-        <p
-          class="type-meta text-panel-muted"
-        >
-          Skipped 3 large tables without an index on the column.
-        </p>
+          <p
+            class="type-body text-foreground"
+            role="status"
+          >
+            No rows match 3f2a1b…c91e in 14 tables.
+          </p>
+          <p
+            class="type-meta text-panel-muted"
+          >
+            Exact match only.
+          </p>
+          <p
+            class="type-meta text-panel-muted"
+          >
+            Skipped 3 large tables without an index on the column.
+          </p>
+        </div>
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
-          class="flex items-center gap-2 border-l border-panel-border pl-3"
+          class="flex items-center gap-2"
         >
           <span>
             Back
@@ -291,276 +315,300 @@ exports[`lookupView states > renders doneHits > doneHits 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
-        >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
-          >
-            <span
-              class="inline-block"
-            >
-              Found in 3 tables · 412ms
-            </span>
-          </span>
-          <span
-            class="type-meta text-panel-muted"
-          >
-            1 column didn't answer in time.
-          </span>
-        </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
-        >
-          Found in users, orders, and events
-        </span>
-      </div>
-      <div
-        aria-label="Tables holding the value"
-        class="flex flex-col px-2 pb-2"
-        id="lookup-results"
-        role="listbox"
-      >
-        <div
-          aria-selected="true"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
-          data-tone="default"
-          id="launcher-option-lookup-hit-0"
-          role="option"
-          tabindex="0"
+          class="relative px-4 pt-3 pb-1.5"
         >
           <div
-            class="absolute inset-0 rounded-[10px] bg-row-active"
-          />
-          <span
-            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
-          >
-            <svg
-              aria-hidden="true"
-              class="lucide lucide-table size-3.5"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 3v18"
-              />
-              <rect
-                height="18"
-                rx="2"
-                width="18"
-                x="3"
-                y="3"
-              />
-              <path
-                d="M3 9h18"
-              />
-              <path
-                d="M3 15h18"
-              />
-            </svg>
-          </span>
-          <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="truncate type-body text-foreground"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              users
+              <span
+                class="inline-block"
+              >
+                Found in 3 tables · 412ms
+              </span>
             </span>
-            <code
-              class="truncate font-mono text-[12px] text-panel-muted"
-            >
-              id
-            </code>
             <span
-              class="shrink-0 type-micro text-panel-muted"
+              class="type-meta text-panel-muted"
             >
-              public
+              1 column didn't answer in time.
             </span>
-          </span>
+          </div>
           <span
-            aria-label="1 row"
-            class="relative shrink-0 type-meta text-foreground tabular-nums"
+            aria-live="polite"
+            class="sr-only"
           >
-            1
+            Found in users, orders, and events
           </span>
         </div>
         <div
-          aria-selected="false"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
-          data-tone="default"
-          id="launcher-option-lookup-hit-1"
-          role="option"
-          tabindex="0"
+          aria-label="Tables holding the value"
+          class="flex flex-col px-2 pb-2"
+          id="lookup-results"
+          role="listbox"
         >
-          <span
-            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+          <div
+            aria-selected="true"
+            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            data-tone="default"
+            id="launcher-option-lookup-hit-0"
+            role="option"
+            tabindex="0"
           >
-            <svg
-              aria-hidden="true"
-              class="lucide lucide-table size-3.5"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="absolute inset-0 rounded-[10px] bg-row-active"
+            />
+            <span
+              class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
             >
-              <path
-                d="M12 3v18"
-              />
-              <rect
-                height="18"
-                rx="2"
-                width="18"
-                x="3"
-                y="3"
-              />
-              <path
-                d="M3 9h18"
-              />
-              <path
-                d="M3 15h18"
-              />
-            </svg>
-          </span>
-          <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-table size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 3v18"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                />
+                <path
+                  d="M3 9h18"
+                />
+                <path
+                  d="M3 15h18"
+                />
+              </svg>
+            </span>
+            <span
+              class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            >
+              <span
+                class="truncate type-body text-foreground"
+              >
+                users
+              </span>
+              <code
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                id
+              </code>
+              <span
+                class="shrink-0 type-micro text-panel-muted"
+              >
+                public
+              </span>
+            </span>
+            <span
+              aria-label="1 row"
+              class="relative shrink-0 type-meta text-foreground tabular-nums"
+            >
+              1
+            </span>
+          </div>
+          <div
+            aria-selected="false"
+            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            data-tone="default"
+            id="launcher-option-lookup-hit-1"
+            role="option"
+            tabindex="0"
           >
             <span
-              class="truncate type-body text-foreground"
+              class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
             >
-              orders
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-table size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 3v18"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                />
+                <path
+                  d="M3 9h18"
+                />
+                <path
+                  d="M3 15h18"
+                />
+              </svg>
             </span>
-            <code
-              class="truncate font-mono text-[12px] text-panel-muted"
-            >
-              user_id
-            </code>
             <span
-              class="shrink-0 type-micro text-panel-muted"
+              class="relative flex min-w-0 flex-1 items-baseline gap-2"
             >
-              public
+              <span
+                class="truncate type-body text-foreground"
+              >
+                orders
+              </span>
+              <code
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                user_id
+              </code>
+              <span
+                class="shrink-0 type-micro text-panel-muted"
+              >
+                public
+              </span>
             </span>
-          </span>
-          <span
-            aria-label="12 rows"
-            class="relative shrink-0 type-meta text-foreground tabular-nums"
-          >
-            12
-          </span>
-        </div>
-        <div
-          aria-selected="false"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
-          data-tone="default"
-          id="launcher-option-lookup-hit-2"
-          role="option"
-          tabindex="0"
-        >
-          <span
-            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
-          >
-            <svg
-              aria-hidden="true"
-              class="lucide lucide-table size-3.5"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
+            <span
+              aria-label="12 rows"
+              class="relative shrink-0 type-meta text-foreground tabular-nums"
             >
-              <path
-                d="M12 3v18"
-              />
-              <rect
-                height="18"
-                rx="2"
-                width="18"
-                x="3"
-                y="3"
-              />
-              <path
-                d="M3 9h18"
-              />
-              <path
-                d="M3 15h18"
-              />
-            </svg>
-          </span>
-          <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              12
+            </span>
+          </div>
+          <div
+            aria-selected="false"
+            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            data-tone="default"
+            id="launcher-option-lookup-hit-2"
+            role="option"
+            tabindex="0"
           >
             <span
-              class="truncate type-body text-foreground"
+              class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
             >
-              events
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-table size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 3v18"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                />
+                <path
+                  d="M3 9h18"
+                />
+                <path
+                  d="M3 15h18"
+                />
+              </svg>
             </span>
-            <code
-              class="truncate font-mono text-[12px] text-panel-muted"
-            >
-              user_id
-            </code>
             <span
-              class="shrink-0 type-micro text-panel-muted"
+              class="relative flex min-w-0 flex-1 items-baseline gap-2"
             >
-              public
+              <span
+                class="truncate type-body text-foreground"
+              >
+                events
+              </span>
+              <code
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                user_id
+              </code>
+              <span
+                class="shrink-0 type-micro text-panel-muted"
+              >
+                public
+              </span>
             </span>
-          </span>
-          <span
-            aria-label="100 or more rows"
-            class="relative shrink-0 type-meta text-foreground tabular-nums"
-          >
-            100+
-          </span>
+            <span
+              aria-label="100 or more rows"
+              class="relative shrink-0 type-meta text-foreground tabular-nums"
+            >
+              100+
+            </span>
+          </div>
         </div>
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -722,70 +770,94 @@ exports[`lookupView states > renders error > error 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
+          class="relative px-4 pt-3 pb-1.5"
         >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
+          <div
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="inline-block"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              Can't search this connection
+              <span
+                class="inline-block"
+              >
+                Can't search this connection
+              </span>
             </span>
+          </div>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          >
+            ID lookup isn't available for ClickHouse yet.
           </span>
         </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
+        <div
+          class="flex flex-col gap-1 px-4 pt-2 pb-5"
         >
-          ID lookup isn't available for ClickHouse yet.
-        </span>
-      </div>
-      <div
-        class="flex flex-col gap-1 px-4 pt-2 pb-5"
-      >
-        <p
-          class="type-body text-foreground"
-          role="alert"
-        >
-          ID lookup isn't available for ClickHouse yet.
-        </p>
+          <p
+            class="type-body text-foreground"
+            role="alert"
+          >
+            ID lookup isn't available for ClickHouse yet.
+          </p>
+        </div>
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
-          class="flex items-center gap-2 border-l border-panel-border pl-3"
+          class="flex items-center gap-2"
         >
           <span>
             Back
@@ -919,73 +991,95 @@ exports[`lookupView states > renders planning > planning 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-label="Search progress"
-          aria-valuemax="0"
-          aria-valuemin="0"
-          aria-valuenow="0"
-          class="absolute inset-x-0 top-0 h-0.5 bg-primary"
-          data-motion="instant"
-          role="progressbar"
-        />
-        <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
+          class="relative px-4 pt-3 pb-1.5"
         >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
+          <div
+            aria-label="Search progress"
+            aria-valuemax="0"
+            aria-valuemin="0"
+            aria-valuenow="0"
+            class="absolute inset-x-0 top-0 h-0.5 bg-primary"
+            data-motion="instant"
+            role="progressbar"
+          />
+          <div
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="inline-block"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              Reading the schema…
+              <span
+                class="inline-block"
+              />
             </span>
-          </span>
+          </div>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          />
         </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
+        <div
+          aria-label="Tables holding the value"
+          class="flex flex-col px-2 pb-2"
+          id="lookup-results"
+          role="listbox"
         />
       </div>
-      <div
-        aria-label="Tables holding the value"
-        class="flex flex-col px-2 pb-2"
-        id="lookup-results"
-        role="listbox"
-      />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
-          class="flex items-center gap-2 border-l border-panel-border pl-3"
+          class="flex items-center gap-2"
         >
           <span>
             Stop
@@ -1120,144 +1214,168 @@ exports[`lookupView states > renders probing > probing 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-label="Search progress"
-          aria-valuemax="14"
-          aria-valuemin="0"
-          aria-valuenow="4"
-          class="absolute inset-x-0 top-0 h-0.5 bg-primary"
-          data-motion="instant"
-          role="progressbar"
-        />
-        <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
-        >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
-          >
-            <span
-              class="inline-block"
-            >
-              Searching 14 tables…
-            </span>
-          </span>
-        </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
-        >
-          Found in users
-        </span>
-      </div>
-      <div
-        aria-label="Tables holding the value"
-        class="flex flex-col px-2 pb-2"
-        id="lookup-results"
-        role="listbox"
-      >
-        <div
-          aria-selected="true"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
-          data-tone="default"
-          id="launcher-option-lookup-hit-0"
-          role="option"
-          tabindex="0"
+          class="relative px-4 pt-3 pb-1.5"
         >
           <div
-            class="absolute inset-0 rounded-[10px] bg-row-active"
+            aria-label="Search progress"
+            aria-valuemax="14"
+            aria-valuemin="0"
+            aria-valuenow="4"
+            class="absolute inset-x-0 top-0 h-0.5 bg-primary"
+            data-motion="instant"
+            role="progressbar"
           />
-          <span
-            class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
-          >
-            <svg
-              aria-hidden="true"
-              class="lucide lucide-table size-3.5"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 3v18"
-              />
-              <rect
-                height="18"
-                rx="2"
-                width="18"
-                x="3"
-                y="3"
-              />
-              <path
-                d="M3 9h18"
-              />
-              <path
-                d="M3 15h18"
-              />
-            </svg>
-          </span>
-          <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+          <div
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="truncate type-body text-foreground"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              users
+              <span
+                class="inline-block"
+              >
+                Searching 14 tables…
+              </span>
             </span>
-            <code
-              class="truncate font-mono text-[12px] text-panel-muted"
-            >
-              id
-            </code>
-            <span
-              class="shrink-0 type-micro text-panel-muted"
-            >
-              public
-            </span>
-          </span>
+          </div>
           <span
-            aria-label="1 row"
-            class="relative shrink-0 type-meta text-foreground tabular-nums"
+            aria-live="polite"
+            class="sr-only"
           >
-            1
+            Found in users
           </span>
+        </div>
+        <div
+          aria-label="Tables holding the value"
+          class="flex flex-col px-2 pb-2"
+          id="lookup-results"
+          role="listbox"
+        >
+          <div
+            aria-selected="true"
+            class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+            data-tone="default"
+            id="launcher-option-lookup-hit-0"
+            role="option"
+            tabindex="0"
+          >
+            <div
+              class="absolute inset-0 rounded-[10px] bg-row-active"
+            />
+            <span
+              class="relative grid size-6 shrink-0 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-table size-3.5"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 3v18"
+                />
+                <rect
+                  height="18"
+                  rx="2"
+                  width="18"
+                  x="3"
+                  y="3"
+                />
+                <path
+                  d="M3 9h18"
+                />
+                <path
+                  d="M3 15h18"
+                />
+              </svg>
+            </span>
+            <span
+              class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            >
+              <span
+                class="truncate type-body text-foreground"
+              >
+                users
+              </span>
+              <code
+                class="truncate font-mono text-[12px] text-panel-muted"
+              >
+                id
+              </code>
+              <span
+                class="shrink-0 type-micro text-panel-muted"
+              >
+                public
+              </span>
+            </span>
+            <span
+              aria-label="1 row"
+              class="relative shrink-0 type-meta text-foreground tabular-nums"
+            >
+              1
+            </span>
+          </div>
         </div>
       </div>
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1419,66 +1537,90 @@ exports[`lookupView states > renders stopped > stopped 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade relative flex flex-1 flex-col"
     >
       <div
-        class="relative px-4 pt-3 pb-1.5"
+        class="flex min-h-full launcher-body flex-col"
       >
         <div
-          aria-hidden="true"
-          class="flex min-h-5 flex-col gap-0.5"
+          class="relative px-4 pt-3 pb-1.5"
         >
-          <span
-            class="type-body text-foreground"
-            data-slot="swap-text"
+          <div
+            aria-hidden="true"
+            class="flex min-h-5 flex-col gap-0.5"
           >
             <span
-              class="inline-block"
+              class="type-body text-foreground"
+              data-slot="swap-text"
             >
-              Stopped · 6 of 14 columns
+              <span
+                class="inline-block"
+              >
+                Stopped · 6 of 14 columns
+              </span>
             </span>
+          </div>
+          <span
+            aria-live="polite"
+            class="sr-only"
+          >
+            Search stopped
           </span>
         </div>
-        <span
-          aria-live="polite"
-          class="sr-only"
-        >
-          Search stopped
-        </span>
+        <div
+          aria-label="Tables holding the value"
+          class="flex flex-col px-2 pb-2"
+          id="lookup-results"
+          role="listbox"
+        />
       </div>
-      <div
-        aria-label="Tables holding the value"
-        class="flex flex-col px-2 pb-2"
-        id="lookup-results"
-        role="listbox"
-      />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-panel-muted opacity-60"
-        />
-        <span
-          class="min-w-0 truncate"
-          data-slot="swap-text"
+          class="flex min-w-0 items-center gap-1.5 type-meta"
         >
-          <span
-            class="inline-block"
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-search size-3.5 shrink-0 opacity-80"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            analytics
+            <path
+              d="m21 21-4.34-4.34"
+            />
+            <circle
+              cx="11"
+              cy="11"
+              r="8"
+            />
+          </svg>
+          <span
+            class="truncate"
+          >
+            Look up
           </span>
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
-          class="flex items-center gap-2 border-l border-panel-border pl-3"
+          class="flex items-center gap-2"
         >
           <span>
             Back

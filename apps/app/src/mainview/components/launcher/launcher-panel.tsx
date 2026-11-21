@@ -30,6 +30,7 @@ import { useMotionPreset } from "@/lib/motion";
 
 import { ConnectionsProvider } from "./connections/connections-provider";
 import { LauncherSurface } from "./launcher-surface";
+import { panelMaxHeightOf } from "./panel-height";
 import { renderView } from "./render-launcher-view";
 import { stackVariants } from "./stack-variants";
 import { StackViewFrame } from "./stack-view-frame";
@@ -231,7 +232,11 @@ function LauncherStackView() {
   const viewVariants = stackVariants(preset);
 
   return (
-    <LauncherSurface onPresenceSettled={onPresenceSettled} presence={presence}>
+    <LauncherSurface
+      maxHeight={panelMaxHeightOf(stack.current.kind)}
+      onPresenceSettled={onPresenceSettled}
+      presence={presence}
+    >
       <AnimatePresence
         custom={stack.direction}
         initial={false}

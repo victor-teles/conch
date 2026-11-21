@@ -1,26 +1,39 @@
 import { ast, generate, parse } from "@polyglot-sql/sdk";
 
+import type { ColumnRef, Node, TimeGrain } from "./sql-ast.ts";
 import type { DialectType } from "./types.ts";
 
+import { filterLabel } from "./filter-label.ts";
 import { toPolyglotDialect } from "./polyglot-dialect.ts";
+import {
+  columnOf,
+  grainOfFormat,
+  grainOfUnit,
+  identifier,
+  isRecord,
+  listOf,
+  nodeOf,
+  NOW_FUNCTIONS,
+  operatorOf,
+  textOf,
+  unwrap,
+} from "./sql-ast.ts";
 
-export type TimeGrain = "hour" | "day" | "week" | "month" | "quarter" | "year";
+export type { TimeGrain } from "./sql-ast.ts";
 
 export type SqlAssumption =
   | { kind: "table"; name: string }
-  | { kind: "time"; column: string; grain: TimeGrain | null }
-  | { kind: "filter"; column: string | null; text: string }
+  | {
+      kind: "time";
+      column: string;
+      grain: TimeGrain | null;
+      range: string | null;
+    }
+  | { kind: "filter"; column: string | null; text: string; label: string }
   | { kind: "limit"; rows: number };
 
 export interface SqlAssumptions {
   items: SqlAssumption[];
-}
-
-type Node = Record<string, unknown>;
-
-interface ColumnRef {
-  name: string;
-  table: string | null;
 }
 
 interface SelectScope {
@@ -32,53 +45,6 @@ const MAX_TABLES = 4;
 const MAX_FILTERS = 4;
 const MAX_ITEMS = 8;
 const FILTER_CHARS = 60;
-
-const isRecord = (value: unknown): value is Node =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
-
-const nodeOf = (value: unknown, type: string): Node | null => {
-  if (!isRecord(value)) {
-    return null;
-  }
-  const inner = value[type];
-  return isRecord(inner) ? inner : null;
-};
-
-const listOf = (value: unknown): unknown[] =>
-  Array.isArray(value) ? value : [];
-
-const identifier = (value: unknown): string | null =>
-  isRecord(value) && typeof value.name === "string" ? value.name : null;
-
-const textOf = (value: unknown): string | null => {
-  const literal = nodeOf(value, "literal");
-  if (literal && typeof literal.value === "string") {
-    return literal.value;
-  }
-  const variable = nodeOf(value, "var");
-  return variable && typeof variable.this === "string" ? variable.this : null;
-};
-
-const WRAPPERS = ["alias", "cast", "paren"];
-
-const unwrap = (value: unknown): unknown => {
-  for (const wrapper of WRAPPERS) {
-    const inner = nodeOf(value, wrapper);
-    if (inner) {
-      return unwrap(inner.this);
-    }
-  }
-  return value;
-};
-
-const columnOf = (value: unknown): ColumnRef | null => {
-  const column = nodeOf(unwrap(value), "column");
-  const name = column ? identifier(column.name) : null;
-  if (!(column && name)) {
-    return null;
-  }
-  return { name, table: identifier(column.table) };
-};
 
 const firstColumn = (value: unknown): ColumnRef | null => {
   const direct = columnOf(value);
@@ -94,31 +60,6 @@ const firstColumn = (value: unknown): ColumnRef | null => {
   }
   return null;
 };
-
-const GRAIN_WORDS: [RegExp, TimeGrain][] = [
-  [/^(hour|hh)/, "hour"],
-  [/^(day|dd?$|dayofyear)/, "day"],
-  [/^(week|wk|ww|isoweek|iso_week)/, "week"],
-  [/^(month|mm?$|mon)/, "month"],
-  [/^(quarter|qq?$)/, "quarter"],
-  [/^(year|yy|yyyy)/, "year"],
-];
-
-const grainOfUnit = (unit: string | null): TimeGrain | null => {
-  const word = unit?.toLowerCase().trim() ?? "";
-  return GRAIN_WORDS.find(([pattern]) => pattern.test(word))?.[1] ?? null;
-};
-
-const FORMAT_GRAINS: [RegExp, TimeGrain][] = [
-  [/%H/, "hour"],
-  [/%[dj]/, "day"],
-  [/%[WVUu]/, "week"],
-  [/%m/, "month"],
-  [/%Y/, "year"],
-];
-
-const grainOfFormat = (format: string | null): TimeGrain | null =>
-  FORMAT_GRAINS.find(([pattern]) => pattern.test(format ?? ""))?.[1] ?? null;
 
 interface Bucket {
   column: ColumnRef;
@@ -163,16 +104,6 @@ const bucketOf = (expression: unknown): Bucket | null => {
 
 const COMPARISONS = new Set(["gt", "gte", "lt", "lte", "eq", "neq"]);
 const RANGES = new Set(["gt", "gte", "lt", "lte", "between"]);
-const NOW_FUNCTIONS = new Set([
-  "current_date",
-  "current_timestamp",
-  "now",
-  "today",
-  "getdate",
-  "sysdate",
-  "date",
-  "datetime",
-]);
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/;
 
 const isDateLike = (value: unknown): boolean => {
@@ -200,14 +131,6 @@ const isDateLike = (value: unknown): boolean => {
   }
   const cast = nodeOf(value, "cast");
   return cast ? isDateLike(cast.this) : false;
-};
-
-const operatorOf = (conjunct: unknown): [string, Node] | null => {
-  if (!isRecord(conjunct)) {
-    return null;
-  }
-  const [entry] = Object.entries(conjunct);
-  return entry && isRecord(entry[1]) ? [entry[0], entry[1]] : null;
 };
 
 const timeComparison = (conjunct: unknown): ColumnRef | null => {
@@ -321,6 +244,7 @@ const timeItem = (
           column: columnLabel(bucket.column, scope),
           grain: bucket.grain,
           kind: "time",
+          range: null,
         },
       };
     }
@@ -330,7 +254,12 @@ const timeItem = (
     if (column) {
       return {
         fallback: conjunct,
-        item: { column: columnLabel(column, scope), grain: null, kind: "time" },
+        item: {
+          column: columnLabel(column, scope),
+          grain: null,
+          kind: "time",
+          range: filterLabel(conjunct),
+        },
       };
     }
   }
@@ -352,6 +281,7 @@ const renderFilter = (
   return {
     column: firstColumn(conjunct)?.name ?? null,
     kind: "filter",
+    label: clip(filterLabel(conjunct) ?? text),
     text: clip(text),
   };
 };

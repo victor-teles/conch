@@ -5,6 +5,7 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 
 import { useListSelection } from "@/components/launcher/use-list-selection";
 import { useMotionPreset } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 import type { MenuAction } from "./menu-action";
 
@@ -48,6 +49,7 @@ interface ActionsMenuProps<A extends MenuAction> {
   armedId: string | null;
   onRun: (action: A) => void;
   onClose: () => void;
+  className?: string;
 }
 
 export function ActionsMenu<A extends MenuAction>({
@@ -57,6 +59,7 @@ export function ActionsMenu<A extends MenuAction>({
   armedId,
   onRun,
   onClose,
+  className,
 }: ActionsMenuProps<A>) {
   const { reduced, snappy, fadeIn, fadeOut } = useMotionPreset();
   const menuRef = useOriginAt(anchorId);
@@ -102,7 +105,10 @@ export function ActionsMenu<A extends MenuAction>({
       animate={{ opacity: 1, scale: 1 }}
       aria-activedescendant={selected ? actionItemId(selected.id) : undefined}
       aria-label={`Actions for ${title}`}
-      className="absolute right-3 bottom-3 z-10 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+      className={cn(
+        "absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none",
+        className
+      )}
       exit={{ ...hidden, transition: fadeOut }}
       initial={hidden}
       onBlur={handleBlur}

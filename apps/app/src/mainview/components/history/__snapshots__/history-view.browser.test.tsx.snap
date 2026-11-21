@@ -3,7 +3,7 @@
 exports[`history motion with full motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
 <div
   aria-hidden="true"
-  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  class="flex flex-col px-2 pt-7"
   data-testid="history-skeleton"
 >
   <div
@@ -45,7 +45,7 @@ exports[`history motion with full motion > keeps a slow load's skeleton up until
 exports[`history motion with reduced motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
 <div
   aria-hidden="true"
-  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  class="flex flex-col px-2 pt-7"
   data-testid="history-skeleton"
 >
   <div
@@ -87,7 +87,7 @@ exports[`history motion with reduced motion > keeps a slow load's skeleton up un
 exports[`historyView > asks for every stored ask and groups them by day 1`] = `
 <div
   aria-label="Past asks"
-  class="relative flex flex-col gap-1 px-2 pb-2"
+  class="relative flex flex-col px-2"
   id="launcher-history-list"
   role="listbox"
 >
@@ -97,7 +97,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Today
@@ -227,7 +227,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Yesterday

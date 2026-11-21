@@ -285,6 +285,7 @@ export function BoardTile({
               actions={actions}
               anchorId={menuAnchorId(tile.id)}
               armedId={null}
+              className="right-3 bottom-3 z-10"
               onClose={closeMenu}
               onRun={runAction}
               title={name}

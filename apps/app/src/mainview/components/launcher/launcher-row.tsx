@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 
 import { motion } from "motion/react";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 import { useMotionPreset } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+
+import { useRowInView } from "./use-row-in-view";
 
 export const optionId = (id: string) => `launcher-option-${id}`;
 
@@ -32,6 +34,8 @@ export function LauncherRow({
   const { spring, snappy, fadeIn, fadeOut, pressed, press } = useMotionPreset();
   const handleClick = useCallback(() => onRun(id), [onRun, id]);
   const handlePointerMove = useCallback(() => onHover(id), [onHover, id]);
+  const rowRef = useRef<HTMLDivElement>(null);
+  useRowInView(rowRef, selected);
 
   return (
     <motion.div
@@ -46,6 +50,7 @@ export function LauncherRow({
       layout="position"
       onClick={handleClick}
       onPointerMove={handlePointerMove}
+      ref={rowRef}
       role="option"
       transition={{ layout: spring, opacity: fadeIn }}
       whileTap={{ ...pressed, transition: press }}

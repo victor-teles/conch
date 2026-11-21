@@ -67,7 +67,7 @@ exports[`importView results > finishes on Enter with the first imported widget 1
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -110,10 +110,11 @@ exports[`importView results > finishes on Enter with the first imported widget 1
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -121,7 +122,9 @@ exports[`importView results > finishes on Enter with the first imported widget 1
           />
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -223,7 +226,7 @@ exports[`importView results > lists what failed and what was skipped 1`] = `
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -332,10 +335,11 @@ exports[`importView results > lists what failed and what was skipped 1`] = `
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -343,7 +347,9 @@ exports[`importView results > lists what failed and what was skipped 1`] = `
           />
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -445,7 +451,7 @@ exports[`importView results > shows Importing… while a slow import runs 1`] = 
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -988,10 +994,11 @@ exports[`importView results > shows Importing… while a slow import runs 1`] = 
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -1009,9 +1016,6 @@ exports[`importView results > shows Importing… while a slow import runs 1`] = 
             </span>
           </span>
         </div>
-        <div
-          class="flex shrink-0 items-center gap-3"
-        />
       </footer>
     </div>
   </div>
@@ -1085,7 +1089,7 @@ exports[`importView review > maps connections by name, leaves duplicates off and
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -1628,10 +1632,11 @@ exports[`importView review > maps connections by name, leaves duplicates off and
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -1650,7 +1655,9 @@ exports[`importView review > maps connections by name, leaves duplicates off and
           </span>
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -1802,7 +1809,7 @@ exports[`importView review > shows every widget on when each connection has a ma
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -2355,10 +2362,11 @@ exports[`importView review > shows every widget on when each connection has a ma
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -2377,7 +2385,9 @@ exports[`importView review > shows every widget on when each connection has a ma
           </span>
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -2529,7 +2539,7 @@ exports[`importView sources > explains an empty clipboard 1`] = `
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -2716,10 +2726,11 @@ exports[`importView sources > explains an empty clipboard 1`] = `
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -2727,7 +2738,9 @@ exports[`importView sources > explains an empty clipboard 1`] = `
           />
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -2829,7 +2842,7 @@ exports[`importView sources > names the first invalid field of a file 1`] = `
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -3016,10 +3029,11 @@ exports[`importView sources > names the first invalid field of a file 1`] = `
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -3027,7 +3041,9 @@ exports[`importView sources > names the first invalid field of a file 1`] = `
           />
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -3129,7 +3145,7 @@ exports[`importView sources > offers the clipboard and a file, focusing the clip
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -3262,10 +3278,11 @@ exports[`importView sources > offers the clipboard and a file, focusing the clip
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -3273,7 +3290,9 @@ exports[`importView sources > offers the clipboard and a file, focusing the clip
           />
         </div>
         <div
-          class="flex shrink-0 items-center gap-3"
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
         >
           <div
             class="flex items-center gap-2"
@@ -3375,7 +3394,7 @@ exports[`importView sources > shows a reading hairline when the read takes a whi
         </h1>
       </header>
       <div
-        class="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        class="relative flex min-h-0 flex-1 launcher-body flex-col"
       >
         <div
           class="flex min-h-0 flex-col"
@@ -3518,10 +3537,11 @@ exports[`importView sources > shows a reading hairline when the read takes a whi
         </div>
       </div>
       <footer
-        class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
       >
         <div
-          class="flex min-w-0 items-center gap-2"
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
         >
           <span
             class="flex min-w-0 items-center"
@@ -3539,9 +3559,6 @@ exports[`importView sources > shows a reading hairline when the read takes a whi
             </span>
           </span>
         </div>
-        <div
-          class="flex shrink-0 items-center gap-3"
-        />
       </footer>
     </div>
   </div>

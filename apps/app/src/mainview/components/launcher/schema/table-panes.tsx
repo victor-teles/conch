@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import type { RootItem } from "@/components/launcher/views/root-items";
 
 import { LauncherListbox } from "@/components/launcher/launcher-list";
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { ROOT_LIST_ID } from "@/components/launcher/views/root-list";
 import { Reveal } from "@/components/motion/reveal";
 import { useMotionPreset } from "@/lib/motion";
@@ -55,7 +56,7 @@ export function TablePanes({ list, detail }: TablePanesProps) {
 
   return (
     <div className="grid h-full min-h-0 grid-cols-[2fr_3fr]">
-      <div className="min-h-0 overflow-y-auto border-r border-panel-border pt-2">
+      <LauncherScrollArea className="border-r border-panel-border pt-2">
         <LauncherListbox id={ROOT_LIST_ID} label="Tables">
           {list.items.map((item) => (
             <TableRow
@@ -70,13 +71,13 @@ export function TablePanes({ list, detail }: TablePanesProps) {
             />
           ))}
         </LauncherListbox>
-      </div>
+      </LauncherScrollArea>
       <Reveal className="min-h-0">
         <div
           aria-label={
             selected ? `Columns of ${selected.table.name}` : "Columns"
           }
-          className="h-full overflow-y-auto outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset"
+          className="h-full launcher-body overflow-y-auto outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset"
           onKeyDown={handleDetailKeyDown}
           ref={detail.ref}
           role="region"

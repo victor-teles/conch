@@ -49,6 +49,8 @@
     sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
   --tracking-normal: -0.003em;
+  /* Footer capsules are 32 tall and float 8 above the edge; 8 more of air. */
+  --launcher-footer-clearance: 48px;
 
   --panel: oklch(0.982 0.006 75 / 0.9);
   --panel-solid: oklch(0.985 0.003 70 / 0.97);
@@ -302,6 +304,68 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@utility capsule-material {
+  background-color: var(--panel-raised);
+  border: 1px solid var(--panel-border);
+  box-shadow:
+    inset 0 1px 0 var(--panel-highlight),
+    0 4px 12px -4px oklch(0 0 0 / 0.28);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--panel-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  @media (prefers-contrast: more) {
+    background-color: var(--panel-solid);
+  }
+}
+
+@utility launcher-body {
+  padding-bottom: var(--launcher-footer-clearance);
+  scroll-padding-bottom: var(--launcher-footer-clearance);
+}
+
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@utility scroll-fade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  transition:
+    --fade-start 110ms ease-out,
+    --fade-end 110ms ease-out;
+
+  &[data-fade-start] {
+    --fade-start: 12px;
+  }
+
+  &[data-fade-end] {
+    --fade-end: var(--launcher-footer-clearance);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }
 

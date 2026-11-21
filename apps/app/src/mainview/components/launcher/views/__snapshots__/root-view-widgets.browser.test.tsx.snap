@@ -103,7 +103,7 @@ exports[`root widget interactions > steps through date presets with the arrow ke
 exports[`widgets in the root list with full motion > lists recent asks and widgets with their current inputs 1`] = `
 <div
   aria-label="Results"
-  class="flex flex-col gap-1 px-2 pb-2"
+  class="flex flex-col px-2"
   id="launcher-root-list"
   role="listbox"
 >
@@ -113,7 +113,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Recent
@@ -178,7 +178,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Widgets
@@ -218,7 +218,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Connections
@@ -271,7 +271,7 @@ exports[`widgets in the root list with full motion > lists recent asks and widge
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Commands
@@ -850,7 +850,7 @@ exports[`widgets in the root list with full motion > shows argument pills on Tab
 exports[`widgets in the root list with reduced motion > lists recent asks and widgets with their current inputs 1`] = `
 <div
   aria-label="Results"
-  class="flex flex-col gap-1 px-2 pb-2"
+  class="flex flex-col px-2"
   id="launcher-root-list"
   role="listbox"
 >
@@ -860,7 +860,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Recent
@@ -925,7 +925,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Widgets
@@ -965,7 +965,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Connections
@@ -1018,7 +1018,7 @@ exports[`widgets in the root list with reduced motion > lists recent asks and wi
     role="group"
   >
     <div
-      class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
       id="_r_id_"
     >
       Commands

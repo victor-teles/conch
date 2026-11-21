@@ -81,7 +81,7 @@ export function ConnectionEditView({
     <div className="flex min-h-0 flex-1 flex-col" onKeyDown={handleKeyDown}>
       <ViewHeader onBack={onBack} title={missing ? "Edit Connection" : title} />
       <div
-        className="min-h-0 flex-1 overflow-y-auto border-t border-panel-border px-4 pt-3 pb-4"
+        className="min-h-0 flex-1 launcher-body overflow-y-auto px-4 pt-3"
         ref={formHost}
       >
         {missing ? (

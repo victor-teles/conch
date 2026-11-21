@@ -12,6 +12,7 @@ import { SwapText } from "@/components/motion/swap-text";
 import {
   alternatesFor,
   chartModelOf,
+  insightOf,
   pieModelOf,
   trendOf,
 } from "@/lib/card-data";
@@ -138,6 +139,7 @@ export function AskCard({
 }: AskCardProps) {
   const { reduced, fadeIn, fadeOut } = useMotionPreset();
   const options = alternatesFor(spec, result);
+  const insight = insightOf(spec);
   const option = options.find((item) => item.kind === view) ?? options[0];
   const [introView, setIntroView] = useState<CardViewKind | null>(
     intro === "play" ? view : null
@@ -196,14 +198,11 @@ export function AskCard({
         </motion.div>
       </AnimatePresence>
       <AnimatePresence initial={false} mode="popLayout">
-        {spec.insight ? (
-          <motion.div
-            exit={{ opacity: 0, transition: fadeOut }}
-            key={spec.insight}
-          >
+        {insight ? (
+          <motion.div exit={{ opacity: 0, transition: fadeOut }} key={insight}>
             <CardInsight
               delay={intro === "update" ? INSIGHT_AFTER_UPDATE_S : undefined}
-              text={spec.insight}
+              text={insight}
               trend={trendFor(option, result, spec)}
             />
           </motion.div>

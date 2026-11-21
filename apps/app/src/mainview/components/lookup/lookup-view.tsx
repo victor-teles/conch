@@ -1,14 +1,16 @@
 import type { RefObject } from "react";
 
+import { SearchIcon } from "lucide-react";
 import { useCallback, useMemo } from "react";
 
 import type { LookupHit } from "@/lib/ipc";
 
-import { ConnectionStatus } from "@/components/launcher/connection-status";
 import { ActiveConnectionChip } from "@/components/launcher/connections/active-connection-chip";
+import { FooterLocation } from "@/components/launcher/footer-location";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { LauncherInputRow } from "@/components/launcher/launcher-input-row";
 import { optionId } from "@/components/launcher/launcher-row";
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { useListSelection } from "@/components/launcher/use-list-selection";
 import { useCopyFeedback } from "@/hooks/use-copy-feedback";
 
@@ -23,7 +25,7 @@ import { LOOKUP_LIST_ID, LookupResults } from "./lookup-results";
 import { useLookupKeyboard } from "./use-lookup-keyboard";
 
 const CHIP = <ActiveConnectionChip />;
-const STATUS = <ConnectionStatus />;
+const STATUS = <FooterLocation icon={SearchIcon} label="Look up" />;
 
 interface LookupViewProps {
   session: LookupSession;
@@ -92,7 +94,7 @@ export function LookupView({ session, inputRef, onOpenRows }: LookupViewProps) {
           value={value}
         />
       </LauncherInputRow>
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border">
+      <LauncherScrollArea className="relative flex flex-1 flex-col">
         <LookupHeader state={state} />
         <LookupResults
           onHover={select}
@@ -100,7 +102,7 @@ export function LookupView({ session, inputRef, onOpenRows }: LookupViewProps) {
           selectedId={selected?.id ?? null}
           state={state}
         />
-      </div>
+      </LauncherScrollArea>
       <LauncherFooter
         actionLabel={footer.actionLabel}
         hints={footer.hints}

@@ -24,6 +24,7 @@ import { LauncherInput } from "@/components/launcher/launcher-input";
 import { optionId } from "@/components/launcher/launcher-row";
 import { ModeBadge } from "@/components/launcher/mode-badge";
 import { useListSelection } from "@/components/launcher/use-list-selection";
+import { useSteadyHeight } from "@/components/launcher/use-steady-height";
 import { useAlerts } from "@/components/watches/use-alerts";
 import {
   useWatches,
@@ -215,6 +216,8 @@ export function RootView({
   );
 
   const detailRef = useRef<HTMLDivElement>(null);
+  const steady = useSteadyHeight(query);
+  const { onInput: holdHeight } = steady;
   const { commit: commitConnection, interceptChange } = token;
   const modeKeys = useMemo(
     () => ({
@@ -245,10 +248,11 @@ export function RootView({
       if (interceptChange(event.target.value)) {
         return;
       }
+      holdHeight(event.target.value);
       onQueryChange(event.target.value);
       select(null);
     },
-    [interceptChange, onQueryChange, select]
+    [holdHeight, interceptChange, onQueryChange, select]
   );
 
   const menuConnection =
@@ -290,7 +294,8 @@ export function RootView({
   const listMinHeight = Math.max(
     menuConnection ? actionsMenuHeight(actions.length) : 0,
     catalogItem ? actionsMenuHeight(catalogMenu.length) : 0,
-    argsWidget ? PILL_POPOVER_SPACE : 0
+    argsWidget ? PILL_POPOVER_SPACE : 0,
+    steady.minHeight
   );
   const armedId = armedRowId(menu, catalog);
 
@@ -334,7 +339,8 @@ export function RootView({
         />
       )}
       <div
-        className="relative flex min-h-0 flex-1 flex-col border-t border-panel-border"
+        className="relative flex min-h-0 flex-1 flex-col"
+        ref={steady.bodyRef}
         style={{ minHeight: listMinHeight }}
       >
         <RootBody

@@ -4,7 +4,7 @@ exports[`connection actions with full motion > opens from the selected row and c
 <div
   aria-activedescendant="launcher-action-edit"
   aria-label="Actions for analytics"
-  class="absolute right-3 bottom-3 z-10 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
   role="menu"
   tabindex="-1"
 >
@@ -178,7 +178,7 @@ exports[`connection actions with reduced motion > opens from the selected row an
 <div
   aria-activedescendant="launcher-action-edit"
   aria-label="Actions for analytics"
-  class="absolute right-3 bottom-3 z-10 w-64 rounded-[12px] popover-material p-1.5 outline-none"
+  class="absolute right-2 bottom-2 z-30 w-64 rounded-[12px] popover-material p-1.5 outline-none"
   role="menu"
   tabindex="-1"
 >

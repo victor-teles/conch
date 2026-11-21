@@ -1,0 +1,4 @@
+DEL leaderboard:week
+ZADD leaderboard:week 98420 nova_k 91077 marlo 87310 juniper.dev 80902 okafor 76544 tsuki 71230 brightfox 68811 quill 64102 orbit_9 60775 lumen 57340 kestrel
+ZADD leaderboard:week 52990 harborlight 49012 sable 45730 ember.io 41208 quarry 38817 fieldstone 33402 tidewater 29918 cobalt 25110 atlas_q 21007 meridian 17450 halcyon
+SET season:current "2026-W47"

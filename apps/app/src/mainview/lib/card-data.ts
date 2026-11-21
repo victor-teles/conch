@@ -328,6 +328,21 @@ const profile = (result: CardResult): ColumnProfile[] =>
 const distinct = (values: readonly unknown[]): number =>
   new Set(present(values).map(String)).size;
 
+const sentenceKey = (text: string): string =>
+  text
+    .toLowerCase()
+    .replaceAll(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+
+// An insight that only restates the card's title adds a line, not a fact.
+export const insightOf = (spec: CardSpec): string | null => {
+  const insight = spec.insight?.trim() ?? "";
+  if (insight === "" || sentenceKey(insight) === sentenceKey(spec.title)) {
+    return null;
+  }
+  return insight;
+};
+
 export const inferView = (result: CardResult): CardView => {
   const columns = profile(result);
   const numeric = columns.filter((item) => item.kind === "numeric");

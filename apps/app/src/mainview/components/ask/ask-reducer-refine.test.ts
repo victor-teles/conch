@@ -156,6 +156,37 @@ describe("a chain of turns", () => {
     expect(canRefine(state)).toBeTruthy();
   });
 
+  it("hides the SQL a failed refine opened once the next refine starts", () => {
+    const failed = run(
+      [
+        { prompt: "drop it", type: "refine" },
+        {
+          code: "NOT_READ_ONLY",
+          message: "Only read-only queries can run here, not DELETE.",
+          phase: "sql",
+          sql: "delete from t",
+          type: "error",
+        },
+      ],
+      firstTurn
+    );
+    expect(failed.sqlExpanded).toBeTruthy();
+    const next = run(
+      [
+        { prompt: "by week", type: "refine" },
+        { text: "select", type: "sqlDelta" },
+      ],
+      failed
+    );
+    expect(next.sqlExpanded).toBeFalsy();
+  });
+
+  it("keeps the SQL open across refines once the user opened it", () => {
+    const opened = run([{ type: "toggleSql" }], firstTurn);
+    const next = run([{ prompt: "by week", type: "refine" }], opened);
+    expect(next.sqlExpanded).toBeTruthy();
+  });
+
   it.each<[string, AskAction]>([
     ["a stop", { type: "cancel" }],
     [

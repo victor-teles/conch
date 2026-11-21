@@ -9,16 +9,17 @@ import type { Presence } from "./use-launcher-presence";
 import { useWindowHeightSync } from "./use-window-height-sync";
 
 export const PANEL_MARGIN = 20;
-const PANEL_MAX_HEIGHT = 680;
 
 interface LauncherSurfaceProps {
   presence: Presence;
+  maxHeight: number;
   onPresenceSettled: (definition: unknown) => void;
   children: ReactNode;
 }
 
 export function LauncherSurface({
   presence,
+  maxHeight,
   onPresenceSettled,
   children,
 }: LauncherSurfaceProps) {
@@ -50,7 +51,7 @@ export function LauncherSurface({
     >
       <motion.div
         animate={presence}
-        className="flex w-full flex-col overflow-hidden launcher-material"
+        className="relative flex w-full flex-col overflow-hidden launcher-material"
         data-presence={presence}
         initial="hidden"
         layout
@@ -58,8 +59,8 @@ export function LauncherSurface({
         onLayoutAnimationComplete={settle}
         ref={panelRef}
         style={{
-          borderRadius: 16,
-          maxHeight: PANEL_MAX_HEIGHT,
+          borderRadius: 18,
+          maxHeight,
           originX: 0.5,
           originY: 0,
           pointerEvents: presence === "shown" ? "auto" : "none",

@@ -16,13 +16,30 @@ const POPULATED: SqlAssumptions = {
   items: [
     { kind: "table", name: "orders" },
     { kind: "table", name: "regions" },
-    { column: "orders.created_at", grain: "month", kind: "time" },
-    { column: "status", kind: "filter", text: "status <> 'refunded'" },
+    {
+      column: "orders.created_at",
+      grain: "month",
+      kind: "time",
+      range: null,
+    },
+    {
+      column: "status",
+      kind: "filter",
+      label: "status is not refunded",
+      text: "status <> 'refunded'",
+    },
     { kind: "limit", rows: 500 },
   ],
 };
 const FILTER_ONLY: SqlAssumptions = {
-  items: [{ column: "status", kind: "filter", text: "status = 'paid'" }],
+  items: [
+    {
+      column: "status",
+      kind: "filter",
+      label: "status is paid",
+      text: "status = 'paid'",
+    },
+  ],
 };
 
 const BY_QUARTER: SqlAssumptions = {
@@ -86,7 +103,7 @@ describe.each([
       />
     );
     await expect
-      .element(screen.getByText("orders.created_at · by quarter"))
+      .element(screen.getByText("orders.created_at by quarter"))
       .toBeVisible();
     expect(screen.getByTestId("chip-pulse").elements()).toHaveLength(pulses);
   });

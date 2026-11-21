@@ -36,7 +36,7 @@ export function SectionRows({
       role="group"
     >
       <div
-        className="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        className="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id={headingId}
       >
         {section.label}

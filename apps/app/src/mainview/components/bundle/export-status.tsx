@@ -1,3 +1,5 @@
+import type { Ref } from "react";
+
 import { motion } from "motion/react";
 
 import { CheckDraw } from "@/components/motion/check-draw";
@@ -11,9 +13,10 @@ import type { ExportOutcome } from "./use-export";
 interface ExportStatusProps {
   outcome: ExportOutcome;
   onReveal: () => void;
+  ref?: Ref<HTMLSpanElement>;
 }
 
-export function ExportStatus({ outcome, onReveal }: ExportStatusProps) {
+export function ExportStatus({ outcome, onReveal, ref }: ExportStatusProps) {
   const { reduced, fadeIn, fadeOut } = useMotionPreset();
   const exported = outcome.kind === "exported";
   return (
@@ -22,6 +25,7 @@ export function ExportStatus({ outcome, onReveal }: ExportStatusProps) {
       className="flex min-w-0 items-center gap-1.5"
       exit={{ opacity: 0, transition: fadeOut }}
       initial={reduced ? false : { filter: "blur(4px)", opacity: 0, y: 2 }}
+      ref={ref}
       role="status"
       transition={fadeIn}
     >

@@ -76,7 +76,7 @@ export function HistoryList({
       </p>
       <div
         aria-label="Past asks"
-        className="relative flex flex-col gap-1 px-2 pb-2"
+        className="relative flex flex-col px-2"
         id={HISTORY_LIST_ID}
         role="listbox"
       >

@@ -172,7 +172,7 @@ export function AskView({
         overlay={<RefineOverlay {...input.overlay} />}
       />
       <div
-        className="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+        className="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
         style={{ minHeight: askOverlayHeight(menu, drill) }}
       >
         <QuestionTrail
