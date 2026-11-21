@@ -16,10 +16,10 @@ export const useRootArguments = (widgets: readonly Widget[]) => {
     : null;
 
   const open = useCallback(
-    (widgetId: string) => {
+    (widgetId: string, initial: ParamValues = {}) => {
       const target = widgets.find((item) => item.id === widgetId);
       if (target) {
-        setArgs({ values: currentValues(target), widgetId });
+        setArgs({ values: { ...currentValues(target), ...initial }, widgetId });
       }
     },
     [widgets]

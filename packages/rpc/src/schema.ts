@@ -52,7 +52,10 @@ export type LauncherNavigateView =
   | "root"
   | "settings"
   | { kind: "widget-run"; widgetId: string }
-  | "watches";
+  | "watches"
+  | { kind: "ask-draft"; prompt: string; connection: string | null }
+  | { kind: "widget-args"; widgetId: string; values: Record<string, string> }
+  | { kind: "notice"; message: string };
 
 export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
 

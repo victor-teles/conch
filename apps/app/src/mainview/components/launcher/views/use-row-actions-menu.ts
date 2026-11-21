@@ -1,4 +1,5 @@
 import { isSqlDialect } from "@conch/core/client";
+import { askLink } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import type { AskTarget } from "@/components/ask/use-ask";
@@ -33,6 +34,7 @@ interface UseRowActionsMenuOptions {
 }
 
 const COPIED: Partial<Record<RowAction["id"], string>> = {
+  "copy-ask-link": "Copied link",
   "copy-prompt": "Copied the prompt",
   "copy-sql": "Copied the SQL",
   "copy-table": "Copied the table name",
@@ -55,8 +57,29 @@ const sqlOf = (item: RowMenuItem): string | null => {
   return item.kind === "recent" ? item.ask.sql : null;
 };
 
-const copiedText = (item: RowMenuItem, id: RowAction["id"]): string | null => {
+// The link names the connection, not its id, so it works on a colleague's machine.
+const askLinkOf = (
+  item: RowMenuItem,
+  connections: readonly DatabaseConnection[]
+): string | null => {
+  if (item.kind !== "recent") {
+    return null;
+  }
+  const connection = connections.find(
+    (entry) => entry.id === item.ask.connectionId
+  );
+  return askLink(item.ask.prompt, connection?.name ?? null);
+};
+
+const copiedText = (
+  item: RowMenuItem,
+  id: RowAction["id"],
+  connections: readonly DatabaseConnection[]
+): string | null => {
   switch (id) {
+    case "copy-ask-link": {
+      return askLinkOf(item, connections);
+    }
     case "copy-prompt": {
       return promptOf(item);
     }
@@ -123,7 +146,7 @@ export const useRowActionsMenu = ({
 
   const perform = useCallback(
     async (target: RowMenuItem, action: RowAction) => {
-      const copied = copiedText(target, action.id);
+      const copied = copiedText(target, action.id, connections);
       if (copied !== null) {
         if (await copyText(copied)) {
           announce(COPIED[action.id] ?? "Copied");
@@ -172,7 +195,7 @@ export const useRowActionsMenu = ({
         }
       }
     },
-    [announce, handlers]
+    [announce, connections, handlers]
   );
 
   const close = useCallback(() => {

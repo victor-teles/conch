@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import type { DatabaseConnection } from "@/lib/connections";
 import type { Board, LookupValue } from "@/lib/ipc";
 
 import { useConnections } from "@/components/launcher/connections/connections-provider";
@@ -41,6 +42,7 @@ interface UseRootSectionsOptions {
   boards: readonly Board[];
   navigate: CommandNavigation;
   offer: LookupValue | null;
+  askWith?: DatabaseConnection | null;
 }
 
 export const useRootSections = ({
@@ -48,6 +50,7 @@ export const useRootSections = ({
   boards,
   navigate,
   offer,
+  askWith = null,
 }: UseRootSectionsOptions) => {
   const { state, activeConnection } = useConnections();
   const aiReady = useAiReadiness();
@@ -120,7 +123,7 @@ export const useRootSections = ({
           sections: buildRootSections({
             aiSetup: aiReady === false ? aiSetupCommand(openSettings) : null,
             alerts,
-            askWith: aiReady === true ? activeConnection : null,
+            askWith: aiReady === true ? (askWith ?? activeConnection) : null,
             boards,
             commands,
             connections: state.connections,

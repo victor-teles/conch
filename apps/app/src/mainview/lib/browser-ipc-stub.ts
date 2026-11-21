@@ -21,6 +21,7 @@ import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
 import { createAskEmulator, languageForType } from "@/lib/browser-ask-stub";
 import { createBoardEmulator } from "@/lib/browser-board-stub";
 import { createBundleEmulator } from "@/lib/browser-bundle-stub";
+import { createLinkOpener } from "@/lib/browser-link-stub";
 import {
   createClipboardEmulator,
   createLookupEmulator,
@@ -171,10 +172,21 @@ const createLauncherEmulator = (emit: EmitMessage) => {
     hide: () => {
       launcher.visible = false;
     },
+    show: () => {
+      if (launcher.visible) {
+        return;
+      }
+      launcher.visible = true;
+      emit("launcherShown", { clipboard: clipboard.offer() });
+    },
   };
 };
 
 const noop = (): undefined => undefined;
+
+const openBoardTab = (boardId: string) => {
+  window.open(`#/board/${encodeURIComponent(boardId)}`, "_blank");
+};
 
 const createDispatcher = (emit: EmitMessage) => {
   const ai = createAiSettingsStore();
@@ -186,6 +198,16 @@ const createDispatcher = (emit: EmitMessage) => {
     viewOf: (widgetId) =>
       widgets.listWidgets().find((widget) => widget.id === widgetId)?.view ??
       null,
+  });
+  // e2e opens conch:// links through this, as macOS hands them to bun.
+  Object.defineProperty(globalThis, "__conchOpenLink", {
+    configurable: true,
+    value: createLinkOpener({
+      boardExists: (boardId) => boards.getBoard({ boardId }) !== null,
+      navigate: (view) => emit("launcherNavigate", { view }),
+      openBoard: openBoardTab,
+      show: launcher.show,
+    }),
   });
   const lookups = createLookupEmulator((payload) =>
     emit("lookupEvent", payload)
@@ -281,8 +303,7 @@ const createDispatcher = (emit: EmitMessage) => {
     loadParamOptions: () => widgets.loadParamOptions(),
     lookup: (payload) => lookups.lookup(payload as LookupRequest),
     openBoard: (payload) => {
-      const { boardId } = payload as { boardId: string };
-      window.open(`#/board/${encodeURIComponent(boardId)}`, "_blank");
+      openBoardTab((payload as { boardId: string }).boardId);
     },
     openWidgetInLauncher: noop,
     peekSchema: () => demoSchemaPeek(),

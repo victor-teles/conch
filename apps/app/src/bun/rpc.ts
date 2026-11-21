@@ -376,6 +376,17 @@ export function createAppRpcs(host: AppHost) {
     formats: createPasteboardTypes(),
     readText: () => Utils.clipboardReadText(),
   });
+  const openBoardWindow = async (
+    boardId: string
+  ): Promise<"opened" | "missing"> => {
+    const board = await boards.getBoard(boardId);
+    if (!board) {
+      return "missing";
+    }
+    await host.boardWindows()?.open(board.id, boardTitle(board));
+    return "opened";
+  };
+
   const getLauncher = host.launcher;
   const handlers = wrapHandlers({
     acknowledgeAlert: ({ watchId }) => watches.acknowledge(watchId),
@@ -502,11 +513,9 @@ export function createAppRpcs(host: AppHost) {
       widgets.loadParamOptions(widgetId, paramName),
     lookup: (params) => lookups.startLookup(params),
     openBoard: async ({ boardId }) => {
-      const board = await boards.getBoard(boardId);
-      if (!board) {
+      if ((await openBoardWindow(boardId)) === "missing") {
         throw new DbError("BOARD_NOT_FOUND", "This board no longer exists.");
       }
-      await host.boardWindows()?.open(board.id, boardTitle(board));
     },
     openExternal: async ({ url }) => {
       await Utils.openExternal(url);
@@ -601,6 +610,7 @@ export function createAppRpcs(host: AppHost) {
     },
     createWindowRpc,
     launcherRpc,
+    openBoardWindow,
     releaseWindowRpc: (rpc: AppRpc) => {
       live.delete(rpc);
     },

@@ -3,6 +3,7 @@ import type { ChangeEvent, RefObject } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { AskTarget } from "@/components/ask/use-ask";
+import type { StagedLinkControls } from "@/components/launcher/links/staged-link";
 import type { RootAlert } from "@/components/watches/use-alerts";
 import type { LookupValue, ParamValues } from "@/lib/ipc";
 
@@ -13,6 +14,12 @@ import { useConnections } from "@/components/launcher/connections/connections-pr
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { LauncherInput } from "@/components/launcher/launcher-input";
 import { optionId } from "@/components/launcher/launcher-row";
+import { LinkMarkerChip } from "@/components/launcher/links/link-marker-chip";
+import { NO_STAGED_LINK } from "@/components/launcher/links/staged-link";
+import {
+  useLinkAsk,
+  useStagedLink,
+} from "@/components/launcher/links/use-staged-link";
 import { ModeBadge } from "@/components/launcher/mode-badge";
 import { PrefixHints } from "@/components/launcher/prefix-hints";
 import { useListSelection } from "@/components/launcher/use-list-selection";
@@ -26,7 +33,7 @@ import type { RootItem } from "./root-items";
 import type { CatalogNavigation } from "./use-catalog-menu";
 
 import { RootBody } from "./root-body";
-import { widgetItemId } from "./root-items";
+import { ASK_ITEM_ID, widgetItemId } from "./root-items";
 import { ROOT_LIST_ID } from "./root-list";
 import { RootMenusLayer } from "./root-menus-layer";
 import { RootStatus } from "./root-status";
@@ -71,6 +78,7 @@ interface RootViewProps {
   navigate: RootNavigation;
   ask: RootAskActions;
   lookup: RootLookup;
+  link?: StagedLinkControls;
 }
 
 export function RootView({
@@ -80,6 +88,7 @@ export function RootView({
   navigate,
   ask,
   lookup,
+  link = NO_STAGED_LINK,
 }: RootViewProps) {
   const connections = useConnections();
   const { state, activate, discardDraft } = connections;
@@ -124,7 +133,9 @@ export function RootView({
     }),
     [exportScope, navigate, startMode]
   );
+  const linkAsk = useLinkAsk(link.staged, query);
   const view = useRootSections({
+    askWith: linkAsk.target,
     boards,
     navigate: commandNavigation,
     offer: lookup.offer,
@@ -135,6 +146,19 @@ export function RootView({
   const { move, select, selected } = useListSelection(
     items,
     freshId ? widgetItemId(freshId) : state.focusId
+  );
+
+  const staging = useStagedLink({
+    args,
+    link,
+    linkAsk,
+    selectAsk: () => select(ASK_ITEM_ID),
+    start: ask.start,
+  });
+  const { clear: clearLink, startAsk } = staging;
+  const linkedAsk = useMemo(
+    () => ({ ...ask, start: startAsk }),
+    [ask, startAsk]
   );
 
   const focusInput = useCallback(() => inputRef.current?.focus(), [inputRef]);
@@ -156,7 +180,7 @@ export function RootView({
     [acknowledge, runWidget]
   );
   const { runById, runItem } = useRootRun({
-    ask,
+    ask: linkedAsk,
     items,
     onActivate: token.onActivate,
     openAlert,
@@ -235,6 +259,7 @@ export function RootView({
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
+      clearLink();
       if (interceptChange(event.target.value)) {
         return;
       }
@@ -242,9 +267,12 @@ export function RootView({
       onQueryChange(event.target.value);
       select(null);
     },
-    [holdHeight, interceptChange, onQueryChange, select]
+    [clearLink, holdHeight, interceptChange, onQueryChange, select]
   );
 
+  const linkNotice = staging.status
+    ? { done: false, message: staging.status }
+    : null;
   const footer = footerFor(selected, state.liveIds, mode, lastAnswerId);
 
   const argsWidget = args.widget;
@@ -252,28 +280,34 @@ export function RootView({
   const argumentControls = useMemo(
     () => ({
       onChange: args.change,
-      onExit: exitArguments,
+      onExit: () => {
+        clearLink();
+        exitArguments();
+      },
       onRun: (values: ParamValues) => {
+        clearLink();
         if (argsWidget) {
           runWidget(argsWidget.id, values);
         }
       },
     }),
-    [args.change, argsWidget, exitArguments, runWidget]
+    [args.change, argsWidget, clearLink, exitArguments, runWidget]
   );
   const inputSlots = useMemo(
     () => ({
       chip: (
         <>
           <ActiveConnectionChip
+            target={linkAsk.target}
             tone={mode === "connection" ? "pending" : "active"}
           />
+          <LinkMarkerChip visible={linkAsk.live} />
           <ModeBadge mode={mode} />
         </>
       ),
       trailing: <PrefixHints onPick={startMode} visible={query === ""} />,
     }),
-    [mode, query, startMode]
+    [linkAsk.live, linkAsk.target, mode, query, startMode]
   );
   const listMinHeight = Math.max(
     menus.minHeight,
@@ -283,6 +317,9 @@ export function RootView({
 
   return (
     <>
+      <p aria-live="polite" className="sr-only">
+        {staging.announcement}
+      </p>
       {argsWidget ? (
         <WidgetArgumentsRow
           busy={false}
@@ -335,7 +372,7 @@ export function RootView({
         hints={footer.hints}
         status={
           <RootStatus
-            notice={menus.notice}
+            notice={menus.notice ?? linkNotice}
             onReveal={handleReveal}
             outcome={exportOutcome}
           />

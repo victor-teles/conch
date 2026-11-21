@@ -27,6 +27,10 @@ exports[`activating a connection with full motion > shows a failed connection in
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
@@ -981,6 +985,10 @@ exports[`activating a connection with reduced motion > shows a failed connection
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
@@ -1935,6 +1943,10 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
@@ -2874,6 +2886,10 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
@@ -3798,6 +3814,10 @@ exports[`rootView with connections > lists connections first, most recent first,
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >
@@ -4797,6 +4817,10 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
   }
 })("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
   </script>
+  <p
+    aria-live="polite"
+    class="sr-only"
+  />
   <div
     class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
   >

@@ -321,6 +321,43 @@ exports[`widgetRunView actions > lists the shared export actions before the widg
   </div>
   <div
     class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
+    id="launcher-action-copy-link"
+    role="menuitem"
+    tabindex="0"
+  >
+    <svg
+      aria-hidden="true"
+      class="lucide lucide-link relative size-3.5 shrink-0 opacity-80"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+      />
+      <path
+        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+      />
+    </svg>
+    <span
+      class="relative min-w-0 flex-1 truncate"
+      data-slot="swap-text"
+    >
+      <span
+        class="inline-block"
+      >
+        Copy Link with Inputs
+      </span>
+    </span>
+  </div>
+  <div
+    class="relative flex h-8 cursor-default items-center gap-2.5 px-2.5 type-body text-foreground"
     id="launcher-action-edit-inputs"
     role="menuitem"
     tabindex="0"

@@ -125,6 +125,25 @@ describe("row actions at the root", () => {
       .toHaveTextContent("Copied the SQL");
   });
 
+  it("copies a recent ask as a link that names its connection", async () => {
+    const writeText = vi
+      .spyOn(navigator.clipboard, "writeText")
+      .mockResolvedValue();
+    const { screen } = await setup();
+    await userEvent.keyboard("{Meta>}k{/Meta}");
+    await screen
+      .getByRole("textbox", { name: "Filter actions" })
+      .fill("ask link");
+    await userEvent.keyboard("{Enter}");
+
+    expect(writeText).toHaveBeenCalledWith(
+      "conch://ask?q=Revenue+for+Europe&conn=analytics"
+    );
+    await expect
+      .element(screen.getByRole("contentinfo"))
+      .toHaveTextContent("Copied link");
+  });
+
   it("runs the stored SQL without the AI on Command-Enter", async () => {
     const { ask } = await setup();
     await userEvent.keyboard("{Meta>}{Enter}{/Meta}");

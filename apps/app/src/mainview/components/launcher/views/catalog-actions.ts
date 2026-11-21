@@ -2,6 +2,7 @@ import {
   CopyPlusIcon,
   DownloadIcon,
   LayoutGridIcon,
+  LinkIcon,
   PencilIcon,
   PlayIcon,
   SquareArrowOutUpRightIcon,
@@ -29,6 +30,7 @@ export type CatalogActionId =
   | "add-to-board"
   | "export-board"
   | "export-widget"
+  | "copy-link"
   | WatchActionId;
 
 export interface CatalogAction extends MenuAction {
@@ -36,6 +38,13 @@ export interface CatalogAction extends MenuAction {
 }
 
 export type CatalogItem = Extract<RootItem, { kind: "board" | "widget" }>;
+
+const COPY_LINK: CatalogAction = {
+  icon: LinkIcon,
+  id: "copy-link",
+  label: "Copy Link",
+  tone: "default",
+};
 
 export const isCatalogItem = (item: RootItem | null): item is CatalogItem =>
   item?.kind === "board" || item?.kind === "widget";
@@ -66,6 +75,7 @@ export const catalogActions = (
           label: "Duplicate",
           tone: "default",
         },
+        COPY_LINK,
         {
           icon: DownloadIcon,
           id: "export-board",
@@ -94,6 +104,7 @@ export const catalogActions = (
           label: "Add to Board…",
           tone: "default",
         },
+        COPY_LINK,
         {
           icon: DownloadIcon,
           id: "export-widget",

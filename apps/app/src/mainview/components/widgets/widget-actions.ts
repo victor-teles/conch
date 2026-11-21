@@ -1,6 +1,7 @@
 import {
   CopyPlusIcon,
   LayoutGridIcon,
+  LinkIcon,
   PencilIcon,
   SlidersHorizontalIcon,
   Trash2Icon,
@@ -25,7 +26,8 @@ export type WidgetActionId =
   | "rename"
   | "duplicate"
   | "delete"
-  | "add-to-board";
+  | "add-to-board"
+  | "copy-link";
 
 export interface WidgetAction extends MenuAction {
   id: WidgetActionId;
@@ -36,6 +38,12 @@ export const widgetActions = (
   watching: readonly WatchAction[] = []
 ): WidgetAction[] => [
   ...exportActions(context),
+  {
+    icon: LinkIcon,
+    id: "copy-link",
+    label: "Copy Link with Inputs",
+    tone: "default",
+  },
   {
     icon: SlidersHorizontalIcon,
     id: "edit-inputs",

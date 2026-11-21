@@ -155,6 +155,7 @@ describe("root view boards", () => {
       "Open",
       "Rename",
       "Duplicate",
+      "Copy Link",
       "Export Board",
       "Delete",
     ]);
@@ -199,6 +200,7 @@ describe("root view boards", () => {
     expect(menuLabels(screen)).toStrictEqual([
       "Run",
       "Add to Board…",
+      "Copy Link",
       "Export Widget",
       "Watch…",
     ]);

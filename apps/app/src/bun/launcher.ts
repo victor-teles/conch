@@ -21,6 +21,7 @@ import {
   resizedFrame,
   workAreaForPoint,
 } from "./launcher-geometry.ts";
+import { createNavigationGate } from "./launcher-navigation.ts";
 import { summonPayload } from "./summon-payload.ts";
 import {
   EMPTY_TRAY_STATUS,
@@ -66,7 +67,6 @@ export function createLauncher({
   onWatchedOpened,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
-  let rendererReady = false;
   let modal = false;
   const shownTray = { image: TRAY_IMAGES.idle as string, menu: "", title: "" };
   const trayState = {
@@ -92,6 +92,14 @@ export function createLauncher({
     window.activate();
     rpc.send.launcherShown(summonPayload(summonOffer));
   };
+  // A cold-start blur can hide the panel before the renderer is ready, so
+  // delivering a held view shows it again.
+  const navigation = createNavigationGate<LauncherNavigateView>((view) => {
+    if (!window.isVisible()) {
+      show();
+    }
+    rpc.send.launcherNavigate({ view });
+  });
 
   const tray = new Tray({
     height: 18,
@@ -134,14 +142,12 @@ export function createLauncher({
       window.hide();
       releaseFocus();
     },
-    markRendererReady: () => {
-      rendererReady = true;
-    },
+    markRendererReady: navigation.markReady,
     navigate: (view) => {
       if (!window.isVisible()) {
         show();
       }
-      rpc.send.launcherNavigate({ view });
+      navigation.navigate(view);
     },
     resize: (height) => {
       const frame = resizedFrame(window.getFrame(), height);
@@ -174,7 +180,7 @@ export function createLauncher({
   window.on("blur", () => {
     const response = blurResponse({
       modal,
-      rendererReady,
+      rendererReady: navigation.isReady(),
       visible: window.isVisible(),
     });
     if (response === "dismiss") {

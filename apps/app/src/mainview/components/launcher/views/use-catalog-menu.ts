@@ -1,10 +1,12 @@
-import { draftOf } from "@conch/rpc";
+import { boardLink, draftOf, widgetLink } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import type { Board, ExportScope, Widget } from "@/lib/ipc";
 
 import { useMenuBarToggle } from "@/components/watches/use-menu-bar-toggle";
 import { useArmedConfirm } from "@/hooks/use-armed-confirm";
+import { useFlashMessage } from "@/hooks/use-flash-message";
+import { copyText } from "@/lib/clipboard";
 import { deleteBoard, saveBoard } from "@/lib/ipc";
 
 import type { CatalogAction, CatalogItem } from "./catalog-actions";
@@ -57,6 +59,12 @@ const runWidgetAction = async (
   }
 };
 
+export const COPIED_LINK = "Copied link";
+const NOTICE_MS = 2000;
+
+const linkOf = (item: CatalogItem): string =>
+  item.kind === "board" ? boardLink(item.board.id) : widgetLink(item.widget.id);
+
 const duplicateOf = (board: Board) => {
   const { id: _id, ...draft } = draftOf(board);
   return { ...draft, name: `${board.name} copy`.slice(0, 60) };
@@ -70,6 +78,7 @@ export const useCatalogMenu = ({
   const [item, setItem] = useState<CatalogItem | null>(null);
   const { arm, armed, disarm } = useArmedConfirm();
   const toggleMenuBar = useMenuBarToggle();
+  const { flash, message: notice } = useFlashMessage(NOTICE_MS);
 
   const close = useCallback(() => {
     disarm();
@@ -87,6 +96,12 @@ export const useCatalogMenu = ({
 
   const runOn = useCallback(
     async (target: CatalogItem, action: CatalogAction) => {
+      if (action.id === "copy-link") {
+        if (await copyText(linkOf(target))) {
+          flash(COPIED_LINK);
+        }
+        return;
+      }
       if (target.kind === "widget") {
         await runWidgetAction(action, target.widget, navigate, toggleMenuBar);
         return;
@@ -119,7 +134,7 @@ export const useCatalogMenu = ({
         }
       }
     },
-    [navigate, onChanged, toggleMenuBar]
+    [flash, navigate, onChanged, toggleMenuBar]
   );
 
   const run = useCallback(
@@ -137,5 +152,5 @@ export const useCatalogMenu = ({
     [arm, armed, close, item, runOn]
   );
 
-  return { armed, close, item, open, run, runOn };
+  return { armed, close, item, notice, open, run, runOn };
 };

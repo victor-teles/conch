@@ -94,6 +94,7 @@ describe("rowActions", () => {
         "Run SQL (no AI)",
         "Copy SQL",
         "Copy Prompt",
+        "Copy Ask Link",
         "Remove from History",
       ],
     ],

@@ -10,6 +10,7 @@ import { createBoardWindows } from "./board-windows.ts";
 import { focusAfterLauncherHides } from "./focus-policy.ts";
 import { readLauncherHotkey } from "./launcher-config.ts";
 import { createLauncher } from "./launcher.ts";
+import { createLinkRouter, urlOfOpenEvent } from "./link-router.ts";
 import { APPLICATION_MENU, MENU_ACTIONS } from "./menu.ts";
 import { createAppRpcs } from "./rpc.ts";
 import { LAUNCHER_URL } from "./window.ts";
@@ -18,13 +19,28 @@ const menuActionOf = (event: unknown): string | undefined =>
   (event as { data?: { action?: string } }).data?.action;
 
 async function main(): Promise<void> {
-  await migrateAppData();
   let launcher: LauncherController | null = null;
+  let rpcs: ReturnType<typeof createAppRpcs> | null = null;
+  const links = createLinkRouter({
+    launcher: () => launcher,
+    log: (route) => console.info(`[link] ${route}`),
+    openBoardWindow: async (boardId) =>
+      rpcs ? await rpcs.openBoardWindow(boardId) : "missing",
+  });
+  // A cold-start link arrives once; it is lost unless this runs before the first await.
+  Electrobun.events.on("open-url", (event) => {
+    const url = urlOfOpenEvent(event);
+    if (url !== null) {
+      links.handle(url);
+    }
+  });
+
+  await migrateAppData();
   let boards: BoardWindows | null = null;
   let returnBoardId: string | null = null;
   const activation = createAppActivation();
 
-  const rpcs = createAppRpcs({
+  rpcs = createAppRpcs({
     boardWindows: () => boards,
     launcher: () => launcher,
     toggleLauncherFrom: (boardId) => {
@@ -75,6 +91,7 @@ async function main(): Promise<void> {
     console.error("[launcher] failed to start", error);
     return;
   }
+  links.flush();
 
   ApplicationMenu.setApplicationMenu(APPLICATION_MENU);
   ApplicationMenu.on("application-menu-clicked", (event) => {

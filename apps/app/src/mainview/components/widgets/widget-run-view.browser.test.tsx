@@ -324,6 +324,7 @@ describe("widgetRunView actions", () => {
       "Copy as Markdown",
       "Copy Chart as PNG",
       "Save CSV to Downloads",
+      "Copy Link with Inputs",
       "Edit Inputs",
       "Rename",
       "Duplicate",

@@ -29,8 +29,11 @@ import {
 import { onLauncherNavigate, openBoard } from "@/lib/ipc";
 import { useMotionPreset } from "@/lib/motion";
 
+import type { StagedLink } from "./links/staged-link";
+
 import { ConnectionsProvider } from "./connections/connections-provider";
 import { LauncherSurface } from "./launcher-surface";
+import { stagedLinkOf } from "./links/staged-link";
 import { panelMaxHeightOf } from "./panel-height";
 import { renderView } from "./render-launcher-view";
 import { stackVariants } from "./stack-variants";
@@ -69,6 +72,8 @@ function LauncherStackView() {
   const stack = useLauncherStack();
   const { markFresh, refresh: refreshWidgets } = useWidgets();
   const [query, setQuery] = useState("");
+  const [stagedLink, setStagedLink] = useState<StagedLink | null>(null);
+  const linkNonce = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const preset = useMotionPreset();
 
@@ -82,6 +87,7 @@ function LauncherStackView() {
       if (hiddenForMs > RESET_AFTER_HIDDEN_MS) {
         stack.reset();
         setQuery("");
+        setStagedLink(null);
         inputRef.current?.focus();
         return;
       }
@@ -110,7 +116,15 @@ function LauncherStackView() {
       push({ connectionId, kind: "connection-edit" }),
     [push]
   );
-  const handleClearQuery = useCallback(() => setQuery(""), []);
+  const handleClearQuery = useCallback(() => {
+    setQuery("");
+    setStagedLink(null);
+  }, []);
+  const clearStagedLink = useCallback(() => setStagedLink(null), []);
+  const link = useMemo(
+    () => ({ onDone: clearStagedLink, staged: stagedLink }),
+    [clearStagedLink, stagedLink]
+  );
   const handleRunWidget = useCallback(
     (widgetId: string, values: ParamValues = {}) =>
       push({ kind: "widget-run", values, widgetId }),
@@ -228,6 +242,15 @@ function LauncherStackView() {
   });
 
   const handleNavigate = useEffectEvent((view: LauncherNavigateView) => {
+    linkNonce.current += 1;
+    const staged = stagedLinkOf(view, linkNonce.current);
+    if (staged) {
+      stack.reset();
+      setQuery(staged.kind === "ask" ? staged.prompt : "");
+      setStagedLink(staged);
+      inputRef.current?.focus();
+      return;
+    }
     if (view === "settings") {
       stack.push(SETTINGS);
       return;
@@ -235,7 +258,7 @@ function LauncherStackView() {
     stack.reset();
     if (view === "watches") {
       stack.push(WATCHES);
-    } else if (typeof view === "object") {
+    } else if (typeof view === "object" && view.kind === "widget-run") {
       stack.push({ kind: "widget-run", values: {}, widgetId: view.widgetId });
     }
   });
@@ -304,6 +327,7 @@ function LauncherStackView() {
               <RootView
                 ask={rootAsk}
                 inputRef={inputRef}
+                link={link}
                 lookup={rootLookup}
                 navigate={navigation}
                 onQueryChange={setQuery}

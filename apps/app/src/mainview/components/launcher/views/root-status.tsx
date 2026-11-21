@@ -6,11 +6,14 @@ import { useAgentActivityStatus } from "@/components/agents/agent-activity-provi
 import { AgentActivityStatus } from "@/components/agents/agent-activity-status";
 import { ExportStatus } from "@/components/bundle/export-status";
 import { ConnectionStatus } from "@/components/launcher/connection-status";
+import { CheckDraw } from "@/components/motion/check-draw";
 import { SwapText } from "@/components/motion/swap-text";
+
+import type { RootNotice } from "./use-root-menus";
 
 interface RootStatusProps {
   outcome: ExportOutcome | null;
-  notice?: string | null;
+  notice?: RootNotice | null;
   onReveal: () => void;
 }
 
@@ -26,8 +29,9 @@ export function RootStatus({
       {quiet && !activity ? <ConnectionStatus /> : null}
       <AgentActivityStatus activity={quiet ? activity : null} />
       {notice && !outcome ? (
-        <span className="flex min-w-0 items-center" role="status">
-          <SwapText className="truncate" value={notice} />
+        <span className="flex min-w-0 items-center gap-1.5" role="status">
+          {notice.done ? <CheckDraw className="shrink-0" label="Done" /> : null}
+          <SwapText className="truncate" value={notice.message} />
         </span>
       ) : null}
       <AnimatePresence mode="popLayout">

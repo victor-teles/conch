@@ -15,6 +15,7 @@ export default {
   app: {
     identifier: "dev.conch.app",
     name: "Conch",
+    urlSchemes: ["conch"],
     version: "0.0.10",
   },
   build: {

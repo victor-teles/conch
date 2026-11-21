@@ -38,6 +38,21 @@ const catalogMenuFor = (
   return catalogActions(item, watch);
 };
 
+export interface RootNotice {
+  message: string;
+  done: boolean;
+}
+
+const noticeOf = (
+  row: string | null,
+  catalog: string | null
+): RootNotice | null => {
+  if (catalog) {
+    return { done: true, message: catalog };
+  }
+  return row ? { done: false, message: row } : null;
+};
+
 interface UseRootMenusOptions {
   catalogNavigation: CatalogNavigation;
   lastAnswerId: string | null;
@@ -150,7 +165,7 @@ export const useRootMenus = ({
       rows,
     },
     minHeight,
-    notice: rows.notice,
+    notice: noticeOf(rows.notice, catalog.notice),
     openActions,
     runSecond,
     runShortcut,

@@ -44,6 +44,14 @@ export {
   TableView,
 } from "./card-spec.ts";
 export type { ColumnFormatKind } from "./card-spec.ts";
+export {
+  askLink,
+  boardLink,
+  CONCH_SCHEME,
+  parseConchLink,
+  widgetLink,
+} from "./conch-link.ts";
+export type { ConchLink, ConchLinkParse } from "./conch-link.ts";
 export { decodeRpcError, encodeRpcError } from "./error.ts";
 export { LookupRequest, LookupValueSchema } from "./lookup.ts";
 export type {

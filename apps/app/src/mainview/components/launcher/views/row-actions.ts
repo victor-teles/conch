@@ -5,6 +5,7 @@ import {
   ClipboardCopyIcon,
   Columns3Icon,
   CornerDownLeftIcon,
+  LinkIcon,
   PlayIcon,
   Trash2Icon,
   XIcon,
@@ -22,6 +23,7 @@ import type { RootItem } from "./root-items";
 export type RowActionId =
   | "run"
   | "copy-prompt"
+  | "copy-ask-link"
   | "copy-sql"
   | "copy-value"
   | "copy-table"
@@ -121,6 +123,12 @@ export const rowActions = (
         },
         copy("copy-sql", "Copy SQL"),
         copy("copy-prompt", "Copy Prompt"),
+        {
+          icon: LinkIcon,
+          id: "copy-ask-link",
+          label: "Copy Ask Link",
+          tone: "default",
+        },
         {
           icon: XIcon,
           id: "remove-recent",

@@ -200,6 +200,7 @@ describe.each([
     ).toStrictEqual([
       "Run",
       "Add to Board…",
+      "Copy Link",
       "Export Widget",
       "Watch…",
       "Show in Menu Bar",

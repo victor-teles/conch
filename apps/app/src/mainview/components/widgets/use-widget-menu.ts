@@ -1,8 +1,10 @@
+import { widgetLink } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
 import type { ResultExport } from "@/components/result-actions/use-result-export";
 import type { Widget, WidgetDraft, WidgetRunResult } from "@/lib/ipc";
 
+import { linkParamsOf } from "@/components/launcher/links/link-values";
 import { runExportAction } from "@/components/result-actions/use-result-export";
 import { useMenuBarToggle } from "@/components/watches/use-menu-bar-toggle";
 import { useArmedConfirm } from "@/hooks/use-armed-confirm";
@@ -10,6 +12,7 @@ import { copyText } from "@/lib/clipboard";
 
 import type { WidgetAction } from "./widget-actions";
 
+import { currentValues } from "./param-labels";
 import { draftFromWidget, duplicateDraft } from "./widget-draft";
 import { useWidgets } from "./widgets-provider";
 
@@ -57,6 +60,15 @@ export const useWidgetMenu = ({
     }
   }, [announce, outcome, widget.sqlTemplate]);
 
+  const copyLink = useCallback(async () => {
+    const values = outcome?.values ?? currentValues(widget);
+    if (
+      await copyText(widgetLink(widget.id, linkParamsOf(widget.params, values)))
+    ) {
+      announce("Copied link");
+    }
+  }, [announce, outcome, widget]);
+
   const run = useCallback(
     async (action: WidgetAction) => {
       if (action.id === "delete" && !armed) {
@@ -96,6 +108,10 @@ export const useWidgetMenu = ({
           onDeleted();
           break;
         }
+        case "copy-link": {
+          await copyLink();
+          break;
+        }
         default: {
           await runExportAction(action.id, exporter, copySql);
         }
@@ -106,6 +122,7 @@ export const useWidgetMenu = ({
       arm,
       armed,
       close,
+      copyLink,
       copySql,
       exporter,
       onAddToBoard,

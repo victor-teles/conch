@@ -239,6 +239,10 @@ const subscribe = <M extends MessageName>(
   };
 };
 
+// Bun sends a navigate right after the handshake (a cold-start link), which
+// can land before the launcher mounts and subscribes.
+const unheardNavigation: { view: LauncherNavigateView | null } = { view: null };
+
 const bunReadyHandlers = new Set<() => void>();
 const bunReadyState = { fired: false };
 
@@ -248,8 +252,13 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
       askEvent: (payload) => dispatchMessage("askEvent", payload),
       boardChanged: (payload) => dispatchMessage("boardChanged", payload),
       launcherDismiss: (payload) => dispatchMessage("launcherDismiss", payload),
-      launcherNavigate: (payload) =>
-        dispatchMessage("launcherNavigate", payload),
+      launcherNavigate: (payload) => {
+        if (messageHandlers.launcherNavigate.size === 0) {
+          unheardNavigation.view = payload.view;
+          return;
+        }
+        dispatchMessage("launcherNavigate", payload);
+      },
       launcherShown: (payload) => dispatchMessage("launcherShown", payload),
       launcherToggle: (payload) => dispatchMessage("launcherToggle", payload),
       lookupEvent: (payload) => dispatchMessage("lookupEvent", payload),
@@ -329,8 +338,17 @@ export const onLauncherDismiss = (handler: () => void): (() => void) =>
 
 export const onLauncherNavigate = (
   handler: (view: LauncherNavigateView) => void
-): (() => void) =>
-  subscribe("launcherNavigate", (payload) => handler(payload.view));
+): (() => void) => {
+  const unsubscribe = subscribe("launcherNavigate", (payload) =>
+    handler(payload.view)
+  );
+  const missed = unheardNavigation.view;
+  if (missed !== null) {
+    unheardNavigation.view = null;
+    handler(missed);
+  }
+  return unsubscribe;
+};
 
 export function onBunReady(handler: () => void): () => void {
   bunReadyHandlers.add(handler);
