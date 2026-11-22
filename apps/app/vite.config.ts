@@ -95,6 +95,8 @@ export default defineConfig({
         extends: true,
         test: {
           browser: {
+            // Overrides the dev server's strictPort so parallel worktrees take the next free port.
+            api: { strictPort: false },
             commands: { resetPointer },
             enabled: true,
             headless: true,

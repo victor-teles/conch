@@ -20,6 +20,7 @@ pre-commit:
       glob: "{apps,packages}/**/*.{ts,tsx}"
       run: . scripts/git-hook-env.sh && bun run check-types
 
+pre-push:
+  jobs:
     - name: test
-      glob: "{apps,packages}/**/*.{ts,tsx}"
       run: . scripts/git-hook-env.sh && bun run --cwd apps/app test

@@ -17,12 +17,17 @@ bun run --cwd apps/app desktop:build     # production desktop build
 bun run check-types                      # tsc across workspaces
 bun run check                            # lint + format check (Ultracite)
 bun run fix                              # auto-fix lint + format
-bun run --cwd apps/app test              # all tests — REQUIRED before declaring done
+bun run --cwd apps/app test              # all tests — once, before declaring done
 ```
 
 ## Development Guidelines
 
-- Run type-check, lint, and tests after multi-file changes, before declaring done.
+- Verify in tiers. The full browser suite takes ~2 min, so don't run it after every edit.
+  - While iterating: only the tests you touched or that cover what you changed (`bun run test:unit <path>`, `bun run test:browser <path>`, or `bunx vitest run --changed` from `apps/app`), plus `bun run check-types` (~8 s).
+  - Once, before declaring done: `bun run check`, `bun run check-types`, `bun run --cwd apps/app test`. Rerun only the files that failed, not the whole suite.
+  - Coverage (`test:coverage`) and e2e (`bun run --cwd apps/app e2e`) only when asked, or when the change touches a flow under `apps/app/e2e/`. CI gates both.
+  - Never poll with `sleep` loops. Start long commands in the background and wait for the completion notice.
+  - Formatting runs per edited file through the Claude hook and on staged files at commit, and tests run on `pre-push`, so don't re-run them just to satisfy the hooks.
 - Do not stop mid-implementation. Execute all tasks of a plan sequentially; pause only for explicit user questions.
 - Fix CI failures at the root cause. Never loosen thresholds or disable checks.
 - Before implementing a GitHub issue, verify the branch and create a feature branch if on `main`.
