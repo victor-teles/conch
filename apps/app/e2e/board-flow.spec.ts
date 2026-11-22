@@ -95,10 +95,9 @@ const widgetRuns = (page: Page) =>
 const addToBoard = async (page: Page, widgetName: string) => {
   const root = page.getByRole("combobox", { name: "Search commands" });
   await root.fill(widgetName);
-  await root.press("ArrowDown");
-  await expect(
-    page.getByRole("option", { name: new RegExp(widgetName) })
-  ).toHaveAttribute("aria-selected", "true");
+  const row = page.getByRole("option", { name: new RegExp(widgetName) });
+  await row.hover();
+  await expect(row).toHaveAttribute("aria-selected", "true");
   await root.press("Meta+k");
   await page.getByRole("menuitem", { name: "Add to Board…" }).click();
 };

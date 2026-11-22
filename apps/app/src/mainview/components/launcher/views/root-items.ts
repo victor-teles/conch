@@ -1,13 +1,18 @@
 import type { LookupValue, TableItem } from "@conch/core/client";
 
+import type { FormState } from "@/components/connection-form/connection-form-state";
 import type { LauncherCommand } from "@/components/launcher/root-commands";
 import type { RootAlert } from "@/components/watches/use-alerts";
 import type { DatabaseConnection } from "@/lib/connections";
-import type { Board, RecentAsk, Widget } from "@/lib/ipc";
+import type { Ranked } from "@/lib/fuzzy-match";
+import type { Board, MiniApp, RecentAsk, Widget } from "@/lib/ipc";
 
-import { filterConnections } from "@/components/launcher/connections/connection-search";
-import { filterCommands } from "@/components/launcher/root-commands";
-import { filterWidgets } from "@/components/widgets/widget-search";
+import { rankConnections } from "@/components/launcher/connections/connection-search";
+import { rankCommands } from "@/components/launcher/root-commands";
+import { rankWidgets } from "@/components/widgets/widget-search";
+import { rankByTerms } from "@/lib/fuzzy-match";
+
+import { rankRootItems } from "./root-ranking";
 
 export type RootItem =
   | { kind: "command"; id: string; command: LauncherCommand }
@@ -16,9 +21,17 @@ export type RootItem =
   | { kind: "widget"; id: string; widget: Widget }
   | { kind: "recent"; id: string; ask: RecentAsk }
   | { kind: "board"; id: string; board: Board }
+  | { kind: "mini-app"; id: string; app: MiniApp }
+  | {
+      kind: "build-app";
+      id: string;
+      prompt: string;
+      connection: DatabaseConnection;
+    }
   | { kind: "alert"; id: string; alert: RootAlert }
   | { kind: "sql"; id: string; sql: string; connection: DatabaseConnection }
   | { kind: "table"; id: string; schema: string; table: TableItem }
+  | { kind: "draft"; id: string; draft: FormState }
   | {
       kind: "lookup";
       id: string;
@@ -30,6 +43,8 @@ export type RootItem =
 export type LookupOrigin = "typed" | "clipboard";
 
 export const ASK_ITEM_ID = "ask";
+export const BUILD_APP_ITEM_ID = "build-app";
+export const DRAFT_ITEM_ID = "draft-connection";
 export const LOOKUP_ITEM_IDS: Record<LookupOrigin, string> = {
   clipboard: "lookup-clipboard",
   typed: "lookup",
@@ -38,6 +53,7 @@ export const RECENTS_SHOWN = 5;
 
 export const widgetItemId = (widgetId: string) => `widget-${widgetId}`;
 export const boardItemId = (boardId: string) => `board-${boardId}`;
+export const appItemId = (appId: string) => `app-${appId}`;
 export const alertItemId = (watchId: string) => `alert-${watchId}`;
 const recentItemId = (askId: string) => `recent-${askId}`;
 
@@ -48,6 +64,7 @@ export interface RootSection {
     | "commands"
     | "recent"
     | "widgets"
+    | "apps"
     | "boards"
     | "sql"
     | "tables"
@@ -55,7 +72,10 @@ export interface RootSection {
     | "pick"
     | "lookup"
     | "clipboard"
-    | "alerts";
+    | "alerts"
+    | "results"
+    | "fallbacks"
+    | "drafts";
   label: string;
   items: RootItem[];
 }
@@ -69,16 +89,23 @@ interface BuildRootSectionsInput {
   widgets?: readonly Widget[];
   recents?: readonly RecentAsk[];
   boards?: readonly Board[];
+  apps?: readonly MiniApp[];
   lookup?: LookupValue | null;
   offer?: LookupValue | null;
   lookupWith?: DatabaseConnection | null;
   alerts?: readonly RootAlert[];
+  draft?: FormState | null;
+  fallbacks?: readonly LauncherCommand[];
 }
 
-const matchesBoard = (board: Board, query: string): boolean => {
-  const needle = query.trim().toLowerCase();
-  return !needle || board.name.toLowerCase().includes(needle);
-};
+const boardTerms = (board: Board) => [board.name];
+const appTerms = (app: MiniApp) => [app.name, app.description];
+
+const draftTerms = (draft: FormState) => [
+  "New Connection",
+  draft.name,
+  draft.host,
+];
 
 const commandItem = (command: LauncherCommand): RootItem => ({
   command,
@@ -86,26 +113,19 @@ const commandItem = (command: LauncherCommand): RootItem => ({
   kind: "command",
 });
 
-const recentItems = (
-  recents: readonly RecentAsk[],
-  query: string
-): RootItem[] =>
-  query.trim()
-    ? []
-    : recents.slice(0, RECENTS_SHOWN).map((ask) => ({
-        ask,
-        id: recentItemId(ask.id),
-        kind: "recent",
-      }));
+const recentItems = (recents: readonly RecentAsk[]): RootItem[] =>
+  recents.slice(0, RECENTS_SHOWN).map((ask) => ({
+    ask,
+    id: recentItemId(ask.id),
+    kind: "recent",
+  }));
 
-const alertItems = (alerts: readonly RootAlert[], query: string): RootItem[] =>
-  query.trim()
-    ? []
-    : alerts.map((alert) => ({
-        alert,
-        id: alertItemId(alert.watchId),
-        kind: "alert",
-      }));
+const alertItems = (alerts: readonly RootAlert[]): RootItem[] =>
+  alerts.map((alert) => ({
+    alert,
+    id: alertItemId(alert.watchId),
+    kind: "alert",
+  }));
 
 const lookupSection = (
   origin: LookupOrigin,
@@ -138,76 +158,186 @@ const leadingSections = (
 ): RootSection[] =>
   present(lookup?.kind === "integer" ? [ask, typed] : [typed, ask]);
 
-export const buildRootSections = ({
-  query,
+const restingSections = ({
   connections,
   commands,
-  aiSetup,
-  askWith = null,
   widgets = [],
   recents = [],
   boards = [],
-  lookup = null,
-  offer = null,
-  lookupWith = null,
+  apps = [],
   alerts = [],
-}: BuildRootSectionsInput): RootSection[] => {
+}: BuildRootSectionsInput): RootSection[] =>
+  [
+    { id: "alerts", items: alertItems(alerts), label: "Alerts" },
+    { id: "recent", items: recentItems(recents), label: "Recent" },
+    {
+      id: "widgets",
+      items: widgets.map((widget) => widgetItem(widget)),
+      label: "Widgets",
+    },
+    { id: "apps", items: apps.map((app) => appItem(app)), label: "Apps" },
+    {
+      id: "boards",
+      items: boards.map((board) => boardItem(board)),
+      label: "Boards",
+    },
+    {
+      id: "connections",
+      items: rankConnections(connections, "").map(({ item }) =>
+        connectionItem(item)
+      ),
+      label: "Connections",
+    },
+    { id: "commands", items: commands.map(commandItem), label: "Commands" },
+  ].filter((section): section is RootSection => section.items.length > 0);
+
+const widgetItem = (widget: Widget): RootItem => ({
+  id: widgetItemId(widget.id),
+  kind: "widget",
+  widget,
+});
+
+const boardItem = (board: Board): RootItem => ({
+  board,
+  id: boardItemId(board.id),
+  kind: "board",
+});
+
+const appItem = (app: MiniApp): RootItem => ({
+  app,
+  id: appItemId(app.id),
+  kind: "mini-app",
+});
+
+const connectionItem = (connection: DatabaseConnection): RootItem => ({
+  connection,
+  id: connection.id,
+  kind: "connection",
+});
+
+const draftItem = (draft: FormState): RootItem => ({
+  draft,
+  id: DRAFT_ITEM_ID,
+  kind: "draft",
+});
+
+const scoredAs = <T>(
+  ranked: readonly Ranked<T>[],
+  toItem: (item: T) => RootItem
+): Ranked<RootItem>[] =>
+  ranked.map(({ item, score }) => ({ item: toItem(item), score }));
+
+const typedResults = (
+  prompt: string,
+  {
+    connections,
+    commands,
+    widgets = [],
+    boards = [],
+    apps = [],
+    draft = null,
+  }: BuildRootSectionsInput
+): RootItem[] =>
+  rankRootItems([
+    ...scoredAs(rankWidgets(widgets, prompt), widgetItem),
+    ...scoredAs(rankByTerms(apps, prompt, appTerms), appItem),
+    ...scoredAs(rankByTerms(boards, prompt, boardTerms), boardItem),
+    ...scoredAs(rankConnections(connections, prompt), connectionItem),
+    ...scoredAs(rankCommands(commands, prompt), commandItem),
+    ...scoredAs(
+      rankByTerms(draft ? [draft] : [], prompt, draftTerms),
+      draftItem
+    ),
+  ]);
+
+const fallbackSection = (
+  prompt: string,
+  fallbacks: readonly LauncherCommand[]
+): RootSection | null =>
+  fallbacks.length > 0
+    ? {
+        id: "fallbacks",
+        items: fallbacks.map(commandItem),
+        label: `Use “${prompt}” with…`,
+      }
+    : null;
+
+// Typed text keeps Ask (and Look up) first so ↵ always asks; everything else
+// that matched is one list ranked across kinds, then the fallbacks.
+export const buildRootSections = (
+  input: BuildRootSectionsInput
+): RootSection[] => {
+  const {
+    query,
+    aiSetup,
+    askWith = null,
+    lookup = null,
+    offer = null,
+    lookupWith = null,
+    draft = null,
+    fallbacks = [],
+  } = input;
   const prompt = query.trim();
   const typed = lookupSection("typed", lookup, lookupWith);
-  const clipboard = lookupSection(
-    "clipboard",
-    prompt ? null : offer,
-    lookupWith
-  );
-  const connectionItems: RootItem[] = filterConnections(connections, query).map(
-    (connection) => ({ connection, id: connection.id, kind: "connection" })
-  );
-  const widgetItems: RootItem[] = filterWidgets(widgets, query).map(
-    (widget) => ({ id: widgetItemId(widget.id), kind: "widget", widget })
-  );
-  const boardItems: RootItem[] = boards
-    .filter((board) => matchesBoard(board, query))
-    .map((board) => ({ board, id: boardItemId(board.id), kind: "board" }));
-  const commandItems = filterCommands(commands, query).map(commandItem);
-  const sections: RootSection[] = [
-    { id: "alerts", items: alertItems(alerts, query), label: "Alerts" },
-    { id: "recent", items: recentItems(recents, query), label: "Recent" },
-    { id: "widgets", items: widgetItems, label: "Widgets" },
-    { id: "boards", items: boardItems, label: "Boards" },
-    { id: "connections", items: connectionItems, label: "Connections" },
-    { id: "commands", items: commandItems, label: "Commands" },
-  ];
-  const nothingMatched =
-    connectionItems.length +
-      commandItems.length +
-      widgetItems.length +
-      boardItems.length ===
-    0;
-  if (nothingMatched && aiSetup && prompt) {
-    const setup: RootSection = {
-      id: "ask",
-      items: [commandItem(aiSetup)],
-      label: "Ask",
-    };
-    return leadingSections(setup, typed, lookup);
-  }
-  const matched = sections.filter((section) => section.items.length > 0);
-  const ask: RootSection | null =
-    askWith && prompt
-      ? {
-          id: "ask",
-          items: [
-            { connection: askWith, id: ASK_ITEM_ID, kind: "ask", prompt },
-          ],
-          label: "Ask",
-        }
+
+  if (!prompt) {
+    const drafts: RootSection | null = draft
+      ? { id: "drafts", items: [draftItem(draft)], label: "Drafts" }
       : null;
+    return [
+      ...present([
+        drafts,
+        typed,
+        lookupSection("clipboard", offer, lookupWith),
+      ]),
+      ...restingSections(input),
+    ];
+  }
+
+  const results = typedResults(prompt, input);
+  const resultsSection: RootSection | null =
+    results.length > 0
+      ? { id: "results", items: results, label: "Results" }
+      : null;
+  const nothingMatched = !results.some((item) => item.kind !== "draft");
+  const leading: RootSection | null =
+    nothingMatched && aiSetup
+      ? { id: "ask", items: [commandItem(aiSetup)], label: "Ask" }
+      : askSection(prompt, askWith);
   return [
-    ...leadingSections(ask, typed, lookup),
-    ...present([clipboard]),
-    ...matched,
+    ...leadingSections(leading, typed, lookup),
+    ...present([resultsSection, fallbackSection(prompt, fallbacks)]),
   ];
 };
+
+const askSection = (
+  prompt: string,
+  askWith: DatabaseConnection | null
+): RootSection | null =>
+  askWith
+    ? {
+        id: "ask",
+        items: [
+          { connection: askWith, id: ASK_ITEM_ID, kind: "ask", prompt },
+          {
+            connection: askWith,
+            id: BUILD_APP_ITEM_ID,
+            kind: "build-app",
+            prompt,
+          },
+        ],
+        label: "Ask",
+      }
+    : null;
+
+// The recent row for the answer still in memory: ↵ shows it instead of asking again.
+export const isShownAnswer = (
+  item: RootItem,
+  lastAnswerId: string | null | undefined
+): boolean =>
+  item.kind === "recent" &&
+  Boolean(lastAnswerId) &&
+  item.ask.id === lastAnswerId;
 
 export const flattenSections = (sections: readonly RootSection[]): RootItem[] =>
   sections.flatMap((section) => section.items);

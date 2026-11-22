@@ -3,8 +3,14 @@ import { render } from "vitest-browser-react";
 import { userEvent } from "vitest/browser";
 
 import { AppProviders } from "@/components/app-providers";
+import { sqlPreview } from "@/test/action-fixtures";
 import { emitIpcMessage } from "@/test/ipc-mock";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
+import {
+  makeActivity,
+  makeAuditEntry,
+  makeMcpSettings,
+} from "@/test/mcp-fixtures";
 import { wait } from "@/test/wait";
 import { makeKpiWidget, makeWatch } from "@/test/watch-fixtures";
 
@@ -116,6 +122,46 @@ describe("launcherPanel", () => {
     }
   );
 
+  it("walks settings → Agents (MCP) → activity and back", async () => {
+    mockLauncherIpc({
+      handlers: {
+        getMcpSettings: () =>
+          makeMcpSettings({ enabled: true, listening: true }),
+        listMcpAudit: () => [makeAuditEntry()],
+      },
+    });
+    const screen = renderLauncher();
+
+    emitIpcMessage("launcherNavigate", { view: "settings" });
+    await screen.getByRole("button", { name: "Open Agents (MCP)" }).click();
+    await expect
+      .element(screen.getByRole("heading", { name: "Agents (MCP)" }))
+      .toBeVisible();
+    await screen.getByRole("button", { name: "Open agent activity" }).click();
+    await expect
+      .element(screen.getByRole("heading", { name: "Agent activity" }))
+      .toBeVisible();
+
+    await userEvent.keyboard("{Escape}");
+    await expect
+      .element(screen.getByRole("heading", { name: "Agents (MCP)" }))
+      .toBeVisible();
+  });
+
+  it("shows agent activity in the root footer instead of the connection", async () => {
+    const screen = renderLauncher();
+    await expect
+      .element(screen.getByRole("combobox", { name: "Search commands" }))
+      .toBeVisible();
+
+    emitIpcMessage("mcpActivity", { active: [makeActivity()] });
+
+    await expect
+      .element(screen.getByText("Claude Code is asking analytics"))
+      .toBeVisible();
+    expect(screen.getByText("No connection").query()).toBeNull();
+  });
+
   it("follows navigate messages from the tray and menu", async () => {
     const screen = renderLauncher();
 
@@ -128,6 +174,34 @@ describe("launcherPanel", () => {
     await expect
       .element(screen.getByRole("combobox", { name: "Search commands" }))
       .toBeVisible();
+  });
+
+  it("runs a staged app action, and keeps its confirm sheet over later stages", async () => {
+    mockLauncherIpc({
+      handlers: {
+        discardActionToken: () => null,
+        hideLauncher: () => hideLauncher(),
+        prepareMiniAppAction: () => sqlPreview(),
+        resizeLauncher: (payload) => resizeLauncher(payload),
+      },
+    });
+    const screen = renderLauncher();
+    const request = {
+      actionId: "refund",
+      appId: "app-desk",
+      context: { rowIndex: 0, runId: "r", values: {} },
+    };
+    emitIpcMessage("launcherNavigate", {
+      view: { kind: "mini-app-action", request },
+    });
+    const sheet = screen.getByRole("alertdialog", { name: "Mark reviewed" });
+    await expect.element(sheet).toBeVisible();
+    emitIpcMessage("launcherNavigate", { view: "settings" });
+    await wait(150);
+    expect(
+      screen.getByRole("heading", { name: "Settings" }).query()
+    ).toBeNull();
+    await expect.element(sheet).toBeVisible();
   });
 
   it("opens the watched widgets from the tray and goes on to a watch", async () => {
@@ -190,6 +264,23 @@ describe("launcherPanel", () => {
     expect(performance.now() - started).toBeLessThan(150);
   });
 
+  it("fits the panel inside the window room bun reports", async () => {
+    const screen = renderLauncher();
+    await expect
+      .element(screen.getByRole("combobox", { name: "Search commands" }))
+      .toBeVisible();
+
+    emitIpcMessage("launcherShown", { clipboard: null, maxHeight: 420 });
+
+    await expect
+      .poll(
+        () =>
+          screen.container.querySelector<HTMLElement>("[data-presence]")?.style
+            .maxHeight
+      )
+      .toBe("380px");
+  });
+
   it("refocuses the field and resets after a long absence", async () => {
     const screen = renderLauncher();
     const input = screen.getByRole("combobox", { name: "Search commands" });
@@ -205,6 +296,21 @@ describe("launcherPanel", () => {
     await expect.element(input).toHaveValue("");
     await expect.element(input).toHaveFocus();
     vi.restoreAllMocks();
+  });
+
+  it("keeps a recent query and selects it when summoned again", async () => {
+    const screen = renderLauncher();
+    const input = screen.getByRole("combobox", { name: "Search commands" });
+    await input.fill("hid");
+
+    emitIpcMessage("launcherDismiss");
+    await expect.poll(() => hideLauncher.mock.calls.length).toBe(1);
+    emitIpcMessage("launcherShown");
+
+    await expect.element(input).toHaveValue("hid");
+    await expect.element(input).toHaveFocus();
+    const field = input.element() as HTMLInputElement;
+    expect([field.selectionStart, field.selectionEnd]).toStrictEqual([0, 3]);
   });
 
   it("adds a connection in the editor and selects it back at root", async () => {

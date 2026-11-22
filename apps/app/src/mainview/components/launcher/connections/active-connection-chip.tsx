@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 
+import type { DatabaseConnection } from "@/lib/connections";
+
 import { useMotionPreset } from "@/lib/motion";
 
 import { ConnectionGlyph } from "./connection-glyph";
@@ -12,20 +14,28 @@ const PENDING_OPACITY = 0.5;
 
 interface ActiveConnectionChipProps {
   tone?: ChipTone;
+  target?: DatabaseConnection | null;
 }
 
+// `target` shows the connection a staged link will ask before it is active.
 export function ActiveConnectionChip({
   tone = "active",
+  target = null,
 }: ActiveConnectionChipProps) {
-  const { activeConnection } = useConnections();
+  const { activeConnection: active } = useConnections();
   const { spring, fadeIn, fadeOut } = useMotionPreset();
+  const activeConnection = target ?? active;
+  const label =
+    activeConnection && activeConnection.id !== active?.id
+      ? `Connection for this ask: ${activeConnection.name}`
+      : `Active connection: ${activeConnection?.name ?? ""}`;
 
   return (
     <AnimatePresence initial={false} mode="popLayout">
       {activeConnection ? (
         <motion.span
           animate={{ opacity: tone === "pending" ? PENDING_OPACITY : 1 }}
-          aria-label={`Active connection: ${activeConnection.name}`}
+          aria-label={label}
           className="relative flex h-8 max-w-56 shrink-0 items-center pr-2.5 pl-1"
           data-tone={tone}
           exit={{ opacity: 0, transition: fadeOut }}

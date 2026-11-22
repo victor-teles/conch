@@ -1,28 +1,25 @@
 import type { LanguageModel } from "@conch/agent";
 import type {
-  BindValue,
-  DatabaseConnection,
-  DialectType,
-  Pool,
-  TemplateValue,
-} from "@conch/core";
-import type { ConnectionPoolManager } from "@conch/drivers";
-import type {
   CardResult,
+  CompiledSource,
   ParamDef,
   ParamValues,
+  PreviewSourceRequest,
   ProposeParamsRequest,
   ProposeParamsResult,
   RecentAsk as RecentAskRecord,
   RunSample,
   RunWidgetRequest,
+  SourcePreviewResult,
+  SourceProposal,
+  SourceTarget as SourceTargetValue,
   Widget as WidgetRecord,
   WidgetDraft as WidgetDraftRecord,
   WidgetRunResult,
   WidgetTrend,
 } from "@conch/rpc";
 
-import { assertReadOnly, proposeParams } from "@conch/agent";
+import { inferCardSpec, proposeParams, proposeSource } from "@conch/agent";
 import {
   CancellationRegistry,
   compileSqlTemplate,
@@ -30,8 +27,6 @@ import {
   createRunLogStore,
   createWidgetStore,
   DbError,
-  maskTemplateInputs,
-  raceWithCancel,
 } from "@conch/core";
 import {
   Dialect,
@@ -39,23 +34,27 @@ import {
   MAX_RUN_LOG_ENTRIES_PER_WIDGET,
   MAX_SAMPLES,
   MAX_SELECT_OPTIONS,
+  ParamDef as ParamDefSchema,
+  parseStoredWidget,
   paramValueSchema,
   RecentAsk,
   RunLogEntry,
-  toTemplateValue,
+  Source,
+  SourceTarget,
+  sourceParamProblems,
+  sqlSourceOf,
   trendOfEntry,
   Widget,
+  WIDGET_VERSION,
   WidgetDraft,
 } from "@conch/rpc";
 import { z } from "zod";
 
-import {
-  ensurePool,
-  findConnection,
-  resolveSchemaName,
-  tabular,
-} from "./connection-access.ts";
+import type { RunCache } from "./run-cache.ts";
+import type { SourceRunner } from "./source-runner.ts";
+
 import { sampleOf, valuesKeyOf } from "./run-samples.ts";
+import { guardTemplate, templateValues } from "./source-runner.ts";
 
 export const WIDGET_MAX_ROWS = 2000;
 const WIDGET_TIMEOUT_MS = 30_000;
@@ -79,6 +78,19 @@ const listRecentRequestSchema = z.object({
 
 const askIdSchema = z.string().min(1).max(100);
 
+const previewRequestSchema = z.object({
+  params: z.array(ParamDefSchema).max(6),
+  prompt: z.string().max(4000).optional(),
+  runId: z.string().min(1).max(100),
+  source: Source,
+  values: z.record(z.string(), z.unknown()),
+});
+
+const proposeSourceRequestSchema = z.object({
+  prompt: z.string().trim().min(1).max(1000),
+  target: SourceTarget,
+});
+
 const parseWith =
   <T>(schema: z.ZodType<T>) =>
   (raw: unknown): T | null => {
@@ -94,7 +106,7 @@ export type RecentAskStore = ReturnType<
 export type RunLogStore = ReturnType<typeof createRunLogStore<RunSample>>;
 
 export const defaultWidgetStore = (): WidgetStore =>
-  createWidgetStore(parseWith(Widget));
+  createWidgetStore(parseStoredWidget);
 export const defaultRecentAskStore = (): RecentAskStore =>
   createRecentAskStore(parseWith(RecentAsk));
 export const defaultRunLogStore = (): RunLogStore =>
@@ -104,19 +116,20 @@ export const defaultRunLogStore = (): RunLogStore =>
   });
 
 export interface WidgetServiceDeps {
-  pools: ConnectionPoolManager;
+  runner: SourceRunner;
   widgets: WidgetStore;
   recents: RecentAskStore;
   runLog: RunLogStore;
   loadModel(): Promise<LanguageModel | null>;
   now(): Date;
   onSampled(widgetId: string, valuesKey: string): void;
+  runCache: Pick<RunCache, "record">;
 }
 
 export interface DetachedRun {
   widget: WidgetRecord;
-  result: CardResult;
-  compiledSql: string;
+  result: CardResult & { executionTimeMs: number };
+  compiled: CompiledSource;
   values: ParamValues;
   valuesKey: string;
   sample: RunSample;
@@ -125,28 +138,6 @@ export interface DetachedRun {
 
 const failure = (code: string, message: string): DbError =>
   new DbError(code, message);
-
-const guardTemplate = (template: string, dialect: DialectType): void => {
-  const verdict = assertReadOnly(
-    maskTemplateInputs(template, dialect, "NULL"),
-    dialect
-  );
-  if (!verdict.ok) {
-    throw failure("NOT_READ_ONLY", verdict.reason);
-  }
-};
-
-const templateValues = (
-  params: readonly ParamDef[],
-  values: ParamValues,
-  now: Date
-): Record<string, TemplateValue> =>
-  Object.fromEntries(
-    params.map((param) => [
-      param.name,
-      toTemplateValue(param, values[param.name] ?? param.default, now),
-    ])
-  );
 
 const keptValues = (
   params: readonly ParamDef[],
@@ -216,57 +207,12 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     return widget;
   };
 
-  const openConnection = async (
-    widget: WidgetRecord
-  ): Promise<{
-    connection: DatabaseConnection;
-    pool: Pool;
-    schema: string;
-  }> => {
-    const connection = await findConnection(widget.connectionId);
-    if (!connection) {
-      throw failure(
-        "CONNECTION_MISSING",
-        "This widget's connection no longer exists. Choose a connection to run it on."
-      );
-    }
-    const pool = await ensurePool(deps.pools, connection);
-    if (!pool.dialect) {
-      throw failure(
-        "UNSUPPORTED_ENGINE",
-        "Widgets work with SQL databases for now."
-      );
-    }
-    const schema = await resolveSchemaName(pool, widget.database, connection);
-    return { connection, pool, schema };
-  };
-
-  const runReadOnly = (
-    pool: Pool,
-    sql: string,
-    options: { schema: string; maxRows: number; params?: BindValue[] },
-    signal: AbortSignal
-  ) =>
-    raceWithCancel(
-      async (merged) => {
-        const started = performance.now();
-        const result = tabular(
-          await pool.execute(sql, options.maxRows, options.schema, merged, {
-            params: options.params,
-            readOnly: true,
-          })
-        );
-        const executionTimeMs = Math.round(performance.now() - started);
-        return { ...result, executionTimeMs };
-      },
-      { signal, timeoutMs: WIDGET_TIMEOUT_MS }
-    );
-
   const queryOptions = async (
     widget: WidgetRecord,
     param: ParamDef & { type: "select" }
   ): Promise<string[]> => {
-    if (!param.optionsSql) {
+    const source = sqlSourceOf(widget);
+    if (!(param.optionsSql && source)) {
       return param.options ?? [];
     }
     const key = `${widget.id}:${param.name}`;
@@ -274,15 +220,10 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     if (cached && Date.now() - cached.at < OPTIONS_TTL_MS) {
       return cached.options;
     }
-    const verdict = assertReadOnly(param.optionsSql, widget.dialect);
-    if (!verdict.ok) {
-      throw failure("NOT_READ_ONLY", verdict.reason);
-    }
-    const { pool, schema } = await openConnection(widget);
-    const result = await runReadOnly(
-      pool,
+    const result = await deps.runner.readSql(
+      source,
       param.optionsSql,
-      { maxRows: MAX_SELECT_OPTIONS, schema },
+      MAX_SELECT_OPTIONS,
       new AbortController().signal
     );
     const options = firstColumnStrings(result.rows);
@@ -301,18 +242,22 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     }
   };
 
-  const resolveValues = async (
-    widget: WidgetRecord,
-    raws: Record<string, unknown>
+  const parseValues = async (
+    params: readonly ParamDef[],
+    raws: Record<string, unknown>,
+    allowedFor: (
+      param: ParamDef & { type: "select" }
+    ) => Promise<string[] | null> = () => {
+      const none = null;
+      return Promise.resolve(none);
+    }
   ): Promise<ParamValues> => {
     const resolved: ParamValues = {};
-    for (const param of widget.params) {
-      const raw = raws[param.name];
-      const allowed =
-        param.type === "select" && param.optionsSql
-          ? await queryOptions(widget, param)
-          : undefined;
-      const parsed = paramValueSchema(param, allowed).safeParse(raw);
+    for (const param of params) {
+      const allowed = param.type === "select" ? await allowedFor(param) : null;
+      const parsed = paramValueSchema(param, allowed ?? undefined).safeParse(
+        raws[param.name]
+      );
       if (!parsed.success) {
         throw failure(
           "INVALID_INPUT",
@@ -324,27 +269,26 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     return resolved;
   };
 
+  const resolveValues = (
+    widget: WidgetRecord,
+    raws: Record<string, unknown>
+  ): Promise<ParamValues> =>
+    parseValues(widget.params, raws, async (param) =>
+      param.optionsSql ? await queryOptions(widget, param) : null
+    );
+
   const execute = async (
     widget: WidgetRecord,
     raws: Record<string, unknown>,
     now: Date,
     signal: AbortSignal
   ) => {
-    const { pool, schema } = await openConnection(widget);
     const resolved = await resolveValues(widget, raws);
-    guardTemplate(widget.sqlTemplate, widget.dialect);
-    const compiled = compileSqlTemplate(
-      widget.sqlTemplate,
-      templateValues(widget.params, resolved, now),
-      widget.dialect
-    );
-    const result = await runReadOnly(
-      pool,
-      compiled.sql,
-      { maxRows: WIDGET_MAX_ROWS, params: compiled.params, schema },
+    const { compiled, result } = await deps.runner.run(
+      { now, params: widget.params, source: widget.source, values: resolved },
       signal
     );
-    return { compiledSql: compiled.sql, resolved, result };
+    return { compiled, resolved, result };
   };
 
   const appendSample = async (
@@ -364,13 +308,18 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
     }
   };
 
-  const checkDraft = (draft: WidgetDraftRecord): void => {
-    guardTemplate(draft.sqlTemplate, draft.dialect);
+  const checkDraft = async (draft: WidgetDraftRecord): Promise<void> => {
+    const { source } = draft;
+    if (source.kind !== "sql") {
+      await deps.runner.check(source, draft.params, deps.now());
+      return;
+    }
+    guardTemplate(source.sqlTemplate, source.dialect);
     try {
       compileSqlTemplate(
-        draft.sqlTemplate,
+        source.sqlTemplate,
         templateValues(draft.params, {}, deps.now()),
-        draft.dialect
+        source.dialect
       );
     } catch (error) {
       throw failure("INVALID_TEMPLATE", DbError.fromUnknown(error).message);
@@ -441,6 +390,32 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
       return queryOptions(widget, param);
     },
 
+    async previewSource(
+      request: PreviewSourceRequest
+    ): Promise<SourcePreviewResult> {
+      const { params, prompt, runId, source, values } =
+        previewRequestSchema.parse(request);
+      const [problem] = sourceParamProblems({ params, source });
+      if (problem) {
+        throw failure("INVALID_TEMPLATE", problem);
+      }
+      const controller = runs.register(runId);
+      try {
+        const resolved = await parseValues(
+          params,
+          rawValues(params, values, {})
+        );
+        const { compiled, result } = await deps.runner.run(
+          { now: deps.now(), params, source, values: resolved },
+          controller.signal
+        );
+        const spec = inferCardSpec(result, { prompt: prompt ?? "", sql: "" });
+        return { compiled, result, spec, values: resolved };
+      } finally {
+        runs.remove(runId);
+      }
+    },
+
     async proposeParams(
       request: ProposeParamsRequest
     ): Promise<ProposeParamsResult> {
@@ -459,16 +434,37 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
       });
     },
 
+    async proposeSource(request: {
+      target: SourceTargetValue;
+      prompt: string;
+    }): Promise<SourceProposal> {
+      const { prompt, target } = proposeSourceRequestSchema.parse(request);
+      const model = await deps.loadModel();
+      if (!model) {
+        return {
+          error: "Add an AI provider in Settings, or fill the call in by hand.",
+        };
+      }
+      return proposeSource({
+        model,
+        now: deps.now(),
+        prompt,
+        signal: AbortSignal.timeout(WIDGET_TIMEOUT_MS),
+        target: await deps.runner.proposalTarget(target),
+      });
+    },
+
     rememberAsk: (ask: RecentAskRecord) => deps.recents.pushRecentAsk(ask),
 
     async runDetached(
       widgetId: string,
       values: ParamValues,
-      signal: AbortSignal
+      signal: AbortSignal,
+      { record = true }: { record?: boolean } = {}
     ): Promise<DetachedRun> {
       const widget = await requireWidget(widgetId);
       const now = deps.now();
-      const { compiledSql, resolved, result } = await execute(
+      const { compiled, resolved, result } = await execute(
         widget,
         detachedValues(widget, values),
         now,
@@ -476,9 +472,11 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
       );
       const valuesKey = valuesKeyOf(resolved);
       const sample = sampleOf(widget.spec, result, now);
-      const entry = await appendSample(widget, valuesKey, sample);
+      const entry = record
+        ? await appendSample(widget, valuesKey, sample)
+        : null;
       return {
-        compiledSql,
+        compiled,
         previous: entry?.samples.at(-2) ?? null,
         result,
         sample,
@@ -488,19 +486,26 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
       };
     },
 
-    async runWidget(request: RunWidgetRequest): Promise<WidgetRunResult> {
+    // Only launcher runs are kept for row actions; boards pass cacheRun false.
+    async runWidget(
+      request: RunWidgetRequest,
+      { cacheRun = false }: { cacheRun?: boolean } = {}
+    ): Promise<WidgetRunResult> {
       const { runId, values, widgetId } = runRequestSchema.parse(request);
       const widget = await requireWidget(widgetId);
       rejectStray(widget, values);
       const now = deps.now();
       const controller = runs.register(runId);
       try {
-        const { compiledSql, resolved, result } = await execute(
+        const { compiled, resolved, result } = await execute(
           widget,
           rawValues(widget.params, values, widget.lastValues),
           now,
           controller.signal
         );
+        if (cacheRun) {
+          deps.runCache.record(runId, widget.id, result);
+        }
         await deps.widgets.updateWidget(widget.id, (current) => ({
           ...current,
           lastRunAt: now.toISOString(),
@@ -512,7 +517,7 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
           sampleOf(widget.spec, result, now)
         );
         return {
-          compiledSql,
+          compiled,
           result,
           trend: entry ? trendOfEntry(entry) : null,
           values: resolved,
@@ -524,7 +529,7 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
 
     async saveWidget(input: WidgetDraftRecord): Promise<WidgetRecord> {
       const draft = WidgetDraft.parse(input);
-      checkDraft(draft);
+      await checkDraft(draft);
       const existing = draft.id ? await deps.widgets.getWidget(draft.id) : null;
       const stamp = deps.now().toISOString();
       const widget = Widget.parse({
@@ -534,6 +539,7 @@ export const createWidgetService = (deps: WidgetServiceDeps) => {
         lastRunAt: existing?.lastRunAt ?? null,
         lastValues: keptValues(draft.params, draft.lastValues),
         updatedAt: stamp,
+        version: WIDGET_VERSION,
       });
       return deps.widgets.saveWidget(widget);
     },

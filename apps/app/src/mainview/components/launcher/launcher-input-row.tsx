@@ -9,6 +9,7 @@ import { useMotionPreset } from "@/lib/motion";
 interface LauncherInputRowProps {
   busy?: boolean;
   chip?: ReactNode;
+  trailing?: ReactNode;
   onSubmit: () => void;
   onStop?: () => void;
   children: ReactNode;
@@ -17,6 +18,7 @@ interface LauncherInputRowProps {
 export function LauncherInputRow({
   busy = false,
   chip,
+  trailing,
   onSubmit,
   onStop,
   children,
@@ -24,7 +26,7 @@ export function LauncherInputRow({
   const { spring, snappy, fadeIn } = useMotionPreset();
 
   return (
-    <div className="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4">
+    <div className="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4">
       {chip}
       <motion.div
         className="flex min-w-0 flex-1 items-center"
@@ -33,6 +35,7 @@ export function LauncherInputRow({
       >
         {children}
       </motion.div>
+      {trailing}
       <Pressable
         aria-label={busy ? "Stop" : "Run"}
         className="grid size-7 shrink-0 place-items-center bg-row-hover text-panel-muted hover:text-foreground"

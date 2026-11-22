@@ -10,24 +10,28 @@ import { createBoardService } from "./board-service.ts";
 const NOW = new Date("2026-11-19T10:00:00.000Z");
 
 const widget = (id: string, view: Widget["view"]): Widget => ({
-  connectionId: "c1",
   createdAt: NOW.toISOString(),
-  database: null,
-  dialect: "postgresql",
   id,
   lastRunAt: null,
   lastValues: {},
   name: id,
   params: [],
   prompt: "",
+  source: {
+    connectionId: "c1",
+    database: null,
+    dialect: "postgresql",
+    kind: "sql",
+    sqlTemplate: "select 1",
+  },
   spec: {
     formats: {},
     title: id,
     version: CARD_SPEC_VERSION,
     view: { kind: "table" },
   },
-  sqlTemplate: "select 1",
   updatedAt: NOW.toISOString(),
+  version: 2,
   view,
 });
 

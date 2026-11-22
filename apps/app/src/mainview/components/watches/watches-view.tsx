@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { useListSelection } from "@/components/launcher/use-list-selection";
 import { ViewHeader } from "@/components/launcher/view-header";
 import { SettingRow } from "@/components/launcher/views/settings/setting-row";
@@ -86,7 +87,7 @@ export function WatchesView({ onBack, onOpenWatch }: WatchesViewProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Watching" />
-      <div className="min-h-0 flex-1 overflow-y-auto border-t border-panel-border">
+      <LauncherScrollArea className="flex-1">
         <SettingRow
           description="Nothing runs in the background while this is on."
           label="Pause all watching"
@@ -112,7 +113,7 @@ export function WatchesView({ onBack, onOpenWatch }: WatchesViewProps) {
             selection={{ armed, selectedId: selected?.id ?? null }}
           />
         </div>
-      </div>
+      </LauncherScrollArea>
       <LauncherFooter
         actionLabel={selected?.widget ? "Edit Watch" : null}
         hints={

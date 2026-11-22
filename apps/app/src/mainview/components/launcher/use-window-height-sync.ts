@@ -51,7 +51,11 @@ export const useWindowHeightSync = ({
     const measure = () => {
       frame = 0;
       const next = Math.ceil(panel.offsetHeight + margin * 2);
-      if (next > windowHeight.current || reduced) {
+      // Content that grew back to the window's height cancels a shrink still
+      // waiting for its animation, or the window would clip it later.
+      if (next >= windowHeight.current || reduced) {
+        pendingShrink.current = null;
+        window.clearTimeout(fallback.current);
         if (next !== windowHeight.current) {
           apply(next);
         }

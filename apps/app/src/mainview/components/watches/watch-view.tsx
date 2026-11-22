@@ -1,3 +1,5 @@
+import { connectionIdOf } from "@conch/rpc";
+
 import { useConnections } from "@/components/launcher/connections/connections-provider";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { ViewHeader } from "@/components/launcher/view-header";
@@ -18,7 +20,7 @@ function WatchMessage({ text, onBack }: { text: string; onBack: () => void }) {
     <div className="flex min-h-0 flex-1 flex-col">
       <ViewHeader onBack={onBack} title="Watch" />
       <p
-        className="border-t border-panel-border px-4 py-6 type-body text-panel-muted"
+        className="launcher-body px-4 pt-6 type-body text-panel-muted"
         role="status"
       >
         {text}
@@ -52,7 +54,7 @@ export function WatchView({ widgetId, onBack }: WatchViewProps) {
   return (
     <WatchPanel
       connection={
-        state.connections.find((item) => item.id === widget.connectionId) ??
+        state.connections.find((item) => item.id === connectionIdOf(widget)) ??
         null
       }
       onDone={onBack}

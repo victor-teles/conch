@@ -34,7 +34,11 @@ const SIZE_ICONS: Record<TileSize, LucideIcon> = {
   wide: Maximize2Icon,
 };
 
-export const tileActions = (size: TileSize, hasSql: boolean): TileAction[] => [
+export const tileActions = (
+  size: TileSize,
+  hasSql: boolean,
+  copyLabel = "Copy SQL"
+): TileAction[] => [
   {
     icon: SquareArrowOutUpRightIcon,
     id: "open",
@@ -45,7 +49,7 @@ export const tileActions = (size: TileSize, hasSql: boolean): TileAction[] => [
     disabled: !hasSql,
     icon: ClipboardCopyIcon,
     id: "copy-sql",
-    label: "Copy SQL",
+    label: copyLabel,
     tone: "default",
   },
   ...TILE_SIZES.map(

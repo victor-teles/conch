@@ -15,6 +15,12 @@ export interface ActiveConnectionConfig {
   database: string | null;
 }
 
+export interface ThemeSettingsConfig {
+  mode: string;
+  darkThemeId: string;
+  lightThemeId: string;
+}
+
 export interface AppConfig {
   /** Legacy plaintext AI settings; migrated to the encrypted ai.enc on read. */
   ai?: AISettings | null;
@@ -22,6 +28,7 @@ export interface AppConfig {
   launcherHotkey?: string;
   clipboardLookups?: boolean;
   watchingPaused?: boolean;
+  theme?: ThemeSettingsConfig;
 }
 
 export async function getConfig(): Promise<AppConfig> {

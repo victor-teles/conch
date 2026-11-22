@@ -1,0 +1,2400 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`agentsView > explains the feature while it is off 1`] = `
+<div>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-1 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Agents (MCP)
+        </h1>
+      </header>
+      <div
+        class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade flex-1"
+      >
+        <div
+          class="flex min-h-full launcher-body flex-col"
+        >
+          <div
+            class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+              >
+                Let local agents use Conch
+              </span>
+              <span
+                class="type-meta text-panel-muted"
+              >
+                <span
+                  aria-live="polite"
+                  class=""
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Off
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex shrink-0 items-center"
+            >
+              <span
+                aria-checked="false"
+                aria-label="Let local agents use Conch"
+                class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                data-slot="checkbox"
+                data-unchecked=""
+                id="base-ui-_r_id_"
+                role="checkbox"
+                tabindex="0"
+              />
+              <input
+                aria-hidden="true"
+                style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                tabindex="-1"
+                type="checkbox"
+              />
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-start gap-3 px-4 pt-1 pb-4"
+          >
+            <p
+              class="type-body text-panel-muted"
+            >
+              Claude Code, Cursor and other MCP clients on this Mac can list your connections, read schemas, ask questions and run saved widgets through Conch. Every tool is read-only, agents only see the connections you choose, passwords never leave Conch, and every call is logged.
+            </p>
+            <button
+              class="flex h-7 items-center gap-1.5 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+              tabindex="0"
+              type="button"
+            >
+              Turn on
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+      >
+        <div
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Off
+            </span>
+          </span>
+        </div>
+        <div
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Back
+              </span>
+            </span>
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`agentsView > shows a start failure with a retry that turns it on again 1`] = `
+<div>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-1 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Agents (MCP)
+        </h1>
+      </header>
+      <div
+        class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade flex-1"
+      >
+        <div
+          class="flex min-h-full launcher-body flex-col"
+        >
+          <div
+            class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+              >
+                Let local agents use Conch
+              </span>
+              <span
+                class="type-meta text-panel-muted"
+              >
+                <span
+                  aria-live="polite"
+                  class=""
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Couldn't start
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex shrink-0 items-center"
+            >
+              <span
+                aria-checked="true"
+                aria-label="Let local agents use Conch"
+                class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                data-checked=""
+                data-slot="checkbox"
+                id="base-ui-_r_id_"
+                role="checkbox"
+                tabindex="0"
+              >
+                <span
+                  class="
+          grid place-content-center text-current transition-none
+          [&>svg]:size-3.5
+        "
+                  data-checked=""
+                  data-slot="checkbox-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                    fill="none"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 6 9 17l-5-5"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <input
+                aria-hidden="true"
+                checked=""
+                style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                tabindex="-1"
+                type="checkbox"
+              />
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-between gap-3 px-4 py-3"
+          >
+            <p
+              class="min-w-0 type-body text-danger-ink"
+              role="alert"
+            >
+              Couldn't start the agent server: socket in use
+            </p>
+            <button
+              class="flex h-7 items-center gap-1.5 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-rotate-cw size-3"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                />
+                <path
+                  d="M21 3v5h-5"
+                />
+              </svg>
+              Retry
+            </button>
+          </div>
+          <div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Connections
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <ul
+                    aria-label="Connections agents can read"
+                    class="divide-y divide-panel-border"
+                  >
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="false"
+                          aria-label="Let agents read analytics"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-slot="checkbox"
+                          data-unchecked=""
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        />
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          analytics
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-row-hover text-panel-muted"
+                        >
+                          dev
+                        </span>
+                      </label>
+                    </li>
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="false"
+                          aria-label="Let agents read billing"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-slot="checkbox"
+                          data-unchecked=""
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        />
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          billing
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-destructive/14 text-danger-ink"
+                        >
+                          prod
+                        </span>
+                      </label>
+                    </li>
+                  </ul>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Row limit
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Most rows an agent gets back from one call.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <div
+                        aria-label="Row limit"
+                        class="flex rounded-[9px] bg-row-hover p-0.5"
+                        role="radiogroup"
+                      >
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="50"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            50
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="true"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                          data-segment="100"
+                          role="radio"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                          />
+                          <span
+                            class="relative"
+                          >
+                            100
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="250"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            250
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="500"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            500
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Set up a client
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex flex-col"
+                  >
+                    <ul
+                      aria-label="Set up a client"
+                      class="divide-y divide-panel-border"
+                    >
+                      <li>
+                        <button
+                          aria-label="Copy Claude Code config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Claude Code
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies a claude mcp add command. Run it in your terminal.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy Cursor config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Cursor
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Paste into ~/.cursor/mcp.json
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy JSON config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              JSON
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies an mcpServers entry for any other client.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      class="flex flex-col gap-1 px-4 pt-2 pb-3"
+                    >
+                      <code
+                        class="truncate font-mono type-meta text-panel-muted"
+                      >
+                        CONCH_MCP_TOKEN=
+                        conch_…a1b2
+                         · 
+                        ~/.config/conch/run/mcp.sock
+                      </code>
+                      <p
+                        class="type-meta text-panel-muted"
+                      >
+                        The token lets local agents connect. Anyone who can read your files can read it too.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Rotate token
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        <span
+                          aria-live="polite"
+                        >
+                          <span
+                            data-slot="swap-text"
+                          >
+                            <span
+                              class="inline-block"
+                            >
+                              Disconnects every client. Copy the config again after.
+                            </span>
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        class="flex h-7 items-center rounded-[8px] px-2.5 type-meta focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none bg-row-hover text-foreground hover:bg-row-active"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          data-slot="swap-text"
+                        >
+                          <span
+                            class="inline-block"
+                          >
+                            Rotate
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Activity
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Agent calls
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Every agent call, newest first.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        aria-label="Open agent activity"
+                        class="flex h-7 items-center gap-1 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+                        tabindex="0"
+                        type="button"
+                      >
+                        Open
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-right size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m9 18 6-6-6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <p
+                class="px-4 pt-3 pb-2 type-meta text-panel-muted"
+              >
+                Asks from agents use your AI provider and count toward its usage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+      >
+        <div
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              On · 0 connections
+            </span>
+          </span>
+        </div>
+        <div
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Back
+              </span>
+            </span>
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`agentsView > turns on, says it is starting, then reveals the sections 1`] = `
+<div>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-1 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Agents (MCP)
+        </h1>
+      </header>
+      <div
+        class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade flex-1"
+      >
+        <div
+          class="flex min-h-full launcher-body flex-col"
+        >
+          <div
+            class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+              >
+                Let local agents use Conch
+              </span>
+              <span
+                class="type-meta text-panel-muted"
+              >
+                <span
+                  aria-live="polite"
+                  class=""
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Listening
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex shrink-0 items-center"
+            >
+              <span
+                aria-checked="true"
+                aria-label="Let local agents use Conch"
+                class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                data-checked=""
+                data-slot="checkbox"
+                id="base-ui-_r_id_"
+                role="checkbox"
+                tabindex="0"
+              >
+                <span
+                  class="
+          grid place-content-center text-current transition-none
+          [&>svg]:size-3.5
+        "
+                  data-checked=""
+                  data-slot="checkbox-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                    fill="none"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 6 9 17l-5-5"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <input
+                aria-hidden="true"
+                style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                tabindex="-1"
+                type="checkbox"
+              />
+            </div>
+          </div>
+          <div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Connections
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <ul
+                    aria-label="Connections agents can read"
+                    class="divide-y divide-panel-border"
+                  >
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="false"
+                          aria-label="Let agents read analytics"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-slot="checkbox"
+                          data-unchecked=""
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        />
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          analytics
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-row-hover text-panel-muted"
+                        >
+                          dev
+                        </span>
+                      </label>
+                    </li>
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="false"
+                          aria-label="Let agents read billing"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-slot="checkbox"
+                          data-unchecked=""
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        />
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          billing
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-destructive/14 text-danger-ink"
+                        >
+                          prod
+                        </span>
+                      </label>
+                    </li>
+                  </ul>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Row limit
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Most rows an agent gets back from one call.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <div
+                        aria-label="Row limit"
+                        class="flex rounded-[9px] bg-row-hover p-0.5"
+                        role="radiogroup"
+                      >
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="50"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            50
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="true"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                          data-segment="100"
+                          role="radio"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                          />
+                          <span
+                            class="relative"
+                          >
+                            100
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="250"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            250
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="500"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            500
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Set up a client
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex flex-col"
+                  >
+                    <ul
+                      aria-label="Set up a client"
+                      class="divide-y divide-panel-border"
+                    >
+                      <li>
+                        <button
+                          aria-label="Copy Claude Code config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Claude Code
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies a claude mcp add command. Run it in your terminal.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy Cursor config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Cursor
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Paste into ~/.cursor/mcp.json
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy JSON config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              JSON
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies an mcpServers entry for any other client.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      class="flex flex-col gap-1 px-4 pt-2 pb-3"
+                    >
+                      <code
+                        class="truncate font-mono type-meta text-panel-muted"
+                      >
+                        CONCH_MCP_TOKEN=
+                        conch_…a1b2
+                         · 
+                        ~/.config/conch/run/mcp.sock
+                      </code>
+                      <p
+                        class="type-meta text-panel-muted"
+                      >
+                        The token lets local agents connect. Anyone who can read your files can read it too.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Rotate token
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        <span
+                          aria-live="polite"
+                        >
+                          <span
+                            data-slot="swap-text"
+                          >
+                            <span
+                              class="inline-block"
+                            >
+                              Disconnects every client. Copy the config again after.
+                            </span>
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        class="flex h-7 items-center rounded-[8px] px-2.5 type-meta focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none bg-row-hover text-foreground hover:bg-row-active"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          data-slot="swap-text"
+                        >
+                          <span
+                            class="inline-block"
+                          >
+                            Rotate
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Activity
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Agent calls
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Every agent call, newest first.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        aria-label="Open agent activity"
+                        class="flex h-7 items-center gap-1 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+                        tabindex="0"
+                        type="button"
+                      >
+                        Open
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-right size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m9 18 6-6-6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <p
+                class="px-4 pt-3 pb-2 type-meta text-panel-muted"
+              >
+                Asks from agents use your AI provider and count toward its usage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+      >
+        <div
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              On · 0 connections
+            </span>
+          </span>
+        </div>
+        <div
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Back
+              </span>
+            </span>
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`agentsView > warns under an exposed production connection 1`] = `
+<div>
+  <div
+    style="width: 760px"
+  >
+    <div
+      class="flex min-h-0 flex-1 flex-col"
+    >
+      <header
+        class="flex h-14 shrink-0 items-center gap-2 px-3"
+      >
+        <button
+          aria-label="Back"
+          class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chevron-left size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m15 18-6-6 6-6"
+            />
+          </svg>
+        </button>
+        <h1
+          class="min-w-0 flex-1 truncate type-title text-foreground"
+        >
+          Agents (MCP)
+        </h1>
+      </header>
+      <div
+        class="min-h-0 scroll-pb-(--launcher-footer-clearance) overflow-y-auto scroll-fade flex-1"
+      >
+        <div
+          class="flex min-h-full launcher-body flex-col"
+        >
+          <div
+            class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-0.5"
+            >
+              <span
+                class="type-body text-foreground"
+              >
+                Let local agents use Conch
+              </span>
+              <span
+                class="type-meta text-panel-muted"
+              >
+                <span
+                  aria-live="polite"
+                  class=""
+                >
+                  <span
+                    data-slot="swap-text"
+                  >
+                    <span
+                      class="inline-block"
+                    >
+                      Listening
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex shrink-0 items-center"
+            >
+              <span
+                aria-checked="true"
+                aria-label="Let local agents use Conch"
+                class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                data-checked=""
+                data-slot="checkbox"
+                id="base-ui-_r_id_"
+                role="checkbox"
+                tabindex="0"
+              >
+                <span
+                  class="
+          grid place-content-center text-current transition-none
+          [&>svg]:size-3.5
+        "
+                  data-checked=""
+                  data-slot="checkbox-indicator"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="lucide lucide-check"
+                    fill="none"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M20 6 9 17l-5-5"
+                    />
+                  </svg>
+                </span>
+              </span>
+              <input
+                aria-hidden="true"
+                checked=""
+                style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                tabindex="-1"
+                type="checkbox"
+              />
+            </div>
+          </div>
+          <div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Connections
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <ul
+                    aria-label="Connections agents can read"
+                    class="divide-y divide-panel-border"
+                  >
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="false"
+                          aria-label="Let agents read analytics"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-slot="checkbox"
+                          data-unchecked=""
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        />
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          analytics
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-row-hover text-panel-muted"
+                        >
+                          dev
+                        </span>
+                      </label>
+                    </li>
+                    <li
+                      class="flex flex-col gap-1 px-4 py-2.5"
+                    >
+                      <label
+                        class="flex min-h-7 items-center gap-3"
+                      >
+                        <span
+                          aria-checked="true"
+                          aria-describedby="_r_id_"
+                          aria-label="Let agents read billing"
+                          class="peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-all duration-150 ease-out outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary"
+                          data-checked=""
+                          data-slot="checkbox"
+                          id="base-ui-_r_id_"
+                          role="checkbox"
+                          tabindex="0"
+                        >
+                          <span
+                            class="
+          grid place-content-center text-current transition-none
+          [&>svg]:size-3.5
+        "
+                            data-checked=""
+                            data-slot="checkbox-indicator"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="size-3.5"
+                              fill="none"
+                              viewBox="0 0 16 16"
+                            >
+                              <path
+                                d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                                data-motion="draw"
+                                pathLength="1"
+                                stroke="currentColor"
+                                stroke-dasharray="1 1"
+                                stroke-dashoffset="0"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                              />
+                            </svg>
+                          </span>
+                        </span>
+                        <input
+                          aria-hidden="true"
+                          style="clip-path: inset(50%); overflow: hidden; white-space: nowrap; border: 0px; padding: 0px; width: 1px; height: 1px; margin: -1px; position: fixed; top: 0px; left: 0px"
+                          tabindex="-1"
+                          type="checkbox"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate type-body text-foreground"
+                        >
+                          billing
+                        </span>
+                        <span
+                          class="shrink-0 type-meta text-panel-muted"
+                        >
+                          postgresql
+                        </span>
+                        <span
+                          class="relative shrink-0 rounded-[5px] px-1.5 py-px type-micro bg-destructive/14 text-danger-ink"
+                        >
+                          prod
+                        </span>
+                      </label>
+                      <p
+                        class="pl-7 type-meta text-danger-ink"
+                        id="_r_id_"
+                      >
+                        Agents can read everything this connection can.
+                      </p>
+                    </li>
+                  </ul>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Row limit
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Most rows an agent gets back from one call.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <div
+                        aria-label="Row limit"
+                        class="flex rounded-[9px] bg-row-hover p-0.5"
+                        role="radiogroup"
+                      >
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="50"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            50
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="true"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                          data-segment="100"
+                          role="radio"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                          />
+                          <span
+                            class="relative"
+                          >
+                            100
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="250"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            250
+                          </span>
+                        </button>
+                        <button
+                          aria-checked="false"
+                          class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                          data-segment="500"
+                          role="radio"
+                          tabindex="-1"
+                          type="button"
+                        >
+                          <span
+                            class="relative"
+                          >
+                            500
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Set up a client
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex flex-col"
+                  >
+                    <ul
+                      aria-label="Set up a client"
+                      class="divide-y divide-panel-border"
+                    >
+                      <li>
+                        <button
+                          aria-label="Copy Claude Code config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Claude Code
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies a claude mcp add command. Run it in your terminal.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy Cursor config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              Cursor
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Paste into ~/.cursor/mcp.json
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          aria-label="Copy JSON config"
+                          class="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left hover:bg-row-hover focus-visible:bg-row-hover focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none focus-visible:ring-inset"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <span
+                            class="flex min-w-0 flex-1 flex-col gap-0.5"
+                          >
+                            <span
+                              class="type-body text-foreground"
+                            >
+                              JSON
+                            </span>
+                            <span
+                              class="truncate type-meta text-panel-muted"
+                            >
+                              Copies an mcpServers entry for any other client.
+                            </span>
+                          </span>
+                          <span
+                            aria-live="polite"
+                            class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="lucide lucide-copy size-3"
+                              fill="none"
+                              height="24"
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <rect
+                                height="14"
+                                rx="2"
+                                ry="2"
+                                width="14"
+                                x="8"
+                                y="8"
+                              />
+                              <path
+                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                              />
+                            </svg>
+                            <span
+                              data-slot="swap-text"
+                            >
+                              <span
+                                class="inline-block"
+                              >
+                                Copy
+                              </span>
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                    <div
+                      class="flex flex-col gap-1 px-4 pt-2 pb-3"
+                    >
+                      <code
+                        class="truncate font-mono type-meta text-panel-muted"
+                      >
+                        CONCH_MCP_TOKEN=
+                        conch_…a1b2
+                         · 
+                        ~/.config/conch/run/mcp.sock
+                      </code>
+                      <p
+                        class="type-meta text-panel-muted"
+                      >
+                        The token lets local agents connect. Anyone who can read your files can read it too.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Rotate token
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        <span
+                          aria-live="polite"
+                        >
+                          <span
+                            data-slot="swap-text"
+                          >
+                            <span
+                              class="inline-block"
+                            >
+                              Disconnects every client. Copy the config again after.
+                            </span>
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        class="flex h-7 items-center rounded-[8px] px-2.5 type-meta focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none bg-row-hover text-foreground hover:bg-row-active"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <span
+                          data-slot="swap-text"
+                        >
+                          <span
+                            class="inline-block"
+                          >
+                            Rotate
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div>
+              <section
+                aria-labelledby="_r_id_"
+                class="pt-3"
+              >
+                <h2
+                  class="px-4 pb-1 type-micro text-panel-muted"
+                  id="_r_id_"
+                >
+                  Activity
+                </h2>
+                <div
+                  class="divide-y divide-panel-border"
+                >
+                  <div
+                    class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+                  >
+                    <div
+                      class="flex min-w-0 flex-col gap-0.5"
+                    >
+                      <span
+                        class="type-body text-foreground"
+                      >
+                        Agent calls
+                      </span>
+                      <span
+                        class="type-meta text-panel-muted"
+                      >
+                        Every agent call, newest first.
+                      </span>
+                    </div>
+                    <div
+                      class="flex shrink-0 items-center"
+                    >
+                      <button
+                        aria-label="Open agent activity"
+                        class="flex h-7 items-center gap-1 rounded-[8px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+                        tabindex="0"
+                        type="button"
+                      >
+                        Open
+                        <svg
+                          aria-hidden="true"
+                          class="lucide lucide-chevron-right size-3"
+                          fill="none"
+                          height="24"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                          width="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m9 18 6-6-6-6"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <p
+                class="px-4 pt-3 pb-2 type-meta text-panel-muted"
+              >
+                Asks from agents use your AI provider and count toward its usage.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+      >
+        <div
+          class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+          data-slot="footer-status"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              On · 1 connection
+            </span>
+          </span>
+        </div>
+        <div
+          class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+          data-motion="pop"
+          data-slot="footer-actions"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <span
+              class="text-foreground"
+              data-slot="swap-text"
+            >
+              <span
+                class="inline-block"
+              >
+                Back
+              </span>
+            </span>
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</div>
+`;

@@ -303,7 +303,9 @@ describe("boardView header and keys", () => {
     const { calls, screen } = setup();
     await waitForTiles(screen);
     await userEvent.keyboard("{Alt>}{Shift>}{Space}{/Shift}{/Alt}");
-    expect(calls.toggleLauncher).toHaveBeenCalledWith({ fromBoardId: "b-ops" });
+    expect(calls.toggleLauncher).toHaveBeenCalledWith({
+      fromWindowKey: "b-ops",
+    });
   });
 });
 

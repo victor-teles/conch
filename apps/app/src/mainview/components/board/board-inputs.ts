@@ -9,6 +9,7 @@ export type WidgetsById = ReadonlyMap<string, Widget>;
 
 export interface SharedInput extends ArgumentInput {
   tileIds: string[];
+  widgetId: string;
 }
 
 export const sharedInputs = (
@@ -26,6 +27,7 @@ export const sharedInputs = (
       } else if (widget) {
         inputs.set(key, {
           key,
+          owner: { kind: "widget", widgetId: widget.id },
           param,
           tileIds: [tile.id],
           widgetId: widget.id,

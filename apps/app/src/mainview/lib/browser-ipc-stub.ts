@@ -9,7 +9,14 @@ import type {
   BoardDraft,
   ImportSource,
   LookupRequest,
+  ExternalSource,
+  HttpEndpointInput,
+  McpServerInput,
+  McpSettingsUpdate,
+  PreviewSourceRequest,
   RunSqlParams,
+  SetMcpToolReadRequest,
+  SourceTarget,
   RunWidgetRequest,
   WatchDraft,
   WidgetDraft,
@@ -17,15 +24,22 @@ import type {
 
 import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
 
+import type { createMiniAppEmulator } from "@/lib/browser-mini-app-stub";
+
+import { createActionEmulator } from "@/lib/browser-action-stub";
 import { createAskEmulator, languageForType } from "@/lib/browser-ask-stub";
 import { createBoardEmulator } from "@/lib/browser-board-stub";
 import { createBundleEmulator } from "@/lib/browser-bundle-stub";
+import { createLinkOpener } from "@/lib/browser-link-stub";
 import {
   createClipboardEmulator,
   createLookupEmulator,
 } from "@/lib/browser-lookup-stub";
+import { createMcpEmulator } from "@/lib/browser-mcp-stub";
 import { recordedAssumptions } from "@/lib/browser-refine-stub";
 import { demoSchemaPeek } from "@/lib/browser-schema-stub";
+import { createSourceEmulator } from "@/lib/browser-source-stub";
+import { createThemeEmulator } from "@/lib/browser-theme-stub";
 import { createWatchEmulator } from "@/lib/browser-watch-stub";
 import { createWidgetEmulator } from "@/lib/browser-widget-stub";
 
@@ -169,21 +183,153 @@ const createLauncherEmulator = (emit: EmitMessage) => {
     hide: () => {
       launcher.visible = false;
     },
+    show: () => {
+      if (launcher.visible) {
+        return;
+      }
+      launcher.visible = true;
+      emit("launcherShown", { clipboard: clipboard.offer() });
+    },
   };
 };
 
 const noop = (): undefined => undefined;
 
+type ActionEmulatorValue = ReturnType<typeof createActionEmulator>;
+type MiniAppEmulatorValue = ReturnType<typeof createMiniAppEmulator>;
+
+type Payload<K extends keyof MiniAppEmulatorValue> = Parameters<
+  MiniAppEmulatorValue[K]
+>[0];
+
+// Loaded on first use so the production bundle never carries the stub's
+// recordings; started at once so another tab's staged action still arrives.
+const loadMiniAppEmulator = async (
+  emit: EmitMessage
+): Promise<MiniAppEmulatorValue> => {
+  const module = await import("@/lib/browser-mini-app-stub");
+  return module.createMiniAppEmulator(emit);
+};
+
+const miniAppHandlers = (
+  loaded: Promise<MiniAppEmulatorValue>
+): Record<string, (payload: unknown) => unknown> => {
+  const using = async <T>(work: (apps: MiniAppEmulatorValue) => T) =>
+    work(await loaded);
+  return {
+    cancelMiniAppGeneration: (payload) =>
+      using((apps) => apps.cancel(payload as Payload<"cancel">)),
+    cancelMiniAppRun: noop,
+    deleteMiniApp: (payload) =>
+      using((apps) => apps.deleteMiniApp(payload as Payload<"deleteMiniApp">)),
+    duplicateMiniApp: (payload) =>
+      using((apps) =>
+        apps.duplicateMiniApp(payload as Payload<"duplicateMiniApp">)
+      ),
+    generateMiniApp: (payload) =>
+      using((apps) => apps.generate(payload as Payload<"generate">)),
+    getMiniApp: (payload) =>
+      using((apps) => apps.getMiniApp(payload as Payload<"getMiniApp">)),
+    listMiniApps: () => using((apps) => apps.listMiniApps()),
+    loadMiniAppInputOptions: (payload) =>
+      using((apps) =>
+        apps.loadInputOptions(payload as Payload<"loadInputOptions">)
+      ),
+    openMiniApp: (payload) =>
+      using((apps) => apps.open(payload as Payload<"open">)),
+    prepareMiniAppAction: (payload) =>
+      using((apps) => apps.prepare(payload as Payload<"prepare">)),
+    runMiniAppSource: (payload) =>
+      using((apps) => apps.run(payload as Payload<"run">)),
+    saveMiniApp: (payload) =>
+      using((apps) => apps.save(payload as Payload<"save">)),
+    setMiniAppValues: (payload) =>
+      using((apps) => apps.setValues(payload as Payload<"setValues">)),
+    stageMiniAppAction: (payload) =>
+      using((apps) => apps.stage(payload as Payload<"stage">)),
+  };
+};
+
+const actionHandlers = (
+  actions: ActionEmulatorValue
+): Record<string, (payload: unknown) => unknown> => ({
+  deleteAction: (payload) =>
+    actions.deleteAction(payload as { actionId: string }),
+  discardActionToken: (payload) =>
+    actions.discardActionToken(payload as { token: string }),
+  executeAction: (payload) =>
+    actions.executeAction(payload as { token: string }),
+  listActionActivity: () => actions.listActionActivity(),
+  listActions: (payload) =>
+    actions.listActions(payload as { widgetId: string }),
+  listWritePermissions: () => actions.listWritePermissions(),
+  prepareAction: (payload) =>
+    actions.prepareAction(
+      payload as Parameters<ActionEmulatorValue["prepareAction"]>[0]
+    ),
+  proposeAction: (payload) =>
+    actions.proposeAction(
+      payload as Parameters<ActionEmulatorValue["proposeAction"]>[0]
+    ),
+  reviewAction: (payload) =>
+    actions.reviewAction(
+      payload as Parameters<ActionEmulatorValue["reviewAction"]>[0]
+    ),
+  saveAction: (payload) =>
+    actions.saveAction(
+      payload as Parameters<ActionEmulatorValue["saveAction"]>[0]
+    ),
+  setWriteActionsAllowed: (payload) =>
+    actions.setWriteActionsAllowed(
+      payload as Parameters<ActionEmulatorValue["setWriteActionsAllowed"]>[0]
+    ),
+});
+
+const openBoardTab = (boardId: string) => {
+  window.open(`#/board/${encodeURIComponent(boardId)}`, "_blank");
+};
+
 const createDispatcher = (emit: EmitMessage) => {
   const ai = createAiSettingsStore();
   const launcher = createLauncherEmulator(emit);
-  const widgets = createWidgetEmulator();
+  const sources = createSourceEmulator();
+  const widgets = createWidgetEmulator(sources);
+  const actions = createActionEmulator({
+    connectionName: (id) => {
+      const connection = readConnections().find((item) => item.id === id);
+      return {
+        environment: connection?.environment ?? null,
+        name: connection?.name ?? id,
+      };
+    },
+    endpointOf: (id) =>
+      sources.listHttpEndpoints().find((endpoint) => endpoint.id === id) ??
+      null,
+    serverName: (id) =>
+      sources.listMcpServers().find((server) => server.id === id)?.name ?? null,
+    toolsOf: (serverId) =>
+      sources.listMcpServers().some((server) => server.id === serverId)
+        ? sources.listMcpTools({ serverId })
+        : [],
+    widgetById: (id) =>
+      widgets.listWidgets().find((widget) => widget.id === id) ?? null,
+  });
   const boards = createBoardEmulator({
     now: () => new Date(),
     onChanged: (boardId) => emit("boardChanged", { boardId }),
     viewOf: (widgetId) =>
       widgets.listWidgets().find((widget) => widget.id === widgetId)?.view ??
       null,
+  });
+  // e2e opens conch:// links through this, as macOS hands them to bun.
+  Object.defineProperty(globalThis, "__conchOpenLink", {
+    configurable: true,
+    value: createLinkOpener({
+      boardExists: (boardId) => boards.getBoard({ boardId }) !== null,
+      navigate: (view) => emit("launcherNavigate", { view }),
+      openBoard: openBoardTab,
+      show: launcher.show,
+    }),
   });
   const lookups = createLookupEmulator((payload) =>
     emit("lookupEvent", payload)
@@ -205,6 +351,10 @@ const createDispatcher = (emit: EmitMessage) => {
     widgetById: (widgetId) =>
       widgets.listWidgets().find((widget) => widget.id === widgetId) ?? null,
   });
+  const mcp = createMcpEmulator({
+    now: () => new Date(),
+    onActivity: (active) => emit("mcpActivity", { active }),
+  });
   const asks = createAskEmulator((payload) => emit("askEvent", payload), {
     labelFor: (connectionId) =>
       readConnections().find((connection) => connection.id === connectionId)
@@ -217,7 +367,12 @@ const createDispatcher = (emit: EmitMessage) => {
     onAnswered: widgets.rememberAsk,
   });
 
+  const themes = createThemeEmulator((state) => emit("themeChanged", state));
+  const miniApps = loadMiniAppEmulator(emit);
+  const actionRequests = actionHandlers(actions);
   const handlers: Record<string, (payload: unknown) => unknown> = {
+    ...actionRequests,
+    ...miniAppHandlers(miniApps),
     acknowledgeAlert: (payload) =>
       watches.acknowledgeAlert(payload as { watchId: string }),
     addBoardTile: (payload) =>
@@ -229,13 +384,21 @@ const createDispatcher = (emit: EmitMessage) => {
       lookups.cancel((payload as { lookupId: string }).lookupId),
     cancelWidgetRun: noop,
     clearAiKey: () => ai.clearKey(),
+    clearMcpAudit: () => mcp.clearMcpAudit(),
     clearRecentAsks: () => widgets.clearRecentAsks(),
     connectToDatabase: noop,
     copyImage: noop,
+    copyMcpClientConfig: () => mcp.copyMcpClientConfig(),
     deleteBoard: (payload) =>
       boards.deleteBoard(payload as { boardId: string }),
+    deleteHttpEndpoint: (payload) =>
+      sources.deleteHttpEndpoint(payload as { endpointId: string }),
+    deleteMcpServer: (payload) =>
+      sources.deleteMcpServer(payload as { serverId: string }),
     deleteRecentAsk: (payload) =>
       widgets.deleteRecentAsk(payload as { askId: string }),
+    deleteTheme: (payload) =>
+      themes.deleteTheme(payload as { themeId: string }),
     deleteWatch: (payload) =>
       watches.deleteWatch(payload as { watchId: string }),
     deleteWidget: (payload) => {
@@ -246,8 +409,24 @@ const createDispatcher = (emit: EmitMessage) => {
     },
     describeSql: (payload) =>
       recordedAssumptions((payload as { sql: string }).sql),
+    discardActionToken: async (payload) => {
+      const { token } = payload as { token: string };
+      const apps = await miniApps;
+      return apps.discard(token)
+        ? undefined
+        : actionRequests.discardActionToken?.(payload);
+    },
     disconnectFromDatabase: noop,
+    executeAction: async (payload) => {
+      const apps = await miniApps;
+      return (
+        apps.execute((payload as { token: string }).token) ??
+        actionRequests.executeAction?.(payload)
+      );
+    },
     exportBundle: (payload) => bundles.exportBundle(payload),
+    exportTheme: (payload) =>
+      themes.exportTheme(payload as { themeId: string }),
     getActiveConnection: () => readActiveConnection(),
     getAiSettings: () => ai.get(),
     getAllHistory: () => [],
@@ -257,10 +436,18 @@ const createDispatcher = (emit: EmitMessage) => {
     getConnections: () => readConnections(),
     getHistory: () => [],
     getLauncherHotkey: () => DEFAULT_LAUNCHER_HOTKEY,
+    getMcpSettings: () => mcp.getMcpSettings(),
+    getThemeState: () => themes.getThemeState(),
     getUpdateChannel: () => "stable",
     getWatchingPaused: () => watches.getWatchingPaused(),
     hideLauncher: () => launcher.hide(),
+    importTheme: () => themes.importTheme(),
     listBoards: () => boards.listBoards(),
+    listHttpEndpoints: () => sources.listHttpEndpoints(),
+    listMcpAudit: (payload) => mcp.listMcpAudit(payload as { limit?: number }),
+    listMcpServers: () => sources.listMcpServers(),
+    listMcpTools: (payload) =>
+      sources.listMcpTools(payload as { serverId: string }),
     listRecentAsks: (payload) =>
       widgets.listRecentAsks(payload as { limit?: number }),
     listWatchStatuses: () => watches.listWatchStatuses(),
@@ -271,22 +458,31 @@ const createDispatcher = (emit: EmitMessage) => {
     loadParamOptions: () => widgets.loadParamOptions(),
     lookup: (payload) => lookups.lookup(payload as LookupRequest),
     openBoard: (payload) => {
-      const { boardId } = payload as { boardId: string };
-      window.open(`#/board/${encodeURIComponent(boardId)}`, "_blank");
+      openBoardTab((payload as { boardId: string }).boardId);
     },
     openWidgetInLauncher: noop,
     peekSchema: () => demoSchemaPeek(),
     previewImport: (payload) =>
       bundles.previewImport(payload as { source: ImportSource }),
+    previewSource: (payload) =>
+      sources.previewSource(
+        payload as PreviewSourceRequest & { source: ExternalSource }
+      ),
+    proposeSourceWidget: (payload) =>
+      sources.proposeSourceWidget(
+        payload as { target: SourceTarget; prompt: string }
+      ),
     proposeWidgetParams: (payload) =>
       widgets.proposeWidgetParams(payload as { sql: string }),
     rendererReady: noop,
     resizeLauncher: noop,
     revealSaved: noop,
+    rotateMcpToken: () => mcp.rotateMcpToken(),
     runSql: (payload) => asks.runSql(payload as RunSqlParams),
     runWidget: async (payload) => {
       const request = payload as RunWidgetRequest;
       const outcome = await widgets.runWidget(request);
+      actions.recordRun(request.runId, request.widgetId, outcome.result);
       return watches.decorateRun(request.widgetId, outcome);
     },
     saveAiSettings: (payload) => ai.save(payload as AiSettingsInput),
@@ -295,6 +491,13 @@ const createDispatcher = (emit: EmitMessage) => {
       writeConnections(
         (payload as { connections: DatabaseConnection[] }).connections
       ),
+    saveHttpEndpoint: (payload) =>
+      sources.saveHttpEndpoint(payload as { endpoint: HttpEndpointInput }),
+    saveMcpServer: (payload) =>
+      sources.saveMcpServer(payload as { server: McpServerInput }),
+    saveMcpSettings: (payload) =>
+      mcp.saveMcpSettings(payload as McpSettingsUpdate),
+    saveTheme: (payload) => themes.saveTheme(payload as { theme: unknown }),
     saveToDownloads: (payload) => ({
       fileName: `${(payload as { baseName: string }).baseName}.csv`,
       savedId: "stub",
@@ -308,6 +511,10 @@ const createDispatcher = (emit: EmitMessage) => {
       ),
     setClipboardLookups: (payload) =>
       writeClipboardLookups((payload as { enabled: boolean }).enabled),
+    setMcpToolRead: (payload) =>
+      sources.setMcpToolRead(payload as SetMcpToolReadRequest),
+    setThemeSettings: (payload) =>
+      themes.setThemeSettings(payload as { settings: unknown }),
     setWatchingPaused: (payload) =>
       watches.setWatchingPaused(payload as { paused: boolean }),
     testAiSettings,
@@ -316,6 +523,10 @@ const createDispatcher = (emit: EmitMessage) => {
       message: "Connected",
       success: true,
     }),
+    testHttpEndpoint: (payload) =>
+      sources.testHttpEndpoint(payload as { endpointId: string }),
+    testMcpServer: (payload) =>
+      sources.testMcpServer(payload as { serverId: string }),
     toggleLauncher: noop,
   };
 

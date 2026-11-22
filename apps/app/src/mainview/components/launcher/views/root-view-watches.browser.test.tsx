@@ -30,13 +30,20 @@ vi.mock(import("motion/react"), async (importOriginal) => {
 
 const navigate = {
   addToBoard: vi.fn(),
+  buildApp: vi.fn(),
+  changeApp: vi.fn(),
   dismiss: vi.fn(),
   editConnection: vi.fn(),
   newBoard: vi.fn(),
+  newSourceWidget: vi.fn(),
+  openActivity: vi.fn(),
+  openApp: vi.fn(),
   openBoard: vi.fn(),
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
+  renameApp: vi.fn(),
   renameBoard: vi.fn(),
   runWidget: vi.fn(),
   watchWidget: vi.fn(),
@@ -186,15 +193,21 @@ describe.each([
       );
     await userEvent.keyboard("{Meta>}k{/Meta}");
     const menu = screen.getByRole("menu");
-    await expect.element(menu).toHaveFocus();
+    await expect
+      .element(screen.getByRole("textbox", { name: "Filter actions" }))
+      .toHaveFocus();
     expect(
       menu
         .getByRole("menuitem")
         .all()
-        .map((item) => item.element().textContent)
+        .map(
+          (item) =>
+            item.element().querySelector('[data-slot="swap-text"]')?.textContent
+        )
     ).toStrictEqual([
       "Run",
       "Add to Board…",
+      "Copy Link",
       "Export Widget",
       "Watch…",
       "Show in Menu Bar",

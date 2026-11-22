@@ -1,11 +1,18 @@
-import { draftOf } from "@conch/rpc";
+import { boardLink, draftOf, widgetLink } from "@conch/rpc";
 import { useCallback, useState } from "react";
 
-import type { Board, ExportScope, Widget } from "@/lib/ipc";
+import type { Board, ExportScope, MiniApp, Widget } from "@/lib/ipc";
 
 import { useMenuBarToggle } from "@/components/watches/use-menu-bar-toggle";
 import { useArmedConfirm } from "@/hooks/use-armed-confirm";
-import { deleteBoard, saveBoard } from "@/lib/ipc";
+import { useFlashMessage } from "@/hooks/use-flash-message";
+import { copyText } from "@/lib/clipboard";
+import {
+  deleteBoard,
+  deleteMiniApp,
+  duplicateMiniApp,
+  saveBoard,
+} from "@/lib/ipc";
 
 import type { CatalogAction, CatalogItem } from "./catalog-actions";
 
@@ -16,6 +23,9 @@ export interface CatalogNavigation {
   addToBoard: (widgetId: string) => void;
   exportScope: (scope: ExportScope) => void;
   watchWidget: (widgetId: string) => void;
+  openApp: (appId: string) => void;
+  renameApp: (app: MiniApp) => void;
+  changeApp: (appId: string) => void;
 }
 
 interface UseCatalogMenuOptions {
@@ -57,6 +67,60 @@ const runWidgetAction = async (
   }
 };
 
+export const COPIED_LINK = "Copied link";
+const NOTICE_MS = 2000;
+
+const linkOf = (item: CatalogItem): string | null => {
+  switch (item.kind) {
+    case "board": {
+      return boardLink(item.board.id);
+    }
+    case "widget": {
+      return widgetLink(item.widget.id);
+    }
+    default: {
+      return null;
+    }
+  }
+};
+
+const runAppAction = async (
+  action: CatalogAction,
+  app: MiniApp,
+  navigate: CatalogNavigation
+): Promise<boolean> => {
+  switch (action.id) {
+    case "open-app": {
+      navigate.openApp(app.id);
+      return false;
+    }
+    case "rename-app": {
+      navigate.renameApp(app);
+      return false;
+    }
+    case "change-app": {
+      navigate.changeApp(app.id);
+      return false;
+    }
+    case "duplicate-app": {
+      await duplicateMiniApp(app.id);
+      return true;
+    }
+    case "delete-app": {
+      await deleteMiniApp(app.id);
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+};
+
+const ARMED_ACTIONS: ReadonlySet<string> = new Set([
+  "delete-board",
+  "delete-app",
+]);
+
 const duplicateOf = (board: Board) => {
   const { id: _id, ...draft } = draftOf(board);
   return { ...draft, name: `${board.name} copy`.slice(0, 60) };
@@ -70,6 +134,7 @@ export const useCatalogMenu = ({
   const [item, setItem] = useState<CatalogItem | null>(null);
   const { arm, armed, disarm } = useArmedConfirm();
   const toggleMenuBar = useMenuBarToggle();
+  const { flash, message: notice } = useFlashMessage(NOTICE_MS);
 
   const close = useCallback(() => {
     disarm();
@@ -85,40 +150,45 @@ export const useCatalogMenu = ({
     [disarm]
   );
 
-  const run = useCallback(
-    async (action: CatalogAction) => {
-      if (!item) {
+  const runOn = useCallback(
+    async (target: CatalogItem, action: CatalogAction) => {
+      if (action.id === "copy-link") {
+        const link = linkOf(target);
+        if (link && (await copyText(link))) {
+          flash(COPIED_LINK);
+        }
         return;
       }
-      if (action.id === "delete-board" && !armed) {
-        arm();
+      if (target.kind === "mini-app") {
+        if (await runAppAction(action, target.app, navigate)) {
+          onChanged();
+        }
         return;
       }
-      close();
-      if (item.kind === "widget") {
-        await runWidgetAction(action, item.widget, navigate, toggleMenuBar);
+      if (target.kind === "widget") {
+        await runWidgetAction(action, target.widget, navigate, toggleMenuBar);
         return;
       }
       switch (action.id) {
         case "open-board": {
-          navigate.openBoard(item.board.id);
+          navigate.openBoard(target.board.id);
           break;
         }
         case "rename-board": {
-          navigate.renameBoard(item.board);
+          navigate.renameBoard(target.board);
           break;
         }
         case "export-board": {
-          navigate.exportScope({ boardId: item.board.id, kind: "board" });
+          navigate.exportScope({ boardId: target.board.id, kind: "board" });
           break;
         }
         case "duplicate-board": {
-          await saveBoard(duplicateOf(item.board));
+          await saveBoard(duplicateOf(target.board));
           onChanged();
           break;
         }
         case "delete-board": {
-          await deleteBoard(item.board.id);
+          await deleteBoard(target.board.id);
           onChanged();
           break;
         }
@@ -127,8 +197,23 @@ export const useCatalogMenu = ({
         }
       }
     },
-    [arm, armed, close, item, navigate, onChanged, toggleMenuBar]
+    [flash, navigate, onChanged, toggleMenuBar]
   );
 
-  return { armed, close, item, open, run };
+  const run = useCallback(
+    async (action: CatalogAction) => {
+      if (!item) {
+        return;
+      }
+      if (ARMED_ACTIONS.has(action.id) && !armed) {
+        arm();
+        return;
+      }
+      close();
+      await runOn(item, action);
+    },
+    [arm, armed, close, item, runOn]
+  );
+
+  return { armed, close, item, notice, open, run, runOn };
 };

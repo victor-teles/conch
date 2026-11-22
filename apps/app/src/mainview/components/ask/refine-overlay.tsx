@@ -17,7 +17,8 @@ interface RefineOverlayProps {
 }
 
 // Draws the placeholder (so it can swap) and an invisible copy of the typed
-// follow-up that the trail's new crumb grows out of when ↵ lifts it.
+// follow-up that the trail's new crumb grows out of when ↵ lifts it. The copy
+// hides with visibility because layoutId writes an inline opacity.
 export function RefineOverlay({
   draft,
   placeholder,
@@ -37,7 +38,7 @@ export function RefineOverlay({
       ) : null}
       {ghost && !reduced ? (
         <motion.span
-          className="absolute left-0 whitespace-pre opacity-0"
+          className="invisible absolute left-0 whitespace-pre"
           data-testid="refine-ghost"
           layoutId={turnLayoutId(ghost.index)}
           transition={spring}

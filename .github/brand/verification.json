@@ -76,21 +76,6 @@
       "mode": "RGBA"
     },
     {
-      "path": ".github/brand/concepts/concept-1-whorl.png",
-      "size": [1254, 1254],
-      "mode": "RGBA"
-    },
-    {
-      "path": ".github/brand/concepts/concept-2-spire.png",
-      "size": [1254, 1254],
-      "mode": "RGBA"
-    },
-    {
-      "path": ".github/brand/concepts/concept-3-open-call.png",
-      "size": [1254, 1254],
-      "mode": "RGBA"
-    },
-    {
       "path": ".github/brand/asset-review.png",
       "size": [1200, 920],
       "mode": "RGB"
@@ -111,5 +96,11 @@
   "tray_alpha_range": [0, 255],
   "svg_viewBox": "0 0 1000 1000",
   "icon_body_geometry": [100, 100, 924, 924],
-  "visual_review": "asset-review.png inspected; actual macOS Dock/menu-bar integration not run"
+  "visual_review": "asset-review.png inspected; 16 px and 1024 px icons checked; actual macOS Dock/menu-bar integration not run",
+  "generator": "apps/app/scripts/build-brand-assets.ts",
+  "colors": {
+    "ink": "#121212",
+    "vermilion": "#fc4738",
+    "vermilion_on_light": "#e31510"
+  }
 }

@@ -19,10 +19,16 @@ interface UseHistoryKeyboardOptions {
   commands: HistoryCommands;
   move: (delta: number) => void;
   onToggleMenu: () => void;
+  onToggleScope: () => void;
 }
 
 export const useHistoryKeyboard =
-  ({ commands, move, onToggleMenu }: UseHistoryKeyboardOptions) =>
+  ({
+    commands,
+    move,
+    onToggleMenu,
+    onToggleScope,
+  }: UseHistoryKeyboardOptions) =>
   (event: KeyboardEvent<HTMLInputElement>) => {
     const delta = movementFor(event);
     if (delta !== 0) {
@@ -38,6 +44,11 @@ export const useHistoryKeyboard =
     if (event.metaKey && event.key === "k") {
       event.preventDefault();
       onToggleMenu();
+      return;
+    }
+    if (event.metaKey && event.key === "p") {
+      event.preventDefault();
+      onToggleScope();
       return;
     }
     if (event.metaKey && event.key === "s") {

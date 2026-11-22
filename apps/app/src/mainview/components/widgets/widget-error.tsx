@@ -9,7 +9,7 @@ import { Pressable } from "@/components/motion/pressable";
 
 import type { WidgetRunFailure } from "./widget-run-reducer";
 
-type Remedy = "retry" | "choose-connection" | null;
+type Remedy = "retry" | "choose-connection" | "open-sources" | null;
 
 interface FailureCopy {
   title: string;
@@ -38,6 +38,46 @@ const COPY: Record<string, FailureCopy> = {
     remedy: "retry",
     showDetail: false,
     title: "The query took longer than 30 seconds.",
+  },
+  SOURCE_BAD_URL: {
+    remedy: null,
+    showDetail: true,
+    title: "The request would leave the endpoint.",
+  },
+  SOURCE_EMPTY: {
+    remedy: null,
+    showDetail: true,
+    title: "Nothing in the response matched.",
+  },
+  SOURCE_FAILED: {
+    remedy: "retry",
+    showDetail: true,
+    title: "The source didn't answer.",
+  },
+  SOURCE_MISSING: {
+    remedy: "open-sources",
+    showDetail: false,
+    title: "This widget's source no longer exists.",
+  },
+  SOURCE_NOT_DATA: {
+    remedy: null,
+    showDetail: true,
+    title: "The source returned text, not data.",
+  },
+  SOURCE_TOO_LARGE: {
+    remedy: null,
+    showDetail: true,
+    title: "The response is too large for a widget.",
+  },
+  TOOL_MISSING: {
+    remedy: "open-sources",
+    showDetail: true,
+    title: "The tool is gone from its server.",
+  },
+  TOOL_NOT_READ_ONLY: {
+    remedy: "open-sources",
+    showDetail: false,
+    title: "This tool can change data, so it can't feed a widget.",
   },
   UNSUPPORTED_ENGINE: {
     remedy: null,
@@ -98,17 +138,33 @@ interface WidgetErrorProps {
   connections: readonly DatabaseConnection[];
   onRetry: () => void;
   onRebind: (connectionId: string) => void;
+  onOpenSources: () => void;
 }
+
+const actionFor = (
+  remedy: Remedy,
+  {
+    onRetry,
+    onOpenSources,
+  }: Pick<WidgetErrorProps, "onRetry" | "onOpenSources">
+): NoticeAction | null => {
+  if (remedy === "retry") {
+    return { label: "Retry", onRun: onRetry };
+  }
+  return remedy === "open-sources"
+    ? { label: "Open Sources Settings", onRun: onOpenSources }
+    : null;
+};
 
 export function WidgetError({
   failure,
   connections,
   onRetry,
   onRebind,
+  onOpenSources,
 }: WidgetErrorProps) {
   const copy = failureCopy(failure);
-  const action: NoticeAction | null =
-    copy.remedy === "retry" ? { label: "Retry", onRun: onRetry } : null;
+  const action = actionFor(copy.remedy, { onOpenSources, onRetry });
   const choices = connections.filter((connection) =>
     SQL_ENGINES.has(connection.type)
   );

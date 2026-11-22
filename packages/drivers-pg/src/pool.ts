@@ -7,6 +7,8 @@ import type {
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
+  GuardedWrite,
+  GuardedWriteOptions,
   IndexItem,
   Pool,
   SchemaInfo,
@@ -23,7 +25,9 @@ import {
   DbError,
   guardDestructive,
   parsePostgres,
+  tooManyRows,
   validateSchemaName,
+  WRITE_STATEMENT_TIMEOUT_MS,
 } from "@conch/core";
 import { types } from "pg";
 
@@ -47,7 +51,7 @@ const NOOP = (): void => {
   // intentionally empty: swallows pool/transaction cleanup errors
 };
 
-export class PostgresPool implements Pool {
+export class PostgresPool implements Pool, GuardedWrite {
   readonly dialect: DialectType = "postgresql";
   readonly supportsExplain = true;
   readonly #pool: PgPoolType;
@@ -160,6 +164,56 @@ export class PostgresPool implements Pool {
     }
   }
 
+  async executeWrite(
+    sql: string,
+    params: BindValue[],
+    { schema, maxAffectedRows, signal }: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }> {
+    const client = await this.#pool.connect();
+    const release = bindAbort(client, signal);
+    try {
+      await client.query("BEGIN");
+      try {
+        await client.query(
+          `SET LOCAL statement_timeout = ${WRITE_STATEMENT_TIMEOUT_MS}`
+        );
+        if (schema) {
+          validateSchemaName(schema);
+          await client.query(`SET LOCAL search_path TO "${schema}"`);
+        }
+        const result = await runSingle(client, {
+          rowMode: "array",
+          text: sql,
+          values: params,
+        });
+        if (result.rowCount === null) {
+          throw multipleResults();
+        }
+        const affectedRows = result.rowCount;
+        if (affectedRows > maxAffectedRows) {
+          throw tooManyRows(affectedRows, maxAffectedRows);
+        }
+        if (signal.aborted) {
+          throw DbError.cancelled();
+        }
+        await client.query("COMMIT");
+        return { affectedRows };
+      } catch (error) {
+        if (!signal.aborted) {
+          await client.query("ROLLBACK").catch(NOOP);
+        }
+        throw error;
+      }
+    } catch (error) {
+      if (signal.aborted && signal.reason instanceof DbError) {
+        throw signal.reason;
+      }
+      throw mapPgError(error);
+    } finally {
+      release();
+    }
+  }
+
   async explain(
     sql: string,
     analyze: boolean,
@@ -239,6 +293,31 @@ function toArrayQuery(sql: string, params?: BindValue[]): QueryArrayConfig {
   return { rowMode: "array", text: sql, values: params };
 }
 
+// The extended protocol takes exactly one statement, so SQL that hides a
+// second one (a COMMIT, then a write) is refused by the server itself.
+interface SingleStatementQuery extends QueryArrayConfig {
+  queryMode: "extended";
+}
+
+const singleStatement = (query: QueryArrayConfig): SingleStatementQuery => ({
+  ...query,
+  queryMode: "extended",
+});
+
+const multipleResults = (): DbError =>
+  new DbError("MULTIPLE_STATEMENTS", "Only one statement can run at a time.");
+
+async function runSingle(
+  client: PoolClient,
+  query: QueryArrayConfig
+): Promise<QueryArrayResult> {
+  const result: unknown = await client.query(singleStatement(query));
+  if (Array.isArray(result)) {
+    throw multipleResults();
+  }
+  return result as QueryArrayResult;
+}
+
 async function queryReadOnly(
   client: PoolClient,
   query: QueryArrayConfig,
@@ -246,7 +325,7 @@ async function queryReadOnly(
 ): Promise<QueryArrayResult> {
   await client.query("BEGIN READ ONLY");
   try {
-    return await client.query(query);
+    return await runSingle(client, query);
   } finally {
     if (!signal.aborted) {
       try {

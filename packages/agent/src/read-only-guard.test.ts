@@ -40,6 +40,16 @@ const allowed: [string, string, DialectType][] = [
     "tsql",
   ],
   [
+    "T-SQL paging with OFFSET and FETCH",
+    "select id from orders order by id offset 10 rows fetch next 5 rows only",
+    "tsql",
+  ],
+  [
+    "T-SQL statement words used as bracketed column names",
+    "select [backup], [kill], [begin] from jobs",
+    "tsql",
+  ],
+  [
     "column names that contain forbidden words",
     "select created_at, updated_by, settings, offset_ms from t",
     "postgresql",
@@ -108,6 +118,29 @@ const rejected: [string, string, DialectType][] = [
   ["an unterminated string", "select 'abc", "postgresql"],
   ["an unterminated block comment", "select 1 /* never closed", "postgresql"],
   ["a T-SQL batch without semicolons", "select 1 commit", "tsql"],
+  ["a T-SQL batch that shuts the server down", "select 1 shutdown", "tsql"],
+  ["a T-SQL batch that kills a session", "select name from t kill 52", "tsql"],
+  [
+    "a T-SQL batch that restores a database",
+    "select 1 restore database app from disk = 'x.bak'",
+    "tsql",
+  ],
+  [
+    "a T-SQL batch with DBCC",
+    "select 1 dbcc checkident ('t', reseed, 0)",
+    "tsql",
+  ],
+  [
+    "a T-SQL batch that disables a trigger",
+    "select 1 disable trigger audit on orders",
+    "tsql",
+  ],
+  ["a T-SQL batch that waits", "select 1 waitfor delay '00:10:00'", "tsql"],
+  [
+    "OPENROWSET reading outside the database",
+    "select * from openrowset(bulk 'c:\\secrets.txt', single_clob) as f",
+    "tsql",
+  ],
 ];
 
 describe("assertReadOnly", () => {

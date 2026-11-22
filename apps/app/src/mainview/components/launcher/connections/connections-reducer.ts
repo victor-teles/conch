@@ -1,3 +1,4 @@
+import type { FormState } from "@/components/connection-form/connection-form-state";
 import type { DatabaseConnection } from "@/lib/connections";
 
 export type RowActivity =
@@ -19,6 +20,7 @@ export interface ConnectionsState {
   liveIds: readonly string[];
   activity: Readonly<Record<string, RowActivity>>;
   focusId: string | null;
+  draft: FormState | null;
 }
 
 export type ConnectionsAction =
@@ -35,12 +37,14 @@ export type ConnectionsAction =
   | { type: "disconnected"; id: string }
   | { type: "removed"; id: string }
   | { type: "pin-toggled"; id: string }
-  | { type: "saved"; connection: DatabaseConnection; stale: boolean };
+  | { type: "saved"; connection: DatabaseConnection; stale: boolean }
+  | { type: "draft"; draft: FormState | null };
 
 export const initialConnectionsState: ConnectionsState = {
   activeId: null,
   activity: {},
   connections: [],
+  draft: null,
   focusId: null,
   liveIds: [],
   load: { status: "loading" },
@@ -161,6 +165,11 @@ export const connectionsReducer = (
         focusId: id,
         liveIds: action.stale ? withoutId(state.liveIds, id) : state.liveIds,
       };
+    }
+    case "draft": {
+      return state.draft === action.draft
+        ? state
+        : { ...state, draft: action.draft };
     }
     default: {
       return state;

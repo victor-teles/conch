@@ -1,0 +1,2516 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`actionEditView > labels each MCP tool as read-only or changing data 1`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="sql"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="mcp"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="http"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="open-url"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="copy"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Server
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="Server"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value="stripe"
+                >
+                  Stripe
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Tool
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="Tool"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value=""
+                >
+                  Choose a tool
+                </option>
+                <option
+                  value="refund_charge"
+                >
+                  refund_charge · Changes data
+                </option>
+                <option
+                  value="get_charge"
+                >
+                  get_charge · Read-only
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Arguments
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <textarea
+                aria-label="Arguments"
+                autocapitalize="off"
+                autocomplete="off"
+                class="w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 h-auto min-h-[76px] resize-y py-2 leading-[18px] whitespace-pre-wrap"
+                rows="4"
+                spellcheck="false"
+              >
+                {}
+              </textarea>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                Put {"$param": "name"} where a value goes.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <p
+            class="px-4 py-2 type-meta text-panel-muted"
+          >
+            Add a 
+            {{value}}
+             to bind a row column, an input or fixed text.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Give the action a label.
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`actionEditView > saves a copy action directly 1`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value="Copy month"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="sql"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="mcp"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="http"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="open-url"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="copy"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Text
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <textarea
+                aria-label="Text"
+                autocapitalize="off"
+                autocomplete="off"
+                class="w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 h-auto min-h-[76px] resize-y py-2 leading-[18px] whitespace-pre-wrap"
+                rows="4"
+                spellcheck="false"
+              >
+                {{month}}
+              </textarea>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                Text with {{values}}; nothing runs.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <ul
+            aria-label="Values"
+            class="flex flex-col gap-1.5 px-4 py-1.5"
+          >
+            <li
+              class="flex items-center gap-2"
+            >
+              <span
+                class="w-24 shrink-0 truncate font-mono text-[12px] text-panel-muted"
+              >
+                month
+              </span>
+              <select
+                aria-label="Value for month"
+                class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-44 shrink-0"
+              >
+                <option
+                  value="row:month"
+                >
+                  row.month
+                </option>
+                <option
+                  value="row:mrr"
+                >
+                  row.mrr
+                </option>
+                <option
+                  value="input:region"
+                >
+                  input Region
+                </option>
+                <option
+                  value="literal"
+                >
+                  Fixed text
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ready
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Save
+            </span>
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`actionEditView > shows the HTTP and link fields 1`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="sql"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="mcp"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="http"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="open-url"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="copy"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Endpoint
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="Endpoint"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              />
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Request
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <div
+                class="flex gap-2"
+              >
+                <select
+                  aria-label="Method"
+                  class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-28 shrink-0"
+                >
+                  <option
+                    value="GET"
+                  >
+                    GET
+                  </option>
+                  <option
+                    value="POST"
+                  >
+                    POST
+                  </option>
+                  <option
+                    value="PUT"
+                  >
+                    PUT
+                  </option>
+                  <option
+                    value="PATCH"
+                  >
+                    PATCH
+                  </option>
+                  <option
+                    value="DELETE"
+                  >
+                    DELETE
+                  </option>
+                </select>
+                <input
+                  aria-label="Path"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+                  placeholder="/tickets/{{id}}/close"
+                  spellcheck="false"
+                  type="text"
+                  value="/"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Body
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <textarea
+                aria-label="Body"
+                autocapitalize="off"
+                autocomplete="off"
+                class="w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 h-auto min-h-[76px] resize-y py-2 leading-[18px] whitespace-pre-wrap"
+                rows="4"
+                spellcheck="false"
+              />
+              <span
+                class="type-micro text-panel-muted"
+              >
+                JSON, or leave empty.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <p
+            class="px-4 py-2 type-meta text-panel-muted"
+          >
+            Add a 
+            {{value}}
+             to bind a row column, an input or fixed text.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Give the action a label.
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`actionEditView > shows the HTTP and link fields 2`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="sql"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="mcp"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="http"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="open-url"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="copy"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Address
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <input
+                aria-label="Address"
+                autocapitalize="off"
+                autocomplete="off"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+                placeholder="https://dashboard.example.com/orders"
+                spellcheck="false"
+                type="text"
+                value="https://"
+              />
+              <span
+                class="type-micro text-panel-muted"
+              >
+                https only; the host is fixed.
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Path
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <input
+                aria-label="Path"
+                autocapitalize="off"
+                autocomplete="off"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+                spellcheck="false"
+                type="text"
+                value="/{{id}}"
+              />
+              <span
+                class="type-micro text-panel-muted"
+              >
+                A value fills a whole segment, like /{{id}}.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <p
+            class="px-4 py-2 type-meta text-panel-muted"
+          >
+            Add a 
+            {{value}}
+             to bind a row column, an input or fixed text.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Give the action a label.
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`actionEditView with full motion > generates one value row per placeholder as the statement changes 1`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value="Mark reviewed"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="sql"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="mcp"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="http"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="open-url"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="copy"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Connection
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="Connection"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value="analytics"
+                >
+                  analytics
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Statement
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <textarea
+                aria-label="Statement"
+                autocapitalize="off"
+                autocomplete="off"
+                class="w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 h-auto min-h-[76px] resize-y py-2 leading-[18px] whitespace-pre-wrap"
+                placeholder="UPDATE orders SET status = {{status}} WHERE id = {{id}}"
+                rows="4"
+                spellcheck="false"
+              >
+                UPDATE revenue SET status = {{status}} WHERE month = {{month}}
+              </textarea>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                One INSERT, UPDATE or DELETE. Values are {{inputs}}; UPDATE and DELETE need one in WHERE.
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              At most
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="At most"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value="1"
+                >
+                  1 row
+                </option>
+                <option
+                  value="5"
+                >
+                  5 rows
+                </option>
+                <option
+                  value="10"
+                >
+                  10 rows
+                </option>
+                <option
+                  value="25"
+                >
+                  25 rows
+                </option>
+                <option
+                  value="100"
+                >
+                  100 rows
+                </option>
+              </select>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                Larger writes roll back.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <ul
+            aria-label="Values"
+            class="flex flex-col gap-1.5 px-4 py-1.5"
+          >
+            <li
+              class="flex items-center gap-2"
+            >
+              <span
+                class="w-24 shrink-0 truncate font-mono text-[12px] text-panel-muted"
+              >
+                status
+              </span>
+              <select
+                aria-label="Value for status"
+                class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-44 shrink-0"
+              >
+                <option
+                  value="row:month"
+                >
+                  row.month
+                </option>
+                <option
+                  value="row:mrr"
+                >
+                  row.mrr
+                </option>
+                <option
+                  value="input:region"
+                >
+                  input Region
+                </option>
+                <option
+                  value="literal"
+                >
+                  Fixed text
+                </option>
+              </select>
+              <input
+                aria-label="Text for status"
+                autocapitalize="off"
+                autocomplete="off"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+                spellcheck="false"
+                type="text"
+                value="reviewed"
+              />
+            </li>
+            <li
+              class="flex items-center gap-2"
+            >
+              <span
+                class="w-24 shrink-0 truncate font-mono text-[12px] text-panel-muted"
+              >
+                month
+              </span>
+              <select
+                aria-label="Value for month"
+                class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-44 shrink-0"
+              >
+                <option
+                  value="row:month"
+                >
+                  row.month
+                </option>
+                <option
+                  value="row:mrr"
+                >
+                  row.mrr
+                </option>
+                <option
+                  value="input:region"
+                >
+                  input Region
+                </option>
+                <option
+                  value="literal"
+                >
+                  Fixed text
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ready
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Review
+            </span>
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`actionEditView with reduced motion > generates one value row per placeholder as the statement changes 1`] = `
+<div
+  data-testid="editor"
+  style="height: 640px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Add Action
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto pb-2"
+    >
+      <div
+        class="relative"
+      >
+        <div
+          class="flex items-start gap-3 px-4 py-1.5"
+        >
+          <span
+            class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+          >
+            Label
+          </span>
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-1"
+          >
+            <input
+              aria-label="Label"
+              autocapitalize="off"
+              autocomplete="off"
+              class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+              placeholder="Mark shipped"
+              spellcheck="false"
+              type="text"
+              value="Mark reviewed"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Acts on
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Acts on"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="row"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                A row
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="widget"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                The widget
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start gap-3 px-4 py-1.5"
+      >
+        <span
+          class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+        >
+          Does
+        </span>
+        <div
+          class="flex min-w-0 flex-1 flex-col gap-1"
+        >
+          <div
+            aria-label="Target"
+            class="flex rounded-[9px] bg-row-hover p-0.5"
+            role="radiogroup"
+          >
+            <button
+              aria-checked="true"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+              data-segment="sql"
+              role="radio"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+              />
+              <span
+                class="relative"
+              >
+                SQL
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="mcp"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                MCP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="http"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                HTTP
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="open-url"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Link
+              </span>
+            </button>
+            <button
+              aria-checked="false"
+              class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+              data-segment="copy"
+              role="radio"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="relative"
+              >
+                Copy
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="relative"
+        >
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Connection
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="Connection"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value="analytics"
+                >
+                  analytics
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              Statement
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <textarea
+                aria-label="Statement"
+                autocapitalize="off"
+                autocomplete="off"
+                class="w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 h-auto min-h-[76px] resize-y py-2 leading-[18px] whitespace-pre-wrap"
+                placeholder="UPDATE orders SET status = {{status}} WHERE id = {{id}}"
+                rows="4"
+                spellcheck="false"
+              >
+                UPDATE revenue SET status = {{status}} WHERE month = {{month}}
+              </textarea>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                One INSERT, UPDATE or DELETE. Values are {{inputs}}; UPDATE and DELETE need one in WHERE.
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex items-start gap-3 px-4 py-1.5"
+          >
+            <span
+              class="w-24 shrink-0 pt-1.5 type-meta text-panel-muted"
+            >
+              At most
+            </span>
+            <div
+              class="flex min-w-0 flex-1 flex-col gap-1"
+            >
+              <select
+                aria-label="At most"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans"
+              >
+                <option
+                  value="1"
+                >
+                  1 row
+                </option>
+                <option
+                  value="5"
+                >
+                  5 rows
+                </option>
+                <option
+                  value="10"
+                >
+                  10 rows
+                </option>
+                <option
+                  value="25"
+                >
+                  25 rows
+                </option>
+                <option
+                  value="100"
+                >
+                  100 rows
+                </option>
+              </select>
+              <span
+                class="type-micro text-panel-muted"
+              >
+                Larger writes roll back.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative"
+        >
+          <ul
+            aria-label="Values"
+            class="flex flex-col gap-1.5 px-4 py-1.5"
+          >
+            <li
+              class="flex items-center gap-2"
+            >
+              <span
+                class="w-24 shrink-0 truncate font-mono text-[12px] text-panel-muted"
+              >
+                status
+              </span>
+              <select
+                aria-label="Value for status"
+                class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-44 shrink-0"
+              >
+                <option
+                  value="row:month"
+                >
+                  row.month
+                </option>
+                <option
+                  value="row:mrr"
+                >
+                  row.mrr
+                </option>
+                <option
+                  value="input:region"
+                >
+                  input Region
+                </option>
+                <option
+                  value="literal"
+                >
+                  Fixed text
+                </option>
+              </select>
+              <input
+                aria-label="Text for status"
+                autocapitalize="off"
+                autocomplete="off"
+                class="h-8 w-full min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 font-mono text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40"
+                spellcheck="false"
+                type="text"
+                value="reviewed"
+              />
+            </li>
+            <li
+              class="flex items-center gap-2"
+            >
+              <span
+                class="w-24 shrink-0 truncate font-mono text-[12px] text-panel-muted"
+              >
+                month
+              </span>
+              <select
+                aria-label="Value for month"
+                class="h-8 min-w-0 rounded-[8px] border border-panel-border bg-row-hover px-2.5 text-[12px] text-foreground outline-none placeholder:font-sans placeholder:text-panel-muted focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 font-sans w-44 shrink-0"
+              >
+                <option
+                  value="row:month"
+                >
+                  row.month
+                </option>
+                <option
+                  value="row:mrr"
+                >
+                  row.mrr
+                </option>
+                <option
+                  value="input:region"
+                >
+                  input Region
+                </option>
+                <option
+                  value="literal"
+                >
+                  Fixed text
+                </option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+          class="truncate"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Ready
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Review
+            </span>
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+        <div
+          class="flex items-center gap-2 border-l border-panel-border pl-3"
+        >
+          <span>
+            Suggest
+          </span>
+          <kbd
+            aria-label="⌘ ⇧ S"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⇧
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              S
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

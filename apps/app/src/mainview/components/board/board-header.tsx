@@ -1,4 +1,4 @@
-import type { ChangeEvent, KeyboardEvent } from "react";
+import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
 
 import { REFRESH_INTERVALS, RefreshInterval } from "@conch/rpc";
 import { PencilRulerIcon, RotateCwIcon } from "lucide-react";
@@ -32,13 +32,16 @@ export interface BoardHeaderActions {
   onToggleEdit: () => void;
 }
 
+export type HeaderSubject = Pick<Board, "name" | "emoji" | "refresh">;
+
 interface BoardNameProps {
-  board: Board;
+  board: HeaderSubject;
   editing: boolean;
+  label: string;
   onRename: (name: string) => void;
 }
 
-function BoardName({ board, editing, onRename }: BoardNameProps) {
+function BoardName({ board, editing, label, onRename }: BoardNameProps) {
   const [draft, setDraft] = useState(board.name);
   const commit = useCallback(() => {
     const name = draft.trim();
@@ -72,7 +75,7 @@ function BoardName({ board, editing, onRename }: BoardNameProps) {
   }
   return (
     <input
-      aria-label="Board name"
+      aria-label={label}
       className={cn(
         NO_DRAG,
         "h-8 w-64 rounded-[8px] bg-row-hover px-2.5 type-title text-[15px] text-foreground outline-none focus-visible:ring-1 focus-visible:ring-primary/60"
@@ -88,10 +91,12 @@ function BoardName({ board, editing, onRename }: BoardNameProps) {
 }
 
 interface BoardHeaderProps {
-  board: Board;
+  board: HeaderSubject;
   editing: boolean;
   updatedAt: number | null;
   actions: BoardHeaderActions;
+  nameLabel?: string;
+  children?: ReactNode;
 }
 
 export function BoardHeader({
@@ -99,6 +104,8 @@ export function BoardHeader({
   editing,
   updatedAt,
   actions,
+  nameLabel = "Board name",
+  children,
 }: BoardHeaderProps) {
   const now = useNow(MINUTE / 4);
   const { onRefresh, onRefreshInterval, onRename, onToggleEdit } = actions;
@@ -114,6 +121,7 @@ export function BoardHeader({
         board={board}
         editing={editing}
         key={board.name}
+        label={nameLabel}
         onRename={onRename}
       />
       <span
@@ -123,6 +131,7 @@ export function BoardHeader({
         <SwapText value={updatedLabel(updatedAt, now)} />
       </span>
       <div className={cn(NO_DRAG, "ml-auto flex items-center gap-1.5")}>
+        {children}
         <select
           aria-label="Refresh"
           className="h-7 rounded-[7px] bg-row-hover px-2 type-meta text-foreground outline-none focus-visible:ring-1 focus-visible:ring-primary/60"

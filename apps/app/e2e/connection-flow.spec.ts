@@ -47,7 +47,10 @@ test.describe("connection flow", () => {
 
     await search(page).press("Meta+k");
     const menu = page.getByRole("menu", { name: "Actions for scratch" });
-    await expect(menu).toBeFocused();
+    await expect(menu).toBeVisible();
+    await expect(
+      page.getByRole("textbox", { name: "Filter actions" })
+    ).toBeFocused();
 
     await page.keyboard.press("ArrowUp");
     await page.keyboard.press("Enter");

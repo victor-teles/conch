@@ -9,9 +9,10 @@ exports[`assumptionsLine states > matches the filter only snapshot 1`] = `
     class="max-w-full"
   >
     <button
-      aria-label="Refine without status = 'paid'"
+      aria-label="Refine without the “status is paid” filter"
       class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
       tabindex="0"
+      title="status = 'paid'"
       type="button"
     >
       <span
@@ -21,7 +22,7 @@ exports[`assumptionsLine states > matches the filter only snapshot 1`] = `
         <span
           class="inline-block"
         >
-          status = 'paid'
+          status is paid
         </span>
       </span>
     </button>
@@ -68,7 +69,7 @@ exports[`assumptionsLine states > matches the populated snapshot 1`] = `
         <span
           class="inline-block"
         >
-          orders.created_at · by month
+          orders.created_at by month
         </span>
       </span>
     </button>
@@ -77,9 +78,10 @@ exports[`assumptionsLine states > matches the populated snapshot 1`] = `
     class="max-w-full"
   >
     <button
-      aria-label="Refine without status <> 'refunded'"
+      aria-label="Refine without the “status is not refunded” filter"
       class="relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
       tabindex="0"
+      title="status <> 'refunded'"
       type="button"
     >
       <span
@@ -89,7 +91,7 @@ exports[`assumptionsLine states > matches the populated snapshot 1`] = `
         <span
           class="inline-block"
         >
-          status &lt;&gt; 'refunded'
+          status is not refunded
         </span>
       </span>
     </button>

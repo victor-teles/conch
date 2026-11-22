@@ -28,13 +28,13 @@ export const filterOptions = (
 const STEPS: Partial<Record<string, number>> = { ArrowDown: 1, ArrowUp: -1 };
 
 export function SelectPill(props: PillOf<"select">) {
-  const { widgetId, param, value, valueKey, index, active, onCommit } = props;
+  const { owner, param, value, valueKey, index, active, onCommit } = props;
   const target = usePillTarget(props);
   const current = typeof value === "string" ? value : "";
   const [text, setText] = useState(current);
   const [open, setOpen] = useState(false);
   const [moved, setMoved] = useState<number | null>(null);
-  const { ensureLoaded, state } = useParamOptions(widgetId, param);
+  const { ensureLoaded, state } = useParamOptions(owner, param);
   const matches = filterOptions(state.options, text, current).slice(
     0,
     MAX_VISIBLE

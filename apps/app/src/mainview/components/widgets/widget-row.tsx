@@ -10,7 +10,13 @@ import type { Widget, WidgetTrend as WidgetTrendData } from "@/lib/ipc";
 import { ConnectionGlyph } from "@/components/launcher/connections/connection-glyph";
 import { KeyCombo } from "@/components/launcher/key-combo";
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { RowTrailing } from "@/components/launcher/row-trailing";
 import { FreshPulse } from "@/components/motion/fresh-pulse";
+import { SourceGlyph } from "@/components/sources/source-glyph";
+import {
+  sourceNameOf,
+  useSources,
+} from "@/components/sources/sources-provider";
 import { WatchGlyph } from "@/components/watches/watch-glyph";
 import { WidgetTrend } from "@/components/watches/widget-trend";
 import { useMotionPreset } from "@/lib/motion";
@@ -66,6 +72,26 @@ function GlyphSlot({ kind }: { kind: WatchGlyphKind | null }) {
   );
 }
 
+function WidgetGlyph({
+  widget,
+  connection,
+}: Pick<WidgetRowProps, "widget" | "connection">) {
+  const { state } = useSources();
+  const { source } = widget;
+  if (source.kind !== "sql") {
+    return (
+      <SourceGlyph kind={source.kind} name={sourceNameOf(state, source)} />
+    );
+  }
+  return connection ? (
+    <ConnectionGlyph className="relative" connection={connection} />
+  ) : (
+    <span className="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted">
+      <LayoutDashboardIcon aria-hidden className="size-3.5" />
+    </span>
+  );
+}
+
 export function WidgetRow({
   id,
   widget,
@@ -89,13 +115,7 @@ export function WidgetRow({
       selected={selected}
     >
       {handlePulseDone ? <FreshPulse onDone={handlePulseDone} /> : null}
-      {connection ? (
-        <ConnectionGlyph className="relative" connection={connection} />
-      ) : (
-        <span className="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted">
-          <LayoutDashboardIcon aria-hidden className="size-3.5" />
-        </span>
-      )}
+      <WidgetGlyph connection={connection} widget={widget} />
       <span className="relative flex min-w-0 flex-1 items-baseline gap-2">
         <span className="truncate type-body text-foreground">
           {widget.name}
@@ -109,12 +129,14 @@ export function WidgetRow({
         trend={watching.trend}
         widgetId={widget.id}
       />
-      {selected && hasInputs ? (
-        <span className="relative flex shrink-0 items-center gap-1.5 type-meta text-panel-muted">
-          Inputs
-          <KeyCombo keys={["⇥"]} />
-        </span>
-      ) : null}
+      <RowTrailing kind="Widget">
+        {selected && hasInputs ? (
+          <span className="flex items-center gap-1.5">
+            Inputs
+            <KeyCombo keys={["⇥"]} />
+          </span>
+        ) : null}
+      </RowTrailing>
     </LauncherRow>
   );
 }

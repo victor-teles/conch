@@ -1,6 +1,7 @@
 import type { SegmentOption } from "@/components/ui/segmented-control";
 import type { UpdateChannel } from "@/lib/ipc";
 
+import { ConchMark } from "@/components/brand/conch-mark";
 import { SwapText } from "@/components/motion/swap-text";
 import { SegmentedControl } from "@/components/ui/segmented-control";
 
@@ -21,10 +22,13 @@ export function AboutSection() {
   return (
     <SettingsGroup title="About">
       <SettingRow description="The build you are running." label="Version">
-        <SwapText
-          className="font-mono text-[12px] text-panel-muted"
-          value={version ?? "—"}
-        />
+        <span className="flex items-center gap-2">
+          <ConchMark className="size-5 text-brand" />
+          <SwapText
+            className="font-mono text-[12px] text-panel-muted"
+            value={version ?? "—"}
+          />
+        </span>
       </SettingRow>
       <SettingRow
         description="Beta and Nightly get changes sooner, with rougher edges."

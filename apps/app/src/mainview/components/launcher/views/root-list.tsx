@@ -9,6 +9,7 @@ import {
   LauncherSection,
 } from "@/components/launcher/launcher-list";
 import { LauncherNoResults } from "@/components/launcher/launcher-no-results";
+import { ListLayoutContext } from "@/components/launcher/list-layout";
 import { useWidgetWatching } from "@/components/watches/use-widget-watching";
 import { RevealWhenChanged } from "@/components/widgets/reveal-when-changed";
 import { useWidgets } from "@/components/widgets/widgets-provider";
@@ -47,7 +48,11 @@ const REVEALED_SECTIONS = new Set<RootSection["id"]>([
   "alerts",
   "recent",
   "clipboard",
+  "drafts",
 ]);
+
+const resultCount = (count: number) =>
+  `${count} ${count === 1 ? "result" : "results"}`;
 
 const widgetIdsOf = (sections: readonly RootSection[]): string[] =>
   sections.flatMap((section) =>
@@ -114,22 +119,32 @@ export function RootList({
   const renderItem = (item: RootItem) => (
     <RootItemRow context={context} item={item} key={item.id} />
   );
+  const results = sections.find((section) => section.id === "results");
 
   return (
     <>
       {firstRun ? <FirstRunNote /> : null}
       <ConnectionsLoadState />
+      <p aria-live="polite" className="sr-only">
+        {results ? resultCount(results.items.length) : ""}
+      </p>
       {sections.length > 0 ? (
-        <LauncherListbox id={ROOT_LIST_ID} label="Results">
-          {sections.map((section) =>
-            withEntrance(
-              section,
-              <LauncherSection key={section.id} label={section.label}>
-                {section.items.map(renderItem)}
-              </LauncherSection>
-            )
-          )}
-        </LauncherListbox>
+        <ListLayoutContext value={results ? "flat" : "sectioned"}>
+          <LauncherListbox id={ROOT_LIST_ID} label="Results">
+            {sections.map((section) =>
+              withEntrance(
+                section,
+                <LauncherSection
+                  count={section === results ? section.items.length : undefined}
+                  key={section.id}
+                  label={section.label}
+                >
+                  {section.items.map(renderItem)}
+                </LauncherSection>
+              )
+            )}
+          </LauncherListbox>
+        </ListLayoutContext>
       ) : (
         <LauncherNoResults query={query} />
       )}

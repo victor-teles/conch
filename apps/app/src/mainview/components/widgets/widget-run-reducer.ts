@@ -10,6 +10,7 @@ export interface WidgetRunFailure {
 export interface WidgetRunState {
   status: WidgetRunStatus;
   runId: string | null;
+  lastRunId: string | null;
   values: ParamValues;
   outcome: WidgetRunResult | null;
   failure: WidgetRunFailure | null;
@@ -25,6 +26,7 @@ export type WidgetRunAction =
 export const initialWidgetRun = (values: ParamValues): WidgetRunState => ({
   completedRuns: 0,
   failure: null,
+  lastRunId: null,
   outcome: null,
   runId: null,
   status: "idle",
@@ -52,6 +54,7 @@ export const widgetRunReducer = (
       return {
         ...state,
         completedRuns: state.completedRuns + 1,
+        lastRunId: action.runId,
         outcome: action.outcome,
         runId: null,
         status: "done",

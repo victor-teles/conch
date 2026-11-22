@@ -1,0 +1,157 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`theme editor > blocks saving a theme whose text cannot be read 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  class="flex min-h-11 items-center gap-3 px-4 py-1.5"
+  data-token="foreground"
+  role="group"
+>
+  <div
+    class="flex min-w-0 flex-1 flex-col"
+  >
+    <span
+      class="truncate type-body text-foreground"
+      id="_r_id_"
+    >
+      Text
+    </span>
+    <span
+      class="truncate type-meta text-danger-ink"
+      data-level="block"
+    >
+      1.0:1 on Background, aim for 4.5
+    </span>
+  </div>
+  <div
+    class="flex shrink-0 flex-col items-end gap-1"
+  >
+    <div
+      class="flex items-center gap-1.5"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="dialog"
+        aria-label="Pick Text"
+        class="size-7 rounded-[7px] ring-1 ring-panel-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-base-ui-click-trigger=""
+        data-slot="popover-trigger"
+        id="base-ui-_r_id_"
+        style="background-color: rgb(22, 22, 22)"
+        tabindex="0"
+        type="button"
+      />
+      <input
+        aria-label="Text hex"
+        class="h-7 rounded-[7px] bg-row-hover px-2 font-mono type-meta text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring aria-invalid:ring-2 aria-invalid:ring-destructive w-[88px]"
+        spellcheck="false"
+        value="#161616"
+      />
+      <span
+        aria-hidden="true"
+        class="w-12"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme editor > notes a weak pair and counts it in the footer 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  class="flex min-h-11 items-center gap-3 px-4 py-1.5"
+  data-token="foreground"
+  role="group"
+>
+  <div
+    class="flex min-w-0 flex-1 flex-col"
+  >
+    <span
+      class="truncate type-body text-foreground"
+      id="_r_id_"
+    >
+      Text
+    </span>
+  </div>
+  <div
+    class="flex shrink-0 flex-col items-end gap-1"
+  >
+    <div
+      class="flex items-center gap-1.5"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="dialog"
+        aria-label="Pick Text"
+        class="size-7 rounded-[7px] ring-1 ring-panel-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-base-ui-click-trigger=""
+        data-slot="popover-trigger"
+        id="base-ui-_r_id_"
+        style="background-color: oklch(0.96 0 0)"
+        tabindex="0"
+        type="button"
+      />
+      <input
+        aria-label="Text hex"
+        class="h-7 rounded-[7px] bg-row-hover px-2 font-mono type-meta text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring aria-invalid:ring-2 aria-invalid:ring-destructive w-[88px]"
+        spellcheck="false"
+        value="#f2f2f2"
+      />
+      <span
+        aria-hidden="true"
+        class="w-12"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme editor > starts a copy named after its source and reads as readable 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  class="flex min-h-11 items-center gap-3 px-4 py-1.5"
+  data-token="foreground"
+  role="group"
+>
+  <div
+    class="flex min-w-0 flex-1 flex-col"
+  >
+    <span
+      class="truncate type-body text-foreground"
+      id="_r_id_"
+    >
+      Text
+    </span>
+  </div>
+  <div
+    class="flex shrink-0 flex-col items-end gap-1"
+  >
+    <div
+      class="flex items-center gap-1.5"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="dialog"
+        aria-label="Pick Text"
+        class="size-7 rounded-[7px] ring-1 ring-panel-border outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        data-base-ui-click-trigger=""
+        data-slot="popover-trigger"
+        id="base-ui-_r_id_"
+        style="background-color: oklch(0.96 0 0)"
+        tabindex="0"
+        type="button"
+      />
+      <input
+        aria-label="Text hex"
+        class="h-7 rounded-[7px] bg-row-hover px-2 font-mono type-meta text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring aria-invalid:ring-2 aria-invalid:ring-destructive w-[88px]"
+        spellcheck="false"
+        value="#f2f2f2"
+      />
+      <span
+        aria-hidden="true"
+        class="w-12"
+      />
+    </div>
+  </div>
+</div>
+`;

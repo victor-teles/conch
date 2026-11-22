@@ -89,9 +89,11 @@ test.describe("refine flow", () => {
 
     const assumptions = page.getByRole("list", { name: "Assumptions" });
     await assumptions
-      .getByRole("button", { name: "Refine without s.status = 'active'" })
+      .getByRole("button", {
+        name: "Refine without the “status is active” filter",
+      })
       .click();
-    await expect(input).toHaveValue("without s.status = 'active'");
+    await expect(input).toHaveValue("drop the “status is active” filter");
     await expect(input).toBeFocused();
 
     await input.fill("");
@@ -126,7 +128,10 @@ test.describe("refine flow", () => {
     const [saved] = await ipcCalls(page, "saveWidget");
     expect(saved?.payload.widget).toMatchObject({
       prompt: "Revenue by region · only Europe",
-      sqlTemplate: expect.stringContaining("r.name = 'Europe'"),
+      source: {
+        kind: "sql",
+        sqlTemplate: expect.stringContaining("r.name = 'Europe'"),
+      },
       view: "table",
     });
     expect((await ipcCalls(page, "describeSql")).length).toBeGreaterThanOrEqual(

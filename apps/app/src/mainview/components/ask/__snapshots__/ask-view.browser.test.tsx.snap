@@ -9,7 +9,7 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -46,7 +46,7 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
             aria-label="Ask a question"
             aria-placeholder="Ask about your data…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value="Revenue by region"
@@ -92,7 +92,7 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -130,13 +130,8 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -145,11 +140,6 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
             >
               PostgreSQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -216,8 +206,8 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
             class="sr-only"
           />
           <button
-            aria-expanded="true"
-            aria-label="Hide SQL"
+            aria-expanded="false"
+            aria-label="Show SQL"
             class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
             tabindex="0"
             type="button"
@@ -248,795 +238,8 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
       </div>
       <div>
         <div
-          aria-label="Generated SQL"
-          class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
-          data-state="settled"
-          role="region"
-          tabindex="0"
+          data-slot="ask-body"
         >
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              1
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-panel-muted italic"
-              >
-                -- Monthly recurring revenue by region in 2026
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              2
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                select
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-4"
-              >
-                date_trunc
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                (
-              </span>
-              <span
-                class="text-chart-5"
-              >
-                'month'
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                billed_at
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                )
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ::
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                date
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                as
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                month
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              3
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-foreground"
-              >
-                       
-              </span>
-              <span
-                class="text-foreground"
-              >
-                r
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                name
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                as
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                region
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              4
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-foreground"
-              >
-                       
-              </span>
-              <span
-                class="text-chart-4"
-              >
-                sum
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                (
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                amount_cents
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                )
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                /
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                100.0
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                as
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                mrr
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              5
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                from
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                subscriptions
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              6
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                join
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                accounts
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                a
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                on
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                a
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                id
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                =
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                account_id
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              7
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                join
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                regions
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                r
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                on
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                r
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                id
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                =
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                a
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                region_id
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              8
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                where
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                billed_at
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                &gt;=
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                date
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-5"
-              >
-                '2026-01-01'
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              9
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-foreground"
-              >
-                  
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                and
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                status
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                =
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-5"
-              >
-                'active'
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              10
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                group
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                by
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                1
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                2
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              11
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                order
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                by
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                1
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                2
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              12
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                limit
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-2"
-              >
-                500
-              </span>
-            </code>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div />
-        <div>
           <div
             class="flex items-start gap-2.5 px-4 pt-3 pb-2"
           >
@@ -1168,10 +371,11 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -1189,7 +393,9 @@ exports[`askView designed states > matches the snapshot for running 1`] = `
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1251,7 +457,7 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1288,7 +494,7 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""
@@ -1344,7 +550,7 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -1382,13 +588,8 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -1399,11 +600,6 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -1411,11 +607,6 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
             >
               1 row
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -1526,7 +717,9 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -1682,10 +875,11 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -1703,7 +897,9 @@ exports[`askView designed states > matches the snapshot for the KPI card 1`] = `
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -1821,7 +1017,7 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -1858,7 +1054,7 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
             aria-label="Ask a question"
             aria-placeholder="Ask about your data…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value="Revenue by region"
@@ -1903,7 +1099,7 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -1941,13 +1137,8 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -1956,11 +1147,6 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
             >
               PostgreSQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -2087,7 +1273,9 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="px-4 pt-1 pb-4"
           >
@@ -2152,10 +1340,11 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -2173,7 +1362,9 @@ exports[`askView designed states > matches the snapshot for the NO_AI_SETTINGS e
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -2266,7 +1457,7 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -2303,7 +1494,7 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
             aria-label="Ask a question"
             aria-placeholder="Ask about your data…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value="delete all users"
@@ -2348,7 +1539,7 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -2386,13 +1577,8 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -2401,11 +1587,6 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
             >
               PostgreSQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -2598,7 +1779,9 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="px-4 pt-1 pb-4"
           >
@@ -2661,10 +1844,11 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -2682,7 +1866,9 @@ exports[`askView designed states > matches the snapshot for the NOT_READ_ONLY er
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -2800,7 +1986,7 @@ exports[`askView designed states > matches the snapshot for the populated line c
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -2837,7 +2023,7 @@ exports[`askView designed states > matches the snapshot for the populated line c
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""
@@ -2893,7 +2079,7 @@ exports[`askView designed states > matches the snapshot for the populated line c
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -2931,13 +2117,8 @@ exports[`askView designed states > matches the snapshot for the populated line c
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -2948,11 +2129,6 @@ exports[`askView designed states > matches the snapshot for the populated line c
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -2960,11 +2136,6 @@ exports[`askView designed states > matches the snapshot for the populated line c
             >
               27 rows
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -3075,7 +2246,9 @@ exports[`askView designed states > matches the snapshot for the populated line c
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -3757,10 +2930,11 @@ exports[`askView designed states > matches the snapshot for the populated line c
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -3778,7 +2952,9 @@ exports[`askView designed states > matches the snapshot for the populated line c
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -3896,7 +3072,7 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -3933,7 +3109,7 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""
@@ -3989,7 +3165,7 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -4027,13 +3203,8 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -4044,11 +3215,6 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
             </span>
           </span>
           <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
-          <span
             data-slot="swap-text"
           >
             <span
@@ -4056,11 +3222,6 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
             >
               27 rows
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -4171,7 +3332,9 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
         </div>
       </div>
       <div>
-        <div>
+        <div
+          data-slot="ask-body"
+        >
           <div
             class="relative"
           >
@@ -4922,25 +4085,6 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
                   <div
                     class="flex gap-2 px-4 pt-1 pb-4"
                   >
-                    <svg
-                      aria-hidden="true"
-                      class="lucide lucide-dot mt-0.5 size-3.5 shrink-0 text-panel-muted"
-                      fill="none"
-                      height="24"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="12.1"
-                        cy="12.1"
-                        r="1"
-                      />
-                    </svg>
                     <p
                       class="line-clamp-2 type-body text-panel-muted"
                     >
@@ -4959,10 +4103,11 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -4980,7 +4125,9 @@ exports[`askView designed states > matches the snapshot for the table view 1`] =
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"
@@ -5098,7 +4245,7 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
     class="flex min-h-0 flex-col"
   >
     <div
-      class="relative z-20 flex h-14 shrink-0 items-center gap-2.5 px-4"
+      class="relative z-30 flex h-14 shrink-0 items-center gap-2.5 px-4"
     >
       <span
         aria-label="Active connection: analytics"
@@ -5135,7 +4282,7 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
             aria-label="Ask a question"
             aria-placeholder="Ask about your data…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value="Revenue by region"
@@ -5181,7 +4328,7 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
       </button>
     </div>
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-y-auto border-t border-panel-border"
+      class="relative flex min-h-0 flex-1 launcher-body flex-col overflow-y-auto"
       style="min-height: 0px"
     >
       <div
@@ -5219,13 +4366,8 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
           Generated SQL
         </h2>
         <p
-          class="flex min-w-0 items-center gap-1.5 truncate type-meta text-panel-muted tabular-nums"
+          class="ml-1 flex min-w-0 items-center gap-3 truncate type-meta text-panel-muted tabular-nums"
         >
-          <span
-            aria-hidden="true"
-          >
-            ·
-          </span>
           <span
             data-slot="swap-text"
           >
@@ -5234,11 +4376,6 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
             >
               PostgreSQL
             </span>
-          </span>
-          <span
-            aria-hidden="true"
-          >
-            ·
           </span>
           <span
             data-slot="swap-text"
@@ -5305,8 +4442,8 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
             class="sr-only"
           />
           <button
-            aria-expanded="true"
-            aria-label="Hide SQL"
+            aria-expanded="false"
+            aria-label="Show SQL"
             class="grid size-6 place-items-center rounded-[6px] text-panel-muted hover:bg-row-hover hover:text-foreground disabled:opacity-40"
             tabindex="0"
             type="button"
@@ -5337,238 +4474,8 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
       </div>
       <div>
         <div
-          aria-label="Generated SQL"
-          class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60 h-[220px]"
-          data-state="streaming"
-          role="region"
-          tabindex="0"
+          data-slot="ask-body"
         >
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              1
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-panel-muted italic"
-              >
-                -- Monthly recurring revenue by region in 2026
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              2
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-chart-1"
-              >
-                select
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-4"
-              >
-                date_trunc
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                (
-              </span>
-              <span
-                class="text-chart-5"
-              >
-                'month'
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                billed_at
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                )
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ::
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                date
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                as
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                month
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              3
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-foreground"
-              >
-                       
-              </span>
-              <span
-                class="text-foreground"
-              >
-                r
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                .
-              </span>
-              <span
-                class="text-foreground"
-              >
-                name
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-chart-1"
-              >
-                as
-              </span>
-              <span
-                class="text-foreground"
-              >
-                 
-              </span>
-              <span
-                class="text-foreground"
-              >
-                region
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                ,
-              </span>
-            </code>
-          </div>
-          <div
-            class="relative flex"
-          >
-            <span
-              aria-hidden="true"
-              class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
-            >
-              4
-            </span>
-            <code
-              class="min-w-0 flex-1 break-words whitespace-pre-wrap"
-            >
-              <span
-                class="text-foreground"
-              >
-                       
-              </span>
-              <span
-                class="text-chart-4"
-              >
-                sum
-              </span>
-              <span
-                class="text-panel-muted"
-              >
-                (
-              </span>
-              <span
-                class="text-foreground"
-              >
-                s
-              </span>
-              <span
-                aria-hidden="true"
-                class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1"
-                data-testid="sql-caret"
-              />
-            </code>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div />
-        <div>
           <div
             class="flex items-start gap-2.5 px-4 pt-3 pb-2"
           >
@@ -5700,10 +4607,11 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
       />
     </div>
     <footer
-      class="flex h-9 shrink-0 items-center justify-between gap-3 border-t border-panel-border px-4 type-meta text-panel-muted"
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
     >
       <div
-        class="flex min-w-0 items-center gap-2"
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
       >
         <span
           aria-hidden="true"
@@ -5721,7 +4629,9 @@ exports[`askView designed states > matches the snapshot for writing SQL 1`] = `
         </span>
       </div>
       <div
-        class="flex shrink-0 items-center gap-3"
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="fade"
+        data-slot="footer-actions"
       >
         <div
           class="flex items-center gap-2"

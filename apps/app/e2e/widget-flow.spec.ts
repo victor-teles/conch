@@ -81,6 +81,7 @@ test.describe("widget flow", () => {
     await expect(root).toBeVisible();
     await root.fill("revenue by region");
     await root.press("ArrowDown");
+    await root.press("ArrowDown");
     const widgetRow = page.getByRole("option", { name: /Revenue by region/ });
     await expect(widgetRow).toHaveAttribute("aria-selected", "true");
 

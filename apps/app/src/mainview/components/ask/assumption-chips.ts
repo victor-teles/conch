@@ -8,6 +8,7 @@ export interface ChipPrefill {
 export interface AssumptionChip {
   key: string;
   label: string;
+  detail: string | null;
   prefill: ChipPrefill | null;
   actionLabel: string | null;
 }
@@ -32,8 +33,9 @@ const timeChip = (
   if (!item.grain) {
     return {
       actionLabel: `Use another date column than ${item.column}`,
+      detail: null,
       key: "time",
-      label: item.column,
+      label: item.range ?? item.column,
       prefill: selecting(
         `use another date column than ${item.column}`,
         "another date column"
@@ -43,8 +45,9 @@ const timeChip = (
   const alternate = ALTERNATE_GRAIN[item.grain];
   return {
     actionLabel: `Group by ${alternate} instead of ${item.grain}`,
+    detail: null,
     key: "time",
-    label: `${item.column} · by ${item.grain}`,
+    label: `${item.column} by ${item.grain}`,
     prefill: selecting(
       `group by ${alternate} instead of by ${item.grain}`,
       alternate
@@ -59,15 +62,17 @@ const chipOf = (item: SqlAssumption): AssumptionChip | null => {
     }
     case "filter": {
       return {
-        actionLabel: `Refine without ${item.text}`,
+        actionLabel: `Refine without the “${item.label}” filter`,
+        detail: item.text,
         key: `filter:${item.text}`,
-        label: item.text,
-        prefill: { selection: null, text: `without ${item.text}` },
+        label: item.label,
+        prefill: { selection: null, text: `drop the “${item.label}” filter` },
       };
     }
     case "limit": {
       return {
         actionLabel: "Refine to show all rows",
+        detail: null,
         key: "limit",
         label: `top ${item.rows}`,
         prefill: {
@@ -94,6 +99,7 @@ export const assumptionChips = (
       ? [
           {
             actionLabel: null,
+            detail: null,
             key: "tables",
             label: tables.join(", "),
             prefill: null,

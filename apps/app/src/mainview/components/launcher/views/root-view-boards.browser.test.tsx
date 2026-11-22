@@ -18,13 +18,20 @@ import { RootView } from "./root-view";
 
 const navigation = (): RootNavigation => ({
   addToBoard: vi.fn(),
+  buildApp: vi.fn(),
+  changeApp: vi.fn(),
   dismiss: vi.fn(),
   editConnection: vi.fn(),
   newBoard: vi.fn(),
+  newSourceWidget: vi.fn(),
+  openActivity: vi.fn(),
+  openApp: vi.fn(),
   openBoard: vi.fn(),
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
+  renameApp: vi.fn(),
   renameBoard: vi.fn(),
   runWidget: vi.fn(),
   watchWidget: vi.fn(),
@@ -106,16 +113,30 @@ const selectRow = async (screen: Screen, id: string) => {
 
 const openActions = async (screen: Screen) => {
   await userEvent.keyboard("{Meta>}k{/Meta}");
-  await expect.element(screen.getByRole("menu")).toHaveFocus();
+  await expect.element(screen.getByRole("menu")).toBeVisible();
+  await expect
+    .element(screen.getByRole("textbox", { name: "Filter actions" }))
+    .toHaveFocus();
 };
 
 const menuLabels = (screen: Screen) =>
   screen
     .getByRole("menuitem")
     .all()
-    .map((item) => item.element().textContent);
+    .map(
+      (item) =>
+        item.element().querySelector('[data-slot="swap-text"]')?.textContent
+    );
 
 describe("root view boards", () => {
+  it("renames a board on Command-Enter, the action its menu marks ⌘↩", async () => {
+    const { navigate, screen } = await setup();
+    await selectRow(screen, boardItemId("b-ops"));
+    await userEvent.keyboard("{Meta>}{Enter}{/Meta}");
+    expect(navigate.renameBoard).toHaveBeenCalledWith(ops);
+    expect(navigate.openBoard).not.toHaveBeenCalled();
+  });
+
   it("lists boards with their tile counts in their own section", async () => {
     const { screen } = await setup();
     const section = screen.getByRole("group", { name: "Boards" });
@@ -141,6 +162,7 @@ describe("root view boards", () => {
       "Open",
       "Rename",
       "Duplicate",
+      "Copy Link",
       "Export Board",
       "Delete",
     ]);
@@ -185,6 +207,7 @@ describe("root view boards", () => {
     expect(menuLabels(screen)).toStrictEqual([
       "Run",
       "Add to Board…",
+      "Copy Link",
       "Export Widget",
       "Watch…",
     ]);

@@ -10,6 +10,7 @@ import {
   chartModelOf,
   humanize,
   inferView,
+  insightOf,
   latestValues,
   OTHER_LABEL,
   pivotLongToWide,
@@ -349,5 +350,28 @@ describe("helpers", () => {
     expect(humanize("total_spent_cents")).toBe("Total spent cents");
     expect(viewKindOf(mrrView)).toBe("line");
     expect(viewKindOf({ kind: "table" })).toBe("table");
+  });
+});
+
+describe("insightOf", () => {
+  const withInsight = (insight: string | undefined): CardSpec => ({
+    ...specOf({ kind: "table" }),
+    insight,
+    title: "Monthly revenue this year",
+  });
+
+  it("keeps an insight that says something new", () => {
+    expect(insightOf(withInsight(" Europe grew 14% in Q3. "))).toBe(
+      "Europe grew 14% in Q3."
+    );
+  });
+
+  it.each([
+    undefined,
+    "",
+    "Monthly revenue this year.",
+    "monthly  REVENUE this year",
+  ])("drops %j because it is missing or restates the title", (insight) => {
+    expect(insightOf(withInsight(insight))).toBeNull();
   });
 });

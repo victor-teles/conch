@@ -3,6 +3,7 @@ import { HistoryIcon } from "lucide-react";
 import type { RecentAsk } from "@/lib/ipc";
 
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { RowTrailing } from "@/components/launcher/row-trailing";
 
 interface RecentRowProps {
   id: string;
@@ -29,9 +30,12 @@ export function RecentRow({
       <span className="relative flex min-w-0 flex-1 items-baseline gap-2">
         <span className="truncate type-body text-foreground">{ask.prompt}</span>
         <span className="truncate type-meta text-panel-muted">
-          {connectionName ?? ask.spec.title}
+          {ask.spec.title}
         </span>
       </span>
+      {connectionName ? (
+        <RowTrailing kind="Recent">{connectionName}</RowTrailing>
+      ) : null}
     </LauncherRow>
   );
 }

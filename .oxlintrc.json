@@ -9,6 +9,7 @@
     ".agents/**",
     ".claude/**",
     "apps/app/scripts/**",
+    "apps/video/capture/**",
     "apps/app/e2e/**"
   ],
   "plugins": ["unicorn", "typescript", "react", "import", "promise"],

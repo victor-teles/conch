@@ -9,11 +9,13 @@ import type { ConnectionAction } from "./connection-actions";
 import { useConnections } from "./connections-provider";
 
 interface UseConnectionActionsMenuOptions {
+  onActivate: (connection: DatabaseConnection) => void;
   onEdit: (connectionId: string) => void;
   onClosed: () => void;
 }
 
 export const useConnectionActionsMenu = ({
+  onActivate,
   onEdit,
   onClosed,
 }: UseConnectionActionsMenuOptions) => {
@@ -43,6 +45,10 @@ export const useConnectionActionsMenu = ({
       }
       close();
       switch (action.id) {
+        case "use": {
+          onActivate(connection);
+          break;
+        }
         case "edit": {
           onEdit(connection.id);
           break;
@@ -68,7 +74,7 @@ export const useConnectionActionsMenu = ({
         }
       }
     },
-    [arm, armed, close, onEdit, operations]
+    [arm, armed, close, onActivate, onEdit, operations]
   );
 
   return { armed, close, open, openId, run };

@@ -33,14 +33,31 @@ export const workAreaForPoint = (
   fallback: Rect
 ): Rect => workAreas.find((area) => contains(area, point)) ?? fallback;
 
+const launcherTop = (workArea: Rect): number =>
+  Math.round(workArea.y + workArea.height * TOP_OFFSET_RATIO);
+
+// The tallest window that still ends above the Dock on this display.
+export const heightRoom = (workArea: Rect): number =>
+  Math.max(
+    LAUNCHER_MIN_HEIGHT,
+    Math.min(
+      LAUNCHER_MAX_HEIGHT,
+      Math.floor(workArea.y + workArea.height - launcherTop(workArea))
+    )
+  );
+
 export const launcherFrame = (workArea: Rect, height: number): Rect => ({
-  height: clampLauncherHeight(height),
+  height: Math.min(clampLauncherHeight(height), heightRoom(workArea)),
   width: LAUNCHER_WINDOW_WIDTH,
   x: Math.round(workArea.x + (workArea.width - LAUNCHER_WINDOW_WIDTH) / 2),
-  y: Math.round(workArea.y + workArea.height * TOP_OFFSET_RATIO),
+  y: launcherTop(workArea),
 });
 
-export const resizedFrame = (current: Rect, height: number): Rect => ({
+export const resizedFrame = (
+  current: Rect,
+  height: number,
+  room: number = LAUNCHER_MAX_HEIGHT
+): Rect => ({
   ...current,
-  height: clampLauncherHeight(height),
+  height: Math.min(clampLauncherHeight(height), room),
 });

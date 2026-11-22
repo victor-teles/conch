@@ -41,4 +41,11 @@ describe("useCopyFeedback", () => {
     await result.current.copy("select 3");
     expect(result.current.copied).toBeFalsy();
   });
+
+  it("flashes copied for a copy another process made", async () => {
+    const { result } = renderHook(() => useCopyFeedback());
+
+    result.current.flash();
+    await expect.poll(() => result.current.copied).toBeTruthy();
+  });
 });

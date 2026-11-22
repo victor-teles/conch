@@ -34,6 +34,7 @@ export interface ResultContext {
   hasSql: boolean;
   hasRows: boolean;
   view: CardViewKind | null;
+  copyLabel?: string;
 }
 
 const IMAGE_VIEWS: ReadonlySet<CardViewKind> = new Set([
@@ -50,6 +51,7 @@ export const exportActions = ({
   hasSql,
   hasRows,
   view,
+  copyLabel = "Copy SQL",
 }: ResultContext): ResultAction<ExportActionId>[] => {
   const noRows = !hasRows;
   const actions: ResultAction<ExportActionId>[] = [
@@ -58,7 +60,7 @@ export const exportActions = ({
       icon: ClipboardCopyIcon,
       id: "copy-sql",
       keys: ["⌘", "C"],
-      label: "Copy SQL",
+      label: copyLabel,
       tone: "default",
     },
     {

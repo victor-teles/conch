@@ -7,6 +7,8 @@ import type {
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
+  GuardedWrite,
+  GuardedWriteOptions,
   IndexItem,
   Pool,
   SchemaInfo,
@@ -21,7 +23,12 @@ import type {
   Request as MssqlRequest,
 } from "mssql";
 
-import { DbError, validateSchemaName } from "@conch/core";
+import {
+  DbError,
+  tooManyRows,
+  validateSchemaName,
+  WRITE_STATEMENT_TIMEOUT_MS,
+} from "@conch/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "MSSQL pool is closed");
 
@@ -111,7 +118,7 @@ function quoteIdentifier(name: string): string {
   return `[${name.replaceAll("]", "]]")}]`;
 }
 
-export class MssqlPool implements Pool {
+export class MssqlPool implements Pool, GuardedWrite {
   readonly dialect: DialectType = "tsql";
   readonly supportsExplain = false;
   #pool: ConnectionPool | null;
@@ -224,6 +231,63 @@ export class MssqlPool implements Pool {
       throw mapMssqlError(error);
     } finally {
       signal.removeEventListener("abort", onAbort);
+    }
+  }
+
+  async executeWrite(
+    sql: string,
+    params: BindValue[],
+    { schema, maxAffectedRows, signal }: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }> {
+    if (signal.aborted) {
+      throw signal.reason instanceof DbError
+        ? signal.reason
+        : DbError.cancelled();
+    }
+    if (schema) {
+      validateSchemaName(schema);
+    }
+    const transaction = this.#requirePool().transaction();
+    await transaction.begin();
+    const request = transaction.request();
+    const cancel = () => {
+      try {
+        request.cancel();
+      } catch {
+        // best-effort
+      }
+    };
+    const timer = setTimeout(cancel, WRITE_STATEMENT_TIMEOUT_MS);
+    signal.addEventListener("abort", cancel, { once: true });
+    try {
+      if (schema) {
+        await request.query(`USE ${quoteIdentifier(schema)}`);
+      }
+      bindParams(request, params);
+      const result = await request.query(sql);
+      const affectedRows = result.rowsAffected.reduce(
+        (sum, count) => sum + count,
+        0
+      );
+      if (affectedRows > maxAffectedRows) {
+        throw tooManyRows(affectedRows, maxAffectedRows);
+      }
+      if (signal.aborted) {
+        throw DbError.cancelled();
+      }
+      await transaction.commit();
+      return { affectedRows };
+    } catch (error) {
+      await transaction.rollback().catch(() => null);
+      if (signal.aborted) {
+        throw signal.reason instanceof DbError
+          ? signal.reason
+          : DbError.cancelled();
+      }
+      throw mapMssqlError(error);
+    } finally {
+      clearTimeout(timer);
+      signal.removeEventListener("abort", cancel);
     }
   }
 

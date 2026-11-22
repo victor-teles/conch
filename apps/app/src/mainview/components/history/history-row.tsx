@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 
 import { LauncherRow } from "@/components/launcher/launcher-row";
 import { FADE_OUT, staggerDelay, useMotionPreset } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 import type { HistoryMatch } from "./history-search";
 
@@ -23,6 +24,16 @@ const DAY_IN_YEAR = new Intl.DateTimeFormat("en-GB", {
 });
 
 const sameDay = (a: Date, b: Date) => a.toDateString() === b.toDateString();
+
+const isComment = (line: string) => line.trimStart().startsWith("--");
+
+// The first line of actual SQL, whitespace collapsed; generated SQL often
+// opens with a comment that only repeats the title.
+export const firstQueryLine = (sql: string): string => {
+  const lines = sql.split("\n").filter((line) => line.trim());
+  const first = lines.find((line) => !isComment(line)) ?? lines[0] ?? "";
+  return first.replaceAll(/\s+/gu, " ").trim();
+};
 
 export const askedWhen = (askedAt: string, now: Date): string => {
   const date = new Date(askedAt);
@@ -134,25 +145,33 @@ export function HistoryRow({
         onHover={handleHover}
         onRun={handleRun}
         selected={match.id === context.selectedId}
+        size="tall"
       >
         <span className="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted">
           <HistoryIcon aria-hidden className="size-3.5" />
         </span>
-        <span className="relative flex min-w-0 flex-1 items-baseline gap-2">
-          <span className="min-w-0 flex-1 truncate type-body text-foreground">
-            <HighlightedPrompt
-              matches={match.promptMatches}
-              prompt={ask.prompt}
-            />
+        <span className="relative flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="flex min-w-0 items-baseline gap-2">
+            <span className="min-w-0 flex-1 truncate type-body text-foreground">
+              <HighlightedPrompt
+                matches={match.promptMatches}
+                prompt={ask.prompt}
+              />
+            </span>
+            <span className="shrink-0 type-meta text-panel-muted tabular-nums">
+              {when}
+            </span>
           </span>
-          <span className="max-w-[55%] min-w-0 truncate type-meta text-panel-muted">
-            <span className={connectionName === null ? "italic" : undefined}>
+          <span className="flex min-w-0 items-baseline gap-1.5 type-meta text-panel-muted">
+            <span
+              className={cn("shrink-0", connectionName === null && "italic")}
+            >
               {connectionName ?? "connection removed"}
             </span>
-            {[ask.spec.title, when]
-              .filter(Boolean)
-              .map((part) => ` · ${part}`)
-              .join("")}
+            <span aria-hidden>·</span>
+            <span className="min-w-0 truncate font-mono text-[12px]">
+              {firstQueryLine(ask.sql)}
+            </span>
           </span>
         </span>
       </LauncherRow>

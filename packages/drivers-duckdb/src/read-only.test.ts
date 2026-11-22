@@ -1,6 +1,10 @@
 import type { TabularResult } from "@conch/core";
 
 import { DuckDBInstance } from "@duckdb/node-api";
+import { randomUUID } from "node:crypto";
+import { rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { DuckdbPool } from "./pool.ts";
@@ -91,6 +95,94 @@ describe("duckdbPool.execute params", () => {
       })
     ).rejects.toThrow(/read-only/);
     await expect(count(pool, false)).resolves.toBe(1);
+    await pool.close();
+  });
+});
+
+const CANARY = "canary-local-file-contents";
+
+const withCanary = async <T>(work: (path: string) => Promise<T>) => {
+  const path = join(tmpdir(), `conch-canary-${randomUUID()}.txt`);
+  await writeFile(path, CANARY);
+  try {
+    return await work(path);
+  } finally {
+    await rm(path, { force: true });
+  }
+};
+
+const readOnlyRun = (pool: DuckdbPool, sql: string) =>
+  pool.execute(sql, 10, null, signal(), { readOnly: true });
+
+describe("duckdbPool.execute read-only sources", () => {
+  it.each([
+    [
+      "a file table function",
+      (path: string) => `select * from read_text('${path}')`,
+    ],
+    ["a blob reader", (path: string) => `select * from read_blob('${path}')`],
+    ["a quoted path", (path: string) => `select * from '${path}'`],
+    [
+      "a reader inside a CTE",
+      (path: string) =>
+        `with f as (select content from read_text('${path}')) select * from t, f`,
+    ],
+    [
+      "a reader inside a scalar subquery",
+      (path: string) =>
+        `select (select content from read_text('${path}')) as c`,
+    ],
+    ["dynamic SQL", () => "select * from query('select 1')"],
+  ])("refuses %s", async (_label, sqlFor) => {
+    const pool = await seededPool();
+    await withCanary(async (path) => {
+      await expect(readOnlyRun(pool, sqlFor(path))).rejects.toMatchObject({
+        code: "NOT_READ_ONLY",
+      });
+    });
+    await pool.close();
+  });
+
+  it("refuses more than one statement", async () => {
+    const pool = await seededPool();
+    await expect(readOnlyRun(pool, "select 1; select 2")).rejects.toMatchObject(
+      { code: "NOT_READ_ONLY" }
+    );
+    await pool.close();
+  });
+
+  it("still runs reads of its own tables, row generators and SHOW", async () => {
+    const pool = await seededPool();
+    const own = (await readOnlyRun(
+      pool,
+      "select id, n from t, range(2) as r(n) order by n"
+    )) as TabularResult;
+    expect(own.rows).toStrictEqual([
+      [1, "0"],
+      [1, "1"],
+    ]);
+    const shown = (await readOnlyRun(pool, "show tables")) as TabularResult;
+    expect(shown.rows).toStrictEqual([["t"]]);
+    await pool.close();
+  });
+
+  it("keeps the syntax error for a query that does not parse", async () => {
+    const pool = await seededPool();
+    await expect(readOnlyRun(pool, "selec 1")).rejects.toThrow(/syntax/i);
+    await pool.close();
+  });
+
+  it("leaves file access to queries the user runs directly", async () => {
+    const pool = await seededPool();
+    await withCanary(async (path) => {
+      const result = (await pool.execute(
+        `select content from read_text('${path}')`,
+        10,
+        null,
+        signal()
+      )) as TabularResult;
+      expect(result.rows).toStrictEqual([[CANARY]]);
+    });
     await pool.close();
   });
 });

@@ -25,5 +25,11 @@
     "functions": ["clsx", "cn"],
     "preserveWhitespace": true,
   },
-  "ignorePatterns": ["**/*.gen.ts", ".agents/**", ".claude/**"],
+  "ignorePatterns": [
+    "**/*.gen.ts",
+    ".agents/**",
+    ".claude/**",
+    "**/.impeccable/hook.*.json",
+    "**/.impeccable/config.local.json",
+  ],
 }

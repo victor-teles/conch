@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { LayoutGroup, motion } from "motion/react";
 
@@ -6,19 +6,27 @@ import { useMotionPreset } from "@/lib/motion";
 
 import type { Presence } from "./use-launcher-presence";
 
+import { PANEL_MARGIN } from "./panel-height";
 import { useWindowHeightSync } from "./use-window-height-sync";
 
-export const PANEL_MARGIN = 20;
-const PANEL_MAX_HEIGHT = 680;
+type FrameStyle = CSSProperties & Record<"--panel-max-height", string>;
+
+// Views that hold a fixed frame read the panel's cap from this variable.
+const frameStyle = (maxHeight: number): FrameStyle => ({
+  "--panel-max-height": `${maxHeight}px`,
+  padding: PANEL_MARGIN,
+});
 
 interface LauncherSurfaceProps {
   presence: Presence;
+  maxHeight: number;
   onPresenceSettled: (definition: unknown) => void;
   children: ReactNode;
 }
 
 export function LauncherSurface({
   presence,
+  maxHeight,
   onPresenceSettled,
   children,
 }: LauncherSurfaceProps) {
@@ -46,11 +54,11 @@ export function LauncherSurface({
   return (
     <div
       className="flex h-screen w-screen items-start justify-center"
-      style={{ padding: PANEL_MARGIN }}
+      style={frameStyle(maxHeight)}
     >
       <motion.div
         animate={presence}
-        className="flex w-full flex-col overflow-hidden launcher-material"
+        className="relative flex w-full flex-col overflow-hidden launcher-material"
         data-presence={presence}
         initial="hidden"
         layout
@@ -58,8 +66,8 @@ export function LauncherSurface({
         onLayoutAnimationComplete={settle}
         ref={panelRef}
         style={{
-          borderRadius: 16,
-          maxHeight: PANEL_MAX_HEIGHT,
+          borderRadius: 18,
+          maxHeight,
           originX: 0.5,
           originY: 0,
           pointerEvents: presence === "shown" ? "auto" : "none",

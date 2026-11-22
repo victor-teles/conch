@@ -10,7 +10,7 @@ import {
 import { TableError, TableMessage } from "./table-message";
 import { TablePanes } from "./table-panes";
 
-export const TABLE_BODY_HEIGHT = 320;
+export const TABLE_BODY_HEIGHT = 356;
 
 interface TableModeBodyProps {
   catalog: TableCatalog;

@@ -10,7 +10,7 @@ import type { RootItem, RootSection } from "./root-items";
 export type ModeInput = Exclude<LauncherInput, { mode: "search" }>;
 
 export interface ModeNote {
-  tone: "hint" | "unsupported";
+  tone: "hint" | "unsupported" | "tip";
   text: string;
 }
 

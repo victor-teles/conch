@@ -1,17 +1,28 @@
 import type { LucideIcon } from "lucide-react";
 
 import {
+  ActivityIcon,
+  AppWindowIcon,
+  ArrowLeftRightIcon,
   DownloadIcon,
   EyeOffIcon,
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
+  PaletteIcon,
+  PlugIcon,
   PlusIcon,
   SlidersHorizontalIcon,
+  SquareTerminalIcon,
+  TableIcon,
   UploadIcon,
 } from "lucide-react";
 
-import { fuzzyMatch } from "@/lib/fuzzy-match";
+import type { Ranked } from "@/lib/fuzzy-match";
+
+import { rankByTerms } from "@/lib/fuzzy-match";
+
+import { SQL_PREFIX } from "./input-mode";
 
 export interface LauncherCommand {
   id: string;
@@ -21,27 +32,38 @@ export interface LauncherCommand {
   actionLabel: string;
   shortcut?: readonly string[];
   keywords?: readonly string[];
+  prefix?: string;
   run: () => void;
 }
 
 interface RootCommandHandlers {
   addConnection: () => void;
   newBoard: () => void;
+  newApp: () => void;
+  newSourceWidget: () => void;
+  openActivity: () => void;
   openHistory: () => void;
   openSettings: () => void;
+  openThemes: () => void;
   exportAll: () => void;
   openImport: () => void;
   dismiss: () => void;
+  startMode: (prefix: string) => void;
 }
 
 export const rootCommands = ({
   addConnection,
   newBoard,
+  newApp,
+  newSourceWidget,
+  openActivity,
   openHistory,
   openSettings,
+  openThemes,
   exportAll,
   openImport,
   dismiss,
+  startMode,
 }: RootCommandHandlers): LauncherCommand[] => [
   {
     actionLabel: "Add",
@@ -62,6 +84,54 @@ export const rootCommands = ({
     title: "New Board",
   },
   {
+    actionLabel: "Build",
+    icon: AppWindowIcon,
+    id: "new-app",
+    keywords: ["app", "tool", "panel", "build", "mini"],
+    run: newApp,
+    subtitle: "Describe a small tool and press ↵ on Build an app",
+    title: "New App",
+  },
+  {
+    actionLabel: "Choose",
+    icon: PlugIcon,
+    id: "new-source-widget",
+    keywords: ["widget", "mcp", "http", "api", "source", "stripe", "github"],
+    run: newSourceWidget,
+    subtitle: "From an MCP server or an HTTP API",
+    title: "New Widget from a Source…",
+  },
+  {
+    actionLabel: "Start",
+    icon: SquareTerminalIcon,
+    id: "run-sql",
+    keywords: ["sql", "query", "select", "raw"],
+    prefix: ">",
+    run: () => startMode(SQL_PREFIX),
+    subtitle: "Read-only, without the AI",
+    title: "Run SQL",
+  },
+  {
+    actionLabel: "Start",
+    icon: TableIcon,
+    id: "browse-tables",
+    keywords: ["table", "schema", "columns", "peek"],
+    prefix: "#",
+    run: () => startMode("#"),
+    subtitle: "Columns, keys and a row preview",
+    title: "Browse Tables",
+  },
+  {
+    actionLabel: "Start",
+    icon: ArrowLeftRightIcon,
+    id: "switch-connection",
+    keywords: ["connection", "database", "use", "change"],
+    prefix: "@",
+    run: () => startMode("@"),
+    subtitle: "Ask or browse another database",
+    title: "Switch Connection",
+  },
+  {
     actionLabel: "Open",
     icon: HistoryIcon,
     id: "history",
@@ -73,13 +143,31 @@ export const rootCommands = ({
   },
   {
     actionLabel: "Open",
+    icon: ActivityIcon,
+    id: "activity",
+    keywords: ["audit", "log", "writes", "actions", "ran"],
+    run: openActivity,
+    subtitle: "Writes and links you ran, in a verified log",
+    title: "Activity",
+  },
+  {
+    actionLabel: "Open",
     icon: SlidersHorizontalIcon,
     id: "settings",
-    keywords: ["preferences", "hotkey", "theme", "appearance", "ai", "model"],
+    keywords: ["preferences", "hotkey", "appearance", "ai", "model"],
     run: openSettings,
     shortcut: ["⌘", ","],
     subtitle: "AI provider, hotkey and appearance",
     title: "Settings",
+  },
+  {
+    actionLabel: "Open",
+    icon: PaletteIcon,
+    id: "themes",
+    keywords: ["theme", "appearance", "color", "dark", "light"],
+    run: openThemes,
+    subtitle: "Pick one for dark and one for light, or make your own",
+    title: "Themes",
   },
   {
     actionLabel: "Export",
@@ -111,6 +199,43 @@ export const rootCommands = ({
   },
 ];
 
+interface FallbackHandlers {
+  searchHistory: (query: string) => void;
+  findTable: ((query: string) => void) | null;
+}
+
+// Where a query that matched nothing (or not enough) can still go.
+export const fallbackCommands = (
+  query: string,
+  { searchHistory, findTable }: FallbackHandlers
+): LauncherCommand[] => {
+  const text = query.trim();
+  if (!text) {
+    return [];
+  }
+  const history: LauncherCommand = {
+    actionLabel: "Search",
+    icon: HistoryIcon,
+    id: "fallback-history",
+    run: () => searchHistory(text),
+    subtitle: "Past asks that mention it",
+    title: "Search History",
+  };
+  return findTable
+    ? [
+        history,
+        {
+          actionLabel: "Find",
+          icon: TableIcon,
+          id: "fallback-table",
+          run: () => findTable(text),
+          subtitle: "Tables in the active connection",
+          title: "Find Table",
+        },
+      ]
+    : [history];
+};
+
 export const aiSetupCommand = (openSettings: () => void): LauncherCommand => ({
   actionLabel: "Open Settings",
   icon: KeyRoundIcon,
@@ -120,32 +245,18 @@ export const aiSetupCommand = (openSettings: () => void): LauncherCommand => ({
   title: "Set up an AI provider to ask questions →",
 });
 
-const bestScore = (command: LauncherCommand, query: string): number | null => {
-  const candidates = [command.title, ...(command.keywords ?? [])];
-  let best: number | null = null;
-  for (const candidate of candidates) {
-    const match = fuzzyMatch(candidate, query);
-    if (match && (best === null || match.score > best)) {
-      best = match.score;
-    }
-  }
-  return best;
-};
+const termsOf = (command: LauncherCommand) => [
+  command.title,
+  ...(command.keywords ?? []),
+];
+
+export const rankCommands = (
+  commands: readonly LauncherCommand[],
+  query: string
+): Ranked<LauncherCommand>[] => rankByTerms(commands, query, termsOf);
 
 export const filterCommands = (
   commands: readonly LauncherCommand[],
   query: string
-): LauncherCommand[] => {
-  const trimmed = query.trim();
-  if (!trimmed) {
-    return [...commands];
-  }
-  return commands
-    .map((command) => ({ command, score: bestScore(command, trimmed) }))
-    .filter(
-      (entry): entry is { command: LauncherCommand; score: number } =>
-        entry.score !== null
-    )
-    .toSorted((a, b) => b.score - a.score)
-    .map((entry) => entry.command);
-};
+): LauncherCommand[] =>
+  rankCommands(commands, query).map((entry) => entry.item);

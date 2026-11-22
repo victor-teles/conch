@@ -18,16 +18,16 @@
 
 - **Lineage**: Refined & native-calm. Positive references: **TablePlus, Postico, Things 3, Linear, Arc**. The goal is to belong on that shelf.
 - **Anti-references**:
-  - **DBeaver / phpMyAdmin / pgAdmin** — bureaucratic grey panels, icon-heavy toolbars, default widget look, zero personality.
+  - **DBeaver / phpMyAdmin / pgAdmin** — bureaucratic default panels, icon-heavy toolbars, default widget look, zero personality.
   - **Generic AI-app UI** — purple/cyan gradients, neon accents on dark, sparkle icons, chatbot drawer bolted onto an admin UI.
-- **Theme**: Dark-first with a warm amber accent, to be refined rather than replaced. Light mode exists but dark is the hero surface. Current palette (`oklch` warm neutrals, amber primary `~0.92 0.052 66°`) is the starting point, not a placeholder.
+- **Theme**: Dark-first, neutral gray close to native macOS (Raycast is the reference), with one vermilion brand color (`oklch(0.66 0.22 29)`) kept for the logo, the input caret and progress. Light mode exists but dark is the hero surface. The earlier warm-brown and amber palette returns as a selectable theme, not the default.
 - **Typography direction**: The current `-apple-system` stack is a placeholder and the single biggest gap. Pair a distinctive display/UI face with a refined mono for SQL and data. Avoid Inter, IBM Plex, Space Grotesk, Fraunces, Instrument Sans. Look for something with craft character that still reads as native.
 - **Motion**: iOS-like springs (already in use). Purposeful, never decorative. Must degrade cleanly under `prefers-reduced-motion`.
 - **Signature moment**: The **launcher's ask flow** is the "wait, what was that?": one panel that morphs from question to streaming SQL to running to a chart card. Invest here first. Its states, transitions, and at-a-glance legibility should be the thing users screenshot.
 
 ### Design Principles
 
-1. **Warmth is structural, not decorative.** The amber and vibrancy are there because they make long sessions feel cared-for — not because dark mode needs "pop." Every warm touch should reinforce trust.
+1. **Calm chrome, one red.** Surfaces are neutral gray so the user's data carries the color. Vermilion marks the brand and the moment something is in flight — never a status color, a selection or a focus ring. Restraint is what makes it read as trustworthy.
 2. **Native-calm, not native-cosplay.** Feel like a first-party Mac app: keyboard-first, quiet chrome, real vibrancy, deliberate motion. Don't imitate macOS widgets — inherit the discipline, not the skin.
 3. **The AI disappears into the editor.** No chatbot drawer aesthetic, no sparkle iconography. AI output should feel like a colleague paste-ing SQL into your editor, not a product feature demanding attention.
 4. **Density with breathing room.** Pro users want information; calm users want space. Resolve this with tight typographic rhythm and varied spacing — not by wrapping everything in cards or hiding data behind disclosure.

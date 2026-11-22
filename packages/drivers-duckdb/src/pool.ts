@@ -7,6 +7,8 @@ import type {
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
+  GuardedWrite,
+  GuardedWriteOptions,
   IndexItem,
   Pool,
   SchemaInfo,
@@ -17,16 +19,21 @@ import {
   DbError,
   guardDestructive,
   parseDuckdb,
+  tooManyRows,
   validateSchemaName,
+  WRITE_STATEMENT_TIMEOUT_MS,
 } from "@conch/core";
+import { ResultReturnType } from "@duckdb/node-api";
 import { randomUUID } from "node:crypto";
 import { readFile, unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+import { assertReadsOwnTables } from "./read-only-sources.ts";
+
 type ReaderLike = Awaited<ReturnType<DuckDBConnection["runAndReadAll"]>>;
 
-export class DuckdbPool implements Pool {
+export class DuckdbPool implements Pool, GuardedWrite {
   readonly dialect: DialectType = "duckdb";
   readonly supportsExplain = true;
   #instance: DuckDBInstance | null;
@@ -112,7 +119,10 @@ export class DuckdbPool implements Pool {
       }
       const run = () => runStatement(conn, sql, options.params);
       const reader = options.readOnly
-        ? await readOnly(conn, signal, run)
+        ? await readOnly(conn, signal, async () => {
+            await assertReadsOwnTables(conn, sql);
+            return run();
+          })
         : await run();
       const allRows = reader.getRowsJson() as unknown[][];
       const isTruncated = allRows.length > maxRows;
@@ -132,6 +142,52 @@ export class DuckdbPool implements Pool {
       }
       throw mapDuckdbError(error);
     } finally {
+      release();
+    }
+  }
+
+  async executeWrite(
+    sql: string,
+    params: BindValue[],
+    { schema, maxAffectedRows, signal }: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }> {
+    const conn = await this.#connect();
+    const release = bindAbort(conn, signal);
+    const timer = setTimeout(() => {
+      try {
+        conn.interrupt();
+      } catch {
+        // best-effort
+      }
+    }, WRITE_STATEMENT_TIMEOUT_MS);
+    try {
+      if (schema) {
+        validateSchemaName(schema);
+        await conn.run(`SET search_path = '${schema}'`);
+      }
+      await conn.run("BEGIN TRANSACTION");
+      try {
+        const reader = await runStatement(conn, sql, params);
+        const affectedRows = changedRows(reader);
+        if (affectedRows > maxAffectedRows) {
+          throw tooManyRows(affectedRows, maxAffectedRows);
+        }
+        if (signal.aborted) {
+          throw DbError.cancelled();
+        }
+        await conn.run("COMMIT");
+        return { affectedRows };
+      } catch (error) {
+        await conn.run("ROLLBACK").catch(() => null);
+        throw error;
+      }
+    } catch (error) {
+      if (signal.aborted && signal.reason instanceof DbError) {
+        throw signal.reason;
+      }
+      throw mapDuckdbError(error);
+    } finally {
+      clearTimeout(timer);
       release();
     }
   }
@@ -206,6 +262,13 @@ function readerColumns(reader: ReaderLike): ColumnInfo[] {
     name,
     typeName: reader.columnType(i).toString(),
   }));
+}
+
+// A statement with RETURNING reports its rows instead of a change count.
+function changedRows(reader: ReaderLike): number {
+  return reader.returnType === ResultReturnType.QUERY_RESULT
+    ? reader.getRowsJson().length
+    : reader.rowsChanged;
 }
 
 function tryDisconnect(conn: DuckDBConnection): void {

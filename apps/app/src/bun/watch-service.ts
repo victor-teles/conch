@@ -11,6 +11,7 @@ import type {
 import { DbError } from "@conch/core";
 import {
   alertLabel,
+  connectionIdOf,
   editableParams,
   formatScalarValue,
   formatThreshold,
@@ -128,6 +129,26 @@ const displayOf = (widget: Widget, sample: RunSample | null): string | null =>
 const iso = (at: number | null): string | null =>
   at === null ? null : new Date(at).toISOString();
 
+// MCP and HTTP widgets queue per server or endpoint; only SQL widgets
+// pause with their connection.
+const scheduleKeyOf = (widget: Widget): string => {
+  const { source } = widget;
+  switch (source.kind) {
+    case "sql": {
+      return source.connectionId;
+    }
+    case "mcp": {
+      return `mcp:${source.serverId}`;
+    }
+    case "http": {
+      return `http:${source.endpointId}`;
+    }
+    default: {
+      throw new Error(`Unknown source ${source satisfies never}`);
+    }
+  }
+};
+
 export const createWatchService = (deps: WatchServiceDeps) => {
   const pausedConnections = new Set<string>();
   const failureStreaks = new Map<string, number>();
@@ -147,7 +168,7 @@ export const createWatchService = (deps: WatchServiceDeps) => {
     clearTimer: deps.clearTimer,
     connectionOf: async (watch) => {
       const widget = await deps.widgets.getWidget(watch.widgetId);
-      return widget?.connectionId ?? null;
+      return widget ? scheduleKeyOf(widget) : null;
     },
     isPaused: (connectionId) => pausedConnections.has(connectionId),
     lastSampleAt: async (watch) =>
@@ -239,7 +260,10 @@ export const createWatchService = (deps: WatchServiceDeps) => {
   };
 
   const notifyFor = async (widget: Widget, text: Notification) => {
-    const subtitle = await deps.connectionName(widget.connectionId);
+    const connectionId = connectionIdOf(widget);
+    const subtitle = connectionId
+      ? await deps.connectionName(connectionId)
+      : null;
     deps.notify(subtitle ? { ...text, subtitle } : text);
   };
 

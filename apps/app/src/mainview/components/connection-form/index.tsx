@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import type { ConnectionDraft } from "./connection-form-state";
+
 import { AiContextSection } from "./ai-context-section";
 import { AppearanceSection } from "./appearance-section";
 import { DATABASE_OPTIONS, EMOJI_BY_TYPE } from "./constants";
@@ -31,11 +33,13 @@ import { useConnectionForm } from "./use-connection-form";
 interface ConnectionFormProps {
   connection?: DatabaseConnection;
   onSuccess?: (connection: DatabaseConnection) => void;
+  draft?: ConnectionDraft;
 }
 
 export const ConnectionForm = ({
   connection,
   onSuccess,
+  draft,
 }: ConnectionFormProps) => {
   const {
     aiContextOpen,
@@ -57,7 +61,7 @@ export const ConnectionForm = ({
     setAppearanceOpen,
     testStatus,
     updateField,
-  } = useConnectionForm(connection, onSuccess);
+  } = useConnectionForm(connection, onSuccess, draft);
 
   return (
     <form className="grid gap-4" onSubmit={handleSubmit}>

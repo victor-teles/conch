@@ -3,7 +3,11 @@ import { CheckIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
+function Checkbox({
+  className,
+  children,
+  ...props
+}: CheckboxPrimitive.Root.Props) {
   return (
     <CheckboxPrimitive.Root data-slot="checkbox" className={cn(`
           peer relative flex size-4 shrink-0 items-center justify-center
@@ -31,7 +35,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
           [&>svg]:size-3.5
         "
       >
-        <CheckIcon />
+        {children ?? <CheckIcon />}
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

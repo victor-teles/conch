@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import { tileCount } from "@/components/board/board-row";
 import { useBoardList } from "@/components/board/use-board-list";
+import { FooterLocation } from "@/components/launcher/footer-location";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { LauncherInput } from "@/components/launcher/launcher-input";
 import {
@@ -12,6 +13,7 @@ import {
   LauncherSection,
 } from "@/components/launcher/launcher-list";
 import { LauncherRow, optionId } from "@/components/launcher/launcher-row";
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { useListSelection } from "@/components/launcher/use-list-selection";
 import { getErrorMessage } from "@/lib/error-message";
 import { addBoardTile, openBoard } from "@/lib/ipc";
@@ -126,7 +128,7 @@ export function BoardPickerView({
         }}
         onSubmit={handleSubmit}
       />
-      <div className="min-h-0 flex-1 overflow-y-auto border-t border-panel-border pt-2">
+      <LauncherScrollArea className="flex-1 pt-1">
         <LauncherListbox id={PICKER_LIST_ID} label="Boards">
           <LauncherSection label="Add to Board">
             {items.map((item) => (
@@ -161,10 +163,10 @@ export function BoardPickerView({
             {error}
           </p>
         ) : null}
-      </div>
+      </LauncherScrollArea>
       <LauncherFooter
         actionLabel={selected?.boardId ? "Add and Open" : "Create"}
-        status={null}
+        status={<FooterLocation icon={LayoutGridIcon} label="Add to Board" />}
       />
     </div>
   );

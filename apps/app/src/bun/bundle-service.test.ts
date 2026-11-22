@@ -18,19 +18,23 @@ import {
 const NOW = new Date("2026-11-20T12:00:00.000Z");
 
 const widget = (id: string, overrides: Partial<Widget> = {}): Widget => ({
-  connectionId: "pg",
   createdAt: NOW.toISOString(),
-  database: null,
-  dialect: "postgresql",
   id,
   lastRunAt: NOW.toISOString(),
   lastValues: {},
   name: `Widget ${id}`,
   params: [],
   prompt: "",
+  source: {
+    connectionId: "pg",
+    database: null,
+    dialect: "postgresql",
+    kind: "sql",
+    sqlTemplate: `select '${id}'`,
+  },
   spec: { formats: {}, title: id, version: 1, view: { kind: "table" } },
-  sqlTemplate: `select '${id}'`,
   updatedAt: NOW.toISOString(),
+  version: 2,
   view: "table",
   ...overrides,
 });
@@ -78,7 +82,10 @@ const setup = ({
   const clip = { text: clipboard };
   let counter = 0;
   const saveWidget = vi.fn((draft: WidgetDraft): Promise<Widget> => {
-    if (/\bdelete\b/i.test(draft.sqlTemplate)) {
+    if (
+      draft.source.kind === "sql" &&
+      /\bdelete\b/i.test(draft.source.sqlTemplate)
+    ) {
       return Promise.reject(
         new DbError("NOT_READ_ONLY", "DELETE changes data.")
       );

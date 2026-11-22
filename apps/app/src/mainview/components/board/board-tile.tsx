@@ -1,5 +1,6 @@
 import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 
+import { COPY_LABELS } from "@conch/rpc";
 import { GripVerticalIcon, MoreHorizontalIcon } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
@@ -15,6 +16,7 @@ import {
 } from "@/components/launcher/actions/actions-menu";
 import { Pressable } from "@/components/motion/pressable";
 import { Reveal } from "@/components/motion/reveal";
+import { SourceBadge } from "@/components/sources/source-badge";
 import { WidgetTrend } from "@/components/watches/widget-trend";
 import { runSpec } from "@/components/widgets/run-spec";
 import { failureCopy } from "@/components/widgets/widget-error";
@@ -173,6 +175,7 @@ function TileBody({
       slots={{
         actions: (
           <>
+            <SourceBadge kind={widget.source.kind} />
             <WidgetTrend
               spec={widget.spec}
               trend={run.outcome.trend}
@@ -217,7 +220,11 @@ export function BoardTile({
   const [menuOpen, setMenuOpen] = useState(false);
   const name = widget?.name ?? "Deleted widget";
   const view = tile.view ?? widget?.view ?? "table";
-  const actions = tileActions(tile.size, Boolean(run?.outcome));
+  const actions = tileActions(
+    tile.size,
+    Boolean(run?.outcome),
+    widget ? COPY_LABELS[widget.source.kind] : undefined
+  );
   const { onAction, onDragStart, onEditKey, onRetry, onView } = handlers;
 
   const openMenu = useCallback(() => setMenuOpen(true), []);
@@ -285,6 +292,7 @@ export function BoardTile({
               actions={actions}
               anchorId={menuAnchorId(tile.id)}
               armedId={null}
+              className="right-3 bottom-3 z-10"
               onClose={closeMenu}
               onRun={runAction}
               title={name}

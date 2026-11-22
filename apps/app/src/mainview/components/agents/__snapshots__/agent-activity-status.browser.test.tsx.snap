@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`agentActivityStatus > names the newest call with a breathing dot 1`] = `
+<div>
+  <span
+    aria-live="polite"
+    class="flex min-w-0 items-center gap-2 empty:hidden"
+    data-slot="agent-activity"
+  >
+    <span
+      class="flex min-w-0 items-center gap-2"
+    >
+      <span
+        aria-hidden="true"
+        class="size-1.5 shrink-0 rounded-full bg-primary"
+        data-motion="breathe"
+      />
+      <span
+        class="truncate"
+        data-slot="swap-text"
+      >
+        <span
+          class="inline-block"
+        >
+          Claude Code is asking analytics
+        </span>
+      </span>
+    </span>
+  </span>
+</div>
+`;

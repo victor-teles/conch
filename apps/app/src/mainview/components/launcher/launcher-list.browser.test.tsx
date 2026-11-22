@@ -10,10 +10,15 @@ const commands = rootCommands({
   addConnection: vi.fn(),
   dismiss: vi.fn(),
   exportAll: vi.fn(),
+  newApp: vi.fn(),
   newBoard: vi.fn(),
+  newSourceWidget: vi.fn(),
+  openActivity: vi.fn(),
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
+  startMode: vi.fn(),
 });
 
 const renderList = (selectedId: string, onHover = vi.fn(), onRun = vi.fn()) =>
@@ -43,7 +48,7 @@ describe("launcher list", () => {
     await expect
       .element(screen.getByRole("group", { name: "Commands" }))
       .toBeVisible();
-    expect(screen.getByRole("option").all()).toHaveLength(7);
+    expect(screen.getByRole("option").all()).toHaveLength(14);
     expect(screen.getByRole("option", { name: /Settings/ }).element().id).toBe(
       optionId("settings")
     );
@@ -70,6 +75,20 @@ describe("launcher list", () => {
     expect(onHover).toHaveBeenCalledWith("hide");
     await hide.click();
     expect(onRun).toHaveBeenCalledWith("hide");
+  });
+
+  it("ignores a pointer move that a scroll replays under a still cursor", async () => {
+    const onHover = vi.fn();
+    const screen = renderList("settings", onHover);
+    const at = { bubbles: true, screenX: 640, screenY: 360 };
+    const hide = screen.getByRole("option", { name: /Hide Launcher/ });
+    const settings = screen.getByRole("option", { name: /Settings/ });
+    await expect.element(settings).toBeVisible();
+
+    hide.element().dispatchEvent(new PointerEvent("pointermove", at));
+    settings.element().dispatchEvent(new PointerEvent("pointermove", at));
+
+    expect(onHover.mock.calls).toStrictEqual([["hide"]]);
   });
 
   it("tints a destructive row", async () => {

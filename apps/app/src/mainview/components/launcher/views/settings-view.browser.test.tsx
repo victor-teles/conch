@@ -7,6 +7,8 @@ import { userEvent } from "vitest/browser";
 import type { CommandHandlers } from "@/test/ipc-mock";
 
 import { AppProviders } from "@/components/app-providers";
+import { ConnectionsProvider } from "@/components/launcher/connections/connections-provider";
+import { initTheme } from "@/lib/theme/theme-store";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
 
 import { SettingsView } from "./settings-view";
@@ -30,7 +32,16 @@ const renderSettings = (handlers: CommandHandlers = {}, onBack = vi.fn()) => {
   mockLauncherIpc({ handlers });
   return render(
     <AppProviders>
-      <SettingsView onBack={onBack} onOpenWatches={vi.fn()} />
+      <ConnectionsProvider>
+        <SettingsView
+          onBack={onBack}
+          onOpenActivity={vi.fn()}
+          onOpenAgents={vi.fn()}
+          onOpenSource={vi.fn()}
+          onOpenThemes={vi.fn()}
+          onOpenWatches={vi.fn()}
+        />
+      </ConnectionsProvider>
     </AppProviders>
   );
 };
@@ -251,17 +262,20 @@ describe("settings view — launcher", () => {
     await expect.element(screen.getByLabelText("⌥ ⇧ Space")).toBeVisible();
   });
 
-  it("switches theme with clicks and arrow keys", async () => {
+  it("switches appearance with clicks and arrow keys", async () => {
     const screen = renderSettings();
-    const theme = screen.getByRole("radiogroup", { name: "Theme" });
-    const radio = (name: string) => theme.getByRole("radio", { name });
+    await initTheme();
+    const appearance = screen.getByRole("radiogroup", { name: "Appearance" });
+    const radio = (name: string) => appearance.getByRole("radio", { name });
 
     await expect.element(radio("Dark")).toHaveAttribute("aria-checked", "true");
     await radio("Light").click();
     await expect
       .element(radio("Light"))
       .toHaveAttribute("aria-checked", "true");
-    expect(document.documentElement.classList.contains("light")).toBeTruthy();
+    await expect
+      .poll(() => document.documentElement.classList.contains("light"))
+      .toBe(true);
 
     await userEvent.keyboard("{ArrowLeft}");
     await expect.element(radio("Dark")).toHaveAttribute("aria-checked", "true");
@@ -269,6 +283,29 @@ describe("settings view — launcher", () => {
     await expect
       .element(radio("System"))
       .toHaveAttribute("aria-checked", "true");
+  });
+
+  it("opens Themes and names the theme in use", async () => {
+    const onOpenThemes = vi.fn();
+    mockLauncherIpc();
+    await initTheme();
+    const screen = render(
+      <AppProviders>
+        <ConnectionsProvider>
+          <SettingsView
+            onBack={vi.fn()}
+            onOpenActivity={vi.fn()}
+            onOpenAgents={vi.fn()}
+            onOpenSource={vi.fn()}
+            onOpenThemes={onOpenThemes}
+            onOpenWatches={vi.fn()}
+          />
+        </ConnectionsProvider>
+      </AppProviders>
+    );
+    await expect.element(screen.getByText("Conch Dark")).toBeVisible();
+    await screen.getByRole("button", { name: "Open themes" }).click();
+    expect(onOpenThemes).toHaveBeenCalledOnce();
   });
 
   it("goes back from the header button", async () => {
@@ -356,7 +393,16 @@ describe("settings view — background", () => {
     const onOpenWatches = vi.fn();
     const screen = render(
       <AppProviders>
-        <SettingsView onBack={vi.fn()} onOpenWatches={onOpenWatches} />
+        <ConnectionsProvider>
+          <SettingsView
+            onBack={vi.fn()}
+            onOpenActivity={vi.fn()}
+            onOpenAgents={vi.fn()}
+            onOpenSource={vi.fn()}
+            onOpenThemes={vi.fn()}
+            onOpenWatches={onOpenWatches}
+          />
+        </ConnectionsProvider>
       </AppProviders>
     );
     await expect
@@ -364,5 +410,35 @@ describe("settings view — background", () => {
       .toBeVisible();
     await screen.getByRole("button", { name: "Open watched widgets" }).click();
     expect(onOpenWatches).toHaveBeenCalledOnce();
+  });
+});
+
+describe("settings view — agents", () => {
+  beforeEach(resetMotion);
+
+  it("opens Agents (MCP) from its own group", async () => {
+    mockLauncherIpc();
+    const onOpenAgents = vi.fn();
+    const screen = render(
+      <AppProviders>
+        <ConnectionsProvider>
+          <SettingsView
+            onBack={vi.fn()}
+            onOpenActivity={vi.fn()}
+            onOpenAgents={onOpenAgents}
+            onOpenSource={vi.fn()}
+            onOpenThemes={vi.fn()}
+            onOpenWatches={vi.fn()}
+          />
+        </ConnectionsProvider>
+      </AppProviders>
+    );
+    const open = screen.getByRole("button", { name: "Open Agents (MCP)" });
+    await expect
+      .element(screen.getByRole("region", { name: "Agents" }))
+      .toBeVisible();
+    await expect.element(open).toHaveTextContent("Off");
+    await open.click();
+    expect(onOpenAgents).toHaveBeenCalledOnce();
   });
 });

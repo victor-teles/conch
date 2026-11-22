@@ -22,10 +22,7 @@ test.describe("launcher boot", () => {
 
     const search = page.getByRole("combobox", { name: "Search commands" });
     await expect(search).toBeFocused();
-    await expect(search).toHaveAttribute(
-      "placeholder",
-      "Search or ask… > SQL · # table · @ connection"
-    );
+    await expect(search).toHaveAttribute("placeholder", "Search or ask…");
     await expect(page.getByRole("option", { name: /Settings/ })).toBeVisible();
 
     expect(errors).toEqual([]);
@@ -36,7 +33,8 @@ test.describe("launcher boot", () => {
     const search = page.getByRole("combobox", { name: "Search commands" });
 
     await search.fill("sett");
-    await expect(page.getByRole("option")).toHaveCount(1);
+    const results = page.getByRole("group", { name: /^Results/ });
+    await expect(results.getByRole("option")).toHaveCount(1);
     await search.press("Enter");
 
     await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();

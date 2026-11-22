@@ -28,6 +28,32 @@ describe("launcherStackReducer", () => {
     );
   });
 
+  it("returns to the view below with new params", () => {
+    const themes = { kind: "themes" } as const;
+    const withThemes = launcherStackReducer(initialStackState, {
+      type: "push",
+      view: themes,
+    });
+    const stacked = launcherStackReducer(withThemes, {
+      type: "push",
+      view: SETTINGS,
+    });
+    const back = launcherStackReducer(stacked, {
+      type: "returnTo",
+      view: { kind: "themes", selectedId: "theme_1" },
+    });
+    expect(back.stack).toStrictEqual([
+      ROOT_VIEW,
+      { kind: "themes", selectedId: "theme_1" },
+    ]);
+    expect(back.direction).toBe(-1);
+    const elsewhere = launcherStackReducer(back, {
+      type: "returnTo",
+      view: SETTINGS,
+    });
+    expect(elsewhere.stack).toStrictEqual([ROOT_VIEW]);
+  });
+
   it("pops back toward root and moves backward", () => {
     const pushed = launcherStackReducer(initialStackState, {
       type: "push",
@@ -83,5 +109,26 @@ describe("lookup view", () => {
     expect(
       launcherStackReducer(initialStackState, { type: "push", view }).stack
     ).toStrictEqual([ROOT_VIEW, view]);
+  });
+
+  it("stacks the agents view and its activity under settings", () => {
+    const views = [
+      SETTINGS,
+      { kind: "agents" },
+      { kind: "agents-audit" },
+    ] as const;
+    let state = initialStackState;
+    for (const view of views) {
+      state = launcherStackReducer(state, { type: "push", view });
+    }
+    expect(state.stack.map((view) => view.kind)).toStrictEqual([
+      "root",
+      "settings",
+      "agents",
+      "agents-audit",
+    ]);
+    expect(
+      launcherStackReducer(state, { type: "pop" }).stack.at(-1)
+    ).toStrictEqual({ kind: "agents" });
   });
 });

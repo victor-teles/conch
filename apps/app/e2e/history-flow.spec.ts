@@ -113,4 +113,29 @@ test.describe("history flow", () => {
 
     expect(errors).toStrictEqual([]);
   });
+
+  test("narrows History to one connection with Command-P", async ({ page }) => {
+    await seedDemoWorkspace(page);
+    await page.goto("/");
+    const [first] = QUESTIONS;
+    await askFromRoot(page, first[0], first[1]);
+
+    const search = page.getByRole("combobox", { name: "Search commands" });
+    await search.press("Meta+y");
+    const history = page.getByRole("combobox", { name: "Search history" });
+    await expect(history).toBeFocused();
+    await history.press("Meta+p");
+    const connections = page.getByRole("listbox", { name: "Connections" });
+    await connections.getByRole("option", { name: "analytics" }).click();
+
+    await expect(
+      page.getByRole("button", { name: "Scope: analytics" })
+    ).toBeVisible();
+    await expect(history).toBeFocused();
+    await expect(
+      page
+        .getByRole("listbox", { name: "Past asks" })
+        .getByRole("option", { name: /Revenue by region/ })
+    ).toBeVisible();
+  });
 });

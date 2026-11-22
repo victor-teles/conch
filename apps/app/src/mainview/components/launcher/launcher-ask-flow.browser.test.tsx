@@ -71,7 +71,7 @@ describe("asking from the launcher", () => {
     reduced.value = true;
   });
 
-  it("asks from the root, shows the card, and reopens it with ↑ after going back", async () => {
+  it("asks from the root, shows the card, and stays on the root when ↑ moves", async () => {
     const { asked } = setup();
     await search().fill(REVENUE);
     await expect
@@ -95,15 +95,13 @@ describe("asking from the launcher", () => {
     await userEvent.keyboard("{Escape}");
     await expect.element(search()).toBeVisible();
     await search().fill("");
-    await expect.element(page.getByText("Last answer")).toBeVisible();
-    await userEvent.keyboard("{ArrowUp}");
-    await expect
-      .element(
-        page.getByRole("heading", {
-          name: "Monthly recurring revenue by region",
-        })
-      )
-      .toBeVisible();
+    await userEvent.keyboard("{ArrowUp}{ArrowUp}{ArrowDown}");
+    await expect.element(search()).toBeVisible();
+    expect(
+      page
+        .getByRole("heading", { name: "Monthly recurring revenue by region" })
+        .query()
+    ).toBeNull();
     expect(asked).toHaveLength(1);
   });
 

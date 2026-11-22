@@ -82,7 +82,7 @@ describe("crypto file-based key", () => {
     await fs.writeFile(connectionsPath(), '[{"id":"legacy"}]');
 
     await expect(encryptLine("anything")).resolves.toBeTypeOf("string");
-    await expect(fs.access(keyPath())).resolves.toBeUndefined();
+    await expect(fs.stat(keyPath())).resolves.toBeDefined();
   });
 
   it("silently migrates an existing keytar key to the file on first run", async () => {
@@ -114,7 +114,7 @@ describe("crypto file-based key", () => {
     legacyLoader.mockRejectedValueOnce(new Error("user denied"));
 
     await expect(encryptLine("ok")).resolves.toBeTypeOf("string");
-    await expect(fs.access(keyPath())).resolves.toBeUndefined();
+    await expect(fs.stat(keyPath())).resolves.toBeDefined();
   });
 
   it("cryptoError is exported with a code", () => {

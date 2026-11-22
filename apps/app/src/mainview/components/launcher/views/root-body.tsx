@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
 
+import { LauncherScrollArea } from "@/components/launcher/launcher-scroll-area";
 import { TableModeBody } from "@/components/launcher/schema/table-mode-body";
 
 import type { RootSectionsView } from "./use-root-sections";
@@ -40,8 +41,9 @@ export function RootBody({ view, list, detail }: RootBodyProps) {
     );
   }
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto pt-2">
-      {view.note && view.sections.length === 0 ? (
+    <LauncherScrollArea className="flex-1 pt-1">
+      {view.note?.tone === "tip" ? <ModeNote note={view.note} /> : null}
+      {view.note && view.note.tone !== "tip" && view.sections.length === 0 ? (
         <ModeNote note={view.note} />
       ) : (
         <RootList
@@ -53,6 +55,6 @@ export function RootBody({ view, list, detail }: RootBodyProps) {
           selectedId={list.selectedId}
         />
       )}
-    </div>
+    </LauncherScrollArea>
   );
 }

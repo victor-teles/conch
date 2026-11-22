@@ -16,7 +16,7 @@ const PULSE = { duration: 0.9, ease: "easeOut" } as const;
 const CHIP_CLASS =
   "relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums";
 
-// A chip whose text changes in place swaps it and pulses amber once.
+// A chip whose text changes in place swaps it and pulses once.
 const usePulse = (label: string): number => {
   const [seen, setSeen] = useState({ label, pulses: 0 });
   if (seen.label !== label) {
@@ -58,7 +58,12 @@ function Chip({ chip, interactive, onPrefill }: ChipProps) {
   }, [onPrefill, prefill]);
   if (!(interactive && prefill)) {
     return (
-      <span className={cn(CHIP_CLASS, "text-panel-muted")}>{content}</span>
+      <span
+        className={cn(CHIP_CLASS, "text-panel-muted")}
+        title={chip.detail ?? undefined}
+      >
+        {content}
+      </span>
     );
   }
   return (
@@ -69,6 +74,7 @@ function Chip({ chip, interactive, onPrefill }: ChipProps) {
         "text-foreground outline-none hover:bg-row-hover focus-visible:ring-2 focus-visible:ring-ring/60"
       )}
       onClick={handleClick}
+      title={chip.detail ?? undefined}
     >
       {content}
     </Pressable>

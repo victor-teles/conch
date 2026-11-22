@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`root view apps > lists apps with what they read and do 1`] = `
+<div
+  aria-labelledby="_r_id_"
+  role="group"
+>
+  <div
+    class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
+    id="_r_id_"
+  >
+    Apps
+  </div>
+  <div
+    aria-selected="true"
+    class="relative flex cursor-default items-center gap-3 px-2.5 h-14"
+    data-tone="default"
+    id="launcher-option-app-app-desk"
+    role="option"
+    tabindex="0"
+  >
+    <div
+      class="absolute inset-0 rounded-[10px] bg-row-active"
+    />
+    <span
+      class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-[13px] leading-none text-panel-muted"
+    >
+      💳
+    </span>
+    <span
+      class="relative flex min-w-0 flex-1 flex-col"
+    >
+      <span
+        class="truncate type-body text-foreground"
+      >
+        Refund desk
+      </span>
+      <span
+        class="truncate type-meta text-panel-muted"
+      >
+        Failed charges next to their orders.
+      </span>
+    </span>
+    <span
+      class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+    >
+      analytics · 2 actions
+    </span>
+  </div>
+</div>
+`;

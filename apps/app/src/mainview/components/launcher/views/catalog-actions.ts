@@ -1,7 +1,9 @@
 import {
   CopyPlusIcon,
   DownloadIcon,
+  MessageSquarePlusIcon,
   LayoutGridIcon,
+  LinkIcon,
   PencilIcon,
   PlayIcon,
   SquareArrowOutUpRightIcon,
@@ -12,6 +14,10 @@ import type { MenuAction } from "@/components/launcher/actions/menu-action";
 import type { WatchActionId } from "@/components/watches/watch-actions";
 import type { Watch } from "@/lib/ipc";
 
+import {
+  PRIMARY_KEYS,
+  SECOND_KEYS,
+} from "@/components/launcher/actions/menu-action";
 import { watchActions } from "@/components/watches/watch-actions";
 
 import type { RootItem } from "./root-items";
@@ -25,32 +31,85 @@ export type CatalogActionId =
   | "add-to-board"
   | "export-board"
   | "export-widget"
+  | "copy-link"
+  | "open-app"
+  | "rename-app"
+  | "duplicate-app"
+  | "change-app"
+  | "delete-app"
   | WatchActionId;
 
 export interface CatalogAction extends MenuAction {
   id: CatalogActionId;
 }
 
-export type CatalogItem = Extract<RootItem, { kind: "board" | "widget" }>;
+export type CatalogItem = Extract<
+  RootItem,
+  { kind: "board" | "widget" | "mini-app" }
+>;
+
+const COPY_LINK: CatalogAction = {
+  icon: LinkIcon,
+  id: "copy-link",
+  label: "Copy Link",
+  tone: "default",
+};
 
 export const isCatalogItem = (item: RootItem | null): item is CatalogItem =>
-  item?.kind === "board" || item?.kind === "widget";
+  item?.kind === "board" ||
+  item?.kind === "widget" ||
+  item?.kind === "mini-app";
+
+const APP_ACTIONS: CatalogAction[] = [
+  {
+    icon: SquareArrowOutUpRightIcon,
+    id: "open-app",
+    keys: PRIMARY_KEYS,
+    label: "Open",
+    tone: "default",
+  },
+  {
+    icon: PencilIcon,
+    id: "rename-app",
+    keys: SECOND_KEYS,
+    label: "Rename",
+    tone: "default",
+  },
+  {
+    icon: CopyPlusIcon,
+    id: "duplicate-app",
+    label: "Duplicate",
+    tone: "default",
+  },
+  {
+    icon: MessageSquarePlusIcon,
+    id: "change-app",
+    label: "Change with a Prompt…",
+    tone: "default",
+  },
+  { icon: Trash2Icon, id: "delete-app", label: "Delete", tone: "destructive" },
+];
 
 export const catalogActions = (
   item: CatalogItem,
   watch: Watch | null = null
-): CatalogAction[] =>
-  item.kind === "board"
+): CatalogAction[] => {
+  if (item.kind === "mini-app") {
+    return APP_ACTIONS;
+  }
+  return item.kind === "board"
     ? [
         {
           icon: SquareArrowOutUpRightIcon,
           id: "open-board",
+          keys: PRIMARY_KEYS,
           label: "Open",
           tone: "default",
         },
         {
           icon: PencilIcon,
           id: "rename-board",
+          keys: SECOND_KEYS,
           label: "Rename",
           tone: "default",
         },
@@ -60,6 +119,7 @@ export const catalogActions = (
           label: "Duplicate",
           tone: "default",
         },
+        COPY_LINK,
         {
           icon: DownloadIcon,
           id: "export-board",
@@ -74,13 +134,21 @@ export const catalogActions = (
         },
       ]
     : [
-        { icon: PlayIcon, id: "run-widget", label: "Run", tone: "default" },
+        {
+          icon: PlayIcon,
+          id: "run-widget",
+          keys: PRIMARY_KEYS,
+          label: "Run",
+          tone: "default",
+        },
         {
           icon: LayoutGridIcon,
           id: "add-to-board",
+          keys: SECOND_KEYS,
           label: "Add to Board…",
           tone: "default",
         },
+        COPY_LINK,
         {
           icon: DownloadIcon,
           id: "export-widget",
@@ -89,20 +157,18 @@ export const catalogActions = (
         },
         ...watchActions(item.widget, watch),
       ];
+};
 
-export const catalogTitle = (item: CatalogItem): string =>
-  item.kind === "board" ? item.board.name : item.widget.name;
-
-interface ArmedSource {
-  armed: boolean;
-}
-
-export const armedRowId = (
-  menu: ArmedSource & { openId: string | null },
-  catalog: ArmedSource & { item: { id: string } | null }
-) => {
-  if (menu.armed) {
-    return menu.openId;
+export const catalogTitle = (item: CatalogItem): string => {
+  switch (item.kind) {
+    case "board": {
+      return item.board.name;
+    }
+    case "mini-app": {
+      return item.app.name;
+    }
+    default: {
+      return item.widget.name;
+    }
   }
-  return catalog.armed ? (catalog.item?.id ?? null) : null;
 };

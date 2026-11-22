@@ -4,7 +4,11 @@ import { page, userEvent } from "vitest/browser";
 
 import type { DatabaseConnection } from "@/lib/connections";
 
-import { engineAskStateAfter, fakeSession } from "@/test/ask-fixtures";
+import {
+  engineAskStateAfter,
+  fakeSession,
+  withSqlShown,
+} from "@/test/ask-fixtures";
 import { makeConnection } from "@/test/connection-fixture";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
 
@@ -70,10 +74,12 @@ const setup = async (state: AskState, connection: DatabaseConnection) => {
 const SAVE_UNAVAILABLE = "Saving works with SQL databases for now.";
 
 const streamingPipeline = () =>
-  engineAskStateAfter("orders by status", "mongodb", {
-    nth: 12,
-    type: "sqlDelta",
-  });
+  withSqlShown(
+    engineAskStateAfter("orders by status", "mongodb", {
+      nth: 12,
+      type: "sqlDelta",
+    })
+  );
 
 describe.each([
   ["full motion", false],

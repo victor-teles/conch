@@ -15,6 +15,8 @@ import { DatePill, DateRangePill } from "./arguments/date-pills";
 import { NumberPill, TextPill } from "./arguments/field-pill";
 import { PARAM_TYPE_LABELS } from "./param-labels";
 
+const DRAFT_OWNER = { kind: "widget", widgetId: "" } as const;
+
 const DefaultEditor = ({ param, ...props }: PillProps) => {
   switch (param.type) {
     case "dateRange": {
@@ -123,8 +125,8 @@ export function InputReviewRow({
           param={param}
           register={skipRegistration}
           value={param.default}
+          owner={DRAFT_OWNER}
           valueKey={param.name}
-          widgetId=""
         />
       </span>
       <Pressable

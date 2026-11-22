@@ -1,0 +1,33 @@
+{
+  "name": "video",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Showcase out/showcase.mp4",
+    "render:still": "remotion still src/index.ts Showcase out/showcase.png --frame=330",
+    "check-types": "tsgo --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "render:real": "remotion render src/index.ts ShowcaseReal out/showcase-real.mp4",
+    "capture:seed": "./capture/seed.sh"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/mona-sans": "5.3.0",
+    "@remotion/cli": "4.0.545",
+    "@remotion/transitions": "4.0.545",
+    "lucide-react": "^0.575.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.545"
+  },
+  "devDependencies": {
+    "@conch/config": "workspace:*",
+    "@types/node": "^25.6.0",
+    "@types/react": "19.2.7",
+    "@typescript/native-preview": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   clampLauncherHeight,
+  heightRoom,
   LAUNCHER_MAX_HEIGHT,
   LAUNCHER_MIN_HEIGHT,
   LAUNCHER_WINDOW_WIDTH,
@@ -62,5 +63,27 @@ describe("resizedFrame", () => {
       ...current,
       height: 420,
     });
+  });
+});
+
+describe("heightRoom", () => {
+  const laptop = { height: 875, width: 1512, x: 0, y: 25 };
+  const tall = { height: 1415, width: 2560, x: 0, y: 25 };
+
+  it("ends the window at the bottom of the work area on a short display", () => {
+    const frame = launcherFrame(laptop, 5000);
+    expect(heightRoom(laptop)).toBe(682);
+    expect(frame.y + frame.height).toBeLessThanOrEqual(
+      laptop.y + laptop.height
+    );
+  });
+
+  it("keeps the usual cap on a tall display", () => {
+    expect(heightRoom(tall)).toBe(LAUNCHER_MAX_HEIGHT);
+  });
+
+  it("caps a resize at the room it was shown with", () => {
+    const current = launcherFrame(laptop, 64);
+    expect(resizedFrame(current, 5000, heightRoom(laptop)).height).toBe(682);
   });
 });

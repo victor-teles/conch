@@ -106,7 +106,7 @@ describe("ask view for raw SQL", () => {
     await userEvent.keyboard("{Enter}");
     await expect.element(screen.getByText("Saved · ⌥⏎ to run")).toBeVisible();
     expect(saveWidget.mock.calls[0]?.[0]).toMatchObject({
-      widget: { name: "Raw revenue", prompt: "", sqlTemplate: SQL },
+      widget: { name: "Raw revenue", prompt: "", source: { sqlTemplate: SQL } },
     });
   });
 });

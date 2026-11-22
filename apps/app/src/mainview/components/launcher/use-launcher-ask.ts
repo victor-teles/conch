@@ -42,13 +42,15 @@ export const useLauncherAsk = (push: (view: LauncherView) => void) => {
     push(ASK);
   }, [push, restore]);
 
+  const lastAnswerId = hasAnswer ? session.state.chainId : null;
   const rootAsk = useMemo(
     () => ({
+      lastAnswerId,
       reopen: hasAnswer ? reopen : null,
       start: startAndShow,
       startSql: runSqlAndShow,
     }),
-    [hasAnswer, reopen, runSqlAndShow, startAndShow]
+    [hasAnswer, lastAnswerId, reopen, runSqlAndShow, startAndShow]
   );
 
   return { openMatch, rootAsk, session };

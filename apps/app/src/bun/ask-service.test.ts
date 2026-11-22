@@ -82,6 +82,7 @@ const fakePool = (dialect: Pool["dialect"] = "postgresql") => ({
     rowCount: 1,
     rows: [[42]],
   }),
+  executeWrite: vi.fn(),
   listDatabases: vi.fn().mockResolvedValue(["analytics", "public"]),
 });
 
@@ -226,6 +227,7 @@ describe("createAskService", () => {
     expect(appendHistory).toHaveBeenCalledWith(
       expect.objectContaining({ sql: "select 42 as n", success: true })
     );
+    expect(pool.executeWrite).not.toHaveBeenCalled();
   });
 
   it("remembers an answered ask with its SQL and card", async () => {
@@ -365,6 +367,13 @@ describe("raw SQL runs", () => {
     expect(appendHistory).toHaveBeenCalledWith(
       expect.objectContaining({ sql: "select 42 as n", success: true })
     );
+  });
+
+  it("never reaches the guarded write path", async () => {
+    const { pool, service, settled } = setup();
+    service.startSqlRun(rawRun("r1"));
+    await settled;
+    expect(pool.executeWrite).not.toHaveBeenCalled();
   });
 
   it("never sends a refused statement to the database", async () => {

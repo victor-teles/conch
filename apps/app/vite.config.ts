@@ -8,6 +8,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
+import { resetPointer } from "./src/mainview/test/browser-commands";
+
 const dirname =
   typeof __dirname !== "undefined"
     ? __dirname
@@ -22,7 +24,7 @@ export default defineConfig({
       "react-dom/client",
       "motion/react",
       "lucide-react",
-      "next-themes",
+      "react-colorful",
     ],
   },
   plugins: [
@@ -93,6 +95,9 @@ export default defineConfig({
         extends: true,
         test: {
           browser: {
+            // Overrides the dev server's strictPort so parallel worktrees take the next free port.
+            api: { strictPort: false },
+            commands: { resetPointer },
             enabled: true,
             headless: true,
             instances: [{ browser: "chromium" }],

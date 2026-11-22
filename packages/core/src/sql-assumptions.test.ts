@@ -16,15 +16,22 @@ const DIALECT_CASES: DialectCase[] = [
     dialect: "postgresql",
     items: [
       { kind: "table", name: "orders" },
-      { column: "orders.created_at", grain: "month", kind: "time" },
+      {
+        column: "orders.created_at",
+        grain: "month",
+        kind: "time",
+        range: null,
+      },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at since 2026-01-01",
         text: "o.created_at >= CAST('2026-01-01' AS DATE)",
       },
       {
         column: "status",
         kind: "filter",
+        label: "status is paid or pending",
         text: "o.status IN ('paid', 'pending')",
       },
       { kind: "limit", rows: 500 },
@@ -42,15 +49,22 @@ limit 500`,
     dialect: "mysql",
     items: [
       { kind: "table", name: "orders" },
-      { column: "orders.created_at", grain: "month", kind: "time" },
+      {
+        column: "orders.created_at",
+        grain: "month",
+        kind: "time",
+        range: null,
+      },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at since 2026-01-01",
         text: "o.created_at >= '2026-01-01'",
       },
       {
         column: "status",
         kind: "filter",
+        label: "status is paid or pending",
         text: "o.status IN ('paid', 'pending')",
       },
       { kind: "limit", rows: 100 },
@@ -61,13 +75,19 @@ limit 500`,
     dialect: "sqlite",
     items: [
       { kind: "table", name: "orders" },
-      { column: "created_at", grain: "day", kind: "time" },
+      { column: "created_at", grain: "day", kind: "time", range: null },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at last 7 days",
         text: "created_at >= DATE('now', '-7 days')",
       },
-      { column: "status", kind: "filter", text: "status IN ('paid')" },
+      {
+        column: "status",
+        kind: "filter",
+        label: "status is paid",
+        text: "status IN ('paid')",
+      },
       { kind: "limit", rows: 10 },
     ],
     sql: "select strftime('%Y-%m-%d', created_at) as day, count(*) as orders from orders where created_at >= date('now', '-7 days') and status in ('paid') group by 1 limit 10",
@@ -76,15 +96,17 @@ limit 500`,
     dialect: "tsql",
     items: [
       { kind: "table", name: "orders" },
-      { column: "orders.created_at", grain: "week", kind: "time" },
+      { column: "orders.created_at", grain: "week", kind: "time", range: null },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at since 2026-01-01",
         text: "o.created_at >= '2026-01-01'",
       },
       {
         column: "status",
         kind: "filter",
+        label: "status is paid or pending",
         text: "o.status IN ('paid', 'pending')",
       },
       { kind: "limit", rows: 50 },
@@ -95,13 +117,19 @@ limit 500`,
     dialect: "clickhouse",
     items: [
       { kind: "table", name: "events" },
-      { column: "created_at", grain: "month", kind: "time" },
+      { column: "created_at", grain: "month", kind: "time", range: null },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at last 30 days",
         text: "created_at >= today() - 30",
       },
-      { column: "kind", kind: "filter", text: "kind IN ('signup', 'login')" },
+      {
+        column: "kind",
+        kind: "filter",
+        label: "kind is signup or login",
+        text: "kind IN ('signup', 'login')",
+      },
       { kind: "limit", rows: 20 },
     ],
     sql: "select toStartOfMonth(created_at) as month, count() as n from events where created_at >= today() - 30 and kind in ('signup', 'login') group by 1 limit 20",
@@ -110,15 +138,22 @@ limit 500`,
     dialect: "duckdb",
     items: [
       { kind: "table", name: "orders" },
-      { column: "orders.created_at", grain: "quarter", kind: "time" },
+      {
+        column: "orders.created_at",
+        grain: "quarter",
+        kind: "time",
+        range: null,
+      },
       {
         column: "created_at",
         kind: "filter",
+        label: "created_at since 2026-01-01",
         text: "o.created_at >= CAST('2026-01-01' AS DATE)",
       },
       {
         column: "status",
         kind: "filter",
+        label: "status is paid or pending",
         text: "o.status IN ('paid', 'pending')",
       },
       { kind: "limit", rows: 8 },
@@ -148,8 +183,13 @@ group by 1`;
     expect(describeSqlAssumptions(sql, "postgresql")?.items).toStrictEqual([
       { kind: "table", name: "regions" },
       { kind: "table", name: "payments" },
-      { column: "paid_at", grain: "month", kind: "time" },
-      { column: "status", kind: "filter", text: "p.status <> 'refunded'" },
+      { column: "paid_at", grain: "month", kind: "time", range: null },
+      {
+        column: "status",
+        kind: "filter",
+        label: "status is not refunded",
+        text: "p.status <> 'refunded'",
+      },
     ]);
   });
 
@@ -159,7 +199,12 @@ group by 1`;
     expect(describeSqlAssumptions(sql, "postgresql")?.items).toStrictEqual([
       { kind: "table", name: "accounts" },
       { kind: "table", name: "regions" },
-      { column: "name", kind: "filter", text: "r.name = 'Europe'" },
+      {
+        column: "name",
+        kind: "filter",
+        label: "name is Europe",
+        text: "r.name = 'Europe'",
+      },
     ]);
   });
 
@@ -168,8 +213,18 @@ group by 1`;
       "select count(*) as n from orders where created_at > now() - interval '7 days' and total > 10";
     expect(describeSqlAssumptions(sql, "postgresql")?.items).toStrictEqual([
       { kind: "table", name: "orders" },
-      { column: "created_at", grain: null, kind: "time" },
-      { column: "total", kind: "filter", text: "total > 10" },
+      {
+        column: "created_at",
+        grain: null,
+        kind: "time",
+        range: "created_at last 7 days",
+      },
+      {
+        column: "total",
+        kind: "filter",
+        label: "total over 10",
+        text: "total > 10",
+      },
     ]);
   });
 
@@ -178,6 +233,7 @@ group by 1`;
     expect(describeSqlAssumptions(sql, "postgresql")?.items[1]).toStrictEqual({
       column: "note",
       kind: "filter",
+      label: `note is ${"a".repeat(40)} or ${"b".repeat(7)}…`,
       text: `note IN ('${"a".repeat(40)}', '${"b".repeat(5)}…`,
     });
   });

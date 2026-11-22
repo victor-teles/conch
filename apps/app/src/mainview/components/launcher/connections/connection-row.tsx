@@ -5,6 +5,7 @@ import type { RowTone } from "@/components/launcher/launcher-row";
 import type { DatabaseConnection } from "@/lib/connections";
 
 import { LauncherRow } from "@/components/launcher/launcher-row";
+import { RowTrailing } from "@/components/launcher/row-trailing";
 import { SwapText } from "@/components/motion/swap-text";
 import { useMotionPreset } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -105,6 +106,7 @@ export function ConnectionRow({
       ) : null}
       <PinMark pinned={connection.pinned} />
       <ConnectionIndicator activity={activity} />
+      <RowTrailing kind="Connection" />
     </LauncherRow>
   );
 }

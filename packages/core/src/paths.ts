@@ -62,3 +62,43 @@ export function watchesPath(): string {
 export function runLogPath(): string {
   return path.join(appDir(), "widget-runs.enc");
 }
+
+export function mcpSettingsPath(): string {
+  return path.join(appDir(), "mcp.enc");
+}
+
+export function mcpAuditPath(): string {
+  return path.join(appDir(), "mcp-audit.enc");
+}
+
+export function mcpRunDir(): string {
+  return path.join(appDir(), "run");
+}
+
+export function mcpServersPath(): string {
+  return path.join(appDir(), "mcp-servers.enc");
+}
+
+export function httpEndpointsPath(): string {
+  return path.join(appDir(), "http-endpoints.enc");
+}
+
+export function actionsPath(): string {
+  return path.join(appDir(), "actions.enc");
+}
+
+export function writePermissionsPath(): string {
+  return path.join(appDir(), "write-permissions.enc");
+}
+
+export function actionsAuditPath(): string {
+  return path.join(appDir(), "actions-audit.enc");
+}
+
+export function miniAppsPath(): string {
+  return path.join(appDir(), "mini-apps.enc");
+}
+
+export function themesPath(): string {
+  return path.join(appDir(), "themes.enc");
+}

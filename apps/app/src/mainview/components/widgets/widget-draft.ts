@@ -10,6 +10,7 @@ export interface AnsweredAsk {
   spec: CardSpec;
   view: CardViewKind;
   connectionId: string;
+  database?: string | null;
 }
 
 const NAME_MAX = 60;
@@ -22,31 +23,39 @@ export const draftFromAsk = (
   name: string,
   inputs: { template: string; params: ParamDef[] } | null = null
 ): WidgetDraft => ({
-  connectionId: ask.connectionId,
-  database: null,
-  dialect: ask.dialect,
   lastValues: {},
   name: name.trim().slice(0, NAME_MAX),
   params: inputs?.params ?? [],
   prompt: ask.prompt,
+  source: {
+    connectionId: ask.connectionId,
+    database: ask.database ?? null,
+    dialect: ask.dialect,
+    kind: "sql",
+    sqlTemplate: inputs?.template ?? ask.sql,
+  },
   spec: ask.spec,
-  sqlTemplate: inputs?.template ?? ask.sql,
   view: ask.view,
 });
 
 export const draftFromWidget = (widget: Widget): WidgetDraft => ({
-  connectionId: widget.connectionId,
-  database: widget.database,
-  dialect: widget.dialect,
   id: widget.id,
   lastValues: widget.lastValues,
   name: widget.name,
   params: widget.params,
   prompt: widget.prompt,
+  source: widget.source,
   spec: widget.spec,
-  sqlTemplate: widget.sqlTemplate,
   view: widget.view,
 });
+
+export const rebindDraft = (
+  widget: Widget,
+  connectionId: string
+): WidgetDraft | null =>
+  widget.source.kind === "sql"
+    ? { ...draftFromWidget(widget), source: { ...widget.source, connectionId } }
+    : null;
 
 export const duplicateDraft = (widget: Widget): WidgetDraft => {
   const { id: _id, ...rest } = draftFromWidget(widget);

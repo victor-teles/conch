@@ -1,6 +1,10 @@
 import "@/index.css";
 import "./setup";
-import { beforeEach, expect } from "vitest";
+import { defaultThemeFor } from "@conch/rpc";
+import { afterEach, beforeEach, expect } from "vitest";
+import { commands } from "vitest/browser";
+
+import { applyTheme } from "@/lib/theme/apply-theme";
 
 const VOLATILE_STYLE_PROPS = new Set([
   "transform",
@@ -114,8 +118,10 @@ expect.addSnapshotSerializer({
   },
 });
 
+const pointer = { moved: false };
+
 if (typeof document !== "undefined") {
-  document.documentElement.classList.add("dark");
+  applyTheme(defaultThemeFor("dark"));
 
   const style = document.createElement("style");
   style.textContent = `
@@ -129,11 +135,29 @@ if (typeof document !== "undefined") {
     }
   `;
   document.head.append(style);
+
+  window.addEventListener(
+    "mousemove",
+    (event) => {
+      pointer.moved ||= event.isTrusted;
+    },
+    { capture: true }
+  );
 }
 
 // oxlint-disable-next-line jest/require-top-level-describe -- vitest setup file
 beforeEach(async () => {
-  if (typeof document !== "undefined" && document.fonts) {
-    await document.fonts.ready;
+  // A face only starts loading once text uses it, and its swap shifts layout mid-test.
+  await Promise.all(Array.from(document.fonts, (face) => face.load()));
+});
+
+// Playwright's pointer outlives a test and hovers whatever renders under it next.
+// oxlint-disable-next-line jest/require-top-level-describe -- vitest setup file
+afterEach(async () => {
+  applyTheme(defaultThemeFor("dark"));
+  if (!pointer.moved) {
+    return;
   }
+  await commands.resetPointer();
+  pointer.moved = false;
 });

@@ -53,6 +53,7 @@ const setup = ({
   const onEditInputs = vi.fn();
   const onAddToBoard = vi.fn();
   const onWatch = vi.fn();
+  const onOpenSources = vi.fn();
   renderWithConnections(
     <div data-testid="run-harness" style={{ width: 760 }}>
       <WidgetRunView
@@ -60,13 +61,24 @@ const setup = ({
         onAddToBoard={onAddToBoard}
         onClose={onClose}
         onEditInputs={onEditInputs}
+        onOpenSources={onOpenSources}
         onWatch={onWatch}
+        onEditAction={vi.fn()}
+        onManageActions={vi.fn()}
         widgetId={widget.id}
       />
     </div>
   );
   const screen = page.getByTestId("run-harness");
-  return { calls, onAddToBoard, onClose, onEditInputs, onWatch, screen };
+  return {
+    calls,
+    onAddToBoard,
+    onClose,
+    onEditInputs,
+    onOpenSources,
+    onWatch,
+    screen,
+  };
 };
 
 const deferred = () => {
@@ -223,6 +235,33 @@ describe("widgetRunView states", () => {
       .toBeVisible();
   });
 
+  it("sends an MCP widget whose server is gone to Sources settings", async () => {
+    const runWidget = vi
+      .fn()
+      .mockRejectedValue(
+        Object.assign(new Error("gone"), { code: "SOURCE_MISSING" })
+      );
+    const { onOpenSources, screen } = await setup({
+      runWidget,
+      widget: makeWidget({
+        params: [],
+        source: {
+          args: {},
+          kind: "mcp",
+          select: "$",
+          serverId: "stripe",
+          tool: "list_disputes",
+        },
+      }),
+    });
+    await expect
+      .element(screen.getByRole("alert"))
+      .toHaveTextContent("This widget's source no longer exists.");
+    await expect.element(screen.getByText("Copy Call")).toBeVisible();
+    await screen.getByRole("button", { name: "Open Sources Settings" }).click();
+    expect(onOpenSources).toHaveBeenCalledOnce();
+  });
+
   it("offers another connection when the widget's one is gone", async () => {
     const billing = makeConnection({ id: "billing", name: "billing" });
     const runWidget = vi
@@ -242,7 +281,7 @@ describe("widgetRunView states", () => {
     await screen.getByRole("button", { name: "billing" }).click();
     await expect.poll(() => calls.saveWidget.mock.calls.length).toBe(1);
     expect(calls.saveWidget.mock.calls[0]?.[0]).toMatchObject({
-      widget: { connectionId: "billing", id: "w-revenue" },
+      widget: { id: "w-revenue", source: { connectionId: "billing" } },
     });
     await expect.poll(() => runWidget.mock.calls.length).toBe(2);
   });
@@ -255,7 +294,10 @@ describe("widgetRunView states", () => {
         onAddToBoard={vi.fn()}
         onClose={vi.fn()}
         onEditInputs={vi.fn()}
+        onOpenSources={vi.fn()}
         onWatch={vi.fn()}
+        onEditAction={vi.fn()}
+        onManageActions={vi.fn()}
         widgetId="missing"
       />
     );
@@ -324,7 +366,10 @@ describe("widgetRunView actions", () => {
       "Copy as Markdown",
       "Copy Chart as PNG",
       "Save CSV to Downloads",
+      "Copy Link with Inputs",
       "Edit Inputs",
+      "Add Action…",
+      "Manage Actions…",
       "Rename",
       "Duplicate",
       "Add to Board",
@@ -369,7 +414,7 @@ describe("widgetRunView actions", () => {
       .element(menu.getByText("Press ↵ again to delete"))
       .toBeVisible();
     await menu
-      .getByRole("menuitem", { name: "Press ↵ again to delete" })
+      .getByRole("menuitem", { name: /Press ↵ again to delete/ })
       .click();
     await expect.poll(() => onClose.mock.calls.length).toBe(1);
     expect(calls.deleteWidget).toHaveBeenCalledWith({ widgetId: "w-revenue" });

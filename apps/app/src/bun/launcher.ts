@@ -16,14 +16,17 @@ import { createMacAccessibility } from "./accessibility-native.ts";
 import { requireAccessibility } from "./accessibility.ts";
 import { blurResponse } from "./launcher-blur.ts";
 import {
+  heightRoom,
   LAUNCHER_MIN_HEIGHT,
   launcherFrame,
   resizedFrame,
   workAreaForPoint,
 } from "./launcher-geometry.ts";
+import { createNavigationGate } from "./launcher-navigation.ts";
 import { summonPayload } from "./summon-payload.ts";
 import {
   EMPTY_TRAY_STATUS,
+  TRAY_IMAGES,
   trayActionOf,
   trayMenu,
   trayTitle,
@@ -36,6 +39,7 @@ export interface LauncherController {
   resize(height: number): void;
   runModal<T>(openPanel: () => Promise<T>): Promise<T>;
   setTrayStatus(status: TrayStatus): void;
+  setTrayActivity(line: string | null): void;
   show(): void;
   toggle(): void;
 }
@@ -64,9 +68,13 @@ export function createLauncher({
   onWatchedOpened,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
-  let rendererReady = false;
+  let room = heightRoom(cursorWorkArea());
   let modal = false;
-  const shownTray = { menu: "", title: "" };
+  const shownTray = { image: TRAY_IMAGES.idle as string, menu: "", title: "" };
+  const trayState = {
+    agentLine: null as string | null,
+    status: EMPTY_TRAY_STATUS,
+  };
 
   const window = new BrowserWindow({
     frame: launcherFrame(cursorWorkArea(), contentHeight),
@@ -80,24 +88,36 @@ export function createLauncher({
   window.setVisibleOnAllWorkspaces(true);
 
   const show = () => {
-    const frame = launcherFrame(cursorWorkArea(), contentHeight);
+    const workArea = cursorWorkArea();
+    room = heightRoom(workArea);
+    const frame = launcherFrame(workArea, contentHeight);
     window.setFrame(frame.x, frame.y, frame.width, frame.height);
     window.show();
     window.activate();
-    rpc.send.launcherShown(summonPayload(summonOffer));
+    rpc.send.launcherShown({ ...summonPayload(summonOffer), maxHeight: room });
   };
+  // A cold-start blur can hide the panel before the renderer is ready, so
+  // delivering a held view shows it again.
+  const navigation = createNavigationGate<LauncherNavigateView>((view) => {
+    if (!window.isVisible()) {
+      show();
+    }
+    rpc.send.launcherNavigate({ view });
+  });
 
   const tray = new Tray({
     height: 18,
-    image: "views://assets/tray-template.png",
+    image: TRAY_IMAGES.idle,
     template: true,
     width: 18,
   });
   // Native menu rebuilds are not free; skip them when nothing visible changed.
-  const setTrayStatus = (status: TrayStatus) => {
+  const renderTray = () => {
+    const { status, agentLine } = trayState;
     const title = trayTitle(status);
-    const menu = trayMenu(status);
+    const menu = trayMenu(status, agentLine);
     const menuKey = JSON.stringify(menu);
+    const image = agentLine ? TRAY_IMAGES.active : TRAY_IMAGES.idle;
     if (title !== shownTray.title) {
       tray.setTitle(title);
       shownTray.title = title;
@@ -106,25 +126,35 @@ export function createLauncher({
       tray.setMenu(menu);
       shownTray.menu = menuKey;
     }
+    if (image !== shownTray.image) {
+      tray.setImage(image);
+      shownTray.image = image;
+    }
   };
-  setTrayStatus(EMPTY_TRAY_STATUS);
+  const setTrayStatus = (status: TrayStatus) => {
+    trayState.status = status;
+    renderTray();
+  };
+  const setTrayActivity = (line: string | null) => {
+    trayState.agentLine = line;
+    renderTray();
+  };
+  renderTray();
 
   const controller: LauncherController = {
     hide: () => {
       window.hide();
       releaseFocus();
     },
-    markRendererReady: () => {
-      rendererReady = true;
-    },
+    markRendererReady: navigation.markReady,
     navigate: (view) => {
       if (!window.isVisible()) {
         show();
       }
-      rpc.send.launcherNavigate({ view });
+      navigation.navigate(view);
     },
     resize: (height) => {
-      const frame = resizedFrame(window.getFrame(), height);
+      const frame = resizedFrame(window.getFrame(), height, room);
       contentHeight = frame.height;
       window.setFrame(frame.x, frame.y, frame.width, frame.height);
     },
@@ -139,6 +169,7 @@ export function createLauncher({
         modal = false;
       }
     },
+    setTrayActivity,
     setTrayStatus,
     show,
     toggle: () => {
@@ -153,7 +184,7 @@ export function createLauncher({
   window.on("blur", () => {
     const response = blurResponse({
       modal,
-      rendererReady,
+      rendererReady: navigation.isReady(),
       visible: window.isVisible(),
     });
     if (response === "dismiss") {

@@ -3,41 +3,65 @@
 exports[`history motion with full motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
 <div
   aria-hidden="true"
-  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  class="flex flex-col px-2 pt-7"
   data-testid="history-skeleton"
 >
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 62%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 62%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 42%"
+      />
+    </span>
   </div>
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 48%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 48%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 28%"
+      />
+    </span>
   </div>
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 70%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 70%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 50%"
+      />
+    </span>
   </div>
 </div>
 `;
@@ -45,41 +69,65 @@ exports[`history motion with full motion > keeps a slow load's skeleton up until
 exports[`history motion with reduced motion > keeps a slow load's skeleton up until the asks arrive 1`] = `
 <div
   aria-hidden="true"
-  class="flex flex-col gap-1 px-2 pt-7 pb-2"
+  class="flex flex-col px-2 pt-7"
   data-testid="history-skeleton"
 >
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 62%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 62%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 42%"
+      />
+    </span>
   </div>
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 48%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 48%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 28%"
+      />
+    </span>
   </div>
   <div
-    class="flex h-10 items-center gap-3 px-2.5"
+    class="flex h-14 items-center gap-3 px-2.5"
   >
     <span
       class="size-6 rounded-[7px] bg-foreground/[0.06]"
     />
     <span
-      class="h-3 rounded-full bg-foreground/[0.06]"
-      style="width: 70%"
-    />
+      class="flex flex-1 flex-col gap-1.5"
+    >
+      <span
+        class="h-3 rounded-full bg-foreground/[0.06]"
+        style="width: 70%"
+      />
+      <span
+        class="h-2.5 rounded-full bg-foreground/[0.04]"
+        style="width: 50%"
+      />
+    </span>
   </div>
 </div>
 `;
@@ -87,7 +135,7 @@ exports[`history motion with reduced motion > keeps a slow load's skeleton up un
 exports[`historyView > asks for every stored ask and groups them by day 1`] = `
 <div
   aria-label="Past asks"
-  class="relative flex flex-col gap-1 px-2 pb-2"
+  class="relative flex flex-col px-2"
   id="launcher-history-list"
   role="listbox"
 >
@@ -97,7 +145,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Today
@@ -107,7 +155,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       >
         <div
           aria-selected="true"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          class="relative flex cursor-default items-center gap-3 px-2.5 h-14"
           data-tone="default"
           id="launcher-option-a-signups"
           role="option"
@@ -144,20 +192,40 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
             </svg>
           </span>
           <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            class="relative flex min-w-0 flex-1 flex-col gap-0.5"
           >
             <span
-              class="min-w-0 flex-1 truncate type-body text-foreground"
+              class="flex min-w-0 items-baseline gap-2"
             >
-              Signups by plan, EU only
+              <span
+                class="min-w-0 flex-1 truncate type-body text-foreground"
+              >
+                Signups by plan, EU only
+              </span>
+              <span
+                class="shrink-0 type-meta text-panel-muted tabular-nums"
+              >
+                14:05
+              </span>
             </span>
             <span
-              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+              class="flex min-w-0 items-baseline gap-1.5 type-meta text-panel-muted"
             >
-              <span>
+              <span
+                class="shrink-0"
+              >
                 analytics
               </span>
-               · Signups by plan · 14:05
+              <span
+                aria-hidden="true"
+              >
+                ·
+              </span>
+              <span
+                class="min-w-0 truncate font-mono text-[12px]"
+              >
+                select plan, count(*) from signups where region = 'EU' group by 1
+              </span>
             </span>
           </span>
         </div>
@@ -167,7 +235,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       >
         <div
           aria-selected="false"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          class="relative flex cursor-default items-center gap-3 px-2.5 h-14"
           data-tone="default"
           id="launcher-option-a-revenue"
           role="option"
@@ -201,20 +269,40 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
             </svg>
           </span>
           <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            class="relative flex min-w-0 flex-1 flex-col gap-0.5"
           >
             <span
-              class="min-w-0 flex-1 truncate type-body text-foreground"
+              class="flex min-w-0 items-baseline gap-2"
             >
-              Revenue for Europe
+              <span
+                class="min-w-0 flex-1 truncate type-body text-foreground"
+              >
+                Revenue for Europe
+              </span>
+              <span
+                class="shrink-0 type-meta text-panel-muted tabular-nums"
+              >
+                09:30
+              </span>
             </span>
             <span
-              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+              class="flex min-w-0 items-baseline gap-1.5 type-meta text-panel-muted"
             >
-              <span>
+              <span
+                class="shrink-0"
+              >
                 analytics
               </span>
-               · Monthly recurring revenue in Europe · 09:30
+              <span
+                aria-hidden="true"
+              >
+                ·
+              </span>
+              <span
+                class="min-w-0 truncate font-mono text-[12px]"
+              >
+                select sum(mrr) from billing_events
+              </span>
             </span>
           </span>
         </div>
@@ -227,7 +315,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       role="group"
     >
       <div
-        class="px-2.5 pt-1 pb-1.5 type-micro text-panel-muted"
+        class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
         id="_r_id_"
       >
         Yesterday
@@ -237,7 +325,7 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
       >
         <div
           aria-selected="false"
-          class="relative flex h-10 cursor-default items-center gap-3 px-2.5"
+          class="relative flex cursor-default items-center gap-3 px-2.5 h-14"
           data-tone="default"
           id="launcher-option-a-churn"
           role="option"
@@ -271,22 +359,40 @@ exports[`historyView > asks for every stored ask and groups them by day 1`] = `
             </svg>
           </span>
           <span
-            class="relative flex min-w-0 flex-1 items-baseline gap-2"
+            class="relative flex min-w-0 flex-1 flex-col gap-0.5"
           >
             <span
-              class="min-w-0 flex-1 truncate type-body text-foreground"
-            >
-              Churned accounts last month
-            </span>
-            <span
-              class="max-w-[55%] min-w-0 truncate type-meta text-panel-muted"
+              class="flex min-w-0 items-baseline gap-2"
             >
               <span
-                class="italic"
+                class="min-w-0 flex-1 truncate type-body text-foreground"
+              >
+                Churned accounts last month
+              </span>
+              <span
+                class="shrink-0 type-meta text-panel-muted tabular-nums"
+              >
+                18 Nov
+              </span>
+            </span>
+            <span
+              class="flex min-w-0 items-baseline gap-1.5 type-meta text-panel-muted"
+            >
+              <span
+                class="shrink-0 italic"
               >
                 connection removed
               </span>
-               · Monthly recurring revenue in Europe · 18 Nov
+              <span
+                aria-hidden="true"
+              >
+                ·
+              </span>
+              <span
+                class="min-w-0 truncate font-mono text-[12px]"
+              >
+                select * from accounts where churned_at is not null
+              </span>
             </span>
           </span>
         </div>

@@ -1,5 +1,5 @@
 import type { DialectType } from "@conch/core";
-import type { ProposeParamsResult } from "@conch/rpc";
+import type { ParamDef, ProposeParamsResult } from "@conch/rpc";
 import type { LanguageModel, ModelMessage } from "ai";
 
 import {
@@ -10,11 +10,17 @@ import {
   RANGE_PRESETS,
   tokenizeSqlTemplate,
 } from "@conch/core/client";
-import { ParamDef, RangePreset, toTemplateValue } from "@conch/rpc";
+import { toTemplateValue } from "@conch/rpc";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 
 import { classifyAIError } from "./ai-errors.ts";
+import {
+  ParamDraftInput,
+  ProposalRejected,
+  reject,
+  toParamDef,
+} from "./param-draft.ts";
 import { assertReadOnly } from "./read-only-guard.ts";
 import { NUMBER_LITERAL, restoreDefaults } from "./restore-defaults.ts";
 import { DIALECT_LABELS } from "./schema-prompt.ts";
@@ -23,28 +29,14 @@ export const MAX_PROPOSED_PARAMS = 4;
 export const PROPOSE_TIMEOUT_MS = 20_000;
 const MAX_PROPOSAL_REPAIRS = 1;
 
-const PARAM_TYPES = ["date", "dateRange", "number", "text", "select"] as const;
-
 // Strict structured output rejects optional fields and oneOf, so the model
 // fills this flat draft and ParamDef checks the result.
 const ProposalDraft = z.object({
-  inputs: z.array(
-    z.object({
-      defaultValue: z.string(),
-      label: z.string(),
-      max: z.number().nullable(),
-      min: z.number().nullable(),
-      name: z.string(),
-      options: z.array(z.string()).nullable(),
-      optionsSql: z.string().nullable(),
-      type: z.enum(PARAM_TYPES),
-    })
-  ),
+  inputs: z.array(ParamDraftInput),
   template: z.string(),
 });
 
 type ProposalDraftValue = z.infer<typeof ProposalDraft>;
-type DraftInput = ProposalDraftValue["inputs"][number];
 
 export interface ProposeParamsInput {
   sql: string;
@@ -54,12 +46,6 @@ export interface ProposeParamsInput {
   now: Date;
   signal: AbortSignal;
 }
-
-class ProposalRejected extends Error {}
-
-const reject = (message: string): never => {
-  throw new ProposalRejected(message);
-};
 
 const EXAMPLE = `Example. Query:
 select status, count(*) as orders from orders
@@ -102,67 +88,6 @@ ${EXAMPLE}`;
 export const repairProposal = (reason: string): string =>
   `That template was rejected: ${reason}
 Fix it and reply with the whole template and inputs again, following the same rules.`;
-
-const RANGE_SEPARATOR = "..";
-
-const rangeDefault = (value: string): ParamDef["default"] => {
-  const preset = RangePreset.safeParse(value);
-  if (preset.success) {
-    return preset.data;
-  }
-  const [from = "", to = ""] = value.split(RANGE_SEPARATOR);
-  return { from: from.trim(), to: to.trim() };
-};
-
-const candidateFor = (input: DraftInput): unknown => {
-  const base = { label: input.label, name: input.name };
-  switch (input.type) {
-    case "date": {
-      return { ...base, default: input.defaultValue, type: "date" };
-    }
-    case "dateRange": {
-      return {
-        ...base,
-        default: rangeDefault(input.defaultValue),
-        type: "dateRange",
-      };
-    }
-    case "number": {
-      return {
-        ...base,
-        default: Number(input.defaultValue),
-        type: "number",
-        ...(input.min === null ? {} : { min: input.min }),
-        ...(input.max === null ? {} : { max: input.max }),
-      };
-    }
-    case "select": {
-      if (!(input.options?.length || input.optionsSql)) {
-        return { ...base, default: input.defaultValue, type: "text" };
-      }
-      return {
-        ...base,
-        default: input.defaultValue,
-        type: "select",
-        ...(input.options ? { options: input.options } : {}),
-        ...(input.optionsSql ? { optionsSql: input.optionsSql } : {}),
-      };
-    }
-    default: {
-      return { ...base, default: input.defaultValue, type: "text" };
-    }
-  }
-};
-
-const toParamDef = (input: DraftInput): ParamDef => {
-  const parsed = ParamDef.safeParse(candidateFor(input));
-  if (!parsed.success) {
-    return reject(
-      `The proposed input "${input.name}" isn't valid: ${parsed.error.issues[0]?.message ?? "unknown problem"}.`
-    );
-  }
-  return parsed.data;
-};
 
 const STRING_LITERAL = /^['$]/;
 const TYPED_LITERAL = /\b(?:date|timestamp|timestamptz|time|interval)\s+\?/gi;

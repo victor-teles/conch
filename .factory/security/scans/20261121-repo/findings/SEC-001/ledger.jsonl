@@ -1,0 +1,4 @@
+{"phase": "discovery", "at": "2026-11-21", "note": "recorded from code inspection"}
+{"phase":"validation","at":"2026-11-21"}
+{"phase":"attack-path","at":"2026-11-21"}
+{"phase":"fix","at":"2026-11-21"}

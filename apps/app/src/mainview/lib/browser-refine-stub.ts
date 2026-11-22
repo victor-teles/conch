@@ -24,11 +24,13 @@ const SUBSCRIPTION_TABLES: SqlAssumptions["items"] = [
 const SINCE_JANUARY = {
   column: "billed_at",
   kind: "filter",
+  label: "billed_at since 2026-01-01",
   text: "s.billed_at >= CAST('2026-01-01' AS DATE)",
 } as const;
 const ACTIVE = {
   column: "status",
   kind: "filter",
+  label: "status is active",
   text: "s.status = 'active'",
 } as const;
 const TOP_500 = { kind: "limit", rows: 500 } as const;
@@ -41,7 +43,12 @@ export const RECORDED_ASSUMPTIONS = new Map<string, SqlAssumptions>([
     {
       items: [
         ...SUBSCRIPTION_TABLES,
-        { column: "subscriptions.billed_at", grain: "month", kind: "time" },
+        {
+          column: "subscriptions.billed_at",
+          grain: "month",
+          kind: "time",
+          range: null,
+        },
         SINCE_JANUARY,
         ACTIVE,
         TOP_500,
@@ -54,10 +61,16 @@ export const RECORDED_ASSUMPTIONS = new Map<string, SqlAssumptions>([
       items: [
         { kind: "table", name: "users" },
         { kind: "table", name: "plans" },
-        { column: "users.created_at", grain: "week", kind: "time" },
+        {
+          column: "users.created_at",
+          grain: "week",
+          kind: "time",
+          range: null,
+        },
         {
           column: "created_at",
           kind: "filter",
+          label: "created_at last 8 weeks",
           text: "u.created_at >= CURRENT_DATE - INTERVAL '8 weeks'",
         },
       ],
@@ -68,12 +81,23 @@ export const RECORDED_ASSUMPTIONS = new Map<string, SqlAssumptions>([
     {
       items: [
         ...SUBSCRIPTION_TABLES,
-        { column: "subscriptions.billed_at", grain: "month", kind: "time" },
-        { column: "name", kind: "filter", text: "r.name = 'Europe'" },
+        {
+          column: "subscriptions.billed_at",
+          grain: "month",
+          kind: "time",
+          range: null,
+        },
+        {
+          column: "name",
+          kind: "filter",
+          label: "name is Europe",
+          text: "r.name = 'Europe'",
+        },
         SINCE_JANUARY,
         {
           column: "billed_at",
           kind: "filter",
+          label: "billed_at before 2026-10-01",
           text: "s.billed_at < CAST('2026-10-01' AS DATE)",
         },
       ],
@@ -84,7 +108,12 @@ export const RECORDED_ASSUMPTIONS = new Map<string, SqlAssumptions>([
     {
       items: [
         ...SUBSCRIPTION_TABLES,
-        { column: "subscriptions.billed_at", grain: "quarter", kind: "time" },
+        {
+          column: "subscriptions.billed_at",
+          grain: "quarter",
+          kind: "time",
+          range: null,
+        },
         SINCE_JANUARY,
         ACTIVE,
         TOP_500,

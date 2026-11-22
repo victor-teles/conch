@@ -1,0 +1,33 @@
+{
+  "id": "SEC-001",
+  "title": "DuckDB read-only execution reads local files and remote URLs",
+  "affected_locations": [
+    {
+      "file": "packages/drivers-duckdb/src/pool.ts",
+      "line": 117,
+      "label": "root_control"
+    },
+    {
+      "file": "packages/agent/src/read-only-guard.ts",
+      "line": 271,
+      "label": "wrapper"
+    },
+    {
+      "file": "apps/app/src/bun/mcp-server/tools.ts",
+      "line": 257,
+      "label": "entrypoint"
+    },
+    {
+      "file": "apps/app/src/bun/widget-service.ts",
+      "line": 254,
+      "label": "entrypoint"
+    }
+  ],
+  "attacker_source": "SQL written by the AI model (steerable by an MCP agent's question or by text in the data) or a widget template from an imported bundle",
+  "sink_or_broken_control": "DuckDB table functions (read_text, read_blob, read_csv, query, httpfs readers) and quoted-path replacement scans run inside BEGIN TRANSACTION READ ONLY",
+  "impact": "confidentiality: any file the user can read, including ~/.config/conch/.key and connections.json (all stored DB credentials)",
+  "plausibility": "guard has no rule for table functions; READ ONLY only blocks writes to the database",
+  "closest_control": "assertReadOnly + read-only transaction; neither restricts file/network table functions",
+  "cwe": ["CWE-441", "CWE-22", "CWE-200"],
+  "validation_recommended": true
+}

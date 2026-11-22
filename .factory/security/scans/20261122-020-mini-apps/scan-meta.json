@@ -1,0 +1,17 @@
+{
+  "scan_id": "20261122-020-mini-apps",
+  "mode": "diff",
+  "review_only": true,
+  "target": "plan 020 (mini-apps), uncommitted working tree",
+  "base": "b486b51b3f239550f014483db8d112205305f4d4",
+  "head": "a3df7a699a6ab04fadcc53fe8712cc1572f3bf5f",
+  "working_tree_matches_head": true,
+  "changed_files": 157,
+  "threat_model_inputs": [
+    ".factory/plans/020-mini-apps-saved-generated-panels.md",
+    ".factory/plans/019-actions-confirmed-writes-audit-log.md",
+    ".factory/security/scans/20261121-019-actions/report.md",
+    ".factory/security/threat-model.md"
+  ],
+  "date": "2026-11-22"
+}

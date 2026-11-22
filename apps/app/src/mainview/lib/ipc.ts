@@ -23,6 +23,26 @@ import type {
   ViewItem,
 } from "@conch/core/client";
 import type {
+  ActionActivity,
+  ActionActivityPage,
+  ActionContext,
+  ActionDraft,
+  ActionEffect,
+  ActionOutcome,
+  ActionPreview,
+  ActionProposal,
+  ActionReview,
+  ActionScope,
+  ActionTarget,
+  ActionTargetKind,
+  AuditIntegrity,
+  BindSource,
+  BoundValue,
+  CompiledAction,
+  ListedAction,
+  ProposeActionRequest,
+  WidgetAction,
+  WriteTargetKind,
   ActiveConnection,
   AiSettingsInput,
   AiTestResult,
@@ -53,6 +73,10 @@ import type {
   LookupErrorCode,
   LookupEvent,
   LookupHit,
+  McpActivity,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettingsUpdate,
   ParamDef,
   ParamType,
   ParamValue,
@@ -60,6 +84,7 @@ import type {
   ProposeParamsResult,
   RecentAsk,
   RedactedAiSettings,
+  RedactedMcpSettings,
   RefineContext,
   RefreshInterval,
   RpcSchema,
@@ -76,12 +101,58 @@ import type {
   WatchInterval,
   WatchState,
   WatchStatus,
+  ImportThemeResult,
+  Theme,
+  ThemeDraft,
+  ThemeSettings,
+  ThemeState,
   Widget,
   WidgetDraft,
   WidgetPlan,
   WidgetRunResult,
   WidgetTrend,
+  CompiledSource,
+  ExternalSource,
+  HttpEndpointInput,
+  HttpSource,
+  McpServerInput,
+  McpSource,
+  McpToolSummary,
+  ParamRef,
+  PreviewSourceRequest,
+  QueryLeaf,
+  RedactedHttpEndpoint,
+  RedactedMcpServer,
+  RedactedSecret,
+  SetMcpToolReadRequest,
+  Source,
+  SourceKind,
+  SourcePreviewResult,
+  SourceProposal,
+  SourceTarget,
+  SourceTestResult,
+  SqlSource,
 } from "@conch/rpc";
+import type {
+  AppActionDraft,
+  CardElement,
+  DraftPatch,
+  DraftState,
+  GenerateMiniAppRequest,
+  MiniApp,
+  MiniAppActionRequest,
+  MiniAppDraft,
+  MiniAppGenErrorCode,
+  MiniAppGenEvent,
+  MiniAppGenPhase,
+  MiniAppSourceRun,
+  MiniAppTarget,
+  PanelElement,
+  PanelElementOf,
+  PanelElementType,
+  PanelLayout,
+  Visibility,
+} from "@conch/rpc/mini-app";
 
 import { decodeRpcError } from "@conch/rpc";
 import { Electroview } from "electrobun/view";
@@ -171,6 +242,78 @@ export type {
   ImportSource,
   WidgetPlan,
 };
+export type {
+  ActionActivity,
+  ActionActivityPage,
+  ActionContext,
+  ActionDraft,
+  ActionEffect,
+  ActionOutcome,
+  ActionPreview,
+  ActionProposal,
+  ActionReview,
+  ActionScope,
+  ActionTarget,
+  ActionTargetKind,
+  AuditIntegrity,
+  BindSource,
+  BoundValue,
+  CompiledAction,
+  ListedAction,
+  ProposeActionRequest,
+  WidgetAction,
+  WriteTargetKind,
+};
+export type {
+  McpActivity,
+  McpAuditEntry,
+  McpClientKind,
+  McpSettingsUpdate,
+  RedactedMcpSettings,
+};
+export type {
+  CompiledSource,
+  ExternalSource,
+  HttpEndpointInput,
+  HttpSource,
+  McpServerInput,
+  McpSource,
+  McpToolSummary,
+  ParamRef,
+  PreviewSourceRequest,
+  QueryLeaf,
+  RedactedHttpEndpoint,
+  RedactedMcpServer,
+  RedactedSecret,
+  SetMcpToolReadRequest,
+  Source,
+  SourceKind,
+  SourcePreviewResult,
+  SourceProposal,
+  SourceTarget,
+  SourceTestResult,
+  SqlSource,
+};
+export type {
+  AppActionDraft,
+  CardElement,
+  DraftPatch,
+  DraftState,
+  GenerateMiniAppRequest,
+  MiniApp,
+  MiniAppActionRequest,
+  MiniAppDraft,
+  MiniAppGenErrorCode,
+  MiniAppGenEvent,
+  MiniAppGenPhase,
+  MiniAppSourceRun,
+  MiniAppTarget,
+  PanelElement,
+  PanelElementOf,
+  PanelElementType,
+  PanelLayout,
+  Visibility,
+};
 
 const IOS_UA_RE = /iPhone|iPad|iPod/i;
 const MAC_UA_RE = /Mac/i;
@@ -202,6 +345,11 @@ const messageHandlers: {
   launcherShown: new Set(),
   launcherToggle: new Set(),
   lookupEvent: new Set(),
+  mcpActivity: new Set(),
+  miniAppChanged: new Set(),
+  miniAppGenEvent: new Set(),
+  miniAppRefresh: new Set(),
+  themeChanged: new Set(),
   updateProgress: new Set(),
   watchesChanged: new Set(),
   widgetSampled: new Set(),
@@ -226,6 +374,10 @@ const subscribe = <M extends MessageName>(
   };
 };
 
+// Bun sends a navigate right after the handshake (a cold-start link), which
+// can land before the launcher mounts and subscribes.
+const unheardNavigation: { view: LauncherNavigateView | null } = { view: null };
+
 const bunReadyHandlers = new Set<() => void>();
 const bunReadyState = { fired: false };
 
@@ -235,18 +387,28 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
       askEvent: (payload) => dispatchMessage("askEvent", payload),
       boardChanged: (payload) => dispatchMessage("boardChanged", payload),
       launcherDismiss: (payload) => dispatchMessage("launcherDismiss", payload),
-      launcherNavigate: (payload) =>
-        dispatchMessage("launcherNavigate", payload),
+      launcherNavigate: (payload) => {
+        if (messageHandlers.launcherNavigate.size === 0) {
+          unheardNavigation.view = payload.view;
+          return;
+        }
+        dispatchMessage("launcherNavigate", payload);
+      },
       launcherShown: (payload) => dispatchMessage("launcherShown", payload),
       launcherToggle: (payload) => dispatchMessage("launcherToggle", payload),
       lookupEvent: (payload) => dispatchMessage("lookupEvent", payload),
+      mcpActivity: (payload) => dispatchMessage("mcpActivity", payload),
+      miniAppChanged: (payload) => dispatchMessage("miniAppChanged", payload),
+      miniAppGenEvent: (payload) => dispatchMessage("miniAppGenEvent", payload),
+      miniAppRefresh: (payload) => dispatchMessage("miniAppRefresh", payload),
+      themeChanged: (payload) => dispatchMessage("themeChanged", payload),
       updateProgress: (payload) => dispatchMessage("updateProgress", payload),
       watchesChanged: (payload) => dispatchMessage("watchesChanged", payload),
       widgetSampled: (payload) => dispatchMessage("widgetSampled", payload),
     },
     requests: {},
   },
-  // Long queries may legitimately run for minutes; cancelQuery is the
+  // Long queries may legitimately run for minutes; the cancel requests are the
   // user-driven recovery path for hung calls, not a transport-level timeout.
   maxRequestTime: Number.POSITIVE_INFINITY,
 });
@@ -315,8 +477,17 @@ export const onLauncherDismiss = (handler: () => void): (() => void) =>
 
 export const onLauncherNavigate = (
   handler: (view: LauncherNavigateView) => void
-): (() => void) =>
-  subscribe("launcherNavigate", (payload) => handler(payload.view));
+): (() => void) => {
+  const unsubscribe = subscribe("launcherNavigate", (payload) =>
+    handler(payload.view)
+  );
+  const missed = unheardNavigation.view;
+  if (missed !== null) {
+    unheardNavigation.view = null;
+    handler(missed);
+  }
+  return unsubscribe;
+};
 
 export function onBunReady(handler: () => void): () => void {
   bunReadyHandlers.add(handler);
@@ -353,12 +524,21 @@ export const onBoardChanged = (
 ): (() => void) =>
   subscribe("boardChanged", (payload) => handler(payload.boardId));
 
+export const onThemeChanged = (
+  handler: (state: ThemeState) => void
+): (() => void) => subscribe("themeChanged", handler);
+
 export const onUpdateProgress = (
   handler: (progress: RpcMessages["updateProgress"]) => void
 ): (() => void) => subscribe("updateProgress", handler);
 
 export const onWatchesChanged = (handler: () => void): (() => void) =>
   subscribe("watchesChanged", handler);
+
+export const onMcpActivity = (
+  handler: (active: McpActivity[]) => void
+): (() => void) =>
+  subscribe("mcpActivity", (payload) => handler(payload.active));
 
 export const onWidgetSampled = (
   handler: (sampled: RpcMessages["widgetSampled"]) => void
@@ -419,12 +599,6 @@ export const getSchema = (
       force: options?.force ?? false,
     })
   );
-
-export const executeQuery = (params: QueryParams): Promise<ExecuteResult> =>
-  callRpc(() => request.executeQuery({ params }));
-
-export const cancelQuery = (queryId: string): Promise<boolean> =>
-  callRpc(() => request.cancelQuery({ queryId }));
 
 export const formatSql = (sql: string, dialect: string): Promise<string> =>
   callRpc(() => request.formatSql({ dialect, sql }));
@@ -491,9 +665,6 @@ export const checkForUpdate = (): Promise<AvailableUpdate | null> =>
 export const installUpdate = (): Promise<boolean> =>
   callRpc(() => request.installUpdate({} as never));
 
-export const openExternal = (url: string): Promise<void> =>
-  callRpc(() => request.openExternal({ url }));
-
 export const copyImage = (pngBase64: string): Promise<void> =>
   callRpc(() => request.copyImage({ pngBase64 }));
 
@@ -549,6 +720,27 @@ export const setClipboardLookups = async (
   const setting = await callRpc(() => request.setClipboardLookups({ enabled }));
   return setting.enabled;
 };
+
+export const getThemeState = (): Promise<ThemeState> =>
+  callRpc(() => request.getThemeState({} as never));
+
+export const setThemeSettings = (
+  settings: ThemeSettings
+): Promise<ThemeState> => callRpc(() => request.setThemeSettings({ settings }));
+
+export const saveTheme = (theme: ThemeDraft): Promise<Theme> =>
+  callRpc(() => request.saveTheme({ theme }));
+
+export const deleteTheme = (themeId: string): Promise<ThemeState> =>
+  callRpc(() => request.deleteTheme({ themeId }));
+
+export const exportTheme = (
+  themeId: string
+): Promise<{ fileName: string; savedId: string }> =>
+  callRpc(() => request.exportTheme({ themeId }));
+
+export const importTheme = (): Promise<ImportThemeResult> =>
+  callRpc(() => request.importTheme({} as never));
 
 export const listWidgets = (): Promise<Widget[]> =>
   callRpc(() => request.listWidgets({} as never));
@@ -606,8 +798,8 @@ export const addBoardTile = (
 export const openBoard = (boardId: string): Promise<void> =>
   callRpc(() => request.openBoard({ boardId }));
 
-export const toggleLauncher = (fromBoardId: string | null): Promise<void> =>
-  callRpc(() => request.toggleLauncher({ fromBoardId }));
+export const toggleLauncher = (fromWindowKey: string | null): Promise<void> =>
+  callRpc(() => request.toggleLauncher({ fromWindowKey }));
 
 export const openWidgetInLauncher = (widgetId: string): Promise<void> =>
   callRpc(() => request.openWidgetInLauncher({ widgetId }));
@@ -648,3 +840,208 @@ export const setWatchingPaused = (paused: boolean): Promise<void> =>
 
 export const getWatchingPaused = (): Promise<boolean> =>
   callRpc(() => request.getWatchingPaused({} as never));
+
+export const getMcpSettings = (): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.getMcpSettings({} as never));
+
+export const saveMcpSettings = (
+  update: McpSettingsUpdate
+): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.saveMcpSettings(update));
+
+export const rotateMcpToken = (): Promise<RedactedMcpSettings> =>
+  callRpc(() => request.rotateMcpToken({} as never));
+
+export const copyMcpClientConfig = (client: McpClientKind): Promise<void> =>
+  callRpc(() => request.copyMcpClientConfig({ client }));
+
+export const listMcpAudit = (limit?: number): Promise<McpAuditEntry[]> =>
+  callRpc(() => request.listMcpAudit(limit === undefined ? {} : { limit }));
+
+export const clearMcpAudit = (): Promise<void> =>
+  callRpc(() => request.clearMcpAudit({} as never));
+
+export const listMcpServers = (): Promise<RedactedMcpServer[]> =>
+  callRpc(() => request.listMcpServers({} as never));
+
+export const saveMcpServer = (
+  server: McpServerInput
+): Promise<RedactedMcpServer | null> =>
+  callRpc(() => request.saveMcpServer({ server }));
+
+export const deleteMcpServer = (
+  serverId: string
+): Promise<{ widgetNames: string[] }> =>
+  callRpc(() => request.deleteMcpServer({ serverId }));
+
+export const testMcpServer = (serverId: string): Promise<SourceTestResult> =>
+  callRpc(() => request.testMcpServer({ serverId }));
+
+export const listMcpTools = (serverId: string): Promise<McpToolSummary[]> =>
+  callRpc(() => request.listMcpTools({ serverId }));
+
+export const setMcpToolRead = (
+  input: SetMcpToolReadRequest
+): Promise<RedactedMcpServer | null> =>
+  callRpc(() => request.setMcpToolRead(input));
+
+export const listHttpEndpoints = (): Promise<RedactedHttpEndpoint[]> =>
+  callRpc(() => request.listHttpEndpoints({} as never));
+
+export const saveHttpEndpoint = (
+  endpoint: HttpEndpointInput
+): Promise<RedactedHttpEndpoint> =>
+  callRpc(() => request.saveHttpEndpoint({ endpoint }));
+
+export const deleteHttpEndpoint = (
+  endpointId: string
+): Promise<{ widgetNames: string[] }> =>
+  callRpc(() => request.deleteHttpEndpoint({ endpointId }));
+
+export const testHttpEndpoint = (
+  endpointId: string
+): Promise<SourceTestResult> =>
+  callRpc(() => request.testHttpEndpoint({ endpointId }));
+
+export const proposeSourceWidget = (
+  target: SourceTarget,
+  prompt: string
+): Promise<SourceProposal> =>
+  callRpc(() => request.proposeSourceWidget({ prompt, target }));
+
+export const previewSource = (
+  input: PreviewSourceRequest
+): Promise<SourcePreviewResult> => callRpc(() => request.previewSource(input));
+
+export const listActions = (widgetId: string): Promise<ListedAction[]> =>
+  callRpc(() => request.listActions({ widgetId }));
+
+export const saveAction = (
+  widgetId: string,
+  draft: ActionDraft
+): Promise<ListedAction> =>
+  callRpc(() => request.saveAction({ draft, widgetId }));
+
+export const deleteAction = (actionId: string): Promise<void> =>
+  callRpc(() => request.deleteAction({ actionId }));
+
+export const reviewAction = (
+  widgetId: string,
+  draft: ActionDraft,
+  context: ActionContext
+): Promise<ActionReview> =>
+  callRpc(() => request.reviewAction({ context, draft, widgetId }));
+
+export const prepareAction = (
+  actionId: string,
+  context: ActionContext
+): Promise<ActionPreview> =>
+  callRpc(() => request.prepareAction({ actionId, context }));
+
+export const executeAction = (token: string): Promise<ActionOutcome> =>
+  callRpc(() => request.executeAction({ token }));
+
+export const discardActionToken = (token: string): Promise<void> =>
+  callRpc(() => request.discardActionToken({ token }));
+
+export const proposeAction = (
+  input: ProposeActionRequest
+): Promise<ActionProposal> => callRpc(() => request.proposeAction(input));
+
+export const listWritePermissions = (): Promise<
+  { kind: WriteTargetKind; id: string }[]
+> => callRpc(() => request.listWritePermissions({} as never));
+
+export const setWriteActionsAllowed = (
+  kind: WriteTargetKind,
+  id: string,
+  allowed: boolean
+): Promise<{ allowed: boolean }> =>
+  callRpc(() => request.setWriteActionsAllowed({ allowed, id, kind }));
+
+export const listActionActivity = (
+  limit?: number
+): Promise<ActionActivityPage> =>
+  callRpc(() =>
+    request.listActionActivity(limit === undefined ? {} : { limit })
+  );
+
+export const onMiniAppGenEvent = (
+  genId: string,
+  handler: (event: MiniAppGenEvent) => void
+): (() => void) =>
+  subscribe("miniAppGenEvent", (payload) => {
+    if (payload.genId === genId) {
+      handler(payload.event);
+    }
+  });
+
+export const onMiniAppChanged = (
+  handler: (appId: string) => void
+): (() => void) =>
+  subscribe("miniAppChanged", (payload) => handler(payload.appId));
+
+export const onMiniAppRefresh = (
+  handler: (refresh: RpcMessages["miniAppRefresh"]) => void
+): (() => void) => subscribe("miniAppRefresh", handler);
+
+export const listMiniApps = (): Promise<MiniApp[]> =>
+  callRpc(() => request.listMiniApps({} as never));
+
+export const getMiniApp = (appId: string): Promise<MiniApp | null> =>
+  callRpc(() => request.getMiniApp({ appId }));
+
+export const saveMiniApp = (
+  draft: MiniAppDraft,
+  reviewedActionIds: string[] = [],
+  fromGenId?: string
+): Promise<MiniApp> =>
+  callRpc(() =>
+    request.saveMiniApp(
+      fromGenId === undefined
+        ? { draft, reviewedActionIds }
+        : { draft, fromGenId, reviewedActionIds }
+    )
+  );
+
+export const deleteMiniApp = (appId: string): Promise<void> =>
+  callRpc(() => request.deleteMiniApp({ appId }));
+
+export const duplicateMiniApp = (appId: string): Promise<MiniApp> =>
+  callRpc(() => request.duplicateMiniApp({ appId }));
+
+export const setMiniAppValues = (
+  appId: string,
+  values: ParamValues
+): Promise<MiniApp | null> =>
+  callRpc(() => request.setMiniAppValues({ appId, values }));
+
+export const runMiniAppSource = (
+  input: RpcSchema["requests"]["runMiniAppSource"]["params"]
+): Promise<MiniAppSourceRun> => callRpc(() => request.runMiniAppSource(input));
+
+export const cancelMiniAppRun = (runId: string): Promise<void> =>
+  callRpc(() => request.cancelMiniAppRun({ runId }));
+
+export const loadMiniAppInputOptions = (
+  target: MiniAppTarget,
+  inputName: string
+): Promise<string[]> =>
+  callRpc(() => request.loadMiniAppInputOptions({ inputName, target }));
+
+export const generateMiniApp = (input: GenerateMiniAppRequest): Promise<void> =>
+  callRpc(() => request.generateMiniApp(input));
+
+export const cancelMiniAppGeneration = (genId: string): Promise<void> =>
+  callRpc(() => request.cancelMiniAppGeneration({ genId }));
+
+export const openMiniApp = (appId: string): Promise<void> =>
+  callRpc(() => request.openMiniApp({ appId }));
+
+export const stageMiniAppAction = (
+  input: MiniAppActionRequest
+): Promise<void> => callRpc(() => request.stageMiniAppAction(input));
+
+export const prepareMiniAppAction = (
+  input: MiniAppActionRequest
+): Promise<ActionPreview> => callRpc(() => request.prepareMiniAppAction(input));

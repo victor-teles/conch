@@ -1,0 +1,734 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`miniAppView > runs every source of the saved app when it opens 1`] = `
+<div>
+  <div
+    style="width: 1100px"
+  >
+    <div
+      class="flex h-screen flex-col bg-background"
+    >
+      <header
+        class="electrobun-webkit-app-region-drag flex h-[52px] shrink-0 items-center gap-3 border-b border-panel-border pr-4 pl-[84px]"
+      >
+        <h1
+          class="truncate type-title text-[15px] text-foreground"
+        >
+          💳 
+          Refund desk
+        </h1>
+        <span
+          aria-live="polite"
+          class="type-meta text-panel-muted tabular-nums"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Not updated yet
+            </span>
+            <span
+              class="inline-block"
+            >
+              Updated just now
+            </span>
+          </span>
+        </span>
+        <div
+          class="electrobun-webkit-app-region-no-drag ml-auto flex items-center gap-1.5"
+        >
+          <button
+            aria-keyshortcuts="Meta+Shift+E"
+            class="flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-message-square-plus size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"
+              />
+              <path
+                d="M12 8v6"
+              />
+              <path
+                d="M9 11h6"
+              />
+            </svg>
+            Change
+          </button>
+          <select
+            aria-label="Refresh"
+            class="h-7 rounded-[7px] bg-row-hover px-2 type-meta text-foreground outline-none focus-visible:ring-1 focus-visible:ring-primary/60"
+          >
+            <option
+              value="off"
+            >
+              Manual refresh
+            </option>
+            <option
+              value="1m"
+            >
+              Every minute
+            </option>
+            <option
+              value="5m"
+            >
+              Every 5 minutes
+            </option>
+            <option
+              value="15m"
+            >
+              Every 15 minutes
+            </option>
+            <option
+              value="1h"
+            >
+              Every hour
+            </option>
+          </select>
+          <button
+            aria-keyshortcuts="Meta+R"
+            aria-label="Refresh now"
+            class="flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-rotate-cw size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+              />
+              <path
+                d="M21 3v5h-5"
+              />
+            </svg>
+            <kbd
+              aria-label="⌘ R"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                R
+              </kbd>
+            </kbd>
+          </button>
+          <button
+            aria-keyshortcuts="Meta+E"
+            aria-pressed="false"
+            class="flex h-7 items-center gap-1.5 rounded-[7px] px-2 type-meta hover:bg-row-hover text-panel-muted hover:text-foreground"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-pencil-ruler size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"
+              />
+              <path
+                d="m8 6 2-2"
+              />
+              <path
+                d="m18 16 2-2"
+              />
+              <path
+                d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"
+              />
+              <path
+                d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+              />
+              <path
+                d="m15 5 4 4"
+              />
+            </svg>
+            Edit
+            <kbd
+              aria-label="⌘ E"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                ⌘
+              </kbd>
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                E
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </header>
+      <div
+        class="relative z-20 flex shrink-0 items-center gap-3 min-h-12 border-b border-panel-border px-6 py-2"
+      >
+        <span
+          class="flex shrink-0 items-center gap-1.5 type-meta text-panel-muted"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-sliders-horizontal size-3.5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 5H3"
+            />
+            <path
+              d="M12 19H3"
+            />
+            <path
+              d="M14 3v4"
+            />
+            <path
+              d="M16 17v4"
+            />
+            <path
+              d="M21 12h-9"
+            />
+            <path
+              d="M21 19h-5"
+            />
+            <path
+              d="M21 5h-7"
+            />
+            <path
+              d="M8 10v4"
+            />
+            <path
+              d="M8 12H3"
+            />
+          </svg>
+          Inputs
+        </span>
+        <div
+          class="flex min-w-0 flex-wrap items-center gap-1.5"
+        >
+          <div
+            aria-label="App inputs"
+            class="flex min-w-0 items-center gap-1.5"
+            role="group"
+          >
+            <span
+              class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+              data-active="false"
+            >
+              <span
+                aria-hidden="true"
+                class="relative type-micro text-panel-muted"
+              >
+                Period
+              </span>
+              <span
+                class="relative flex min-w-0 items-center"
+              >
+                <button
+                  aria-controls="arg-presets-period"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-label="Period: Last 7 days"
+                  class="flex items-center gap-1 type-body text-foreground outline-none focus-visible:outline-none"
+                  type="button"
+                >
+                  <span
+                    class="max-w-56 truncate"
+                  >
+                    Last 7 days
+                  </span>
+                  <svg
+                    aria-hidden="true"
+                    class="lucide lucide-chevron-down size-3 text-panel-muted"
+                    fill="none"
+                    height="24"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </span>
+            <span
+              class="relative inline-flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] bg-row-hover px-2"
+              data-active="false"
+            >
+              <span
+                aria-hidden="true"
+                class="relative type-micro text-panel-muted"
+              >
+                Region
+              </span>
+              <span
+                class="relative flex min-w-0 items-center"
+              >
+                <input
+                  aria-label="Region"
+                  autocomplete="off"
+                  class="min-w-[3ch] max-w-48 bg-transparent type-body text-foreground outline-none focus-visible:outline-none"
+                  maxlength="200"
+                  size="3"
+                  spellcheck="false"
+                  value="EU"
+                />
+              </span>
+            </span>
+          </div>
+        </div>
+        <span
+          class="ml-auto shrink-0 type-micro text-panel-muted"
+        >
+          Applies to every part that uses it
+        </span>
+      </div>
+      <main
+        class="min-h-0 flex-1 overflow-y-auto px-6 pt-5 pb-10"
+      >
+        <div
+          class="flex min-w-0 flex-col gap-4"
+          data-element="stack"
+        >
+          <div
+            class="min-w-0"
+          >
+            <h2
+              class="type-title text-foreground"
+            >
+              Refund desk
+            </h2>
+          </div>
+          <div
+            class="min-w-0"
+          >
+            <p
+              class="max-w-prose type-meta text-panel-muted"
+            >
+              Only EU charges.
+            </p>
+          </div>
+          <div
+            class="min-w-0"
+          >
+            <div
+              class="relative grid min-w-0 grid-cols-12 items-start gap-3"
+              data-element="grid"
+            >
+              <div
+                class="min-w-0"
+                style="grid-column: span 6 / span 6"
+              >
+                <article
+                  aria-label="Failed charges"
+                  class="relative flex h-full flex-col overflow-hidden rounded-[14px] border border-panel-border bg-card outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
+                  data-card="charges"
+                  tabindex="-1"
+                >
+                  <div
+                    class="relative"
+                  >
+                    <div
+                      aria-busy="false"
+                    >
+                      <section
+                        aria-label="Failed charges"
+                        class="relative flex flex-col"
+                      >
+                        <div
+                          class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                        >
+                          <div
+                            class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                          >
+                            <h3
+                              class="truncate type-title text-foreground"
+                            >
+                              <span
+                                data-slot="swap-text"
+                              >
+                                <span
+                                  class="inline-block"
+                                >
+                                  Failed charges
+                                </span>
+                              </span>
+                            </h3>
+                          </div>
+                          <div
+                            class="flex shrink-0 items-center gap-1"
+                          >
+                            <div
+                              aria-label="Chart view"
+                              class="flex rounded-[9px] bg-row-hover p-0.5"
+                              role="radiogroup"
+                            >
+                              <button
+                                aria-checked="true"
+                                class="relative h-7 rounded-[7px] px-3 type-meta text-foreground"
+                                data-segment="table"
+                                role="radio"
+                                tabindex="0"
+                                type="button"
+                              >
+                                <span
+                                  class="absolute inset-0 rounded-[7px] bg-control-thumb shadow-sm"
+                                />
+                                <span
+                                  class="relative"
+                                >
+                                  Table
+                                </span>
+                              </button>
+                              <button
+                                aria-checked="false"
+                                class="relative h-7 rounded-[7px] px-3 type-meta text-panel-muted"
+                                data-segment="bar"
+                                role="radio"
+                                tabindex="-1"
+                                type="button"
+                              >
+                                <span
+                                  class="relative"
+                                >
+                                  Bar
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div
+                            class="px-2 pb-2"
+                          >
+                            <div
+                              class="relative max-h-[248px] overflow-auto rounded-[8px]"
+                            >
+                              <table
+                                aria-label="Result rows"
+                                class="w-full border-collapse type-meta tabular-nums relative z-[1]"
+                                role="grid"
+                              >
+                                <thead
+                                  class="sticky top-0 bg-(--panel-solid)"
+                                >
+                                  <tr>
+                                    <th
+                                      class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-left"
+                                      scope="col"
+                                    >
+                                      charge_id
+                                    </th>
+                                    <th
+                                      class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-right"
+                                      scope="col"
+                                    >
+                                      amount
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    aria-selected="false"
+                                    class="hover:bg-row-hover cursor-default outline-none focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:ring-inset"
+                                    tabindex="0"
+                                  >
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground"
+                                    >
+                                      ch_1
+                                    </td>
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                                    >
+                                      12
+                                    </td>
+                                  </tr>
+                                  <tr
+                                    aria-selected="false"
+                                    class="hover:bg-row-hover cursor-default outline-none focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:ring-inset"
+                                    tabindex="-1"
+                                  >
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground"
+                                    >
+                                      ch_2
+                                    </td>
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                                    >
+                                      40
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="h-3"
+                        />
+                      </section>
+                    </div>
+                  </div>
+                </article>
+              </div>
+              <div
+                class="min-w-0"
+                style="grid-column: span 6 / span 6"
+              >
+                <article
+                  aria-label="Matching orders"
+                  class="relative flex h-full flex-col overflow-hidden rounded-[14px] border border-panel-border bg-card outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
+                  data-card="orders"
+                  tabindex="-1"
+                >
+                  <div
+                    class="relative"
+                  >
+                    <div
+                      aria-busy="false"
+                    >
+                      <section
+                        aria-label="Matching orders"
+                        class="relative flex flex-col"
+                      >
+                        <div
+                          class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-4 pt-3 pb-3"
+                        >
+                          <div
+                            class="flex min-w-[9rem] flex-1 flex-col gap-0.5"
+                          >
+                            <h3
+                              class="truncate type-title text-foreground"
+                            >
+                              <span
+                                data-slot="swap-text"
+                              >
+                                <span
+                                  class="inline-block"
+                                >
+                                  Matching orders
+                                </span>
+                              </span>
+                            </h3>
+                          </div>
+                          <div
+                            class="flex shrink-0 items-center gap-1"
+                          />
+                        </div>
+                        <div>
+                          <div
+                            class="px-2 pb-2"
+                          >
+                            <div
+                              class="max-h-[248px] overflow-auto rounded-[8px]"
+                            >
+                              <table
+                                class="w-full border-collapse type-meta tabular-nums"
+                              >
+                                <thead
+                                  class="sticky top-0 bg-(--panel-solid)"
+                                >
+                                  <tr>
+                                    <th
+                                      class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-right"
+                                      scope="col"
+                                    >
+                                      id
+                                    </th>
+                                    <th
+                                      class="border-b border-panel-border px-2 py-1.5 font-medium text-panel-muted text-right"
+                                      scope="col"
+                                    >
+                                      total
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    class="hover:bg-row-hover"
+                                  >
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                                    >
+                                      7
+                                    </td>
+                                    <td
+                                      class="max-w-64 truncate px-2 py-1 text-foreground text-right"
+                                    >
+                                      99
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="h-3"
+                        />
+                      </section>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <div
+            class="min-w-0"
+          >
+            <button
+              class="flex h-8 w-fit items-center gap-2 rounded-[8px] border border-panel-border bg-row-hover px-3 type-body text-foreground hover:bg-row-active focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:outline-none"
+              data-element="action"
+              tabindex="0"
+              type="button"
+            >
+              Copy region
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`miniAppView > shows a failing source inside its card 1`] = `
+<article
+  aria-label="Matching orders"
+  class="relative flex h-full flex-col overflow-hidden rounded-[14px] border border-panel-border bg-card outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
+  data-card="orders"
+  tabindex="-1"
+>
+  <div
+    class="flex items-center justify-between gap-3 px-4 pt-3 pb-2"
+  >
+    <h3
+      class="truncate type-title text-foreground"
+    >
+      Matching orders
+    </h3>
+  </div>
+  <div
+    class="px-4 pt-1 pb-4"
+  >
+    <div
+      class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+      role="alert"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+        />
+        <line
+          x1="12"
+          x2="12"
+          y1="8"
+          y2="12"
+        />
+        <line
+          x1="12"
+          x2="12.01"
+          y1="16"
+          y2="16"
+        />
+      </svg>
+      <div
+        class="flex min-w-0 flex-1 flex-col gap-1"
+      >
+        <p
+          class="type-body text-foreground"
+        >
+          The query failed.
+        </p>
+        <p
+          class="type-meta break-words text-panel-muted"
+        >
+          relation orders does not exist
+        </p>
+      </div>
+      <button
+        class="h-7 shrink-0 self-start rounded-[7px] bg-row-hover px-2.5 type-meta text-foreground hover:bg-row-active"
+        tabindex="0"
+        type="button"
+      >
+        Retry
+      </button>
+    </div>
+  </div>
+</article>
+`;

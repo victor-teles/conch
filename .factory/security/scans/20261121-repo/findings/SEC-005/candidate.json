@@ -1,0 +1,18 @@
+{
+  "id": "SEC-005",
+  "title": "MCP client cap can be exceeded by concurrent handshakes",
+  "affected_locations": [
+    {
+      "file": "apps/app/src/bun/mcp-server/socket-listener.ts",
+      "line": 204,
+      "label": "root_control"
+    }
+  ],
+  "attacker_source": "same-user local process holding the token",
+  "sink_or_broken_control": "sessions.size checked before the async accept",
+  "impact": "availability only, same-user",
+  "plausibility": "check-then-act across an await",
+  "closest_control": "token required; per-client call limits",
+  "cwe": ["CWE-367"],
+  "validation_recommended": false
+}

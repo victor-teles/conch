@@ -72,3 +72,35 @@ export const fuzzyMatch = (
 
   return { matches, score };
 };
+
+export interface Ranked<T> {
+  item: T;
+  score: number;
+}
+
+const bestScore = (terms: readonly string[], query: string): number | null => {
+  let best: number | null = null;
+  for (const term of terms) {
+    const match = term ? fuzzyMatch(term, query) : null;
+    if (match && (best === null || match.score > best)) {
+      best = match.score;
+    }
+  }
+  return best;
+};
+
+// An empty query keeps every item in its given order with a score of 0.
+export const rankByTerms = <T>(
+  items: readonly T[],
+  query: string,
+  termsOf: (item: T) => readonly string[]
+): Ranked<T>[] => {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return items.map((item) => ({ item, score: 0 }));
+  }
+  return items
+    .map((item) => ({ item, score: bestScore(termsOf(item), trimmed) }))
+    .filter((entry): entry is Ranked<T> => entry.score !== null)
+    .toSorted((a, b) => b.score - a.score);
+};

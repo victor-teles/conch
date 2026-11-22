@@ -10,6 +10,8 @@ import type { LookupValue, ParamValues } from "@/lib/ipc";
 import type { RootItem } from "./root-items";
 import type { RootAskActions } from "./root-view";
 
+import { isShownAnswer } from "./root-items";
+
 export interface PreviewTarget {
   connectionId: string;
   dialect: DialectType;
@@ -22,8 +24,11 @@ interface UseRootRunOptions {
   preview: PreviewTarget | null;
   runWidget: (widgetId: string, values: ParamValues) => void;
   openBoard: (boardId: string) => void;
+  openApp: (appId: string) => void;
+  buildApp: (prompt: string, connectionId: string | null) => void;
   openAlert: (alert: RootAlert) => void;
   onActivate: (connection: DatabaseConnection) => void;
+  openDraft: () => void;
 }
 
 const targetOf = (connectionId: string, database: string | null = null) => ({
@@ -38,10 +43,13 @@ export const useRootRun = ({
   preview,
   runWidget,
   openBoard,
+  openApp,
+  buildApp,
   openAlert,
   onActivate,
+  openDraft,
 }: UseRootRunOptions) => {
-  const { start, startSql } = ask;
+  const { start, startSql, reopen, lastAnswerId } = ask;
   const runItem = useCallback(
     (item: RootItem | null | undefined) => {
       switch (item?.kind) {
@@ -76,11 +84,23 @@ export const useRootRun = ({
           openBoard(item.board.id);
           return;
         }
+        case "mini-app": {
+          openApp(item.app.id);
+          return;
+        }
+        case "build-app": {
+          buildApp(item.prompt, item.connection.id);
+          return;
+        }
         case "alert": {
           openAlert(item.alert);
           return;
         }
         case "recent": {
+          if (reopen && isShownAnswer(item, lastAnswerId)) {
+            reopen();
+            return;
+          }
           start(
             item.ask.prompt,
             targetOf(item.ask.connectionId, item.ask.database)
@@ -95,16 +115,25 @@ export const useRootRun = ({
           item.command.run();
           break;
         }
+        case "draft": {
+          openDraft();
+          break;
+        }
         default: {
           break;
         }
       }
     },
     [
+      buildApp,
+      lastAnswerId,
       onActivate,
       openAlert,
+      openApp,
       openBoard,
+      openDraft,
       preview,
+      reopen,
       runWidget,
       start,
       startLookup,

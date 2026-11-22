@@ -1,26 +1,26 @@
 export type FocusRelease =
   | { kind: "keep" }
-  | { kind: "activate"; boardId: string }
+  | { kind: "activate"; windowKey: string }
   | { kind: "deactivate" }
   | { kind: "hide" };
 
 export interface FocusState {
-  focusedBoardId: string | null;
-  returnBoardId: string | null;
-  openBoardIds: readonly string[];
+  focusedWindowKey: string | null;
+  returnWindowKey: string | null;
+  openWindowKeys: readonly string[];
 }
 
-// Deactivating instead of hiding keeps open boards visible when focus goes back.
+// Deactivating instead of hiding keeps open windows visible when focus goes back.
 export const focusAfterLauncherHides = ({
-  focusedBoardId,
-  returnBoardId,
-  openBoardIds,
+  focusedWindowKey,
+  returnWindowKey,
+  openWindowKeys,
 }: FocusState): FocusRelease => {
-  if (focusedBoardId) {
+  if (focusedWindowKey) {
     return { kind: "keep" };
   }
-  if (returnBoardId && openBoardIds.includes(returnBoardId)) {
-    return { boardId: returnBoardId, kind: "activate" };
+  if (returnWindowKey && openWindowKeys.includes(returnWindowKey)) {
+    return { kind: "activate", windowKey: returnWindowKey };
   }
-  return openBoardIds.length > 0 ? { kind: "deactivate" } : { kind: "hide" };
+  return openWindowKeys.length > 0 ? { kind: "deactivate" } : { kind: "hide" };
 };

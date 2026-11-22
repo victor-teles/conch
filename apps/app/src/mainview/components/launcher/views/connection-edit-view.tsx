@@ -1,9 +1,12 @@
 import type { KeyboardEvent } from "react";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import type { ConnectionDraft } from "@/components/connection-form/connection-form-state";
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { dialectForType } from "@/components/actions/editor/action-draft-model";
+import { WriteToggleRow } from "@/components/actions/write-toggle-row";
 import { ConnectionForm } from "@/components/connection-form";
 import { useConnections } from "@/components/launcher/connections/connections-provider";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
@@ -41,7 +44,7 @@ export function ConnectionEditView({
   connectionId,
   onBack,
 }: ConnectionEditViewProps) {
-  const { state, saved } = useConnections();
+  const { state, saved, keepDraft, discardDraft } = useConnections();
   const { reduced } = useMotionPreset();
   const [isSaved, setIsSaved] = useState(false);
   const formHost = useRef<HTMLDivElement>(null);
@@ -50,12 +53,23 @@ export function ConnectionEditView({
     : undefined;
   const missing = connectionId !== null && !connection;
 
+  const draft = useMemo<ConnectionDraft | undefined>(
+    () =>
+      connectionId === null
+        ? { initial: state.draft, onLeave: keepDraft }
+        : undefined,
+    [connectionId, keepDraft, state.draft]
+  );
+
   const handleSuccess = useCallback(
     (next: DatabaseConnection) => {
       saved(next, connection);
+      if (!connection) {
+        discardDraft();
+      }
       setIsSaved(true);
     },
-    [connection, saved]
+    [connection, discardDraft, saved]
   );
 
   useEffect(() => {
@@ -81,7 +95,7 @@ export function ConnectionEditView({
     <div className="flex min-h-0 flex-1 flex-col" onKeyDown={handleKeyDown}>
       <ViewHeader onBack={onBack} title={missing ? "Edit Connection" : title} />
       <div
-        className="min-h-0 flex-1 overflow-y-auto border-t border-panel-border px-4 pt-3 pb-4"
+        className="min-h-0 flex-1 launcher-body overflow-y-auto px-4 pt-3"
         ref={formHost}
       >
         {missing ? (
@@ -89,10 +103,16 @@ export function ConnectionEditView({
         ) : (
           <ConnectionForm
             connection={connection}
+            draft={draft}
             key={connectionId ?? "new"}
             onSuccess={handleSuccess}
           />
         )}
+        {connection && dialectForType(connection.type) ? (
+          <div className="-mx-4 mt-2 border-t border-panel-border">
+            <WriteToggleRow id={connection.id} kind="connection" />
+          </div>
+        ) : null}
       </div>
       <LauncherFooter
         actionKeys={SUBMIT_KEYS}

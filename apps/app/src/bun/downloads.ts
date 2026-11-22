@@ -4,7 +4,11 @@ import { open } from "node:fs/promises";
 import { join } from "node:path";
 import { z } from "zod";
 
-export const SAVE_EXTENSIONS = ["csv", "conch.json"] as const;
+export const SAVE_EXTENSIONS = [
+  "csv",
+  "conch.json",
+  "conch-theme.json",
+] as const;
 export type SaveExtension = (typeof SAVE_EXTENSIONS)[number];
 
 const MAX_CONTENT_BYTES = 20 * 1024 * 1024;

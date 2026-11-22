@@ -1,0 +1,11 @@
+{
+  "scan_id": "20261121-019-actions",
+  "mode": "diff",
+  "workflow": "secure (review only, no fixes)",
+  "target": "plan 019: actions, confirmed writes, audit log",
+  "base": "b5dcc8d39de9f7913488913a0f0525fd2de5a227",
+  "head": "8bac06d499e7fe6952776e40dfcdb3961b19c9b4",
+  "worktree_matches_head": true,
+  "changed_files": 155,
+  "date": "2026-11-21"
+}

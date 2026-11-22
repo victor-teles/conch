@@ -49,6 +49,10 @@ Save an answer as a widget with typed inputs: a region, a date range, a limit. R
 
 A board is a separate window with a grid of widgets that refreshes on a schedule you choose. Inputs that widgets share, such as the same date range, appear once at the top of the board. When you change one, only the tiles that use it run again. Boards pause their refresh while they are hidden or minimized.
 
+### Apps: small tools you describe
+
+Type what you need, such as "a refund desk: failed charges next to their orders, with a Refund button", and choose **Build an app**. The panel assembles as it is written: inputs, cards that read from your databases, MCP tools or HTTP endpoints, and actions. Press `Cmd + S` to review it. Every action that changes data needs your tick, the target's **Allow write actions** setting and a system confirmation before it is saved. A saved app opens in its own window and runs on fresh data each time without calling the AI; a write still asks you to confirm in the launcher every time it runs.
+
 ### Multi-database engines, one client
 
 Connect to **PostgreSQL**, **MySQL**, **SQLite**, **Microsoft SQL Server**, **DuckDB**, **ClickHouse**, **MongoDB** and **Redis** from the same app.
@@ -99,6 +103,16 @@ Built with Electrobun. A translucent panel, dark mode by default, spring animati
 | `Option + Up` / `Down`    | Make the focused tile larger or smaller (edit mode) |
 | `Esc`                     | Leave edit mode                                     |
 
+### Apps
+
+| Shortcut          | Action                                                 |
+| ----------------- | ------------------------------------------------------ |
+| `Cmd + S`         | Review and save the app you just built (launcher)      |
+| `Cmd + R`         | Run every source again                                 |
+| `Cmd + E`         | Enter or leave edit mode (cards move like board tiles) |
+| `Cmd + Shift + E` | Change the app with a prompt                           |
+| `Esc`             | Discard a change in progress, or leave edit mode       |
+
 <br />
 
 ## Installation
@@ -122,7 +136,7 @@ Grab the latest installer from the [GitHub Releases](https://github.com/victor-t
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) v1.3.9+
+- [Bun](https://bun.sh) v1.4.4+
 
 ### Getting started
 
