@@ -69,6 +69,7 @@ describe("postgresPool.execute params", () => {
     });
     expect(statements).toStrictEqual(["BEGIN READ ONLY", sql, "ROLLBACK"]);
     expect(query).toHaveBeenCalledWith({
+      queryMode: "extended",
       rowMode: "array",
       text: sql,
       values: [HOSTILE, 42],

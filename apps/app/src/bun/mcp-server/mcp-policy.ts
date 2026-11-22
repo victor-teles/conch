@@ -2,6 +2,7 @@ import type { DatabaseConnection, SchemaInfo } from "@conch/core";
 import type { ParamDef, Widget } from "@conch/rpc";
 
 import { redactPii } from "@conch/core";
+import { connectionIdOf } from "@conch/rpc";
 
 export const CELL_LIMIT = 1000;
 export const PAYLOAD_LIMIT = 200_000;
@@ -62,7 +63,10 @@ export const visibleWidgets = (
   exposed: readonly DatabaseConnection[]
 ): Widget[] => {
   const ids = new Set(exposed.map((connection) => connection.id));
-  return widgets.filter((widget) => ids.has(widget.connectionId));
+  return widgets.filter((widget) => {
+    const connectionId = connectionIdOf(widget);
+    return connectionId !== null && ids.has(connectionId);
+  });
 };
 
 export const resolveWidget = (

@@ -1,12 +1,15 @@
 import type { LucideIcon } from "lucide-react";
 
 import {
+  ActivityIcon,
+  AppWindowIcon,
   ArrowLeftRightIcon,
   DownloadIcon,
   EyeOffIcon,
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
+  PlugIcon,
   PlusIcon,
   SlidersHorizontalIcon,
   SquareTerminalIcon,
@@ -35,6 +38,9 @@ export interface LauncherCommand {
 interface RootCommandHandlers {
   addConnection: () => void;
   newBoard: () => void;
+  newApp: () => void;
+  newSourceWidget: () => void;
+  openActivity: () => void;
   openHistory: () => void;
   openSettings: () => void;
   exportAll: () => void;
@@ -46,6 +52,9 @@ interface RootCommandHandlers {
 export const rootCommands = ({
   addConnection,
   newBoard,
+  newApp,
+  newSourceWidget,
+  openActivity,
   openHistory,
   openSettings,
   exportAll,
@@ -70,6 +79,24 @@ export const rootCommands = ({
     run: newBoard,
     subtitle: "A live grid of widgets with shared inputs",
     title: "New Board",
+  },
+  {
+    actionLabel: "Build",
+    icon: AppWindowIcon,
+    id: "new-app",
+    keywords: ["app", "tool", "panel", "build", "mini"],
+    run: newApp,
+    subtitle: "Describe a small tool and press ↵ on Build an app",
+    title: "New App",
+  },
+  {
+    actionLabel: "Choose",
+    icon: PlugIcon,
+    id: "new-source-widget",
+    keywords: ["widget", "mcp", "http", "api", "source", "stripe", "github"],
+    run: newSourceWidget,
+    subtitle: "From an MCP server or an HTTP API",
+    title: "New Widget from a Source…",
   },
   {
     actionLabel: "Start",
@@ -110,6 +137,15 @@ export const rootCommands = ({
     shortcut: ["⌘", "Y"],
     subtitle: "Every question you've asked",
     title: "Search History",
+  },
+  {
+    actionLabel: "Open",
+    icon: ActivityIcon,
+    id: "activity",
+    keywords: ["audit", "log", "writes", "actions", "ran"],
+    run: openActivity,
+    subtitle: "Writes and links you ran, in a verified log",
+    title: "Activity",
   },
   {
     actionLabel: "Open",

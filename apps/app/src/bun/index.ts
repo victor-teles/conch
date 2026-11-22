@@ -1,17 +1,17 @@
 // Don't import @conch/core here: evaluating its WASM top-level await before electrobun/main deadlocks the worker.
 import Electrobun, { ApplicationMenu } from "electrobun/main";
 
-import type { BoardWindows } from "./board-windows.ts";
 import type { LauncherController } from "./launcher.ts";
+import type { PanelWindows } from "./panel-windows.ts";
 
 import { migrateAppData } from "./app-data.ts";
 import { createAppActivation } from "./app-hide-native.ts";
-import { createBoardWindows } from "./board-windows.ts";
 import { focusAfterLauncherHides } from "./focus-policy.ts";
 import { readLauncherHotkey } from "./launcher-config.ts";
 import { createLauncher } from "./launcher.ts";
 import { createLinkRouter, urlOfOpenEvent } from "./link-router.ts";
 import { APPLICATION_MENU, MENU_ACTIONS } from "./menu.ts";
+import { createPanelWindows } from "./panel-windows.ts";
 import { createAppRpcs } from "./rpc.ts";
 import { LAUNCHER_URL } from "./window.ts";
 
@@ -36,32 +36,36 @@ async function main(): Promise<void> {
   });
 
   await migrateAppData();
-  let boards: BoardWindows | null = null;
-  let returnBoardId: string | null = null;
+  let windows: PanelWindows | null = null;
+  let returnWindowKey: string | null = null;
   const activation = createAppActivation();
 
   rpcs = createAppRpcs({
-    boardWindows: () => boards,
     launcher: () => launcher,
-    toggleLauncherFrom: (boardId) => {
-      returnBoardId = boardId;
+    panelWindows: () => windows,
+    returnFocusTo: (key) => {
+      returnWindowKey = key;
+    },
+    toggleLauncherFrom: (key) => {
+      returnWindowKey = key;
       launcher?.toggle();
     },
   });
-  boards = createBoardWindows({
+  windows = createPanelWindows({
     baseUrl: LAUNCHER_URL,
     createRpc: rpcs.createWindowRpc,
+    now: () => Date.now(),
     releaseRpc: rpcs.releaseWindowRpc,
   });
 
   const releaseFocus = () => {
-    const next = boards
-      ? focusAfterLauncherHides(boards.state(returnBoardId))
+    const next = windows
+      ? focusAfterLauncherHides(windows.state(returnWindowKey))
       : ({ kind: "hide" } as const);
-    returnBoardId = null;
+    returnWindowKey = null;
     switch (next.kind) {
       case "activate": {
-        boards?.activate(next.boardId);
+        windows?.activate(next.windowKey);
         break;
       }
       case "deactivate": {

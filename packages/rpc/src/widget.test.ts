@@ -5,10 +5,12 @@ import type { ParamDef } from "./widget.ts";
 import { CARD_SPEC_VERSION } from "./card-spec.ts";
 import {
   ParamDef as ParamDefSchema,
+  parseStoredWidget,
   paramValueSchema,
   RecentAsk,
   toTemplateValue,
   Widget,
+  WidgetDraft,
 } from "./widget.ts";
 
 const NOW = new Date(2026, 10, 18, 9, 30);
@@ -160,14 +162,14 @@ describe("toTemplateValue", () => {
 });
 
 describe("widget", () => {
-  const base = {
+  const v1 = {
     connectionId: "c1",
     createdAt: "2026-11-18T00:00:00.000Z",
     database: null,
     dialect: "postgresql",
     id: "w1",
     lastRunAt: null,
-    lastValues: {},
+    lastValues: { region: "Asia" },
     name: "Revenue by region",
     params: [region, period],
     prompt: "revenue by region",
@@ -182,27 +184,66 @@ describe("widget", () => {
     view: "table",
   };
 
-  it("parses a widget", () => {
-    expect(Widget.safeParse(base).success).toBeTruthy();
+  const v2 = {
+    createdAt: v1.createdAt,
+    id: v1.id,
+    lastRunAt: null,
+    lastValues: v1.lastValues,
+    name: v1.name,
+    params: [region, period],
+    prompt: v1.prompt,
+    source: {
+      connectionId: "c1",
+      database: null,
+      dialect: "postgresql",
+      kind: "sql",
+      sqlTemplate: "select 1",
+    },
+    spec: { ...v1.spec, version: CARD_SPEC_VERSION },
+    updatedAt: v1.updatedAt,
+    version: 2,
+    view: "table",
+  };
+
+  const mcp = {
+    ...v2,
+    params: [{ ...region, default: "won", options: ["needs_response", "won"] }],
+    source: {
+      args: { limit: 20, status: { $param: "region" } },
+      kind: "mcp",
+      select: "$.data[*]",
+      serverId: "stripe",
+      tool: "list_disputes",
+    },
+  };
+
+  it("upgrades a version 1 widget into a SQL source", () => {
+    expect(parseStoredWidget(v1)).toStrictEqual(v2);
+  });
+
+  it("round-trips a version 2 widget", () => {
+    const parsed = parseStoredWidget(v2);
+    expect(parsed).toStrictEqual(v2);
+    expect(parseStoredWidget(structuredClone(parsed))).toStrictEqual(v2);
+    expect(parseStoredWidget(mcp)?.source.kind).toBe("mcp");
+  });
+
+  it("returns null for garbage and newer shapes", () => {
+    expect(parseStoredWidget(null)).toBeNull();
+    expect(parseStoredWidget({ id: "w1" })).toBeNull();
+    expect(parseStoredWidget({ ...v2, version: 3 })).toBeNull();
+    expect(parseStoredWidget({ ...v1, dialect: "mongodb" })).toBeNull();
+  });
+
+  it("only accepts version 2 as a widget", () => {
+    expect(Widget.safeParse(v2).success).toBeTruthy();
+    expect(Widget.safeParse(v1).success).toBeFalsy();
   });
 
   it("rejects duplicate input names", () => {
     expect(
-      Widget.safeParse({ ...base, params: [region, region] }).success
+      Widget.safeParse({ ...v2, params: [region, region] }).success
     ).toBeFalsy();
-  });
-
-  it("loads a version 1 widget and upgrades its spec", () => {
-    const parsed = Widget.parse(base);
-    expect(parsed.spec.version).toBe(CARD_SPEC_VERSION);
-    expect(parsed.dialect).toBe("postgresql");
-  });
-
-  it("still rejects a widget on a MongoDB or Redis connection", () => {
-    expect(
-      Widget.safeParse({ ...base, dialect: "mongodb" }).success
-    ).toBeFalsy();
-    expect(Widget.safeParse({ ...base, dialect: "redis" }).success).toBeFalsy();
   });
 
   it("caps inputs at six", () => {
@@ -210,7 +251,80 @@ describe("widget", () => {
       ...threshold,
       name: `n${index}`,
     }));
-    expect(Widget.safeParse({ ...base, params }).success).toBeFalsy();
+    expect(Widget.safeParse({ ...v2, params }).success).toBeFalsy();
+  });
+
+  it.each([
+    [
+      "an unused input",
+      { params: [...mcp.params, threshold] },
+      'The input "threshold" isn\'t used by the call.',
+    ],
+    [
+      "an unknown reference",
+      { source: { ...mcp.source, args: { status: { $param: "nope" } } } },
+      'The call uses "nope", which isn\'t an input.',
+    ],
+    [
+      "options from SQL",
+      {
+        params: [{ ...region, options: undefined, optionsSql: "select 1" }],
+      },
+      '"region" needs a fixed list of options.',
+    ],
+    [
+      "a part on a non-range input",
+      {
+        source: {
+          ...mcp.source,
+          args: { status: { $param: "region", part: "from" } },
+        },
+      },
+      '"region" isn\'t a date range, so it has no from.',
+    ],
+  ])("rejects an MCP widget with %s", (_label, change, message) => {
+    const parsed = Widget.safeParse({ ...mcp, ...change });
+    expect(parsed.error?.issues.map((issue) => issue.message)).toContain(
+      message
+    );
+    expect(
+      WidgetDraft.safeParse({ ...mcp, ...change }).error?.issues[0]?.message
+    ).toBe(message);
+  });
+
+  it("keeps a fixed input on an MCP widget even when the call stops using it", () => {
+    const fixed = { ...threshold, fixed: true };
+    expect(
+      Widget.safeParse({ ...mcp, params: [...mcp.params, fixed] }).success
+    ).toBeTruthy();
+  });
+
+  it("checks HTTP paths and query references", () => {
+    const http = {
+      ...v2,
+      params: [period],
+      source: {
+        endpointId: "status",
+        kind: "http",
+        method: "GET",
+        path: "/incidents/{{period.from}}",
+        query: { to: { $param: "period", part: "to" } },
+        select: "$.items[*]",
+      },
+    };
+    expect(Widget.safeParse(http).success).toBeTruthy();
+    expect(
+      Widget.safeParse({
+        ...http,
+        source: { ...http.source, query: { to: { $param: "period" } } },
+      }).error?.issues[0]?.message
+    ).toBe('Use "period" with part from or to in a path or query.');
+    expect(
+      Widget.safeParse({
+        ...http,
+        source: { ...http.source, method: "POST" },
+      }).success
+    ).toBeFalsy();
   });
 });
 

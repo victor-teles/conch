@@ -4,18 +4,17 @@ import type { LanguageModel, ModelMessage } from "ai";
 
 import { redactPii } from "@conch/core/client";
 import { chainPrompt } from "@conch/rpc";
-import { streamText } from "ai";
 
 import type { QueryEngine } from "./query-engine.ts";
 import type { RunOutcome } from "./run-query.ts";
 import type { RedactOptions } from "./schema-prompt.ts";
 
 import { classifyAIError } from "./ai-errors.ts";
+import { modelText } from "./model-text.ts";
 import { presentCard } from "./present.ts";
 import { refineMessages, relevanceText } from "./refine.ts";
 import {
   AskFailure,
-  cancelled,
   executeWithTimeout,
   lineCount,
   resultEvent,
@@ -59,24 +58,6 @@ const aiFailure = (error: unknown): AskFailure => {
     `${classified.message} ${classified.suggestion}`
   );
 };
-
-async function* modelText(
-  model: LanguageModel,
-  system: string,
-  messages: ModelMessage[],
-  signal: AbortSignal
-): AsyncGenerator<string> {
-  const result = streamText({ abortSignal: signal, messages, model, system });
-  for await (const part of result.fullStream) {
-    if (part.type === "text-delta") {
-      yield part.text;
-    } else if (part.type === "error") {
-      throw part.error;
-    } else if (part.type === "abort") {
-      throw cancelled();
-    }
-  }
-}
 
 async function* streamSql(
   ports: AskPorts,

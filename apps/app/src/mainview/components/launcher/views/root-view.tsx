@@ -69,6 +69,9 @@ export interface RootNavigation extends Omit<
   editConnection: (connectionId: string | null) => void;
   runWidget: (widgetId: string, values: ParamValues) => void;
   newBoard: () => void;
+  newSourceWidget: () => void;
+  openActivity: () => void;
+  buildApp: (prompt: string, connectionId: string | null) => void;
 }
 
 interface RootViewProps {
@@ -96,7 +99,13 @@ export function RootView({
   const { acknowledge } = useAlerts();
   const { boards, reload: reloadBoards } = useBoardList();
   const args = useRootArguments(widgets);
-  const { editConnection: onEditConnection, openBoard, runWidget } = navigate;
+  const {
+    editConnection: onEditConnection,
+    openBoard,
+    runWidget,
+    openApp,
+    buildApp,
+  } = navigate;
   const {
     outcome: exportOutcome,
     reveal: handleReveal,
@@ -181,9 +190,11 @@ export function RootView({
   );
   const { runById, runItem } = useRootRun({
     ask: linkedAsk,
+    buildApp,
     items,
     onActivate: token.onActivate,
     openAlert,
+    openApp,
     openBoard,
     openDraft: openNewConnection,
     preview: view.tables?.preview ?? null,

@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./client": "./src/client.ts"
+    "./client": "./src/client.ts",
+    "./mini-apps": "./src/mini-apps.ts"
   },
   "scripts": {
     "check-types": "tsgo --noEmit",

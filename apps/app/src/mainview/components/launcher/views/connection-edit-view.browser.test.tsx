@@ -44,6 +44,9 @@ describe("connectionEditView", () => {
     await expect
       .element(screen.getByText("Save", { exact: true }))
       .toBeVisible();
+    await expect
+      .element(screen.getByRole("switch", { name: "Allow write actions" }))
+      .toBeEnabled();
     expect(screen.container).toMatchSnapshot();
   });
 

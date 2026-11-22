@@ -1,7 +1,24 @@
 import { useCallback, useReducer } from "react";
 
+import type {
+  ActionEditTarget,
+  ActionReviewTarget,
+} from "@/components/actions/action-targets";
 import type { BoardNameTarget } from "@/components/launcher/views/board-name-view";
-import type { LookupValue, ParamValues, WidgetDraft } from "@/lib/ipc";
+import type { GenerateTarget } from "@/components/mini-app/generate/generate-target";
+import type {
+  LookupValue,
+  MiniApp,
+  MiniAppActionRequest,
+  ParamValues,
+  SourceTarget,
+  WidgetDraft,
+} from "@/lib/ipc";
+
+export interface SourceEditTarget {
+  type: SourceTarget["type"];
+  id: string | null;
+}
 
 export type LauncherView =
   | { kind: "root" }
@@ -18,7 +35,21 @@ export type LauncherView =
   | { kind: "watch"; widgetId: string }
   | { kind: "watches" }
   | { kind: "agents" }
-  | { kind: "agents-audit" };
+  | { kind: "agents-audit" }
+  | { kind: "source-edit"; target: SourceEditTarget }
+  | { kind: "source-picker" }
+  | { kind: "source-draft"; target: SourceTarget }
+  | { kind: "action-edit"; target: ActionEditTarget }
+  | { kind: "action-review"; target: ActionReviewTarget }
+  | {
+      kind: "widget-actions";
+      target: Omit<ActionEditTarget, "actionId" | "draft">;
+    }
+  | { kind: "activity" }
+  | { kind: "activity-entry"; executionId: string }
+  | { kind: "mini-app-generate"; target: GenerateTarget }
+  | { kind: "mini-app-action"; request: MiniAppActionRequest }
+  | { kind: "mini-app-name"; app: MiniApp };
 
 export type StackDirection = 1 | -1;
 

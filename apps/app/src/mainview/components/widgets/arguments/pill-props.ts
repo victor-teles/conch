@@ -1,7 +1,9 @@
 import type { ParamDef, ParamValue } from "@/lib/ipc";
 
+import type { OptionsOwner } from "./use-param-options";
+
 export interface PillProps<P extends ParamDef = ParamDef> {
-  widgetId: string;
+  owner: OptionsOwner;
   param: P;
   valueKey: string;
   value: ParamValue;

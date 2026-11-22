@@ -3,13 +3,17 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ProposeParamsResult } from "@/lib/ipc";
 
 import { REGION_REVENUE } from "./browser-ask-stub";
+import { createSourceEmulator } from "./browser-source-stub";
 import { createWidgetEmulator } from "./browser-widget-stub";
 
 const NOW = new Date(2026, 10, 18, 9, 0);
 
 const setup = () => {
   vi.useFakeTimers({ toFake: ["setTimeout"] });
-  return createWidgetEmulator(() => NOW);
+  return createWidgetEmulator(
+    createSourceEmulator(() => NOW),
+    () => NOW
+  );
 };
 
 const settle = async <T>(promise: Promise<T>): Promise<T> => {
@@ -62,15 +66,18 @@ describe("browser widget emulator", () => {
     );
     const widget = emulator.saveWidget({
       widget: {
-        connectionId: "analytics",
-        database: null,
-        dialect: "postgresql",
         lastValues: {},
         name: "Revenue by region",
         params: proposal.params,
         prompt: "revenue",
+        source: {
+          connectionId: "analytics",
+          database: null,
+          dialect: "postgresql",
+          kind: "sql",
+          sqlTemplate: proposal.template,
+        },
         spec: REGION_REVENUE.spec,
-        sqlTemplate: proposal.template,
         view: "line",
       },
     });
@@ -82,8 +89,11 @@ describe("browser widget emulator", () => {
         widgetId: widget.id,
       })
     );
-    expect(outcome.compiledSql).toContain("r.name = $1");
-    expect(outcome.compiledSql).not.toContain("North America");
+    expect(outcome.compiled).toMatchObject({
+      kind: "sql",
+      sql: expect.stringContaining("r.name = $1"),
+    });
+    expect(JSON.stringify(outcome.compiled)).not.toContain("North America");
     expect(outcome.result.rowCount).toBe(9);
     expect(emulator.listWidgets()[0]?.lastValues).toMatchObject({
       region: "North America",
@@ -94,9 +104,6 @@ describe("browser widget emulator", () => {
     const emulator = setup();
     const widget = emulator.saveWidget({
       widget: {
-        connectionId: "analytics",
-        database: null,
-        dialect: "postgresql",
         lastValues: {},
         name: "Revenue",
         params: [
@@ -109,8 +116,14 @@ describe("browser widget emulator", () => {
           },
         ],
         prompt: "revenue",
+        source: {
+          connectionId: "analytics",
+          database: null,
+          dialect: "postgresql",
+          kind: "sql",
+          sqlTemplate: "select 1 where r = {{region}}",
+        },
         spec: REGION_REVENUE.spec,
-        sqlTemplate: "select 1 where r = {{region}}",
         view: "line",
       },
     });
@@ -159,15 +172,18 @@ describe("browser widget emulator", () => {
     const emulator = setup();
     const widget = emulator.saveWidget({
       widget: {
-        connectionId: "analytics",
-        database: null,
-        dialect: "postgresql",
         lastValues: {},
         name: "Revenue",
         params: [],
         prompt: "revenue",
+        source: {
+          connectionId: "analytics",
+          database: null,
+          dialect: "postgresql",
+          kind: "sql",
+          sqlTemplate: "select 1",
+        },
         spec: REGION_REVENUE.spec,
-        sqlTemplate: "select 1",
         view: "line",
       },
     });

@@ -34,7 +34,9 @@ const renderSettings = (handlers: CommandHandlers = {}, onBack = vi.fn()) => {
       <ConnectionsProvider>
         <SettingsView
           onBack={onBack}
+          onOpenActivity={vi.fn()}
           onOpenAgents={vi.fn()}
+          onOpenSource={vi.fn()}
           onOpenWatches={vi.fn()}
         />
       </ConnectionsProvider>
@@ -366,7 +368,9 @@ describe("settings view — background", () => {
         <ConnectionsProvider>
           <SettingsView
             onBack={vi.fn()}
+            onOpenActivity={vi.fn()}
             onOpenAgents={vi.fn()}
+            onOpenSource={vi.fn()}
             onOpenWatches={onOpenWatches}
           />
         </ConnectionsProvider>
@@ -391,7 +395,9 @@ describe("settings view — agents", () => {
         <ConnectionsProvider>
           <SettingsView
             onBack={vi.fn()}
+            onOpenActivity={vi.fn()}
             onOpenAgents={onOpenAgents}
+            onOpenSource={vi.fn()}
             onOpenWatches={vi.fn()}
           />
         </ConnectionsProvider>

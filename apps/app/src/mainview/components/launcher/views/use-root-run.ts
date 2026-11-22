@@ -24,6 +24,8 @@ interface UseRootRunOptions {
   preview: PreviewTarget | null;
   runWidget: (widgetId: string, values: ParamValues) => void;
   openBoard: (boardId: string) => void;
+  openApp: (appId: string) => void;
+  buildApp: (prompt: string, connectionId: string | null) => void;
   openAlert: (alert: RootAlert) => void;
   onActivate: (connection: DatabaseConnection) => void;
   openDraft: () => void;
@@ -41,6 +43,8 @@ export const useRootRun = ({
   preview,
   runWidget,
   openBoard,
+  openApp,
+  buildApp,
   openAlert,
   onActivate,
   openDraft,
@@ -80,6 +84,14 @@ export const useRootRun = ({
           openBoard(item.board.id);
           return;
         }
+        case "mini-app": {
+          openApp(item.app.id);
+          return;
+        }
+        case "build-app": {
+          buildApp(item.prompt, item.connection.id);
+          return;
+        }
         case "alert": {
           openAlert(item.alert);
           return;
@@ -113,9 +125,11 @@ export const useRootRun = ({
       }
     },
     [
+      buildApp,
       lastAnswerId,
       onActivate,
       openAlert,
+      openApp,
       openBoard,
       openDraft,
       preview,

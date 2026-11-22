@@ -1,4 +1,5 @@
 import {
+  compiledText,
   moveTile,
   REFRESH_MS,
   removeTile,
@@ -124,9 +125,9 @@ function BoardScreen({ board, widgets, update }: BoardScreenProps) {
         } else if (action === "open" && tile) {
           openWidgetInLauncher(tile.widgetId);
         } else if (action === "copy-sql") {
-          const sql = refresh.runs[tileId]?.outcome?.compiledSql;
-          if (sql) {
-            copyText(sql);
+          const compiled = refresh.runs[tileId]?.outcome?.compiled;
+          if (compiled) {
+            copyText(compiledText(compiled));
           }
         }
       },

@@ -1,12 +1,19 @@
 import type { LanguageModel } from "@conch/agent";
 import type { DatabaseConnection } from "@conch/core";
 import type { ConnectionPoolManager } from "@conch/drivers";
-import type { RecentAsk, Widget, WidgetDraft } from "@conch/rpc";
+import type {
+  ParamDef,
+  RecentAsk,
+  SqlSource,
+  Widget,
+  WidgetDraft,
+} from "@conch/rpc";
 
 import { getConnections } from "@conch/core";
 import { CARD_SPEC_VERSION } from "@conch/rpc";
 import { describe, expect, it, vi } from "vitest";
 
+import type { FakeSourceOptions } from "./test-fake-sources.ts";
 import type {
   RecentAskStore,
   RunLogStore,
@@ -14,6 +21,8 @@ import type {
 } from "./widget-service.ts";
 
 import { valuesKeyOf } from "./run-samples.ts";
+import { createSourceRunner } from "./source-runner.ts";
+import { fakeSources } from "./test-fake-sources.ts";
 import { createWidgetService } from "./widget-service.ts";
 
 vi.mock(import("@conch/core"), async (importOriginal) => ({
@@ -44,11 +53,30 @@ where billed_at >= {{period.from}}::date and billed_at < {{period.to}}::date
   and region = {{region}}
 group by 1`;
 
-const widgetFixture = (overrides: Partial<Widget> = {}): Widget => ({
-  connectionId: "conn-1",
+type SqlOverrides = Partial<Omit<SqlSource, "kind">>;
+type WidgetOverrides = Partial<Widget> & SqlOverrides;
+
+const sqlSource = ({
+  connectionId = "conn-1",
+  database = null,
+  dialect = "postgresql",
+  sqlTemplate = TEMPLATE,
+}: SqlOverrides = {}): SqlSource => ({
+  connectionId,
+  database,
+  dialect,
+  kind: "sql",
+  sqlTemplate,
+});
+
+const widgetFixture = ({
+  connectionId,
+  database,
+  dialect,
+  sqlTemplate,
+  ...overrides
+}: WidgetOverrides = {}): Widget => ({
   createdAt: "2026-11-01T00:00:00.000Z",
-  database: null,
-  dialect: "postgresql",
   id: "w1",
   lastRunAt: null,
   lastValues: {},
@@ -69,14 +97,15 @@ const widgetFixture = (overrides: Partial<Widget> = {}): Widget => ({
     },
   ],
   prompt: "revenue by region",
+  source: sqlSource({ connectionId, database, dialect, sqlTemplate }),
   spec: {
     formats: {},
     title: "Revenue",
     version: CARD_SPEC_VERSION,
     view: { kind: "table" },
   },
-  sqlTemplate: TEMPLATE,
   updatedAt: "2026-11-01T00:00:00.000Z",
+  version: 2,
   view: "table",
   ...overrides,
 });
@@ -161,6 +190,7 @@ const fakePool = (dialect: "postgresql" | null = "postgresql") => ({
       : [["Europe", 1]];
     return Promise.resolve(tabular(rows));
   }),
+  executeWrite: vi.fn(),
   listDatabases: vi.fn().mockResolvedValue(["public"]),
 });
 
@@ -221,6 +251,7 @@ const setup = (
     pool?: ReturnType<typeof fakePool>;
     model?: LanguageModel | null;
     runLog?: RunLogStore;
+    sources?: FakeSourceOptions;
   } = {}
 ) => {
   const pool = options.pool ?? fakePool();
@@ -234,16 +265,36 @@ const setup = (
   const runLog = options.runLog ?? memoryRunLog();
   const onSampled = vi.fn();
   const loadModel = vi.fn().mockResolvedValue(options.model ?? null);
+  const sources = fakeSources(options.sources);
+  const runner = createSourceRunner({
+    fetchJson: sources.fetchJson,
+    httpEndpoints: sources.endpoints,
+    mcp: sources.mcp,
+    mcpServers: sources.servers,
+    pools: pools as unknown as ConnectionPoolManager,
+  });
+  const runCache = { record: vi.fn() };
   const service = createWidgetService({
     loadModel,
     now: () => NOW,
     onSampled,
-    pools: pools as unknown as ConnectionPoolManager,
     recents,
+    runCache,
     runLog,
+    runner,
     widgets,
   });
-  return { loadModel, onSampled, pool, recents, runLog, service, widgets };
+  return {
+    loadModel,
+    onSampled,
+    pool,
+    recents,
+    runCache,
+    runLog,
+    service,
+    sources,
+    widgets,
+  };
 };
 
 const run = (values: Record<string, unknown> = {}) => ({
@@ -270,7 +321,7 @@ describe("runWidget", () => {
       params: ["2026-07-01", "2026-10-01", "North America"],
       readOnly: true,
     });
-    expect(outcome.compiledSql).not.toContain("North America");
+    expect(JSON.stringify(outcome.compiled)).not.toContain("North America");
     expect(outcome.values).toStrictEqual({
       period: "lastQuarter",
       region: "North America",
@@ -646,14 +697,21 @@ describe("loadParamOptions", () => {
   });
 });
 
-const draft = (overrides: Partial<WidgetDraft> = {}): WidgetDraft => {
+const draft = ({
+  connectionId,
+  database,
+  dialect,
+  sqlTemplate,
+  ...overrides
+}: Partial<WidgetDraft> & SqlOverrides = {}): WidgetDraft => {
   const {
     createdAt: _c,
     id: _i,
     lastRunAt: _l,
     updatedAt: _u,
+    version: _v,
     ...rest
-  } = widgetFixture();
+  } = widgetFixture({ connectionId, database, dialect, sqlTemplate });
   return { ...rest, ...overrides };
 };
 
@@ -799,5 +857,295 @@ describe("proposeParams", () => {
     await expect(
       service.proposeParams({ dialect: "postgresql", prompt: "q", sql: " " })
     ).rejects.toThrow(/too_small|at least 1/i);
+  });
+});
+
+const STATUS_PARAM: ParamDef = {
+  default: "needs_response",
+  label: "Status",
+  name: "status",
+  options: ["needs_response", "won"],
+  type: "select",
+};
+
+const mcpWidget = (overrides: Partial<Widget> = {}): Widget =>
+  widgetFixture({
+    id: "w-mcp",
+    lastRunAt: "2026-11-10T00:00:00.000Z",
+    name: "Open disputes",
+    params: [
+      STATUS_PARAM,
+      { default: 20, label: "Limit", name: "limit", type: "number" },
+    ],
+    source: {
+      args: { limit: { $param: "limit" }, status: { $param: "status" } },
+      kind: "mcp",
+      select: "$.data[*]",
+      serverId: "stripe",
+      tool: "list_disputes",
+    },
+    ...overrides,
+  });
+
+const httpWidget = (): Widget =>
+  widgetFixture({
+    id: "w-http",
+    lastRunAt: "2026-11-12T00:00:00.000Z",
+    name: "Incidents",
+    params: [STATUS_PARAM],
+    source: {
+      endpointId: "status",
+      kind: "http",
+      method: "GET",
+      path: "/incidents/{{status}}",
+      query: { limit: 5 },
+      select: "$.incidents[*]",
+    },
+  });
+
+const runOf = (widgetId: string, values: Record<string, unknown> = {}) => ({
+  runId: `run-${widgetId}`,
+  values: values as never,
+  widgetId,
+});
+
+describe("widgets with MCP and HTTP sources", () => {
+  it("lists SQL, MCP and HTTP widgets together by recency", async () => {
+    const { service } = setup({
+      widgets: [widgetFixture(), mcpWidget(), httpWidget()],
+    });
+    const widgets = await service.listWidgets();
+    expect(widgets.map((widget) => widget.source.kind)).toStrictEqual([
+      "http",
+      "mcp",
+      "sql",
+    ]);
+  });
+
+  it("sends input values to the tool as JSON numbers and strings, without the model", async () => {
+    const { loadModel, service, sources, widgets } = setup({
+      widgets: [mcpWidget()],
+    });
+    const outcome = await service.runWidget(
+      runOf("w-mcp", { limit: 3, status: "won" })
+    );
+
+    expect(sources.fixture.calls).toStrictEqual([
+      { args: { limit: 3, status: "won" }, tool: "list_disputes" },
+    ]);
+    expect(outcome.compiled).toStrictEqual({
+      args: { limit: 3, status: "won" },
+      kind: "mcp",
+      server: "Stripe",
+      tool: "list_disputes",
+    });
+    expect(outcome.result.rows).toStrictEqual([[450, "dp_2", "won"]]);
+    expect(loadModel).not.toHaveBeenCalled();
+    await expect(widgets.getWidget("w-mcp")).resolves.toMatchObject({
+      lastRunAt: NOW.toISOString(),
+      lastValues: { limit: 3, status: "won" },
+    });
+  });
+
+  it("refuses the next run once the tool stops being read-only", async () => {
+    const { service, sources } = setup({ widgets: [mcpWidget()] });
+    await service.runWidget(runOf("w-mcp"));
+    sources.fixture.state.listReadOnly = false;
+    sources.clock.now += 60_000;
+    sources.mcp.invalidate("stripe");
+    await expect(service.runWidget(runOf("w-mcp"))).rejects.toMatchObject({
+      code: "TOOL_NOT_READ_ONLY",
+    });
+    expect(sources.fixture.calls).toHaveLength(1);
+  });
+
+  it("rejects inputs the widget doesn't have and values outside the options", async () => {
+    const { service, sources } = setup({ widgets: [mcpWidget()] });
+    await expect(
+      service.runWidget(runOf("w-mcp", { customer: "cus_1" }))
+    ).rejects.toMatchObject({
+      code: "INVALID_INPUT",
+      message: "Unknown input: customer.",
+    });
+    await expect(
+      service.runWidget(runOf("w-mcp", { status: "lost" }))
+    ).rejects.toMatchObject({ code: "INVALID_INPUT" });
+    expect(sources.fixture.calls).toStrictEqual([]);
+  });
+
+  it("requests the URL built from the inputs", async () => {
+    const { service, sources } = setup({ widgets: [httpWidget()] });
+    const outcome = await service.runWidget(runOf("w-http", { status: "won" }));
+    expect(sources.requests).toStrictEqual([
+      {
+        endpoint: "Status API",
+        url: "https://status.example.com/api/incidents/won?limit=5",
+      },
+    ]);
+    expect(outcome.compiled).toStrictEqual({
+      endpoint: "Status API",
+      kind: "http",
+      url: "https://status.example.com/api/incidents/won?limit=5",
+    });
+  });
+
+  it("runs a detached MCP widget for watches", async () => {
+    const { service } = setup({ widgets: [mcpWidget()] });
+    const run = await service.runDetached(
+      "w-mcp",
+      { status: "won" },
+      new AbortController().signal
+    );
+    expect(run.compiled.kind).toBe("mcp");
+    expect(run.values).toStrictEqual({ limit: 20, status: "won" });
+  });
+
+  it("only offers static options for MCP inputs", async () => {
+    const { pool, service } = setup({ widgets: [mcpWidget()] });
+    await expect(
+      service.loadParamOptions("w-mcp", "status")
+    ).resolves.toStrictEqual(["needs_response", "won"]);
+    expect(pool.execute).not.toHaveBeenCalled();
+  });
+
+  it("saves a read call and refuses one that writes", async () => {
+    const { service } = setup({ widgets: [] });
+    const {
+      createdAt: _c,
+      id: _i,
+      lastRunAt: _l,
+      updatedAt: _u,
+      version: _v,
+      ...draft
+    } = mcpWidget();
+    await expect(service.saveWidget(draft)).resolves.toMatchObject({
+      source: { kind: "mcp", tool: "list_disputes" },
+      version: 2,
+    });
+    await expect(
+      service.saveWidget({
+        ...draft,
+        params: [],
+        source: {
+          args: { charge: "ch_1" },
+          kind: "mcp",
+          select: "$",
+          serverId: "stripe",
+          tool: "refund_charge",
+        },
+      })
+    ).rejects.toMatchObject({ code: "TOOL_NOT_READ_ONLY" });
+    await expect(
+      service.saveWidget({
+        ...draft,
+        source: {
+          args: { limit: { $param: "limit" }, status: { $param: "status" } },
+          kind: "mcp",
+          select: "$",
+          serverId: "gone",
+          tool: "list_disputes",
+        },
+      })
+    ).rejects.toMatchObject({ code: "SOURCE_MISSING" });
+  });
+});
+
+describe("previewSource", () => {
+  const preview = {
+    params: [STATUS_PARAM],
+    prompt: "open disputes",
+    runId: "p1",
+    source: {
+      args: { status: { $param: "status" } },
+      kind: "mcp" as const,
+      select: "$.data[*]",
+      serverId: "stripe",
+      tool: "list_disputes",
+    },
+    values: {},
+  };
+
+  it("runs the call with defaults and infers a card, storing nothing", async () => {
+    const { service, widgets } = setup({ widgets: [] });
+    const outcome = await service.previewSource(preview);
+    expect(outcome.values).toStrictEqual({ status: "needs_response" });
+    expect(outcome.result.rows).toStrictEqual([
+      [1200, "dp_1", "needs_response"],
+    ]);
+    expect(outcome.spec).toMatchObject({
+      version: CARD_SPEC_VERSION,
+      view: { kind: "kpi" },
+    });
+    await expect(widgets.listWidgets()).resolves.toStrictEqual([]);
+  });
+
+  it("refuses a write tool and an unused input", async () => {
+    const { service, sources } = setup({ widgets: [] });
+    await expect(
+      service.previewSource({
+        ...preview,
+        params: [],
+        source: { ...preview.source, args: {}, tool: "refund_charge" },
+      })
+    ).rejects.toMatchObject({ code: "TOOL_NOT_READ_ONLY" });
+    await expect(
+      service.previewSource({
+        ...preview,
+        source: { ...preview.source, args: {} },
+      })
+    ).rejects.toMatchObject({
+      code: "INVALID_TEMPLATE",
+      message: 'The input "status" isn\'t used by the call.',
+    });
+    expect(sources.fixture.calls).toStrictEqual([]);
+  });
+
+  it("can be cancelled like a widget run", async () => {
+    const { service } = setup({ widgets: [] });
+    const pending = service.previewSource({ ...preview, runId: "p-cancel" });
+    service.cancelRun("p-cancel");
+    await expect(pending).rejects.toMatchObject({ code: "QUERY_CANCELLED" });
+  });
+});
+
+describe("proposeSource", () => {
+  it("asks for AI settings when there is no model", async () => {
+    const { service } = setup();
+    await expect(
+      service.proposeSource({
+        prompt: "open disputes",
+        target: { id: "stripe", type: "mcp" },
+      })
+    ).resolves.toStrictEqual({
+      error: "Add an AI provider in Settings, or fill the call in by hand.",
+    });
+  });
+});
+
+describe("write isolation", () => {
+  it("never reaches executeWrite from runWidget, a detached run or previewSource", async () => {
+    const { pool, service } = setup();
+    await service.runWidget(run(), { cacheRun: true });
+    await service.runDetached("w1", {}, new AbortController().signal);
+    await service.previewSource({
+      params: [],
+      runId: "p1",
+      source: sqlSource({ sqlTemplate: "select region from revenue" }),
+      values: {},
+    });
+    expect(pool.execute.mock.calls.length).toBeGreaterThan(0);
+    expect(pool.executeWrite).not.toHaveBeenCalled();
+  });
+
+  it("caches a launcher run for row actions and skips board runs", async () => {
+    const { runCache, service } = setup();
+    await service.runWidget(run());
+    expect(runCache.record).not.toHaveBeenCalled();
+    await service.runWidget({ ...run(), runId: "r2" }, { cacheRun: true });
+    expect(runCache.record).toHaveBeenCalledWith(
+      "r2",
+      "w1",
+      expect.objectContaining({ resultType: "tabular" })
+    );
   });
 });

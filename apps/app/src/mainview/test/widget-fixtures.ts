@@ -1,6 +1,6 @@
 import { CARD_SPEC_VERSION } from "@conch/rpc";
 
-import type { RecentAsk, Widget, WidgetRunResult } from "@/lib/ipc";
+import type { RecentAsk, SqlSource, Widget, WidgetRunResult } from "@/lib/ipc";
 
 export const REGION_SQL = `select date_trunc('month', billed_at)::date as month, sum(mrr) as mrr
 from revenue
@@ -8,11 +8,27 @@ where region = {{region}}
   and billed_at >= {{period.from}}::date and billed_at < {{period.to}}::date
 group by 1 order by 1`;
 
-export const makeWidget = (overrides: Partial<Widget> = {}): Widget => ({
-  connectionId: "analytics",
+export type WidgetOverrides = Partial<Widget> &
+  Partial<Omit<SqlSource, "kind">>;
+
+export const sqlSource = (
+  overrides: Partial<Omit<SqlSource, "kind">> = {}
+): SqlSource => ({
+  connectionId: overrides.connectionId ?? "analytics",
+  database: overrides.database ?? null,
+  dialect: overrides.dialect ?? "postgresql",
+  kind: "sql",
+  sqlTemplate: overrides.sqlTemplate ?? REGION_SQL,
+});
+
+export const makeWidget = ({
+  connectionId,
+  database,
+  dialect,
+  sqlTemplate,
+  ...overrides
+}: WidgetOverrides = {}): Widget => ({
   createdAt: "2026-11-01T00:00:00.000Z",
-  database: null,
-  dialect: "postgresql",
   id: "w-revenue",
   lastRunAt: null,
   lastValues: {},
@@ -33,6 +49,7 @@ export const makeWidget = (overrides: Partial<Widget> = {}): Widget => ({
     },
   ],
   prompt: "revenue by region",
+  source: sqlSource({ connectionId, database, dialect, sqlTemplate }),
   spec: {
     formats: {
       month: { kind: "month" },
@@ -50,8 +67,8 @@ export const makeWidget = (overrides: Partial<Widget> = {}): Widget => ({
       y: ["mrr"],
     },
   },
-  sqlTemplate: REGION_SQL,
   updatedAt: "2026-11-01T00:00:00.000Z",
+  version: 2,
   view: "line",
   ...overrides,
 });
@@ -79,7 +96,7 @@ export const runResult = (
   values: WidgetRunResult["values"] = DEFAULT_VALUES,
   mrr: number[] = [110, 117, 123]
 ): WidgetRunResult => ({
-  compiledSql: "select … where region = $1",
+  compiled: { kind: "sql", sql: "select … where region = $1" },
   result: {
     columns: [
       { name: "month", typeName: "DATE" },

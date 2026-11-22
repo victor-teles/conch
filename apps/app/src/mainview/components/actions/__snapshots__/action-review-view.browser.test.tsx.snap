@@ -1,0 +1,332 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`actionReviewView > shows the confirm sheet's body with a sampled row 1`] = `
+<div
+  data-testid="review"
+  style="height: 560px; width: 760px"
+>
+  <div
+    class="flex min-h-0 flex-1 flex-col"
+  >
+    <header
+      class="flex h-14 shrink-0 items-center gap-2 px-3"
+    >
+      <button
+        aria-label="Back"
+        class="grid size-7 place-items-center rounded-[8px] text-panel-muted hover:bg-row-hover hover:text-foreground"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+      </button>
+      <h1
+        class="min-w-0 flex-1 truncate type-title text-foreground"
+      >
+        Review “Mark reviewed”
+      </h1>
+    </header>
+    <div
+      class="min-h-0 flex-1 launcher-body overflow-y-auto px-4 pt-1"
+    >
+      <div>
+        <div
+          class="flex flex-col gap-3"
+        >
+          <div
+            id="action-confirm-description"
+          >
+            <p
+              class="flex flex-wrap items-center gap-x-1.5 gap-y-1 type-body text-foreground"
+            >
+              <span>
+                Writes to
+              </span>
+              <strong
+                class="font-medium text-warning-ink"
+              >
+                analytics
+              </strong>
+              <span
+                class="rounded-[5px] border border-warning-ink/40 px-1.5 py-px type-micro text-warning-ink uppercase"
+              >
+                prod
+              </span>
+              <span
+                class="text-panel-muted"
+              >
+                · at most 
+                1 row
+              </span>
+            </p>
+          </div>
+          <div
+            class="overflow-hidden rounded-[8px] border border-panel-border bg-row-hover"
+          >
+            <div
+              aria-label="Statement"
+              class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+              data-state="settled"
+              role="region"
+              tabindex="0"
+            >
+              <div
+                class="relative flex"
+              >
+                <span
+                  aria-hidden="true"
+                  class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                >
+                  1
+                </span>
+                <code
+                  class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                >
+                  <span
+                    class="text-chart-1"
+                  >
+                    UPDATE
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                    revenue
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-chart-1"
+                  >
+                    SET
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                    status
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-panel-muted"
+                  >
+                    =
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     $
+                  </span>
+                  <span
+                    class="text-chart-2"
+                  >
+                    1
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-chart-1"
+                  >
+                    WHERE
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                    month
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     
+                  </span>
+                  <span
+                    class="text-panel-muted"
+                  >
+                    =
+                  </span>
+                  <span
+                    class="text-foreground"
+                  >
+                     $
+                  </span>
+                  <span
+                    class="text-chart-2"
+                  >
+                    2
+                  </span>
+                </code>
+              </div>
+            </div>
+          </div>
+          <table
+            aria-label="Bound values"
+            class="w-full type-meta"
+          >
+            <thead
+              class="sr-only"
+            >
+              <tr>
+                <th
+                  scope="col"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                >
+                  Value
+                </th>
+                <th
+                  scope="col"
+                >
+                  Source
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="border-t border-panel-border align-top"
+              >
+                <th
+                  class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                  scope="row"
+                >
+                  status
+                </th>
+                <td
+                  class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                >
+                  reviewed
+                </td>
+                <td
+                  class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                >
+                  literal
+                </td>
+              </tr>
+              <tr
+                class="border-t border-panel-border align-top"
+              >
+                <th
+                  class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                  scope="row"
+                >
+                  month
+                </th>
+                <td
+                  class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                >
+                  2026-02-01
+                </td>
+                <td
+                  class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                >
+                  row.month
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"
+    >
+      <div
+        class="pointer-events-auto flex h-8 min-w-0 items-center gap-2 rounded-full capsule-material px-3 transition-opacity duration-150 empty:pointer-events-none empty:opacity-0 motion-reduce:transition-none [&:has(>:only-child:empty)]:pointer-events-none [&:has(>:only-child:empty)]:opacity-0"
+        data-slot="footer-status"
+      >
+        <span
+          aria-live="polite"
+        >
+          <span
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Review the write, then save
+            </span>
+          </span>
+        </span>
+      </div>
+      <div
+        class="pointer-events-auto ml-auto flex h-8 shrink-0 items-center gap-3 rounded-full capsule-material pr-1.5 pl-3"
+        data-motion="pop"
+        data-slot="footer-actions"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <span
+            class="text-foreground"
+            data-slot="swap-text"
+          >
+            <span
+              class="inline-block"
+            >
+              Save Action
+            </span>
+          </span>
+          <kbd
+            aria-label="⌘ ↩"
+            class="inline-flex items-center gap-0.5"
+            data-slot="kbd-group"
+          >
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ⌘
+            </kbd>
+            <kbd
+              class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+              data-slot="kbd"
+            >
+              ↩
+            </kbd>
+          </kbd>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

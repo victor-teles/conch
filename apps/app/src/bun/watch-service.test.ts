@@ -23,10 +23,7 @@ function resolved<T>(value: T): Promise<T> {
 const STAMP = "2026-11-19T09:00:00.000Z";
 
 const widgetOf = (id: string, overrides: Partial<Widget> = {}): Widget => ({
-  connectionId: "analytics",
   createdAt: STAMP,
-  database: null,
-  dialect: "postgresql",
   id,
   lastRunAt: null,
   lastValues: {},
@@ -40,14 +37,21 @@ const widgetOf = (id: string, overrides: Partial<Widget> = {}): Widget => ({
     },
   ],
   prompt: "",
+  source: {
+    connectionId: "analytics",
+    database: null,
+    dialect: "postgresql",
+    kind: "sql",
+    sqlTemplate: "select 1",
+  },
   spec: {
     formats: { mrr: { currency: "USD", kind: "currency" } },
     title: "MRR",
     version: 1,
     view: id === "mrr" ? { kind: "kpi", value: "mrr" } : { kind: "table" },
   },
-  sqlTemplate: "select 1",
   updatedAt: STAMP,
+  version: 2,
   view: id === "mrr" ? "kpi" : "table",
   ...overrides,
 });
@@ -115,7 +119,7 @@ const setup = () => {
         };
         samples.set(widgetId, sample);
         return resolved({
-          compiledSql: "select 1",
+          compiled: { kind: "sql", sql: "select 1" },
           previous,
           result: {
             columns: [],

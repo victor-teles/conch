@@ -44,7 +44,7 @@ const COPIED: Partial<Record<RowAction["id"], string>> = {
 const NOTICE_MS = 2000;
 
 const promptOf = (item: RowMenuItem): string | null => {
-  if (item.kind === "ask") {
+  if (item.kind === "ask" || item.kind === "build-app") {
     return item.prompt;
   }
   return item.kind === "recent" ? item.ask.prompt : null;

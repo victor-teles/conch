@@ -7,7 +7,7 @@ import type { WidgetDraft } from "@/lib/ipc";
 import { askStateAfter, fakeSession, REVENUE } from "@/test/ask-fixtures";
 import { makeConnection } from "@/test/connection-fixture";
 import { mockLauncherIpc, renderWithConnections } from "@/test/launcher-ipc";
-import { makeWidget } from "@/test/widget-fixtures";
+import { makeWidget, REGION_SQL } from "@/test/widget-fixtures";
 
 import type { AskSession } from "./use-ask";
 
@@ -106,10 +106,13 @@ describe.each([
     await expect.element(input).toHaveFocus();
     expect(saveWidget.mock.calls[0]?.[0]).toMatchObject({
       widget: {
-        connectionId: "analytics",
         name: "MRR by region",
         params: [],
-        sqlTemplate: expect.stringContaining("select"),
+        source: {
+          connectionId: "analytics",
+          kind: "sql",
+          sqlTemplate: expect.stringContaining("select"),
+        },
         view: "line",
       },
     });
@@ -122,7 +125,7 @@ describe.each([
     reduced.value = isReduced;
     const proposal = {
       params: makeWidget().params,
-      template: makeWidget().sqlTemplate,
+      template: REGION_SQL,
     };
     const reply = Promise.withResolvers<typeof proposal>();
     const { onReviewInputs, screen } = await setup({
@@ -135,7 +138,7 @@ describe.each([
     expect(onReviewInputs.mock.calls[0]?.[0]).toMatchObject({
       name: "Monthly recurring revenue by region",
       params: proposal.params,
-      sqlTemplate: proposal.template,
+      source: { sqlTemplate: proposal.template },
     });
   });
 });

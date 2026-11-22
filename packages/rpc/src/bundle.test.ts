@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Board } from "./board.ts";
+import type { SqlSource } from "./source.ts";
 import type { Widget } from "./widget.ts";
 
 import {
@@ -32,11 +33,16 @@ const SECRETS = {
   widgetId: "widget-id-c0de",
 };
 
-const widget = (overrides: Partial<Widget> = {}): Widget => ({
-  connectionId: "conn-a",
+type WidgetOverrides = Partial<Widget> & Partial<Omit<SqlSource, "kind">>;
+
+const widget = ({
+  connectionId = "conn-a",
+  database = "analytics",
+  dialect = "postgresql",
+  sqlTemplate = "select month, sum(mrr) as mrr from revenue where region = {{region}} group by 1",
+  ...overrides
+}: WidgetOverrides = {}): Widget => ({
   createdAt: SECRETS.stamp,
-  database: "analytics",
-  dialect: "postgresql",
   id: "widget-a",
   lastRunAt: null,
   lastValues: {},
@@ -51,6 +57,7 @@ const widget = (overrides: Partial<Widget> = {}): Widget => ({
     },
   ],
   prompt: "revenue by region",
+  source: { connectionId, database, dialect, kind: "sql", sqlTemplate },
   spec: {
     formats: { mrr: { currency: "USD", kind: "currency" } },
     insight: "An insight about old data.",
@@ -64,9 +71,8 @@ const widget = (overrides: Partial<Widget> = {}): Widget => ({
       y: ["mrr"],
     },
   },
-  sqlTemplate:
-    "select month, sum(mrr) as mrr from revenue where region = {{region}} group by 1",
   updatedAt: SECRETS.stamp,
+  version: 2,
   view: "line",
   ...overrides,
 });
@@ -144,6 +150,32 @@ describe("buildBundle", () => {
 
   it("strips the stored insight", () => {
     expect(sample().widgets[0]?.spec.insight).toBeUndefined();
+  });
+
+  it("leaves MCP and HTTP widgets out of the export", () => {
+    const bundle = buildBundle({
+      boards: [board()],
+      connections,
+      now: NOW,
+      widgets: [
+        widget(),
+        widget({
+          id: "widget-b",
+          params: [],
+          source: {
+            args: {},
+            kind: "mcp",
+            select: "$",
+            serverId: "stripe",
+            tool: "list_disputes",
+          },
+        }),
+      ],
+    });
+    expect(bundle.widgets.map((item) => item.name)).toStrictEqual([
+      "Revenue by region",
+    ]);
+    expect(JSON.stringify(bundle)).not.toContain("stripe");
   });
 
   it("drops tiles for widgets outside the export and widgets without a connection", () => {
@@ -227,18 +259,15 @@ describe("bundle schema", () => {
     const original = widget();
     const { insight: _insight, ...specWithoutInsight } = original.spec;
     expect(revenue?.draft).toStrictEqual({
-      connectionId: "local-pg",
-      database: original.database,
-      dialect: original.dialect,
       lastValues: {},
       name: original.name,
       params: original.params,
       prompt: original.prompt,
+      source: { ...original.source, connectionId: "local-pg" },
       spec: specWithoutInsight,
-      sqlTemplate: original.sqlTemplate,
       view: "line",
     });
-    expect(signups?.draft.connectionId).toBe("local-ch");
+    expect(signups?.draft.source).toMatchObject({ connectionId: "local-ch" });
     const { boards } = result.boardDrafts(
       new Map([
         ["w1", "id-1"],

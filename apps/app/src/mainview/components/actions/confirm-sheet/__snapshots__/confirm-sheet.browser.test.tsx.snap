@@ -1,0 +1,1903 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`confirmSheet > announces a completed write and copies the outcome with ⌘C 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="flex items-center gap-2 px-1 py-3 type-body text-foreground"
+          >
+            <svg
+              aria-label="Done"
+              class="text-success-ink size-4"
+              fill="none"
+              role="img"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M3.5 8.5 6.5 11.5 12.5 4.5"
+                pathLength="1"
+                stroke="currentColor"
+                stroke-dasharray="1 1"
+                stroke-dashoffset="0"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.75"
+              />
+            </svg>
+            <span>
+              1 row changed · 42 ms
+            </span>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        >
+          Write completed: 1 row changed
+        </p>
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Done
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > explains RUN_EXPIRED 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+        </header>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Run the widget again to act on its rows.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  RUN_EXPIRED
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        >
+          Write failed: Run the widget again to act on its rows.
+        </p>
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Done
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > explains TOO_MANY_ROWS 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  The write would change 3 rows; this action allows at most 1. Nothing was changed.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  TOO_MANY_ROWS
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        >
+          Write failed: The write would change 3 rows; this action allows at most 1. Nothing was changed.
+        </p>
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Done
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > explains WRITES_NOT_ALLOWED 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+        </header>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Write actions are off for analytics. Turn on Allow write actions in its settings.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  WRITES_NOT_ALLOWED
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        >
+          Write failed: Write actions are off for analytics. Turn on Allow write actions in its settings.
+        </p>
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Done
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > explains WRITES_UNSUPPORTED 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+        </header>
+        <div>
+          <div
+            class="px-4 pt-1 pb-4"
+          >
+            <div
+              class="flex gap-3 rounded-[10px] border border-danger-ink/25 bg-destructive/[0.07] px-3 py-2.5"
+              role="alert"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-circle-alert mt-0.5 size-4 shrink-0 text-danger-ink"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+                <line
+                  x1="12"
+                  x2="12"
+                  y1="8"
+                  y2="12"
+                />
+                <line
+                  x1="12"
+                  x2="12.01"
+                  y1="16"
+                  y2="16"
+                />
+              </svg>
+              <div
+                class="flex min-w-0 flex-1 flex-col gap-1"
+              >
+                <p
+                  class="type-body text-foreground"
+                >
+                  Write actions aren't available for this database.
+                </p>
+                <p
+                  class="type-meta break-words text-panel-muted"
+                >
+                  WRITES_UNSUPPORTED
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        >
+          Write failed: Write actions aren't available for this database.
+        </p>
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Done
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > names the connection in amber with its environment and every bound value 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="flex flex-col gap-3"
+          >
+            <div
+              id="action-confirm-description"
+            >
+              <p
+                class="flex flex-wrap items-center gap-x-1.5 gap-y-1 type-body text-foreground"
+              >
+                <span>
+                  Writes to
+                </span>
+                <strong
+                  class="font-medium text-warning-ink"
+                >
+                  analytics
+                </strong>
+                <span
+                  class="rounded-[5px] border border-warning-ink/40 px-1.5 py-px type-micro text-warning-ink uppercase"
+                >
+                  prod
+                </span>
+                <span
+                  class="text-panel-muted"
+                >
+                  · at most 
+                  1 row
+                </span>
+              </p>
+            </div>
+            <div
+              class="overflow-hidden rounded-[8px] border border-panel-border bg-row-hover"
+            >
+              <div
+                aria-label="Statement"
+                class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                data-state="settled"
+                role="region"
+                tabindex="0"
+              >
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    1
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-chart-1"
+                    >
+                      UPDATE
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      revenue
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-chart-1"
+                    >
+                      SET
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      status
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      =
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       $
+                    </span>
+                    <span
+                      class="text-chart-2"
+                    >
+                      1
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-chart-1"
+                    >
+                      WHERE
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      month
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      =
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       $
+                    </span>
+                    <span
+                      class="text-chart-2"
+                    >
+                      2
+                    </span>
+                  </code>
+                </div>
+              </div>
+            </div>
+            <table
+              aria-label="Bound values"
+              class="w-full type-meta"
+            >
+              <thead
+                class="sr-only"
+              >
+                <tr>
+                  <th
+                    scope="col"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Value
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Source
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    status
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    reviewed
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    literal
+                  </td>
+                </tr>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    month
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    2026-02-01
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    row.month
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        />
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Cancel
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+          <div>
+            <button
+              aria-disabled="true"
+              aria-keyshortcuts="Meta+Enter"
+              class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-warning-ink text-background hover:opacity-90"
+              data-testid="confirm-write"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Run write
+                </span>
+              </span>
+              <kbd
+                aria-label="⌘ ↩"
+                class="inline-flex items-center gap-0.5 text-background/80"
+                data-slot="kbd-group"
+              >
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ⌘
+                </kbd>
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ↩
+                </kbd>
+              </kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > shows an HTTP request with its method, address and body 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Close ticket
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="flex flex-col gap-3"
+          >
+            <div
+              id="action-confirm-description"
+            >
+              <p
+                class="flex flex-wrap items-center gap-x-1.5 type-body text-foreground"
+              >
+                <strong
+                  class="font-mono font-medium"
+                >
+                  POST
+                </strong>
+                <span
+                  class="font-mono break-all"
+                >
+                  api.example.com/v1/tickets/42/close
+                </span>
+                <span
+                  class="text-panel-muted"
+                >
+                  on
+                </span>
+                <strong
+                  class="font-medium text-warning-ink"
+                >
+                  Support API
+                </strong>
+              </p>
+            </div>
+            <div
+              class="overflow-hidden rounded-[8px] border border-panel-border bg-row-hover"
+            >
+              <div
+                aria-label="Body"
+                class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                data-state="settled"
+                role="region"
+                tabindex="0"
+              >
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    1
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-panel-muted"
+                    >
+                      {
+                    </span>
+                  </code>
+                </div>
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    2
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-foreground"
+                    >
+                        
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      reason
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      :
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-chart-5"
+                    >
+                      resolved
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                  </code>
+                </div>
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    3
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-panel-muted"
+                    >
+                      }
+                    </span>
+                  </code>
+                </div>
+              </div>
+            </div>
+            <table
+              aria-label="Bound values"
+              class="w-full type-meta"
+            >
+              <thead
+                class="sr-only"
+              >
+                <tr>
+                  <th
+                    scope="col"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Value
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Source
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    id
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    42
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    row.id
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        />
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Cancel
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+          <div>
+            <button
+              aria-disabled="true"
+              aria-keyshortcuts="Meta+Enter"
+              class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-warning-ink text-background hover:opacity-90"
+              data-testid="confirm-write"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Run write
+                </span>
+              </span>
+              <kbd
+                aria-label="⌘ ↩"
+                class="inline-flex items-center gap-0.5 text-background/80"
+                data-slot="kbd-group"
+              >
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ⌘
+                </kbd>
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ↩
+                </kbd>
+              </kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > shows an MCP call with its tool and arguments 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Refund charge
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="flex flex-col gap-3"
+          >
+            <div
+              id="action-confirm-description"
+            >
+              <p
+                class="type-body text-foreground"
+              >
+                Calls
+                 
+                <strong
+                  class="font-mono font-medium"
+                >
+                  refund_charge
+                </strong>
+                 on
+                 
+                <strong
+                  class="font-medium text-warning-ink"
+                >
+                  Stripe
+                </strong>
+              </p>
+            </div>
+            <div
+              class="overflow-hidden rounded-[8px] border border-panel-border bg-row-hover"
+            >
+              <div
+                aria-label="Arguments"
+                class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                data-state="settled"
+                role="region"
+                tabindex="0"
+              >
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    1
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-panel-muted"
+                    >
+                      {
+                    </span>
+                  </code>
+                </div>
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    2
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-foreground"
+                    >
+                        
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      amount
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      :
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-chart-2"
+                    >
+                      1200
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      ,
+                    </span>
+                  </code>
+                </div>
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    3
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-foreground"
+                    >
+                        
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      charge
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      :
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                    <span
+                      class="text-chart-5"
+                    >
+                      ch_3NqK
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      "
+                    </span>
+                  </code>
+                </div>
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    4
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-panel-muted"
+                    >
+                      }
+                    </span>
+                  </code>
+                </div>
+              </div>
+            </div>
+            <table
+              aria-label="Bound values"
+              class="w-full type-meta"
+            >
+              <thead
+                class="sr-only"
+              >
+                <tr>
+                  <th
+                    scope="col"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Value
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Source
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    charge
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    ch_3NqK
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    row.id
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        />
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Cancel
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+          <div>
+            <button
+              aria-disabled="true"
+              aria-keyshortcuts="Meta+Enter"
+              class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-warning-ink text-background hover:opacity-90"
+              data-testid="confirm-write"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Run write
+                </span>
+              </span>
+              <kbd
+                aria-label="⌘ ↩"
+                class="inline-flex items-center gap-0.5 text-background/80"
+                data-slot="kbd-group"
+              >
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ⌘
+                </kbd>
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ↩
+                </kbd>
+              </kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`confirmSheet > shows the running state 1`] = `
+<div>
+  <div
+    style="height: 480px; position: relative; width: 760px"
+  >
+    <div
+      aria-describedby="action-confirm-description"
+      aria-labelledby="_r_id_"
+      aria-modal="true"
+      class="absolute inset-0 z-40 flex flex-col justify-end"
+      role="alertdialog"
+    >
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-(--panel-solid)"
+      />
+      <section
+        class="relative flex max-h-full flex-col overflow-y-auto rounded-t-[14px] popover-material px-4 pt-3 pb-14"
+        data-motion="slide"
+      >
+        <div
+          aria-hidden="true"
+          class="absolute inset-x-0 top-0 z-10 h-0.5 overflow-hidden"
+          data-testid="run-progress"
+        >
+          <div
+            class="h-full w-2/5 bg-primary"
+          />
+        </div>
+        <header
+          class="flex items-center gap-2 pb-2"
+        >
+          <h2
+            class="min-w-0 flex-1 truncate type-title text-foreground"
+            id="_r_id_"
+          >
+            Mark reviewed
+          </h2>
+          <span
+            class="rounded-full bg-warning-ink/15 px-2 py-0.5 type-micro text-warning-ink"
+          >
+            Writes
+          </span>
+        </header>
+        <div>
+          <div
+            class="flex flex-col gap-3"
+          >
+            <div
+              id="action-confirm-description"
+            >
+              <p
+                class="flex flex-wrap items-center gap-x-1.5 gap-y-1 type-body text-foreground"
+              >
+                <span>
+                  Writes to
+                </span>
+                <strong
+                  class="font-medium text-warning-ink"
+                >
+                  analytics
+                </strong>
+                <span
+                  class="rounded-[5px] border border-warning-ink/40 px-1.5 py-px type-micro text-warning-ink uppercase"
+                >
+                  prod
+                </span>
+                <span
+                  class="text-panel-muted"
+                >
+                  · at most 
+                  1 row
+                </span>
+              </p>
+            </div>
+            <div
+              class="overflow-hidden rounded-[8px] border border-panel-border bg-row-hover"
+            >
+              <div
+                aria-label="Statement"
+                class="max-h-[220px] overflow-y-auto px-2 py-2 font-mono text-[12px] leading-[19px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                data-state="settled"
+                role="region"
+                tabindex="0"
+              >
+                <div
+                  class="relative flex"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="w-9 shrink-0 pr-3 text-right text-panel-muted tabular-nums select-none"
+                  >
+                    1
+                  </span>
+                  <code
+                    class="min-w-0 flex-1 break-words whitespace-pre-wrap"
+                  >
+                    <span
+                      class="text-chart-1"
+                    >
+                      UPDATE
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      revenue
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-chart-1"
+                    >
+                      SET
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      status
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      =
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       $
+                    </span>
+                    <span
+                      class="text-chart-2"
+                    >
+                      1
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-chart-1"
+                    >
+                      WHERE
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                      month
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       
+                    </span>
+                    <span
+                      class="text-panel-muted"
+                    >
+                      =
+                    </span>
+                    <span
+                      class="text-foreground"
+                    >
+                       $
+                    </span>
+                    <span
+                      class="text-chart-2"
+                    >
+                      2
+                    </span>
+                  </code>
+                </div>
+              </div>
+            </div>
+            <table
+              aria-label="Bound values"
+              class="w-full type-meta"
+            >
+              <thead
+                class="sr-only"
+              >
+                <tr>
+                  <th
+                    scope="col"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Value
+                  </th>
+                  <th
+                    scope="col"
+                  >
+                    Source
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    status
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    reviewed
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    literal
+                  </td>
+                </tr>
+                <tr
+                  class="border-t border-panel-border align-top"
+                >
+                  <th
+                    class="w-0 py-1.5 pr-3 text-left font-mono font-normal whitespace-nowrap text-panel-muted"
+                    scope="row"
+                  >
+                    month
+                  </th>
+                  <td
+                    class="py-1.5 pr-3 font-mono break-all whitespace-pre-wrap text-foreground"
+                  >
+                    2026-02-01
+                  </td>
+                  <td
+                    class="w-0 py-1.5 text-right whitespace-nowrap text-panel-muted"
+                  >
+                    row.month
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p
+          aria-live="polite"
+          class="sr-only"
+          role="status"
+        />
+        <div
+          class="flex items-center justify-end gap-2 pt-3"
+        >
+          <button
+            class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-row-hover text-foreground hover:bg-row-active"
+            tabindex="0"
+            type="button"
+          >
+            Cancel
+            <kbd
+              aria-label="esc"
+              class="inline-flex items-center gap-0.5"
+              data-slot="kbd-group"
+            >
+              <kbd
+                class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                data-slot="kbd"
+              >
+                esc
+              </kbd>
+            </kbd>
+          </button>
+          <div>
+            <button
+              aria-disabled="true"
+              aria-keyshortcuts="Meta+Enter"
+              class="flex h-8 items-center gap-2 rounded-[8px] px-3 type-body outline-none focus-visible:ring-2 focus-visible:ring-primary/70 bg-warning-ink text-background hover:opacity-90"
+              data-testid="confirm-write"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                data-slot="swap-text"
+              >
+                <span
+                  class="inline-block"
+                >
+                  Running…
+                </span>
+              </span>
+              <kbd
+                aria-label="⌘ ↩"
+                class="inline-flex items-center gap-0.5 text-background/80"
+                data-slot="kbd-group"
+              >
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ⌘
+                </kbd>
+                <kbd
+                  class="pointer-events-none inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] bg-kbd px-1 font-sans type-micro text-panel-muted select-none [&_svg:not([class*='size-'])]:size-3"
+                  data-slot="kbd"
+                >
+                  ↩
+                </kbd>
+              </kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;

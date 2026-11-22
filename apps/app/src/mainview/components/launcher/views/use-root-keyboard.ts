@@ -199,8 +199,12 @@ const footerBase = (
     case "recent": {
       return { actionLabel: "Ask again", hints: [] };
     }
-    case "board": {
+    case "board":
+    case "mini-app": {
       return { actionLabel: "Open", hints: [] };
+    }
+    case "build-app": {
+      return { actionLabel: "Build", hints: [] };
     }
     case "alert": {
       return { actionLabel: "Open", hints: [DISMISS_HINT] };

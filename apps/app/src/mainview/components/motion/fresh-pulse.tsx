@@ -8,11 +8,12 @@ const PULSE_OPACITY = 0.14;
 
 interface FreshPulseProps {
   onDone: () => void;
+  delay?: number;
 }
 
 // Driven imperatively: rows mount inside AnimatePresence initial={false},
 // which would otherwise skip a declarative initial state.
-export function FreshPulse({ onDone }: FreshPulseProps) {
+export function FreshPulse({ onDone, delay = 0 }: FreshPulseProps) {
   const { reduced } = useMotionPreset();
   const [scope, animate] = useAnimate<HTMLSpanElement>();
 
@@ -24,7 +25,7 @@ export function FreshPulse({ onDone }: FreshPulseProps) {
     const controls = animate(
       scope.current,
       { opacity: [PULSE_OPACITY, 0] },
-      { duration: PULSE_SECONDS, ease: "easeOut" }
+      { delay, duration: PULSE_SECONDS, ease: "easeOut" }
     );
     const settle = async () => {
       await controls;
@@ -32,7 +33,7 @@ export function FreshPulse({ onDone }: FreshPulseProps) {
     };
     settle();
     return () => controls.stop();
-  }, [animate, onDone, reduced, scope]);
+  }, [animate, delay, onDone, reduced, scope]);
 
   return reduced ? null : (
     <span

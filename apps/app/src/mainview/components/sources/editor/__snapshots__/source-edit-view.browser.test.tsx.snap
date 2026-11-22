@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`mCP server editor (reduced motion false) > saves a new local command on ⌘T, tests it and lists its tools 1`] = `
+<ul
+  aria-label="Tools"
+  class="flex flex-col px-2 pb-2"
+>
+  <li
+    class="flex flex-col rounded-[8px] px-2 py-1.5"
+    data-tool="list_disputes"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <span
+        class="font-mono text-[12px] text-foreground"
+      >
+        list_disputes
+      </span>
+      <span
+        class="min-w-0 flex-1 truncate type-meta text-panel-muted"
+      >
+        List disputes by status.
+      </span>
+      <span
+        class="shrink-0 rounded-[5px] bg-success-ink/12 px-1.5 type-micro text-success-ink"
+      >
+        Read-only
+      </span>
+    </div>
+  </li>
+  <li
+    class="flex flex-col rounded-[8px] px-2 py-1.5"
+    data-tool="refund_charge"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <span
+        class="font-mono text-[12px] text-foreground"
+      >
+        refund_charge
+      </span>
+      <span
+        class="min-w-0 flex-1 truncate type-meta text-panel-muted"
+      >
+        Refund a charge.
+      </span>
+      <label
+        class="relative flex shrink-0 cursor-default items-center gap-1.5 rounded-[7px] px-1.5 py-0.5 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary/70"
+      >
+        <input
+          aria-label="Treat refund_charge as read"
+          class="absolute inset-0 cursor-default appearance-none rounded-[7px] opacity-0"
+          type="checkbox"
+        />
+        <span
+          aria-hidden="true"
+          class="grid size-3.5 place-items-center rounded-[4px] border border-panel-border"
+        />
+        Treat as read
+      </label>
+    </div>
+  </li>
+</ul>
+`;
+
+exports[`mCP server editor (reduced motion true) > saves a new local command on ⌘T, tests it and lists its tools 1`] = `
+<ul
+  aria-label="Tools"
+  class="flex flex-col px-2 pb-2"
+>
+  <li
+    class="flex flex-col rounded-[8px] px-2 py-1.5"
+    data-tool="list_disputes"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <span
+        class="font-mono text-[12px] text-foreground"
+      >
+        list_disputes
+      </span>
+      <span
+        class="min-w-0 flex-1 truncate type-meta text-panel-muted"
+      >
+        List disputes by status.
+      </span>
+      <span
+        class="shrink-0 rounded-[5px] bg-success-ink/12 px-1.5 type-micro text-success-ink"
+      >
+        Read-only
+      </span>
+    </div>
+  </li>
+  <li
+    class="flex flex-col rounded-[8px] px-2 py-1.5"
+    data-tool="refund_charge"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <span
+        class="font-mono text-[12px] text-foreground"
+      >
+        refund_charge
+      </span>
+      <span
+        class="min-w-0 flex-1 truncate type-meta text-panel-muted"
+      >
+        Refund a charge.
+      </span>
+      <label
+        class="relative flex shrink-0 cursor-default items-center gap-1.5 rounded-[7px] px-1.5 py-0.5 type-meta text-panel-muted hover:bg-row-hover hover:text-foreground has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary/70"
+      >
+        <input
+          aria-label="Treat refund_charge as read"
+          class="absolute inset-0 cursor-default appearance-none rounded-[7px] opacity-0"
+          type="checkbox"
+        />
+        <span
+          aria-hidden="true"
+          class="grid size-3.5 place-items-center rounded-[4px] border border-panel-border"
+        />
+        Treat as read
+      </label>
+    </div>
+  </li>
+</ul>
+`;

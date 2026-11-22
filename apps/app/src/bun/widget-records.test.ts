@@ -1,3 +1,4 @@
+import type { ConnectionPoolManager } from "@conch/drivers";
 import type * as NodeOs from "node:os";
 
 import { mkdtempSync } from "node:fs";
@@ -22,11 +23,14 @@ const {
   encryptLine,
   recentAsksPath,
   resetCryptoCache,
+  saveConnections,
   setLegacyKeyLoader,
   widgetsPath,
 } = await import("@conch/core");
-const { defaultRecentAskStore, defaultWidgetStore } =
+const { createWidgetService, defaultRecentAskStore, defaultWidgetStore } =
   await import("./widget-service.ts");
+const { createSourceRunner } = await import("./source-runner.ts");
+const { fakeSources } = await import("./test-fake-sources.ts");
 const { RecentAsk } = await import("@conch/rpc");
 
 const V1_SPEC = {
@@ -168,5 +172,189 @@ describe("records saved before the CardSpec version bump", () => {
       "postgresql",
       "mongodb",
     ]);
+  });
+});
+
+const V1_SIGNUPS = {
+  ...V1_WIDGET,
+  id: "w-signups",
+  lastRunAt: null,
+  lastValues: {},
+  name: "Signups",
+  params: [],
+  sqlTemplate: "select count(*) as signups from users",
+};
+
+const UNKNOWN_RECORD = {
+  future: { shape: [1, 2, 3] },
+  id: "w-from-a-newer-build",
+  version: 9,
+};
+
+const sourceKinds = async (file: string): Promise<unknown[]> => {
+  const records = await readEncrypted(file);
+  return Array.isArray(records)
+    ? records.map(
+        (record: { version?: unknown; source?: { kind?: unknown } }) =>
+          record.version === 2 ? record.source?.kind : (record.version ?? "v1")
+      )
+    : [];
+};
+
+describe("widgets saved before sources", () => {
+  beforeEach(async () => {
+    resetCryptoCache();
+    setLegacyKeyLoader(noLegacyKey);
+    await fs.rm(path.join(TMP_HOME, ".config"), {
+      force: true,
+      recursive: true,
+    });
+  });
+
+  it("upgrades v1 widgets in memory and rewrites only the one that changes", async () => {
+    await writeEncrypted(widgetsPath(), [
+      V1_WIDGET,
+      V1_SIGNUPS,
+      UNKNOWN_RECORD,
+    ]);
+    const store = defaultWidgetStore();
+
+    const listed = await store.listWidgets();
+    expect(
+      listed.map((widget) => [widget.id, widget.version, widget.source])
+    ).toStrictEqual([
+      [
+        "w-revenue",
+        2,
+        {
+          connectionId: "conn-analytics",
+          database: null,
+          dialect: "postgresql",
+          kind: "sql",
+          sqlTemplate: V1_WIDGET.sqlTemplate,
+        },
+      ],
+      [
+        "w-signups",
+        2,
+        {
+          connectionId: "conn-analytics",
+          database: null,
+          dialect: "postgresql",
+          kind: "sql",
+          sqlTemplate: V1_SIGNUPS.sqlTemplate,
+        },
+      ],
+    ]);
+    await expect(sourceKinds(widgetsPath())).resolves.toStrictEqual([
+      "v1",
+      "v1",
+      9,
+    ]);
+
+    await store.updateWidget("w-signups", (widget) => ({
+      ...widget,
+      lastRunAt: "2026-11-21T08:00:00.000Z",
+    }));
+
+    const onDisk = await readEncrypted(widgetsPath());
+    expect(onDisk).toStrictEqual([
+      V1_WIDGET,
+      expect.objectContaining({
+        id: "w-signups",
+        lastRunAt: "2026-11-21T08:00:00.000Z",
+        source: expect.objectContaining({ kind: "sql" }),
+        version: 2,
+      }),
+      UNKNOWN_RECORD,
+    ]);
+    const raw = await fs.readFile(widgetsPath(), "utf8");
+    await expect(decryptLine(raw.trim())).resolves.toContain(
+      JSON.stringify(UNKNOWN_RECORD)
+    );
+  });
+
+  it("runs a v1 widget from disk and stores it back as v2", async () => {
+    await saveConnections([
+      {
+        createdAt: "2026-11-18T00:00:00.000Z",
+        database: "analytics",
+        host: "127.0.0.1",
+        id: "conn-analytics",
+        lastConnectedAt: null,
+        name: "analytics",
+        password: "secret",
+        pinned: false,
+        port: 5432,
+        type: "postgresql",
+        username: "conch",
+      },
+    ]);
+    await writeEncrypted(widgetsPath(), [V1_SIGNUPS, UNKNOWN_RECORD]);
+    const execute = vi.fn().mockResolvedValue({
+      columns: [{ name: "signups", typeName: "INT8" }],
+      executionTimeMs: 2,
+      isTruncated: false,
+      resultType: "tabular",
+      rowCount: 1,
+      rows: [[42]],
+    });
+    const pool = {
+      dialect: "postgresql",
+      execute,
+      listDatabases: () => {
+        const settled = ["analytics"];
+        return Promise.resolve(settled);
+      },
+    };
+    const pools = { connect: vi.fn(), getPool: () => pool, has: () => true };
+    const sources = fakeSources();
+    const service = createWidgetService({
+      loadModel: () => {
+        const none = null;
+        return Promise.resolve(none);
+      },
+      now: () => new Date("2026-11-21T09:00:00.000Z"),
+      onSampled: vi.fn(),
+      recents: defaultRecentAskStore(),
+      runCache: { record: vi.fn() },
+      runLog: {
+        append: () => {
+          const entry = {
+            id: "x",
+            samples: [],
+            valuesKey: "",
+            widgetId: "w-signups",
+          };
+          return Promise.resolve(entry);
+        },
+        entry: () => {
+          const none = null;
+          return Promise.resolve(none);
+        },
+        latestFor: () => {
+          const settled = {};
+          return Promise.resolve(settled);
+        },
+        removeForWidget: vi.fn().mockResolvedValue(null),
+      },
+      runner: createSourceRunner({
+        fetchJson: sources.fetchJson,
+        httpEndpoints: sources.endpoints,
+        mcp: sources.mcp,
+        mcpServers: sources.servers,
+        pools: pools as unknown as ConnectionPoolManager,
+      }),
+      widgets: defaultWidgetStore(),
+    });
+
+    const outcome = await service.runWidget({
+      runId: "r1",
+      values: {},
+      widgetId: "w-signups",
+    });
+    expect(outcome.result.rows).toStrictEqual([[42]]);
+    expect(execute.mock.calls[0]?.[0]).toBe(V1_SIGNUPS.sqlTemplate);
+    await expect(sourceKinds(widgetsPath())).resolves.toStrictEqual(["sql", 9]);
   });
 });

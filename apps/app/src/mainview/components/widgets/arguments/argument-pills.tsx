@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ParamDef, ParamValue, ParamValues, Widget } from "@/lib/ipc";
 
 import type { PillProps } from "./pill-props";
+import type { OptionsOwner } from "./use-param-options";
 
 import { DatePill, DateRangePill } from "./date-pills";
 import { NumberPill, TextPill } from "./field-pill";
@@ -14,14 +15,14 @@ import { SelectPill } from "./select-pill";
 export interface ArgumentInput {
   key: string;
   param: ParamDef;
-  widgetId: string;
+  owner: OptionsOwner;
 }
 
 export const widgetInputs = (widget: Widget): ArgumentInput[] =>
   editableParams(widget.params).map((param) => ({
     key: param.name,
+    owner: { kind: "widget", widgetId: widget.id },
     param,
-    widgetId: widget.id,
   }));
 
 export type PillFocus = "first" | "none";
@@ -145,10 +146,10 @@ export function ArgumentPills({
           onChange: change,
           onCommit: commit,
           onFocus: setActive,
+          owner: input.owner,
           register,
           value: values[input.key] ?? input.param.default,
           valueKey: input.key,
-          widgetId: input.widgetId,
         })
       )}
     </div>

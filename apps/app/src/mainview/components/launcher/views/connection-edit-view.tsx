@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ConnectionDraft } from "@/components/connection-form/connection-form-state";
 import type { DatabaseConnection } from "@/lib/connections";
 
+import { dialectForType } from "@/components/actions/editor/action-draft-model";
+import { WriteToggleRow } from "@/components/actions/write-toggle-row";
 import { ConnectionForm } from "@/components/connection-form";
 import { useConnections } from "@/components/launcher/connections/connections-provider";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
@@ -106,6 +108,11 @@ export function ConnectionEditView({
             onSuccess={handleSuccess}
           />
         )}
+        {connection && dialectForType(connection.type) ? (
+          <div className="-mx-4 mt-2 border-t border-panel-border">
+            <WriteToggleRow id={connection.id} kind="connection" />
+          </div>
+        ) : null}
       </div>
       <LauncherFooter
         actionKeys={SUBMIT_KEYS}

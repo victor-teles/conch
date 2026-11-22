@@ -23,3 +23,28 @@ export * from "./boards.ts";
 export * from "./watches.ts";
 export * from "./types.ts";
 export * from "./mcp-store.ts";
+export * from "./arg-template.ts";
+export * from "./json-select.ts";
+export * from "./request-url.ts";
+export * from "./to-tabular.ts";
+export * from "./source-configs.ts";
+export {
+  createActionStore,
+  createPermissionStore,
+  permissionKey,
+} from "./actions.ts";
+export {
+  appendAudit,
+  archiveAudit,
+  lineHash,
+  readAudit,
+  verifyAudit,
+  ZERO_HASH,
+} from "./audit-log.ts";
+export type { AuditVerification } from "./audit-log.ts";
+export {
+  classifyWriteAst,
+  statementCount,
+  WRITE_AST_DIALECTS,
+} from "./write-ast.ts";
+export type { WriteAstVerdict, WriteKind } from "./write-ast.ts";

@@ -1,4 +1,4 @@
-import type { ChangeEvent, FocusEvent, MouseEvent } from "react";
+import type { ChangeEvent, FocusEvent, MouseEvent, PointerEvent } from "react";
 
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -6,6 +6,7 @@ import { Fragment, useCallback, useEffect, useId, useRef } from "react";
 
 import { SwapText } from "@/components/motion/swap-text";
 import { useMotionPreset } from "@/lib/motion";
+import { isPointerTravel } from "@/lib/pointer-travel";
 import { cn } from "@/lib/utils";
 
 import { useFilteredList } from "./actions/use-filtered-list";
@@ -46,7 +47,11 @@ function ScopeOptionRow({
 }: ScopeOptionRowProps) {
   const handleClick = useCallback(() => onPick(option), [onPick, option]);
   const handlePointerMove = useCallback(
-    () => onHighlight(option.id),
+    (event: PointerEvent) => {
+      if (isPointerTravel(event)) {
+        onHighlight(option.id);
+      }
+    },
     [onHighlight, option.id]
   );
   return (

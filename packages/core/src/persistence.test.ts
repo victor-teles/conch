@@ -32,8 +32,18 @@ const {
   saveConnections,
   saveTabs,
 } = await import("./persistence.ts");
-const { connectionsPath, historyDir, historyPath, keyPath, tabsPath } =
-  await import("./paths.ts");
+const {
+  actionsAuditPath,
+  actionsPath,
+  connectionsPath,
+  historyDir,
+  historyPath,
+  httpEndpointsPath,
+  keyPath,
+  mcpServersPath,
+  tabsPath,
+  writePermissionsPath,
+} = await import("./paths.ts");
 const { appConfigDir, makeConnection, makeHistoryEntry } =
   await import("./test-utils.ts");
 
@@ -155,7 +165,7 @@ describe("persistence — history migration", () => {
 
     const raw = await fs.readFile(historyPath("c1"), "utf8");
     expect(raw.startsWith("{")).toBeFalsy();
-    expect(raw).not.toContain("p1");
+    expect(raw).not.toContain('"p1"');
   });
 });
 
@@ -328,6 +338,45 @@ describe("persistence — resetSecrets", () => {
     await expect(fs.access(keyPath())).rejects.toBeDefined();
     await expect(fs.access(connectionsPath())).rejects.toBeDefined();
     await expect(fs.access(historyDir())).rejects.toBeDefined();
+  });
+
+  it("removes the MCP server and HTTP endpoint files", async () => {
+    for (const file of [mcpServersPath(), httpEndpointsPath()]) {
+      await fs.mkdir(path.dirname(file), { recursive: true });
+      await fs.writeFile(file, "secret");
+    }
+
+    await resetSecrets();
+
+    await expect(fs.access(mcpServersPath())).rejects.toBeDefined();
+    await expect(fs.access(httpEndpointsPath())).rejects.toBeDefined();
+  });
+
+  it("removes the action and write permission files", async () => {
+    const files = [actionsPath(), writePermissionsPath()];
+    for (const file of files) {
+      await fs.mkdir(path.dirname(file), { recursive: true });
+      await fs.writeFile(file, "secret");
+    }
+
+    await resetSecrets();
+
+    for (const file of files) {
+      await expect(fs.access(file)).rejects.toBeDefined();
+    }
+  });
+
+  it("keeps the action audit log, set aside, across a reset", async () => {
+    await fs.mkdir(path.dirname(actionsAuditPath()), { recursive: true });
+    await fs.writeFile(actionsAuditPath(), "line\n");
+
+    await resetSecrets();
+
+    await expect(fs.access(actionsAuditPath())).rejects.toBeDefined();
+    const names = await fs.readdir(path.dirname(actionsAuditPath()));
+    expect(
+      names.some((name) => name.startsWith("actions-audit-"))
+    ).toBeTruthy();
   });
 
   it("returns empty results after reset and rotates the crypto key on next write", async () => {

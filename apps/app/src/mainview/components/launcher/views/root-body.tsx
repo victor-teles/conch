@@ -42,7 +42,8 @@ export function RootBody({ view, list, detail }: RootBodyProps) {
   }
   return (
     <LauncherScrollArea className="flex-1 pt-1">
-      {view.note && view.sections.length === 0 ? (
+      {view.note?.tone === "tip" ? <ModeNote note={view.note} /> : null}
+      {view.note && view.note.tone !== "tip" && view.sections.length === 0 ? (
         <ModeNote note={view.note} />
       ) : (
         <RootList

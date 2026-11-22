@@ -35,21 +35,28 @@ const connection = (
   ...overrides,
 });
 
-const widget = (overrides: Partial<Widget> = {}): Widget =>
+const widget = ({
+  connectionId = "c1",
+  ...overrides
+}: Partial<Widget> & { connectionId?: string } = {}): Widget =>
   Widget.parse({
-    connectionId: "c1",
     createdAt: "2026-11-21T00:00:00.000Z",
-    database: null,
-    dialect: "postgresql",
     id: "w1",
     lastRunAt: null,
     lastValues: {},
     name: "MRR",
     params: [],
     prompt: "monthly revenue",
+    source: {
+      connectionId,
+      database: null,
+      dialect: "postgresql",
+      kind: "sql",
+      sqlTemplate: "select 1",
+    },
     spec: { title: "MRR", version: 2, view: { kind: "table" } },
-    sqlTemplate: "select 1",
     updatedAt: "2026-11-21T00:00:00.000Z",
+    version: 2,
     view: "table",
     ...overrides,
   });

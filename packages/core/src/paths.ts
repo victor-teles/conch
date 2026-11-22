@@ -74,3 +74,27 @@ export function mcpAuditPath(): string {
 export function mcpRunDir(): string {
   return path.join(appDir(), "run");
 }
+
+export function mcpServersPath(): string {
+  return path.join(appDir(), "mcp-servers.enc");
+}
+
+export function httpEndpointsPath(): string {
+  return path.join(appDir(), "http-endpoints.enc");
+}
+
+export function actionsPath(): string {
+  return path.join(appDir(), "actions.enc");
+}
+
+export function writePermissionsPath(): string {
+  return path.join(appDir(), "write-permissions.enc");
+}
+
+export function actionsAuditPath(): string {
+  return path.join(appDir(), "actions-audit.enc");
+}
+
+export function miniAppsPath(): string {
+  return path.join(appDir(), "mini-apps.enc");
+}

@@ -129,3 +129,34 @@ export type {
   RedisReadPlan,
   RedisReadPlanParse,
 } from "./redis-read-plan.ts";
+export {
+  bindArgs,
+  bindParamRef,
+  collectParamRefs,
+  isParamRef,
+  paramText,
+} from "./arg-template.ts";
+export type {
+  ArgTemplateValue,
+  BoundValues,
+  ParamRefShape,
+} from "./arg-template.ts";
+export {
+  MAX_SELECT_PATH,
+  MAX_SELECT_WILDCARDS,
+  parseSelectPath,
+  select,
+} from "./json-select.ts";
+export type { SelectPathParse, SelectSegment } from "./json-select.ts";
+export {
+  buildRequestUrl,
+  parsePathTemplate,
+  pathParamRefs,
+} from "./request-url.ts";
+export type {
+  PathPart,
+  PathTemplateParse,
+  QueryLeafValue,
+} from "./request-url.ts";
+export { toTabular } from "./to-tabular.ts";
+export type { ToTabularOptions } from "./to-tabular.ts";

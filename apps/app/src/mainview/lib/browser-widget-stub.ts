@@ -5,6 +5,7 @@ import type {
   ProposeParamsResult,
   RecentAsk as RecentAskRecord,
   RunWidgetRequest,
+  SqlSource,
   Widget as WidgetRecord,
   WidgetDraft as WidgetDraftRecord,
   WidgetRunResult,
@@ -13,14 +14,17 @@ import type {
 import { compileSqlTemplate } from "@conch/core/client";
 import {
   chainPrompt,
+  parseStoredWidget,
   paramValueSchema,
   RecentAsk,
   toTemplateValue,
   Widget,
+  WIDGET_VERSION,
   WidgetDraft,
 } from "@conch/rpc";
 
 import type { RecordedAsk } from "@/lib/browser-ask-stub";
+import type { SourceEmulator } from "@/lib/browser-source-stub";
 
 import {
   MONTHS,
@@ -52,7 +56,7 @@ const readList = <T>(key: string, parse: (raw: unknown) => T | null): T[] => {
   }
 };
 
-const parseWidget = (raw: unknown) => Widget.safeParse(raw).data ?? null;
+const parseWidget = (raw: unknown) => parseStoredWidget(raw);
 const parseRecent = (raw: unknown) => RecentAsk.safeParse(raw).data ?? null;
 
 const readWidgets = () => readList(WIDGETS_KEY, parseWidget);
@@ -99,21 +103,19 @@ const proposalFor = (sql: string): ProposeParamsResult => {
 const monthsWithin = (from: string, to: string) =>
   MONTHS.filter((month) => month >= from && month < to);
 
-const recordedFor = (widget: WidgetRecord): RecordedAsk => {
-  if (widget.sqlTemplate.includes("{{region}}")) {
+const recordedFor = (template: string): RecordedAsk => {
+  if (template.includes("{{region}}")) {
     return REGION_REVENUE;
   }
-  return widget.sqlTemplate.includes("plans")
-    ? WEEKLY_SIGNUPS
-    : REVENUE_BY_REGION;
+  return template.includes("plans") ? WEEKLY_SIGNUPS : REVENUE_BY_REGION;
 };
 
 const rowsFor = (
   widget: WidgetRecord,
+  recorded: RecordedAsk,
   values: ParamValues,
   now: Date
 ): unknown[][] => {
-  const recorded = recordedFor(widget);
   if (recorded !== REGION_REVENUE) {
     return recorded.rows;
   }
@@ -135,7 +137,8 @@ const resolveValues = (
     widget.params.map((param) => {
       const raw =
         requested[param.name] ?? widget.lastValues[param.name] ?? param.default;
-      const allowed = param.type === "select" ? REGIONS : undefined;
+      const allowed =
+        param.type === "select" && param.optionsSql ? REGIONS : undefined;
       const parsed = paramValueSchema(param, allowed).safeParse(raw);
       if (!parsed.success) {
         throw failure(
@@ -147,19 +150,41 @@ const resolveValues = (
     })
   );
 
-const compiledFor = (widget: WidgetRecord, values: ParamValues, now: Date) =>
-  compileSqlTemplate(
-    widget.sqlTemplate,
+const runSql = (
+  widget: WidgetRecord,
+  source: SqlSource,
+  values: ParamValues,
+  now: Date
+) => {
+  const recorded = recordedFor(source.sqlTemplate);
+  const rows = rowsFor(widget, recorded, values, now);
+  const { sql } = compileSqlTemplate(
+    source.sqlTemplate,
     Object.fromEntries(
       widget.params.map((param) => [
         param.name,
         toTemplateValue(param, values[param.name] ?? param.default, now),
       ])
     ),
-    widget.dialect
-  ).sql;
+    source.dialect
+  );
+  return {
+    compiled: { kind: "sql" as const, sql },
+    result: {
+      columns: recorded.columns,
+      executionTimeMs: recorded.executionTimeMs,
+      isTruncated: false,
+      resultType: "tabular" as const,
+      rowCount: rows.length,
+      rows,
+    },
+  };
+};
 
-export const createWidgetEmulator = (now: () => Date = () => new Date()) => {
+export const createWidgetEmulator = (
+  sources: Pick<SourceEmulator, "run">,
+  now: () => Date = () => new Date()
+) => {
   const requireWidget = (id: string): WidgetRecord => {
     const widget = readWidgets().find((item) => item.id === id);
     if (!widget) {
@@ -240,26 +265,20 @@ export const createWidgetEmulator = (now: () => Date = () => new Date()) => {
     }: RunWidgetRequest): Promise<WidgetRunResult> => {
       const widget = requireWidget(widgetId);
       const resolved = resolveValues(widget, values);
-      await wait(RUN_MS);
-      const recorded = recordedFor(widget);
-      const rows = rowsFor(widget, resolved, now());
+      const { source } = widget;
+      let outcome: Omit<WidgetRunResult, "values">;
+      if (source.kind === "sql") {
+        await wait(RUN_MS);
+        outcome = runSql(widget, source, resolved, now());
+      } else {
+        outcome = await sources.run(source, widget.params, resolved);
+      }
       update(widgetId, (current) => ({
         ...current,
         lastRunAt: now().toISOString(),
         lastValues: resolved,
       }));
-      return {
-        compiledSql: compiledFor(widget, resolved, now()),
-        result: {
-          columns: recorded.columns,
-          executionTimeMs: recorded.executionTimeMs,
-          isTruncated: false,
-          resultType: "tabular",
-          rowCount: rows.length,
-          rows,
-        },
-        values: resolved,
-      };
+      return { ...outcome, values: resolved };
     },
 
     saveWidget: ({ widget: input }: { widget: WidgetDraftRecord }) => {
@@ -273,6 +292,7 @@ export const createWidgetEmulator = (now: () => Date = () => new Date()) => {
         id: draft.id ?? crypto.randomUUID(),
         lastRunAt: existing?.lastRunAt ?? null,
         updatedAt: stamp,
+        version: WIDGET_VERSION,
       });
       writeWidgets([
         ...widgets.filter((item) => item.id !== widget.id),

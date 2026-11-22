@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { LayoutGroup, motion } from "motion/react";
 
@@ -6,9 +6,16 @@ import { useMotionPreset } from "@/lib/motion";
 
 import type { Presence } from "./use-launcher-presence";
 
+import { PANEL_MARGIN } from "./panel-height";
 import { useWindowHeightSync } from "./use-window-height-sync";
 
-export const PANEL_MARGIN = 20;
+type FrameStyle = CSSProperties & Record<"--panel-max-height", string>;
+
+// Views that hold a fixed frame read the panel's cap from this variable.
+const frameStyle = (maxHeight: number): FrameStyle => ({
+  "--panel-max-height": `${maxHeight}px`,
+  padding: PANEL_MARGIN,
+});
 
 interface LauncherSurfaceProps {
   presence: Presence;
@@ -47,7 +54,7 @@ export function LauncherSurface({
   return (
     <div
       className="flex h-screen w-screen items-start justify-center"
-      style={{ padding: PANEL_MARGIN }}
+      style={frameStyle(maxHeight)}
     >
       <motion.div
         animate={presence}

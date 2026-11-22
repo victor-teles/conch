@@ -9,6 +9,8 @@ export interface MenuAction {
   tone: RowTone;
   disabled?: boolean;
   keys?: readonly string[];
+  detail?: string;
+  accent?: boolean;
 }
 
 export const DELETE_CONFIRM_LABEL = "Press ↵ again to delete";

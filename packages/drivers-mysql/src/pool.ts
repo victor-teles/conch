@@ -7,6 +7,8 @@ import type {
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
+  GuardedWrite,
+  GuardedWriteOptions,
   IndexItem,
   Pool,
   SchemaInfo,
@@ -15,10 +17,17 @@ import type {
   FieldPacket,
   Pool as MysqlPoolType,
   PoolConnection,
+  ResultSetHeader,
   RowDataPacket,
 } from "mysql2/promise";
 
-import { DbError, parseMysql, validateSchemaName } from "@conch/core";
+import {
+  DbError,
+  parseMysql,
+  tooManyRows,
+  validateSchemaName,
+  WRITE_STATEMENT_TIMEOUT_MS,
+} from "@conch/core";
 
 const TYPE_NAMES: Record<number, string> = {
   0: "DECIMAL",
@@ -59,7 +68,7 @@ function typeNameForCode(code: number | undefined): string {
   return TYPE_NAMES[code] ?? `TYPE_${code}`;
 }
 
-export class MysqlPool implements Pool {
+export class MysqlPool implements Pool, GuardedWrite {
   readonly dialect: DialectType = "mysql";
   readonly supportsExplain = true;
   readonly #pool: MysqlPoolType;
@@ -170,6 +179,55 @@ export class MysqlPool implements Pool {
         rowCount: rows.length,
         rows: rows.map(jsonifyRow) as never,
       };
+    } catch (error) {
+      if (signal.aborted && signal.reason instanceof DbError) {
+        throw signal.reason;
+      }
+      throw mapMysqlError(error);
+    } finally {
+      release();
+    }
+  }
+
+  async executeWrite(
+    sql: string,
+    params: BindValue[],
+    { schema, maxAffectedRows, signal }: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }> {
+    const conn = await this.#pool.getConnection();
+    const release = bindAbort(conn, signal);
+    try {
+      if (schema) {
+        validateSchemaName(schema);
+        await conn.query(`USE \`${schema}\``);
+      }
+      await conn.query("START TRANSACTION");
+      try {
+        const [result] = await conn.execute<ResultSetHeader>(
+          { sql, timeout: WRITE_STATEMENT_TIMEOUT_MS },
+          params
+        );
+        const { affectedRows } = result;
+        if (affectedRows > maxAffectedRows) {
+          throw tooManyRows(affectedRows, maxAffectedRows);
+        }
+        if (signal.aborted) {
+          throw DbError.cancelled();
+        }
+        await conn.query("COMMIT");
+        return { affectedRows };
+      } catch (error) {
+        if (!signal.aborted) {
+          await conn.query("ROLLBACK").catch(() => null);
+        }
+        throw error;
+      } finally {
+        if (schema && !signal.aborted) {
+          await conn
+            .query(`USE \`${this.#defaultDatabase}\``)
+            .catch(() => null);
+        }
+      }
     } catch (error) {
       if (signal.aborted && signal.reason instanceof DbError) {
         throw signal.reason;

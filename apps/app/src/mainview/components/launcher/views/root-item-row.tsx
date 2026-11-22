@@ -1,5 +1,8 @@
+import { connectionIdOf } from "@conch/rpc";
+
 import type { WidgetWatching } from "@/components/widgets/widget-row";
 import type { DatabaseConnection } from "@/lib/connections";
+import type { Widget } from "@/lib/ipc";
 
 import { BoardRow } from "@/components/board/board-row";
 import { AskRow } from "@/components/launcher/ask-row";
@@ -8,6 +11,8 @@ import { ConnectionRow } from "@/components/launcher/connections/connection-row"
 import { TableRow } from "@/components/launcher/schema/table-row";
 import { SqlRow } from "@/components/launcher/sql-row";
 import { LookupRow } from "@/components/lookup/lookup-row";
+import { BuildAppRow } from "@/components/mini-app/launcher/build-app-row";
+import { MiniAppRow } from "@/components/mini-app/launcher/mini-app-row";
 import { AlertRow } from "@/components/watches/alert-row";
 import { RecentRow } from "@/components/widgets/recent-row";
 import { WidgetRow } from "@/components/widgets/widget-row";
@@ -15,6 +20,14 @@ import { WidgetRow } from "@/components/widgets/widget-row";
 import type { RootItem } from "./root-items";
 
 import { DraftRow } from "./draft-row";
+
+const connectionOf = (
+  widget: Widget,
+  lookup: (id: string) => DatabaseConnection | null
+): DatabaseConnection | null => {
+  const id = connectionIdOf(widget);
+  return id ? lookup(id) : null;
+};
 
 export interface RootRowContext {
   selectedId: string | null;
@@ -40,7 +53,7 @@ export function RootItemRow({ item, context }: RootItemRowProps) {
     case "widget": {
       return (
         <WidgetRow
-          connection={context.connectionById(item.widget.connectionId)}
+          connection={connectionOf(item.widget, context.connectionById)}
           events={{
             onHover,
             onPulseDone:
@@ -76,6 +89,29 @@ export function RootItemRow({ item, context }: RootItemRowProps) {
           onRun={onRun}
           selected={selected}
           tone={tone}
+        />
+      );
+    }
+    case "mini-app": {
+      return (
+        <MiniAppRow
+          app={item.app}
+          connectionById={context.connectionById}
+          events={{ onHover, onRun }}
+          id={item.id}
+          selected={selected}
+          tone={tone}
+        />
+      );
+    }
+    case "build-app": {
+      return (
+        <BuildAppRow
+          id={item.id}
+          onHover={onHover}
+          onRun={onRun}
+          prompt={item.prompt}
+          selected={selected}
         />
       );
     }

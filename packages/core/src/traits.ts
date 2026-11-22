@@ -1,4 +1,3 @@
-import type { DbError } from "./error.ts";
 import type { ExplainResult } from "./explain.ts";
 import type {
   BindValue,
@@ -8,6 +7,8 @@ import type {
   SchemaInfo,
   TestConnectionResult,
 } from "./types.ts";
+
+import { DbError } from "./error.ts";
 
 export interface Driver {
   readonly dbType: string;
@@ -43,3 +44,33 @@ export interface Pool {
 }
 
 export type { DbError };
+
+export interface GuardedWriteOptions {
+  schema: string | null;
+  maxAffectedRows: number;
+  signal: AbortSignal;
+}
+
+export const WRITE_STATEMENT_TIMEOUT_MS = 15_000;
+
+// A separate capability, never a Pool flag: read paths hold a Pool and can't
+// reach a write. Drivers run the statement in a transaction and roll back
+// when it touches more rows than allowed.
+export interface GuardedWrite {
+  executeWrite(
+    sql: string,
+    params: BindValue[],
+    options: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }>;
+}
+
+export const supportsGuardedWrites = (
+  pool: Pool
+): pool is Pool & GuardedWrite =>
+  typeof (pool as Partial<GuardedWrite>).executeWrite === "function";
+
+export const tooManyRows = (affected: number, allowed: number): DbError =>
+  new DbError(
+    "TOO_MANY_ROWS",
+    `The write would change ${affected} rows; this action allows at most ${allowed}. Nothing was changed.`
+  );

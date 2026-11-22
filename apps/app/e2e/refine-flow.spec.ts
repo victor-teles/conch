@@ -128,7 +128,10 @@ test.describe("refine flow", () => {
     const [saved] = await ipcCalls(page, "saveWidget");
     expect(saved?.payload.widget).toMatchObject({
       prompt: "Revenue by region · only Europe",
-      sqlTemplate: expect.stringContaining("r.name = 'Europe'"),
+      source: {
+        kind: "sql",
+        sqlTemplate: expect.stringContaining("r.name = 'Europe'"),
+      },
       view: "table",
     });
     expect((await ipcCalls(page, "describeSql")).length).toBeGreaterThanOrEqual(

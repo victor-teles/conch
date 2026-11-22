@@ -9,6 +9,8 @@ import {
 
 import type { CardSpec } from "@/lib/ipc";
 
+import { RowHighlight } from "@/components/actions/row-highlight";
+import { useSelectableRows } from "@/components/actions/use-selectable-rows";
 import { isNumericColumn } from "@/lib/card-data";
 import { segmentOfRow } from "@/lib/drill";
 import { cn } from "@/lib/utils";
@@ -49,12 +51,32 @@ export function CardTable({ result, formats, columns }: CardTableProps) {
   });
   const rows = result.rows.slice(0, TABLE_ROW_LIMIT);
   const drill = useRowDrill((index) => segmentOfRow(result, index, columns));
+  const selectable = useSelectableRows(rows.length);
   const summary = summaryOf(result, rows.length);
 
   return (
     <div className="px-2 pb-2">
-      <div className="max-h-[248px] overflow-auto rounded-[8px]">
-        <table className="w-full border-collapse type-meta tabular-nums">
+      <div
+        className={cn(
+          selectable && "relative",
+          "max-h-[248px] overflow-auto rounded-[8px]"
+        )}
+        ref={selectable?.containerRef}
+      >
+        {selectable && selectable.selected !== null ? (
+          <RowHighlight
+            containerRef={selectable.containerRef}
+            rowIndex={selectable.selected}
+          />
+        ) : null}
+        <table
+          aria-label={selectable ? "Result rows" : undefined}
+          className={cn(
+            "w-full border-collapse type-meta tabular-nums",
+            selectable && "relative z-[1]"
+          )}
+          role={selectable ? "grid" : undefined}
+        >
           <thead className="sticky top-0 bg-(--panel-solid)">
             <tr>
               {shapes.map((shape) => (
@@ -77,12 +99,15 @@ export function CardTable({ result, formats, columns }: CardTableProps) {
                 className={cn(
                   "hover:bg-row-hover",
                   drill &&
-                    "cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85"
+                    "cursor-pointer outline-none focus-visible:bg-row-active active:opacity-85",
+                  selectable &&
+                    "cursor-default outline-none focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:ring-inset"
                 )}
                 // Result rows have no identity; their order is the query's.
                 // oxlint-disable-next-line react/no-array-index-key
                 key={rowIndex}
                 {...drill?.rowProps(rowIndex)}
+                {...(drill ? null : selectable?.rowProps(rowIndex))}
               >
                 {shapes.map((shape) => (
                   <td

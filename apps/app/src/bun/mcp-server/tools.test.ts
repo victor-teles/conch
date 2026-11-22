@@ -43,10 +43,7 @@ const CONNECTIONS = [
 ];
 
 const WIDGET = Widget.parse({
-  connectionId: "c1",
   createdAt: "2026-11-21T00:00:00.000Z",
-  database: null,
-  dialect: "postgresql",
   id: "w1",
   lastRunAt: null,
   lastValues: { region: "Asia" },
@@ -61,9 +58,16 @@ const WIDGET = Widget.parse({
     },
   ],
   prompt: "monthly revenue by region",
+  source: {
+    connectionId: "c1",
+    database: null,
+    dialect: "postgresql",
+    kind: "sql",
+    sqlTemplate: "select region, mrr from revenue where region = {{region}}",
+  },
   spec: { title: "MRR", version: CARD_SPEC_VERSION, view: { kind: "table" } },
-  sqlTemplate: "select region, mrr from revenue where region = {{region}}",
   updatedAt: "2026-11-21T00:00:00.000Z",
+  version: 2,
   view: "table",
 });
 
@@ -154,7 +158,10 @@ const setup = (overrides: Partial<McpToolDeps> = {}) => {
     runAsk: vi.fn(() => eventsOf(happyAsk())),
     runWidget: vi.fn((_id, values) =>
       resolved({
-        compiledSql: "select region, mrr from revenue where region = $1",
+        compiled: {
+          kind: "sql" as const,
+          sql: "select region, mrr from revenue where region = $1",
+        },
         result: {
           columns: [{ name: "region", typeName: "text" }],
           executionTimeMs: 7,

@@ -1,9 +1,12 @@
+import type { PointerEvent } from "react";
+
 import { motion } from "motion/react";
 import { useCallback } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDelayedVisibility } from "@/hooks/use-delayed-visibility";
 import { useMotionPreset } from "@/lib/motion";
+import { isPointerTravel } from "@/lib/pointer-travel";
 
 import type { ParamOptions } from "./use-param-options";
 
@@ -29,7 +32,11 @@ function OptionRow({
   const { snappy } = useMotionPreset();
   const handleClick = useCallback(() => onChoose(option), [onChoose, option]);
   const handlePointerMove = useCallback(
-    () => onHighlight(position),
+    (event: PointerEvent) => {
+      if (isPointerTravel(event)) {
+        onHighlight(position);
+      }
+    },
     [onHighlight, position]
   );
   return (

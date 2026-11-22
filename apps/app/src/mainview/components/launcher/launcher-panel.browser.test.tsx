@@ -3,6 +3,7 @@ import { render } from "vitest-browser-react";
 import { userEvent } from "vitest/browser";
 
 import { AppProviders } from "@/components/app-providers";
+import { sqlPreview } from "@/test/action-fixtures";
 import { emitIpcMessage } from "@/test/ipc-mock";
 import { mockLauncherIpc } from "@/test/launcher-ipc";
 import {
@@ -175,6 +176,34 @@ describe("launcherPanel", () => {
       .toBeVisible();
   });
 
+  it("runs a staged app action, and keeps its confirm sheet over later stages", async () => {
+    mockLauncherIpc({
+      handlers: {
+        discardActionToken: () => null,
+        hideLauncher: () => hideLauncher(),
+        prepareMiniAppAction: () => sqlPreview(),
+        resizeLauncher: (payload) => resizeLauncher(payload),
+      },
+    });
+    const screen = renderLauncher();
+    const request = {
+      actionId: "refund",
+      appId: "app-desk",
+      context: { rowIndex: 0, runId: "r", values: {} },
+    };
+    emitIpcMessage("launcherNavigate", {
+      view: { kind: "mini-app-action", request },
+    });
+    const sheet = screen.getByRole("alertdialog", { name: "Mark reviewed" });
+    await expect.element(sheet).toBeVisible();
+    emitIpcMessage("launcherNavigate", { view: "settings" });
+    await wait(150);
+    expect(
+      screen.getByRole("heading", { name: "Settings" }).query()
+    ).toBeNull();
+    await expect.element(sheet).toBeVisible();
+  });
+
   it("opens the watched widgets from the tray and goes on to a watch", async () => {
     mockLauncherIpc({
       handlers: {
@@ -233,6 +262,23 @@ describe("launcherPanel", () => {
     emitIpcMessage("launcherDismiss");
     await expect.poll(() => hideLauncher.mock.calls.length).toBe(1);
     expect(performance.now() - started).toBeLessThan(150);
+  });
+
+  it("fits the panel inside the window room bun reports", async () => {
+    const screen = renderLauncher();
+    await expect
+      .element(screen.getByRole("combobox", { name: "Search commands" }))
+      .toBeVisible();
+
+    emitIpcMessage("launcherShown", { clipboard: null, maxHeight: 420 });
+
+    await expect
+      .poll(
+        () =>
+          screen.container.querySelector<HTMLElement>("[data-presence]")?.style
+            .maxHeight
+      )
+      .toBe("380px");
   });
 
   it("refocuses the field and resets after a long absence", async () => {

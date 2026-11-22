@@ -16,6 +16,7 @@ import { createMacAccessibility } from "./accessibility-native.ts";
 import { requireAccessibility } from "./accessibility.ts";
 import { blurResponse } from "./launcher-blur.ts";
 import {
+  heightRoom,
   LAUNCHER_MIN_HEIGHT,
   launcherFrame,
   resizedFrame,
@@ -67,6 +68,7 @@ export function createLauncher({
   onWatchedOpened,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
+  let room = heightRoom(cursorWorkArea());
   let modal = false;
   const shownTray = { image: TRAY_IMAGES.idle as string, menu: "", title: "" };
   const trayState = {
@@ -86,11 +88,13 @@ export function createLauncher({
   window.setVisibleOnAllWorkspaces(true);
 
   const show = () => {
-    const frame = launcherFrame(cursorWorkArea(), contentHeight);
+    const workArea = cursorWorkArea();
+    room = heightRoom(workArea);
+    const frame = launcherFrame(workArea, contentHeight);
     window.setFrame(frame.x, frame.y, frame.width, frame.height);
     window.show();
     window.activate();
-    rpc.send.launcherShown(summonPayload(summonOffer));
+    rpc.send.launcherShown({ ...summonPayload(summonOffer), maxHeight: room });
   };
   // A cold-start blur can hide the panel before the renderer is ready, so
   // delivering a held view shows it again.
@@ -150,7 +154,7 @@ export function createLauncher({
       navigation.navigate(view);
     },
     resize: (height) => {
-      const frame = resizedFrame(window.getFrame(), height);
+      const frame = resizedFrame(window.getFrame(), height, room);
       contentHeight = frame.height;
       window.setFrame(frame.x, frame.y, frame.width, frame.height);
     },

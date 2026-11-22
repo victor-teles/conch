@@ -12,17 +12,22 @@ vi.mock<typeof NodeOs>(import("node:os"), async () => {
 });
 
 const {
+  actionsAuditPath,
+  actionsPath,
   appDir,
   configPath,
   connectionsPath,
   historyDir,
   historyPath,
+  httpEndpointsPath,
   keyPath,
   mcpAuditPath,
   mcpRunDir,
+  mcpServersPath,
   mcpSettingsPath,
   tabsPath,
   updateChannelPath,
+  writePermissionsPath,
 } = await import("./paths.ts");
 
 const ROOT = "/fake/home/.config/conch";
@@ -37,6 +42,19 @@ describe("paths", () => {
     ["mcpSettingsPath", () => mcpSettingsPath(), `${ROOT}/mcp.enc`],
     ["mcpAuditPath", () => mcpAuditPath(), `${ROOT}/mcp-audit.enc`],
     ["mcpRunDir", () => mcpRunDir(), `${ROOT}/run`],
+    ["actionsPath", () => actionsPath(), `${ROOT}/actions.enc`],
+    [
+      "writePermissionsPath",
+      () => writePermissionsPath(),
+      `${ROOT}/write-permissions.enc`,
+    ],
+    ["actionsAuditPath", () => actionsAuditPath(), `${ROOT}/actions-audit.enc`],
+    ["mcpServersPath", () => mcpServersPath(), `${ROOT}/mcp-servers.enc`],
+    [
+      "httpEndpointsPath",
+      () => httpEndpointsPath(),
+      `${ROOT}/http-endpoints.enc`,
+    ],
     [
       "updateChannelPath",
       () => updateChannelPath(),

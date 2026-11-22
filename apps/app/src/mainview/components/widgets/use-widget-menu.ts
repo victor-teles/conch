@@ -13,6 +13,7 @@ import { copyText } from "@/lib/clipboard";
 import type { WidgetAction } from "./widget-actions";
 
 import { currentValues } from "./param-labels";
+import { COPIED, sourceText } from "./source-text";
 import { draftFromWidget, duplicateDraft } from "./widget-draft";
 import { useWidgets } from "./widgets-provider";
 
@@ -25,6 +26,8 @@ interface UseWidgetMenuOptions {
   onAddToBoard: (widgetId: string) => void;
   onWatch: (widgetId: string) => void;
   onDeleted: () => void;
+  onAddAction: () => void;
+  onManageActions: () => void;
 }
 
 export const useWidgetMenu = ({
@@ -36,6 +39,8 @@ export const useWidgetMenu = ({
   onAddToBoard,
   onWatch,
   onDeleted,
+  onAddAction,
+  onManageActions,
 }: UseWidgetMenuOptions) => {
   const { save, remove } = useWidgets();
   const toggleMenuBar = useMenuBarToggle();
@@ -53,12 +58,16 @@ export const useWidgetMenu = ({
     setOpen((value) => !value);
   }, [disarm]);
 
+  const show = useCallback(() => {
+    disarm();
+    setOpen(true);
+  }, [disarm]);
+
   const copySql = useCallback(async () => {
-    const sql = outcome?.compiledSql ?? widget.sqlTemplate;
-    if (await copyText(sql)) {
-      announce("Copied SQL");
+    if (await copyText(sourceText(widget.source, outcome?.compiled ?? null))) {
+      announce(COPIED[widget.source.kind]);
     }
-  }, [announce, outcome, widget.sqlTemplate]);
+  }, [announce, outcome, widget.source]);
 
   const copyLink = useCallback(async () => {
     const values = outcome?.values ?? currentValues(widget);
@@ -112,6 +121,14 @@ export const useWidgetMenu = ({
           await copyLink();
           break;
         }
+        case "add-action": {
+          onAddAction();
+          break;
+        }
+        case "manage-actions": {
+          onManageActions();
+          break;
+        }
         default: {
           await runExportAction(action.id, exporter, copySql);
         }
@@ -125,9 +142,11 @@ export const useWidgetMenu = ({
       copyLink,
       copySql,
       exporter,
+      onAddAction,
       onAddToBoard,
       onDeleted,
       onEditInputs,
+      onManageActions,
       onRename,
       onWatch,
       remove,
@@ -137,5 +156,5 @@ export const useWidgetMenu = ({
     ]
   );
 
-  return { armed, close, copySql, open, run, toggle };
+  return { armed, close, copySql, open, run, show, toggle };
 };

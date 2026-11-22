@@ -12,7 +12,10 @@ const handlers = () => ({
   addConnection: vi.fn(),
   dismiss: vi.fn(),
   exportAll: vi.fn(),
+  newApp: vi.fn(),
   newBoard: vi.fn(),
+  newSourceWidget: vi.fn(),
+  openActivity: vi.fn(),
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
@@ -64,8 +67,8 @@ describe("rootCommands", () => {
 
 describe("filterCommands", () => {
   it("returns every command for an empty or blank query", () => {
-    expect(filterCommands(commands(), "")).toHaveLength(10);
-    expect(filterCommands(commands(), "   ")).toHaveLength(10);
+    expect(filterCommands(commands(), "")).toHaveLength(13);
+    expect(filterCommands(commands(), "   ")).toHaveLength(13);
   });
 
   it("matches titles fuzzily", () => {

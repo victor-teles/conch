@@ -11,7 +11,13 @@ import type {
 
 import { Board, MAX_BOARD_TILES, RefreshInterval, TileSize } from "./board.ts";
 import { CardSpec } from "./card-spec.ts";
-import { CardViewKind, Dialect, Widget } from "./widget.ts";
+import { Dialect, sqlSourceOf, SqlSource } from "./source.ts";
+import {
+  CardViewKind,
+  WidgetName,
+  WidgetParams,
+  WidgetPrompt,
+} from "./widget.ts";
 
 export const BUNDLE_FORMAT = "conch.bundle";
 export const BUNDLE_VERSION = 1;
@@ -33,14 +39,14 @@ export type BundleConnection = z.infer<typeof BundleConnection>;
 
 export const BundleWidget = z.object({
   connectionRef: BundleRef,
-  database: Widget.shape.database,
+  database: SqlSource.shape.database,
   dialect: Dialect,
-  name: Widget.shape.name,
-  params: Widget.shape.params,
-  prompt: Widget.shape.prompt,
+  name: WidgetName,
+  params: WidgetParams,
+  prompt: WidgetPrompt,
   ref: BundleRef,
   spec: CardSpec,
-  sqlTemplate: Widget.shape.sqlTemplate,
+  sqlTemplate: SqlSource.shape.sqlTemplate,
   view: CardViewKind,
 });
 export type BundleWidget = z.infer<typeof BundleWidget>;
@@ -124,7 +130,8 @@ interface BuildBundleInput {
 const withoutInsight = ({ insight: _insight, ...spec }: CardSpec): CardSpec =>
   spec;
 
-// A widget whose connection is gone is left out: nothing says which engine it needs.
+// A widget whose connection is gone is left out: nothing says which engine it
+// needs. MCP and HTTP widgets stay home, because their servers never travel.
 export const buildBundle = ({
   widgets,
   boards,
@@ -138,8 +145,11 @@ export const buildBundle = ({
   const bundleWidgets: BundleWidget[] = [];
 
   for (const widget of widgets) {
-    const connection = connectionById.get(widget.connectionId);
-    if (!connection || widgetRefById.has(widget.id)) {
+    const source = sqlSourceOf(widget);
+    const connection = source
+      ? connectionById.get(source.connectionId)
+      : undefined;
+    if (!(source && connection) || widgetRefById.has(widget.id)) {
       continue;
     }
     let connectionRef = connectionRefById.get(connection.id);
@@ -156,14 +166,14 @@ export const buildBundle = ({
     widgetRefById.set(widget.id, ref);
     bundleWidgets.push({
       connectionRef,
-      database: widget.database,
-      dialect: widget.dialect,
+      database: source.database,
+      dialect: source.dialect,
       name: widget.name,
       params: widget.params,
       prompt: widget.prompt,
       ref,
       spec: withoutInsight(widget.spec),
-      sqlTemplate: widget.sqlTemplate,
+      sqlTemplate: source.sqlTemplate,
       view: widget.view,
     });
   }
@@ -330,12 +340,15 @@ export const planImport = (
     const connectionId = suggested.get(widget.connectionRef) ?? null;
     const template = collapseWhitespace(widget.sqlTemplate);
     const duplicate = connectionId
-      ? existing.find(
-          (item) =>
+      ? existing.find((item) => {
+          const source = sqlSourceOf(item);
+          return (
+            source !== null &&
             item.name === widget.name &&
-            item.connectionId === connectionId &&
-            collapseWhitespace(item.sqlTemplate) === template
-        )
+            source.connectionId === connectionId &&
+            collapseWhitespace(source.sqlTemplate) === template
+          );
+        })
       : undefined;
     return { duplicateOfWidgetId: duplicate?.id ?? null, ref: widget.ref };
   });
@@ -399,15 +412,18 @@ export const draftsFromBundle = (
     }
     widgets.push({
       draft: {
-        connectionId,
-        database: widget.database,
-        dialect: widget.dialect,
         lastValues: {},
         name: widget.name,
         params: widget.params,
         prompt: widget.prompt,
+        source: {
+          connectionId,
+          database: widget.database,
+          dialect: widget.dialect,
+          kind: "sql",
+          sqlTemplate: widget.sqlTemplate,
+        },
         spec: withoutInsight(widget.spec),
-        sqlTemplate: widget.sqlTemplate,
         view: widget.view,
       },
       name: widget.name,

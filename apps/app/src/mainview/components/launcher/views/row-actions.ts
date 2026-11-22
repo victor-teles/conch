@@ -39,11 +39,14 @@ export interface RowAction extends MenuAction {
 
 export type RowMenuItem = Exclude<
   RootItem,
-  { kind: "widget" | "board" | "connection" }
+  { kind: "widget" | "board" | "connection" | "mini-app" }
 >;
 
 export const isRowMenuItem = (item: RootItem): item is RowMenuItem =>
-  item.kind !== "widget" && item.kind !== "board" && item.kind !== "connection";
+  item.kind !== "widget" &&
+  item.kind !== "board" &&
+  item.kind !== "connection" &&
+  item.kind !== "mini-app";
 
 const PRIMARY_LABELS: Record<
   Exclude<RowMenuItem["kind"], "command">,
@@ -51,6 +54,7 @@ const PRIMARY_LABELS: Record<
 > = {
   alert: "Open",
   ask: "Ask",
+  "build-app": "Build",
   draft: "Open Draft",
   lookup: "Find",
   recent: "Ask Again",
@@ -88,7 +92,8 @@ export const rowActions = (
     ? { ...primary(item), label: SHOW_ANSWER_LABEL }
     : primary(item);
   switch (item.kind) {
-    case "ask": {
+    case "ask":
+    case "build-app": {
       return [run, copy("copy-prompt", "Copy Prompt")];
     }
     case "sql": {
@@ -170,7 +175,8 @@ export const rowActions = (
 
 export const rowMenuTitle = (item: RowMenuItem): string => {
   switch (item.kind) {
-    case "ask": {
+    case "ask":
+    case "build-app": {
       return item.prompt;
     }
     case "sql": {

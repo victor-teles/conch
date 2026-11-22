@@ -9,32 +9,42 @@ import {
 } from "react";
 
 import type {
+  ActionEditTarget,
+  ActionReviewTarget,
+} from "@/components/actions/action-targets";
+import type {
   Board,
   LauncherNavigateView,
   LookupValue,
+  MiniApp,
   ParamValues,
+  SourceTarget,
   Widget,
   WidgetDraft,
 } from "@/lib/ipc";
 
+import { isConfirmSheetOpen } from "@/components/actions/confirm-sheet/sheet-presence";
 import { AgentActivityProvider } from "@/components/agents/agent-activity-provider";
 import { AskView } from "@/components/ask/ask-view";
 import { HistoryView } from "@/components/history/history-view";
 import { LookupView } from "@/components/lookup/lookup-view";
+import { MiniAppsProvider } from "@/components/mini-app/mini-apps-provider";
+import { SourcesProvider } from "@/components/sources/sources-provider";
 import { WatchesProvider } from "@/components/watches/watches-provider";
 import {
   useWidgets,
   WidgetsProvider,
 } from "@/components/widgets/widgets-provider";
-import { onLauncherNavigate, openBoard } from "@/lib/ipc";
+import { onLauncherNavigate, openBoard, openMiniApp } from "@/lib/ipc";
 import { useMotionPreset } from "@/lib/motion";
 
 import type { StagedLink } from "./links/staged-link";
+import type { SourceEditTarget } from "./use-launcher-stack";
 
 import { ConnectionsProvider } from "./connections/connections-provider";
 import { LauncherSurface } from "./launcher-surface";
 import { stagedLinkOf } from "./links/staged-link";
-import { panelMaxHeightOf } from "./panel-height";
+import { fittedPanelHeight, panelMaxHeightOf } from "./panel-height";
 import { renderView } from "./render-launcher-view";
 import { stackVariants } from "./stack-variants";
 import { StackViewFrame } from "./stack-view-frame";
@@ -53,16 +63,22 @@ const IMPORT = { kind: "import" } as const;
 const WATCHES = { kind: "watches" } as const;
 const AGENTS = { kind: "agents" } as const;
 const AGENTS_AUDIT = { kind: "agents-audit" } as const;
+const SOURCE_PICKER = { kind: "source-picker" } as const;
+const ACTIVITY = { kind: "activity" } as const;
 
 export function LauncherPanel() {
   return (
     <ConnectionsProvider>
       <WidgetsProvider>
-        <WatchesProvider>
-          <AgentActivityProvider>
-            <LauncherStackView />
-          </AgentActivityProvider>
-        </WatchesProvider>
+        <MiniAppsProvider>
+          <WatchesProvider>
+            <AgentActivityProvider>
+              <SourcesProvider>
+                <LauncherStackView />
+              </SourcesProvider>
+            </AgentActivityProvider>
+          </WatchesProvider>
+        </MiniAppsProvider>
       </WidgetsProvider>
     </ConnectionsProvider>
   );
@@ -80,10 +96,12 @@ function LauncherStackView() {
   const [clipboardOffer, setClipboardOffer] = useState<LookupValue | null>(
     null
   );
+  const [windowRoom, setWindowRoom] = useState<number | null>(null);
   const { presence, dismiss, onPresenceSettled } = useLauncherPresence({
     onHidden: () => setClipboardOffer(null),
     onShown: (hiddenForMs, shown) => {
       setClipboardOffer(shown.clipboard ?? null);
+      setWindowRoom(shown.maxHeight ?? null);
       if (hiddenForMs > RESET_AFTER_HIDDEN_MS) {
         stack.reset();
         setQuery("");
@@ -164,6 +182,37 @@ function LauncherStackView() {
   const handleOpenWatches = useCallback(() => push(WATCHES), [push]);
   const handleOpenAgents = useCallback(() => push(AGENTS), [push]);
   const handleOpenAgentsAudit = useCallback(() => push(AGENTS_AUDIT), [push]);
+  const sourceNavigation = useMemo(
+    () => ({
+      onDraft: (target: SourceTarget) => push({ kind: "source-draft", target }),
+      onEdit: (target: SourceEditTarget) =>
+        push({ kind: "source-edit", target }),
+      onOpenSettings: () => push(SETTINGS),
+      onRunWidget: (widgetId: string) => {
+        reset();
+        push({ kind: "widget-run", values: {}, widgetId });
+      },
+    }),
+    [push, reset]
+  );
+  const actionNavigation = useMemo(
+    () => ({
+      onEdit: (target: ActionEditTarget) =>
+        push({ kind: "action-edit", target }),
+      onManage: (target: Omit<ActionEditTarget, "actionId" | "draft">) =>
+        push({ kind: "widget-actions", target }),
+      onOpenActivity: () => push(ACTIVITY),
+      onOpenEntry: (executionId: string) =>
+        push({ executionId, kind: "activity-entry" }),
+      onReview: (target: ActionReviewTarget) =>
+        push({ kind: "action-review", target }),
+      onSaved: () => {
+        handleBack();
+        handleBack();
+      },
+    }),
+    [handleBack, push]
+  );
   const handleNewBoard = useCallback(
     (widgetId: string | null) =>
       push({
@@ -195,17 +244,46 @@ function LauncherStackView() {
     },
     [handleBoardDone]
   );
+  const handleOpenApp = useCallback(
+    async (appId: string) => {
+      try {
+        await openMiniApp(appId);
+        handleBoardDone();
+      } catch (error) {
+        console.error("[launcher] could not open the app", error);
+      }
+    },
+    [handleBoardDone]
+  );
+  const appNavigation = useMemo(
+    () => ({ onDone: handleBoardDone, onOpenSettings: handleOpenSettings }),
+    [handleBoardDone, handleOpenSettings]
+  );
   const navigation = useMemo(
     () => ({
       addToBoard: handleAddToBoard,
+      buildApp: (prompt: string, connectionId: string | null) =>
+        push({
+          kind: "mini-app-generate",
+          target: { baseAppId: null, connectionId, prompt },
+        }),
+      changeApp: (appId: string) =>
+        push({
+          kind: "mini-app-generate",
+          target: { baseAppId: appId, connectionId: null, prompt: "" },
+        }),
       dismiss,
       editConnection: handleEditConnection,
       newBoard: () => handleNewBoard(null),
+      newSourceWidget: () => push(SOURCE_PICKER),
+      openActivity: () => push(ACTIVITY),
+      openApp: handleOpenApp,
       openBoard: handleOpenBoard,
       openHistory: (search?: string) =>
         push(search ? { kind: "history", query: search } : HISTORY),
       openImport: () => push(IMPORT),
       openSettings: handleOpenSettings,
+      renameApp: (app: MiniApp) => push({ app, kind: "mini-app-name" }),
       renameBoard: (board: Board) =>
         push({
           kind: "board-name",
@@ -223,6 +301,7 @@ function LauncherStackView() {
       handleAddToBoard,
       handleEditConnection,
       handleNewBoard,
+      handleOpenApp,
       handleOpenBoard,
       handleOpenSettings,
       handleRunWidget,
@@ -242,6 +321,9 @@ function LauncherStackView() {
   });
 
   const handleNavigate = useEffectEvent((view: LauncherNavigateView) => {
+    if (isConfirmSheetOpen()) {
+      return;
+    }
     linkNonce.current += 1;
     const staged = stagedLinkOf(view, linkNonce.current);
     if (staged) {
@@ -258,6 +340,8 @@ function LauncherStackView() {
     stack.reset();
     if (view === "watches") {
       stack.push(WATCHES);
+    } else if (typeof view === "object" && view.kind === "mini-app-action") {
+      stack.push({ kind: "mini-app-action", request: view.request });
     } else if (typeof view === "object" && view.kind === "widget-run") {
       stack.push({ kind: "widget-run", values: {}, widgetId: view.widgetId });
     }
@@ -269,7 +353,10 @@ function LauncherStackView() {
 
   return (
     <LauncherSurface
-      maxHeight={panelMaxHeightOf(stack.current.kind)}
+      maxHeight={fittedPanelHeight(
+        panelMaxHeightOf(stack.current.kind),
+        windowRoom
+      )}
       onPresenceSettled={onPresenceSettled}
       presence={presence}
     >
@@ -284,6 +371,8 @@ function LauncherStackView() {
           variants={viewVariants}
         >
           {renderView(stack.current, {
+            actions: actionNavigation,
+            apps: appNavigation,
             ask: (
               <AskView
                 inputRef={inputRef}
@@ -334,6 +423,7 @@ function LauncherStackView() {
                 query={query}
               />
             ),
+            sources: sourceNavigation,
           })}
         </StackViewFrame>
       </AnimatePresence>

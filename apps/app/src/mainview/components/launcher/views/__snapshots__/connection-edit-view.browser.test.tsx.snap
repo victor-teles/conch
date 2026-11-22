@@ -431,6 +431,49 @@ exports[`connectionEditView > edits an existing connection 1`] = `
           Update connection
         </button>
       </form>
+      <div
+        class="-mx-4 mt-2 border-t border-panel-border"
+      >
+        <div
+          class="flex min-h-14 items-center justify-between gap-6 px-4 py-2.5"
+        >
+          <div
+            class="flex min-w-0 flex-col gap-0.5"
+          >
+            <span
+              class="type-body text-foreground"
+            >
+              Allow write actions
+            </span>
+            <span
+              class="type-meta text-panel-muted"
+            >
+              <span
+                aria-live="polite"
+                class=""
+              >
+                Saved actions can change data here. Every write asks you first.
+              </span>
+            </span>
+          </div>
+          <div
+            class="flex shrink-0 items-center"
+          >
+            <button
+              aria-busy="false"
+              aria-checked="false"
+              aria-label="Allow write actions"
+              class="relative flex h-5 w-9 items-center rounded-full border border-panel-border p-0.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/70 disabled:opacity-50 justify-start bg-row-hover"
+              role="switch"
+              type="button"
+            >
+              <span
+                class="size-3.5 rounded-full shadow-sm bg-panel-muted"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <footer
       class="pointer-events-none relative z-20 -mt-(--launcher-footer-clearance) flex h-(--launcher-footer-clearance) shrink-0 items-end gap-2 px-2 pb-2 type-meta text-panel-muted"

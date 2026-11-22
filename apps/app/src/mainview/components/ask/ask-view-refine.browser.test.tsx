@@ -365,8 +365,8 @@ describe("saving a refined answer", () => {
     expect(saved[0]).toMatchObject({
       widget: {
         prompt: `${REVENUE} · only Europe`,
+        source: { sqlTemplate: expect.stringContaining("r.name = 'Europe'") },
         spec: { title: EUROPE_TITLE },
-        sqlTemplate: expect.stringContaining("r.name = 'Europe'"),
         view: "line",
       },
     });

@@ -5,7 +5,7 @@ import type { LauncherCommand } from "@/components/launcher/root-commands";
 import type { RootAlert } from "@/components/watches/use-alerts";
 import type { DatabaseConnection } from "@/lib/connections";
 import type { Ranked } from "@/lib/fuzzy-match";
-import type { Board, RecentAsk, Widget } from "@/lib/ipc";
+import type { Board, MiniApp, RecentAsk, Widget } from "@/lib/ipc";
 
 import { rankConnections } from "@/components/launcher/connections/connection-search";
 import { rankCommands } from "@/components/launcher/root-commands";
@@ -21,6 +21,13 @@ export type RootItem =
   | { kind: "widget"; id: string; widget: Widget }
   | { kind: "recent"; id: string; ask: RecentAsk }
   | { kind: "board"; id: string; board: Board }
+  | { kind: "mini-app"; id: string; app: MiniApp }
+  | {
+      kind: "build-app";
+      id: string;
+      prompt: string;
+      connection: DatabaseConnection;
+    }
   | { kind: "alert"; id: string; alert: RootAlert }
   | { kind: "sql"; id: string; sql: string; connection: DatabaseConnection }
   | { kind: "table"; id: string; schema: string; table: TableItem }
@@ -36,6 +43,7 @@ export type RootItem =
 export type LookupOrigin = "typed" | "clipboard";
 
 export const ASK_ITEM_ID = "ask";
+export const BUILD_APP_ITEM_ID = "build-app";
 export const DRAFT_ITEM_ID = "draft-connection";
 export const LOOKUP_ITEM_IDS: Record<LookupOrigin, string> = {
   clipboard: "lookup-clipboard",
@@ -45,6 +53,7 @@ export const RECENTS_SHOWN = 5;
 
 export const widgetItemId = (widgetId: string) => `widget-${widgetId}`;
 export const boardItemId = (boardId: string) => `board-${boardId}`;
+export const appItemId = (appId: string) => `app-${appId}`;
 export const alertItemId = (watchId: string) => `alert-${watchId}`;
 const recentItemId = (askId: string) => `recent-${askId}`;
 
@@ -55,6 +64,7 @@ export interface RootSection {
     | "commands"
     | "recent"
     | "widgets"
+    | "apps"
     | "boards"
     | "sql"
     | "tables"
@@ -79,6 +89,7 @@ interface BuildRootSectionsInput {
   widgets?: readonly Widget[];
   recents?: readonly RecentAsk[];
   boards?: readonly Board[];
+  apps?: readonly MiniApp[];
   lookup?: LookupValue | null;
   offer?: LookupValue | null;
   lookupWith?: DatabaseConnection | null;
@@ -88,6 +99,7 @@ interface BuildRootSectionsInput {
 }
 
 const boardTerms = (board: Board) => [board.name];
+const appTerms = (app: MiniApp) => [app.name, app.description];
 
 const draftTerms = (draft: FormState) => [
   "New Connection",
@@ -152,6 +164,7 @@ const restingSections = ({
   widgets = [],
   recents = [],
   boards = [],
+  apps = [],
   alerts = [],
 }: BuildRootSectionsInput): RootSection[] =>
   [
@@ -162,6 +175,7 @@ const restingSections = ({
       items: widgets.map((widget) => widgetItem(widget)),
       label: "Widgets",
     },
+    { id: "apps", items: apps.map((app) => appItem(app)), label: "Apps" },
     {
       id: "boards",
       items: boards.map((board) => boardItem(board)),
@@ -189,6 +203,12 @@ const boardItem = (board: Board): RootItem => ({
   kind: "board",
 });
 
+const appItem = (app: MiniApp): RootItem => ({
+  app,
+  id: appItemId(app.id),
+  kind: "mini-app",
+});
+
 const connectionItem = (connection: DatabaseConnection): RootItem => ({
   connection,
   id: connection.id,
@@ -214,11 +234,13 @@ const typedResults = (
     commands,
     widgets = [],
     boards = [],
+    apps = [],
     draft = null,
   }: BuildRootSectionsInput
 ): RootItem[] =>
   rankRootItems([
     ...scoredAs(rankWidgets(widgets, prompt), widgetItem),
+    ...scoredAs(rankByTerms(apps, prompt, appTerms), appItem),
     ...scoredAs(rankByTerms(boards, prompt, boardTerms), boardItem),
     ...scoredAs(rankConnections(connections, prompt), connectionItem),
     ...scoredAs(rankCommands(commands, prompt), commandItem),
@@ -295,7 +317,15 @@ const askSection = (
   askWith
     ? {
         id: "ask",
-        items: [{ connection: askWith, id: ASK_ITEM_ID, kind: "ask", prompt }],
+        items: [
+          { connection: askWith, id: ASK_ITEM_ID, kind: "ask", prompt },
+          {
+            connection: askWith,
+            id: BUILD_APP_ITEM_ID,
+            kind: "build-app",
+            prompt,
+          },
+        ],
         label: "Ask",
       }
     : null;

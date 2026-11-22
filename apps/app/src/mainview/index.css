@@ -64,6 +64,7 @@
   --control-thumb: oklch(1 0 0);
   --danger-ink: oklch(0.5 0.19 33);
   --success-ink: oklch(0.48 0.13 145);
+  --warning-ink: oklch(0.52 0.12 66);
   --shadow-panel:
     0 24px 56px -18px oklch(0.25 0.02 50 / 0.28),
     0 2px 6px oklch(0.25 0.02 50 / 0.12);
@@ -127,6 +128,7 @@
   --control-thumb: oklch(1 0 0 / 0.14);
   --danger-ink: oklch(0.76 0.13 33);
   --success-ink: oklch(0.8 0.13 145);
+  --warning-ink: oklch(0.85 0.1 70);
   --shadow-panel:
     0 28px 64px -16px oklch(0 0 0 / 0.6), 0 2px 8px oklch(0 0 0 / 0.32);
 
@@ -203,6 +205,7 @@
   --color-control-thumb: var(--control-thumb);
   --color-danger-ink: var(--danger-ink);
   --color-success-ink: var(--success-ink);
+  --color-warning-ink: var(--warning-ink);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

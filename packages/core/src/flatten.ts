@@ -3,6 +3,7 @@ import type { ColumnInfo, TabularResult } from "./types.ts";
 export interface FlattenOptions {
   maxColumns: number;
   isTruncated: boolean;
+  maxCellChars?: number;
 }
 
 type Cell = string | number | boolean | null;
@@ -99,9 +100,14 @@ const columnOrder = (
   return idFirst.slice(0, maxColumns);
 };
 
+const clipCell = (cell: Cell, maxChars: number | undefined): Cell =>
+  typeof cell === "string" && maxChars !== undefined && cell.length > maxChars
+    ? `${cell.slice(0, maxChars - 1)}…`
+    : cell;
+
 export const flattenRecords = (
   records: readonly Record<string, unknown>[],
-  { maxColumns, isTruncated }: FlattenOptions
+  { maxColumns, isTruncated, maxCellChars }: FlattenOptions
 ): TabularResult => {
   const flattened = records.map((record) => new Map(flattenRecord(record)));
   const names = columnOrder(flattened, maxColumns);
@@ -121,7 +127,7 @@ export const flattenRecords = (
     resultType: "tabular",
     rowCount: flattened.length,
     rows: flattened.map((row) =>
-      names.map((name) => row.get(name)?.cell ?? null)
+      names.map((name) => clipCell(row.get(name)?.cell ?? null, maxCellChars))
     ),
   };
 };

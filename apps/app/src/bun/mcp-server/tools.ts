@@ -4,11 +4,13 @@ import type {
   AskEvent,
   CardResult,
   CardSpec,
+  CompiledSource,
   ParamValues,
   Widget,
 } from "@conch/rpc";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
+import { connectionIdOf } from "@conch/rpc";
 import { z } from "zod";
 
 import type { CallContext, RunToolCall } from "./tool-call.ts";
@@ -57,7 +59,7 @@ export interface McpToolDeps {
     values: ParamValues,
     signal: AbortSignal
   ): Promise<{
-    compiledSql: string;
+    compiled: CompiledSource;
     result: CardResult & { executionTimeMs: number };
     values: ParamValues;
   }>;
@@ -300,7 +302,7 @@ export const registerMcpTools = (
           connectionName: null,
           payload: {
             widgets: widgets.map((widget) => ({
-              connection: names.get(widget.connectionId) ?? null,
+              connection: names.get(connectionIdOf(widget) ?? "") ?? null,
               id: widget.id,
               inputs: publicInputs(widget.params),
               name: widget.name,
@@ -340,7 +342,7 @@ export const registerMcpTools = (
         }
         const widget = resolved.value;
         const connection = connections.find(
-          (item) => item.id === widget.connectionId
+          (item) => item.id === connectionIdOf(widget)
         );
         if (!connection) {
           throw notFound();
@@ -348,7 +350,7 @@ export const registerMcpTools = (
         ctx.audit.widgetId = widget.id;
         ctx.target(connection);
         const run = await deps.runWidget(widget.id, inputs ?? {}, ctx.signal);
-        ctx.audit.sql = run.compiledSql;
+        ctx.audit.sql = run.compiled.kind === "sql" ? run.compiled.sql : null;
         const shaped = shapeRows(run.result, {
           redact: redactionOf(connection),
           rowLimit: settings.rowLimit,

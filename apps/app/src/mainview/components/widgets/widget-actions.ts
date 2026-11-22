@@ -2,7 +2,9 @@ import {
   CopyPlusIcon,
   LayoutGridIcon,
   LinkIcon,
+  ListChecksIcon,
   PencilIcon,
+  PlusIcon,
   SlidersHorizontalIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -27,7 +29,9 @@ export type WidgetActionId =
   | "duplicate"
   | "delete"
   | "add-to-board"
-  | "copy-link";
+  | "copy-link"
+  | "add-action"
+  | "manage-actions";
 
 export interface WidgetAction extends MenuAction {
   id: WidgetActionId;
@@ -48,6 +52,13 @@ export const widgetActions = (
     icon: SlidersHorizontalIcon,
     id: "edit-inputs",
     label: "Edit Inputs",
+    tone: "default",
+  },
+  { icon: PlusIcon, id: "add-action", label: "Add Action…", tone: "default" },
+  {
+    icon: ListChecksIcon,
+    id: "manage-actions",
+    label: "Manage Actions…",
     tone: "default",
   },
   { icon: PencilIcon, id: "rename", label: "Rename", tone: "default" },

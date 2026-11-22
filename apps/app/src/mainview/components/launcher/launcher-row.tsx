@@ -1,9 +1,10 @@
-import type { ReactNode } from "react";
+import type { PointerEvent, ReactNode } from "react";
 
 import { motion } from "motion/react";
 import { useCallback, useRef } from "react";
 
 import { useMotionPreset } from "@/lib/motion";
+import { isPointerTravel } from "@/lib/pointer-travel";
 import { cn } from "@/lib/utils";
 
 import { useRowInView } from "./use-row-in-view";
@@ -38,7 +39,14 @@ export function LauncherRow({
 }: LauncherRowProps) {
   const { spring, snappy, fadeIn, fadeOut, pressed, press } = useMotionPreset();
   const handleClick = useCallback(() => onRun(id), [onRun, id]);
-  const handlePointerMove = useCallback(() => onHover(id), [onHover, id]);
+  const handlePointerMove = useCallback(
+    (event: PointerEvent) => {
+      if (isPointerTravel(event)) {
+        onHover(id);
+      }
+    },
+    [onHover, id]
+  );
   const rowRef = useRef<HTMLDivElement>(null);
   useRowInView(rowRef, selected);
 

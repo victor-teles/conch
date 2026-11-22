@@ -343,6 +343,122 @@ exports[`activating a connection with full motion > shows a failed connection in
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -599,6 +715,53 @@ exports[`activating a connection with full motion > shows a failed connection in
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
@@ -1301,6 +1464,122 @@ exports[`activating a connection with reduced motion > shows a failed connection
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -1557,6 +1836,53 @@ exports[`activating a connection with reduced motion > shows a failed connection
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
@@ -2244,6 +2570,122 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -2500,6 +2942,53 @@ exports[`rootView load states > reports a load failure and retries 1`] = `
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
@@ -3172,6 +3661,122 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -3428,6 +4033,53 @@ exports[`rootView load states > shows placeholder rows while connections load 1`
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
@@ -4175,6 +4827,122 @@ exports[`rootView with connections > lists connections first, most recent first,
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -4431,6 +5199,53 @@ exports[`rootView with connections > lists connections first, most recent first,
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"
@@ -5086,6 +5901,122 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
               aria-selected="false"
               class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
               data-tone="default"
+              id="launcher-option-new-app"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-app-window size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    height="16"
+                    rx="2"
+                    width="20"
+                    x="2"
+                    y="4"
+                  />
+                  <path
+                    d="M10 4v4"
+                  />
+                  <path
+                    d="M2 8h20"
+                  />
+                  <path
+                    d="M6 4v4"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New App
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Describe a small tool and press ↵ on Build an app
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-new-source-widget"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-plug size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 22v-5"
+                  />
+                  <path
+                    d="M15 8V2"
+                  />
+                  <path
+                    d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M9 8V2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  New Widget from a Source…
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  From an MCP server or an HTTP API
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
               id="launcher-option-run-sql"
               role="option"
               tabindex="0"
@@ -5342,6 +6273,53 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   </kbd>
                 </kbd>
               </span>
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-activity"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-activity size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Activity
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  Writes and links you ran, in a verified log
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
             </div>
             <div
               aria-selected="false"

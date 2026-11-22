@@ -16,6 +16,7 @@ import {
   BUNDLE_EXTENSION,
   BUNDLE_TOO_LARGE,
   buildBundle,
+  connectionIdOf,
   draftsFromBundle,
   ExportBundleRequest,
   ImportSource,
@@ -112,8 +113,9 @@ const reasonOf = (error: unknown): string => {
 };
 
 const checkLimits = (widgets: readonly Widget[], boards: readonly Board[]) => {
-  const connectionCount = new Set(widgets.map((item) => item.connectionId))
-    .size;
+  const connectionCount = new Set(
+    widgets.flatMap((item) => connectionIdOf(item) ?? [])
+  ).size;
   if (
     widgets.length > MAX_BUNDLE_WIDGETS ||
     boards.length > MAX_BUNDLE_BOARDS ||

@@ -1,3 +1,5 @@
+import { connectionIdOf } from "@conch/rpc";
+
 import { useConnections } from "@/components/launcher/connections/connections-provider";
 import { LauncherFooter } from "@/components/launcher/launcher-footer";
 import { ViewHeader } from "@/components/launcher/view-header";
@@ -52,7 +54,7 @@ export function WatchView({ widgetId, onBack }: WatchViewProps) {
   return (
     <WatchPanel
       connection={
-        state.connections.find((item) => item.id === widget.connectionId) ??
+        state.connections.find((item) => item.id === connectionIdOf(widget)) ??
         null
       }
       onDone={onBack}

@@ -291,10 +291,12 @@ describe("historyView", () => {
     await expect.element(page.getByText("Saved · in Widgets")).toBeVisible();
     expect(ipc.saveWidget).toHaveBeenCalledWith({
       widget: expect.objectContaining({
-        connectionId: "analytics",
         name: "Plans in the EU",
         prompt: SIGNUPS.prompt,
-        sqlTemplate: SIGNUPS.sql,
+        source: expect.objectContaining({
+          connectionId: "analytics",
+          sqlTemplate: SIGNUPS.sql,
+        }),
         view: "line",
       }),
     });

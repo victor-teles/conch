@@ -21,10 +21,11 @@ export const isSqlRecent = (ask: RecentAsk): ask is SqlRecentAsk =>
 export const draftFromHistory = (
   ask: SqlRecentAsk,
   name: string
-): WidgetDraft => ({
-  ...draftFromAsk(
+): WidgetDraft =>
+  draftFromAsk(
     {
       connectionId: ask.connectionId,
+      database: ask.database,
       dialect: ask.dialect,
       prompt: ask.prompt,
       spec: ask.spec,
@@ -32,9 +33,7 @@ export const draftFromHistory = (
       view: viewKindOf(ask.spec.view),
     },
     name
-  ),
-  database: ask.database,
-});
+  );
 
 interface UseHistorySaveOptions {
   onSaved: () => void;

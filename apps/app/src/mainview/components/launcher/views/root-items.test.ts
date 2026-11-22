@@ -6,7 +6,9 @@ import {
   fallbackCommands,
   rootCommands,
 } from "@/components/launcher/root-commands";
+import { makeBoard } from "@/test/board-fixtures";
 import { makeConnection } from "@/test/connection-fixture";
+import { deskApp } from "@/test/mini-app-fixtures";
 import { makeRecent, makeWidget } from "@/test/widget-fixtures";
 
 import { buildRootSections, flattenSections } from "./root-items";
@@ -15,7 +17,10 @@ const commands = rootCommands({
   addConnection: vi.fn(),
   dismiss: vi.fn(),
   exportAll: vi.fn(),
+  newApp: vi.fn(),
   newBoard: vi.fn(),
+  newSourceWidget: vi.fn(),
+  openActivity: vi.fn(),
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
@@ -47,10 +52,13 @@ describe("buildRootSections", () => {
       "a",
       "add-connection",
       "new-board",
+      "new-app",
+      "new-source-widget",
       "run-sql",
       "browse-tables",
       "switch-connection",
       "history",
+      "activity",
       "settings",
       "export-bundle",
       "import-bundle",
@@ -130,7 +138,7 @@ describe("buildRootSections", () => {
       connections,
       query: "billing",
     });
-    expect(ids(sections)).toStrictEqual(["ask", "a"]);
+    expect(ids(sections)).toStrictEqual(["ask", "build-app", "a"]);
   });
 
   it("offers no ask row for an empty query", () => {
@@ -176,7 +184,11 @@ describe("buildRootSections", () => {
       recents: [makeRecent()],
       widgets: [makeWidget()],
     });
-    expect(ids(sections)).toStrictEqual(["ask", "widget-w-revenue"]);
+    expect(ids(sections)).toStrictEqual([
+      "ask",
+      "build-app",
+      "widget-w-revenue",
+    ]);
   });
 
   it("counts a widget match so AI setup isn't offered", () => {
@@ -294,6 +306,7 @@ describe("typed results", () => {
     expect(sections[2]?.label).toBe("Use “billing” with…");
     expect(ids(sections)).toStrictEqual([
       "ask",
+      "build-app",
       "a",
       "fallback-history",
       "fallback-table",
@@ -321,7 +334,7 @@ describe("typed results", () => {
       fallbacks,
       query: "zzz",
     });
-    expect(ids(ready)).toStrictEqual(["ask", "fallback-history"]);
+    expect(ids(ready)).toStrictEqual(["ask", "build-app", "fallback-history"]);
   });
 
   it("matches boards by fuzzy name", () => {
@@ -373,7 +386,11 @@ describe("connection drafts", () => {
       draft,
       query: "internal",
     });
-    expect(ids(sections)).toStrictEqual(["ask", "draft-connection"]);
+    expect(ids(sections)).toStrictEqual([
+      "ask",
+      "build-app",
+      "draft-connection",
+    ]);
   });
 
   it("does not count the draft as a match that hides AI setup", () => {
@@ -385,5 +402,48 @@ describe("connection drafts", () => {
       query: "internal",
     });
     expect(ids(sections)).toStrictEqual(["ai-setup", "draft-connection"]);
+  });
+});
+
+describe("apps in the root", () => {
+  const app = deskApp();
+
+  it("lists apps between widgets and boards while the field is empty", () => {
+    const sections = buildRootSections({
+      aiSetup: null,
+      apps: [app],
+      boards: [makeBoard()],
+      commands: [],
+      connections: [],
+      query: "",
+      widgets: [makeWidget()],
+    });
+    expect(sections.map((section) => section.id)).toStrictEqual([
+      "widgets",
+      "apps",
+      "boards",
+    ]);
+    expect(sections[1]?.items).toStrictEqual([
+      { app, id: "app-app-desk", kind: "mini-app" },
+    ]);
+  });
+
+  it("offers to build an app right after Ask, and ranks apps by name", () => {
+    const connection = makeConnection();
+    const sections = buildRootSections({
+      aiSetup: null,
+      apps: [app],
+      askWith: connection,
+      commands: [],
+      connections: [],
+      query: "refund",
+    });
+    expect(sections[0]?.items.map((item) => item.kind)).toStrictEqual([
+      "ask",
+      "build-app",
+    ]);
+    expect(sections[1]?.items.map((item) => item.id)).toStrictEqual([
+      "app-app-desk",
+    ]);
   });
 });

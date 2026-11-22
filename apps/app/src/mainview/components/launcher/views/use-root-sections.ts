@@ -15,6 +15,7 @@ import {
   searchTables,
 } from "@/components/launcher/schema/table-search";
 import { useTableCatalog } from "@/components/launcher/schema/use-table-catalog";
+import { useMiniApps } from "@/components/mini-app/mini-apps-provider";
 import { useAlerts } from "@/components/watches/use-alerts";
 import { useWidgets } from "@/components/widgets/widgets-provider";
 import { isSqlDatabase } from "@/lib/connections";
@@ -34,6 +35,9 @@ type CommandNavigation = Pick<
   | "dismiss"
   | "editConnection"
   | "newBoard"
+  | "buildApp"
+  | "newSourceWidget"
+  | "openActivity"
   | "openImport"
 > & { exportAll: () => void; startMode: (prefix: string) => void };
 
@@ -45,6 +49,17 @@ interface UseRootSectionsOptions {
   askWith?: DatabaseConnection | null;
 }
 
+const APP_WORDS = new Set(["app", "apps"]);
+
+// With no apps yet, typing "app" explains how to make one.
+const appsNote = (query: string, count: number) =>
+  count === 0 && APP_WORDS.has(query.trim().toLowerCase())
+    ? {
+        text: "Describe a tool and press ↵ on Build an app",
+        tone: "tip" as const,
+      }
+    : null;
+
 export const useRootSections = ({
   query,
   boards,
@@ -55,16 +70,21 @@ export const useRootSections = ({
   const { state, activeConnection } = useConnections();
   const aiReady = useAiReadiness();
   const { widgets, recents } = useWidgets();
+  const { apps } = useMiniApps();
   const {
     openSettings,
     openHistory,
     dismiss,
     editConnection,
     newBoard,
+    buildApp,
+    newSourceWidget,
+    openActivity,
     openImport,
     exportAll,
     startMode,
   } = navigate;
+  const activeId = activeConnection?.id ?? null;
   const { alerts } = useAlerts();
 
   const commands = useMemo(
@@ -73,17 +93,24 @@ export const useRootSections = ({
         addConnection: () => editConnection(null),
         dismiss,
         exportAll,
+        newApp: () => buildApp("", activeId),
         newBoard,
+        newSourceWidget,
+        openActivity,
         openHistory,
         openImport,
         openSettings,
         startMode,
       }),
     [
+      activeId,
+      buildApp,
       dismiss,
       editConnection,
       exportAll,
       newBoard,
+      newSourceWidget,
+      openActivity,
       openHistory,
       openImport,
       openSettings,
@@ -119,10 +146,11 @@ export const useRootSections = ({
   const view: ModeView =
     input.mode === "search"
       ? {
-          note: null,
+          note: appsNote(query, apps.length),
           sections: buildRootSections({
             aiSetup: aiReady === false ? aiSetupCommand(openSettings) : null,
             alerts,
+            apps,
             askWith: aiReady === true ? (askWith ?? activeConnection) : null,
             boards,
             commands,

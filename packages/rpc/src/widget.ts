@@ -12,15 +12,21 @@ import {
 } from "@conch/core/client";
 import { z } from "zod";
 
+import type {
+  CompiledSource,
+  ExternalSource,
+  Source as SourceValue,
+} from "./source.ts";
 import type { WidgetTrend } from "./watch.ts";
 
 import { CardSpec } from "./card-spec.ts";
+import { Dialect, DIALECTS, Ident, Source, sourceParamRefs } from "./source.ts";
 
 export const MAX_WIDGET_PARAMS = 6;
 export const MAX_TEXT_VALUE = 200;
 export const MAX_SELECT_OPTIONS = 200;
+export const WIDGET_VERSION = 2;
 
-export const Ident = z.string().regex(/^[a-z][a-z0-9_]{0,31}$/);
 export const DatePreset = z.enum(DATE_PRESETS);
 export const RangePreset = z.enum(RANGE_PRESETS);
 export const IsoDate = z.iso.date();
@@ -30,19 +36,6 @@ export const IsoRange = z
     message: "The range must end after it starts.",
   });
 
-export const DIALECTS = [
-  "postgresql",
-  "mysql",
-  "sqlite",
-  "clickhouse",
-  "duckdb",
-  "tsql",
-  "snowflake",
-  "bigquery",
-  "redshift",
-  "oracle",
-] as const satisfies readonly DialectType[];
-export const Dialect = z.enum(DIALECTS);
 export const QueryLanguageSchema = z.enum([...DIALECTS, "mongodb", "redis"]);
 
 export const CARD_VIEW_KINDS = [
@@ -243,34 +236,127 @@ export const toTemplateValue = (
 const uniqueNames = (params: readonly ParamDef[]): boolean =>
   new Set(params.map((param) => param.name)).size === params.length;
 
-export const Widget = z.object({
-  connectionId: z.string().min(1).max(200),
+export const WidgetName = z.string().trim().min(1).max(60);
+export const WidgetPrompt = z.string().max(4000);
+export const WidgetParams = z
+  .array(ParamDef)
+  .max(MAX_WIDGET_PARAMS)
+  .refine(uniqueNames, { message: "Input names must be unique." });
+
+const widgetFields = {
   createdAt: z.string(),
-  database: z.string().max(500).nullable(),
-  dialect: Dialect,
   id: z.string().min(1).max(100),
   lastRunAt: z.string().nullable(),
   lastValues: z.record(z.string(), ParamValue),
-  name: z.string().trim().min(1).max(60),
-  params: z
-    .array(ParamDef)
-    .max(MAX_WIDGET_PARAMS)
-    .refine(uniqueNames, { message: "Input names must be unique." }),
-  prompt: z.string().max(4000),
+  name: WidgetName,
+  params: WidgetParams,
+  prompt: WidgetPrompt,
   spec: CardSpec,
-  sqlTemplate: z.string().min(1).max(20_000),
   updatedAt: z.string(),
   view: CardViewKind,
+};
+
+interface SourcedParams {
+  source: SourceValue;
+  params: readonly ParamDef[];
+}
+
+const RANGE_ONLY_IN_ARGS = "with part from or to in a path or query";
+
+// SQL templates keep their own rules in the widget service's draft check.
+export const sourceParamProblems = ({
+  source,
+  params,
+}: SourcedParams): string[] => {
+  if (source.kind === "sql") {
+    return [];
+  }
+  const byName = new Map(params.map((param) => [param.name, param]));
+  const problems: string[] = [];
+  const refs = sourceParamRefs(source);
+  const used = new Set(refs.map((ref) => ref.$param));
+  for (const ref of refs) {
+    const param = byName.get(ref.$param);
+    if (!param) {
+      problems.push(`The call uses "${ref.$param}", which isn't an input.`);
+    } else if (ref.part && param.type !== "dateRange") {
+      problems.push(
+        `"${ref.$param}" isn't a date range, so it has no ${ref.part}.`
+      );
+    } else if (
+      source.kind === "http" &&
+      !ref.part &&
+      param.type === "dateRange"
+    ) {
+      problems.push(`Use "${ref.$param}" ${RANGE_ONLY_IN_ARGS}.`);
+    }
+  }
+  for (const param of params) {
+    if (!(param.fixed || used.has(param.name))) {
+      problems.push(`The input "${param.name}" isn't used by the call.`);
+    }
+    if (param.type === "select" && param.optionsSql) {
+      problems.push(`"${param.name}" needs a fixed list of options.`);
+    }
+  }
+  return problems;
+};
+
+const sourceParamRules = (value: SourcedParams, ctx: z.RefinementCtx): void => {
+  for (const message of sourceParamProblems(value)) {
+    ctx.addIssue({ code: "custom", message, path: ["source"] });
+  }
+};
+
+const WidgetShape = z.object({
+  ...widgetFields,
+  source: Source,
+  version: z.literal(WIDGET_VERSION),
 });
+
+export const Widget = WidgetShape.superRefine(sourceParamRules);
 export type Widget = z.infer<typeof Widget>;
 
-export const WidgetDraft = Widget.omit({
+export const WidgetDraft = WidgetShape.omit({
   createdAt: true,
   id: true,
   lastRunAt: true,
   updatedAt: true,
-}).extend({ id: z.string().min(1).max(100).optional() });
+  version: true,
+})
+  .extend({ id: z.string().min(1).max(100).optional() })
+  .superRefine(sourceParamRules);
 export type WidgetDraft = z.infer<typeof WidgetDraft>;
+
+const WidgetV1 = z.object({
+  ...widgetFields,
+  connectionId: z.string().min(1).max(200),
+  database: z.string().max(500).nullable(),
+  dialect: Dialect,
+  sqlTemplate: z.string().min(1).max(20_000),
+});
+type WidgetV1 = z.infer<typeof WidgetV1>;
+
+export const upgradeWidgetV1 = ({
+  connectionId,
+  database,
+  dialect,
+  sqlTemplate,
+  ...rest
+}: WidgetV1): Widget => ({
+  ...rest,
+  source: { connectionId, database, dialect, kind: "sql", sqlTemplate },
+  version: WIDGET_VERSION,
+});
+
+export const parseStoredWidget = (raw: unknown): Widget | null => {
+  const current = Widget.safeParse(raw);
+  if (current.success) {
+    return current.data;
+  }
+  const v1 = WidgetV1.safeParse(raw);
+  return v1.success ? upgradeWidgetV1(v1.data) : null;
+};
 
 export const RecentAsk = z.object({
   askedAt: z.string(),
@@ -302,7 +388,26 @@ export interface RunWidgetRequest {
 
 export interface WidgetRunResult {
   result: TabularResult;
-  compiledSql: string;
+  compiled: CompiledSource;
   values: ParamValues;
   trend?: WidgetTrend | null;
 }
+
+export interface PreviewSourceRequest {
+  source: SourceValue;
+  params: ParamDef[];
+  values: ParamValues;
+  runId: string;
+  prompt?: string;
+}
+
+export interface SourcePreviewResult {
+  result: TabularResult;
+  compiled: CompiledSource;
+  values: ParamValues;
+  spec: CardSpec;
+}
+
+export type SourceProposal =
+  | { draft: { source: ExternalSource; params: ParamDef[] } }
+  | { error: string };

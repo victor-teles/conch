@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import type { MouseEvent, PointerEvent } from "react";
 
 import { motion } from "motion/react";
 import { useCallback } from "react";
@@ -7,6 +7,7 @@ import { KeyCombo } from "@/components/launcher/key-combo";
 import { SwapText } from "@/components/motion/swap-text";
 import { CONFIRM_WINDOW_MS } from "@/hooks/use-armed-confirm";
 import { useMotionPreset } from "@/lib/motion";
+import { isPointerTravel } from "@/lib/pointer-travel";
 import { cn } from "@/lib/utils";
 
 import type { MenuAction } from "./menu-action";
@@ -51,7 +52,11 @@ export function ActionMenuItem<A extends MenuAction>({
     }
   }, [onRun, action]);
   const handlePointerMove = useCallback(
-    () => onHighlight(action.id),
+    (event: PointerEvent) => {
+      if (isPointerTravel(event)) {
+        onHighlight(action.id);
+      }
+    },
     [onHighlight, action.id]
   );
   // Keeps focus in the filter field, so typing still filters after a click.
@@ -90,11 +95,29 @@ export function ActionMenuItem<A extends MenuAction>({
           transition={snappy}
         />
       ) : null}
-      <Icon aria-hidden className="relative size-3.5 shrink-0 opacity-80" />
+      <Icon
+        aria-hidden
+        className={cn(
+          "relative size-3.5 shrink-0 opacity-80",
+          action.accent && "text-warning-ink opacity-100"
+        )}
+      />
       <SwapText
-        className="relative min-w-0 flex-1 truncate"
+        className={
+          action.detail
+            ? "relative max-w-[60%] min-w-0 shrink-0 truncate"
+            : "relative min-w-0 flex-1 truncate"
+        }
         value={armed ? DELETE_CONFIRM_LABEL : action.label}
       />
+      {action.detail ? (
+        <span
+          className="relative min-w-0 flex-1 truncate text-right type-micro text-panel-muted"
+          title={action.detail}
+        >
+          {action.detail}
+        </span>
+      ) : null}
       {action.keys && !armed ? (
         <KeyCombo className="relative shrink-0" keys={action.keys} />
       ) : null}

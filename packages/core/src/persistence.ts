@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { archiveAudit } from "./audit-log.ts";
 import { decryptLine, encryptLine, resetCryptoCache } from "./crypto.ts";
 import {
   atomicWrite,
@@ -10,15 +11,19 @@ import {
   withFileLock,
 } from "./fs-utils.ts";
 import {
+  actionsPath,
   aiConfigPath,
   connectionsPath,
   historyDir,
   historyPath,
   keyPath,
   boardsPath,
+  httpEndpointsPath,
+  mcpServersPath,
   recentAsksPath,
   tabsPath,
   widgetsPath,
+  writePermissionsPath,
 } from "./paths.ts";
 
 const MAX_HISTORY_ENTRIES = 10_000;
@@ -361,6 +366,11 @@ export async function resetSecrets(): Promise<void> {
   await unlinkIfExists(widgetsPath());
   await unlinkIfExists(recentAsksPath());
   await unlinkIfExists(boardsPath());
+  await unlinkIfExists(mcpServersPath());
+  await unlinkIfExists(httpEndpointsPath());
+  await unlinkIfExists(actionsPath());
+  await unlinkIfExists(writePermissionsPath());
+  await archiveAudit(new Date());
   await fs.rm(historyDir(), { force: true, recursive: true });
   resetCryptoCache();
 }

@@ -7,6 +7,8 @@ import type {
   ExecuteResult,
   ExplainResult,
   ForeignKeyItem,
+  GuardedWrite,
+  GuardedWriteOptions,
   IndexItem,
   Pool,
   SchemaInfo,
@@ -15,7 +17,7 @@ import type {
 } from "@conch/core";
 import type { Database, Statement } from "bun:sqlite";
 
-import { DbError, validateSchemaName } from "@conch/core";
+import { DbError, tooManyRows, validateSchemaName } from "@conch/core";
 
 const POOL_CLOSED = new DbError("POOL_CLOSED", "SQLite pool is closed");
 
@@ -90,7 +92,7 @@ function rowsToColumns(
   }));
 }
 
-export class SqlitePool implements Pool {
+export class SqlitePool implements Pool, GuardedWrite {
   readonly dialect: DialectType = "sqlite";
   readonly supportsExplain = false;
   #db: Database | null;
@@ -183,6 +185,42 @@ export class SqlitePool implements Pool {
         return Promise.resolve(runStatement(db, sql, params, maxRows));
       } finally {
         db.run("PRAGMA query_only = OFF");
+      }
+    } catch (error) {
+      return Promise.reject(mapSqliteError(error));
+    }
+  }
+
+  // bun:sqlite runs synchronously, so the statement can't be interrupted
+  // part-way; cancellation is honoured before it starts and before COMMIT.
+  executeWrite(
+    sql: string,
+    params: BindValue[],
+    { maxAffectedRows, signal }: GuardedWriteOptions
+  ): Promise<{ affectedRows: number }> {
+    if (signal.aborted) {
+      return Promise.reject(
+        signal.reason instanceof DbError ? signal.reason : DbError.cancelled()
+      );
+    }
+    try {
+      const db = this.#requireDb();
+      db.run("BEGIN IMMEDIATE");
+      try {
+        const affectedRows = db
+          .query<unknown, BindValue[]>(sql)
+          .run(...params).changes;
+        if (affectedRows > maxAffectedRows) {
+          throw tooManyRows(affectedRows, maxAffectedRows);
+        }
+        if (signal.aborted) {
+          throw DbError.cancelled();
+        }
+        db.run("COMMIT");
+        return Promise.resolve({ affectedRows });
+      } catch (error) {
+        db.run("ROLLBACK");
+        throw error;
       }
     } catch (error) {
       return Promise.reject(mapSqliteError(error));

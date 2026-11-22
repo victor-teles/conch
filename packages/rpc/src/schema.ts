@@ -2,15 +2,27 @@ import type {
   ConnectionParams,
   DatabaseConnection,
   DialectType,
-  ExecuteResult,
   HistoryEntry,
   HistoryFilters,
-  QueryParams,
   SchemaInfo,
   TestConnectionResult,
 } from "@conch/core";
 import type { LookupValue } from "@conch/core/client";
 
+import type {
+  ActionActivityPage,
+  ActionOutcome,
+  ActionPreview,
+  ActionProposal,
+  ActionReview,
+  ListedAction,
+  PrepareActionRequest,
+  ProposeActionRequest,
+  ReviewActionRequest,
+  SaveActionRequest,
+  SetWriteActionsRequest,
+  WriteTargetKind,
+} from "./action.ts";
 import type {
   ActiveConnection,
   AiSettingsInput,
@@ -36,13 +48,37 @@ import type {
   McpSettingsUpdate,
   RedactedMcpSettings,
 } from "./mcp.ts";
+import type {
+  GenerateMiniAppRequest,
+  MiniApp,
+  MiniAppActionRequest,
+  MiniAppGenEventMessage,
+  MiniAppInputOptionsRequest,
+  MiniAppSourceRun,
+  RunMiniAppSourceRequest,
+  SaveMiniAppRequest,
+} from "./mini-app.ts";
+import type {
+  HttpEndpointInput,
+  McpServerInput,
+  McpToolSummary,
+  RedactedHttpEndpoint,
+  RedactedMcpServer,
+  SetMcpToolReadRequest,
+  SourceTarget,
+  SourceTestResult,
+} from "./source-config.ts";
 import type { RunSqlParams, SchemaPeek } from "./sql-run.ts";
 import type { Watch, WatchDraft, WatchStatus, WidgetTrend } from "./watch.ts";
 import type {
+  ParamValues,
+  PreviewSourceRequest,
   ProposeParamsRequest,
   ProposeParamsResult,
   RecentAsk,
   RunWidgetRequest,
+  SourcePreviewResult,
+  SourceProposal,
   Widget,
   WidgetDraft,
   WidgetRunResult,
@@ -55,7 +91,8 @@ export type LauncherNavigateView =
   | "watches"
   | { kind: "ask-draft"; prompt: string; connection: string | null }
   | { kind: "widget-args"; widgetId: string; values: Record<string, string> }
-  | { kind: "notice"; message: string };
+  | { kind: "notice"; message: string }
+  | { kind: "mini-app-action"; request: MiniAppActionRequest };
 
 export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
 
@@ -99,14 +136,6 @@ export interface RpcSchema {
         force?: boolean;
       };
       response: SchemaInfo;
-    };
-    executeQuery: {
-      params: { params: QueryParams };
-      response: ExecuteResult;
-    };
-    cancelQuery: {
-      params: { queryId: string };
-      response: boolean;
     };
     formatSql: {
       params: { sql: string; dialect: string };
@@ -177,7 +206,6 @@ export interface RpcSchema {
     };
     installUpdate: { params: Record<string, never>; response: boolean };
 
-    openExternal: { params: { url: string }; response: void };
     copyImage: { params: { pngBase64: string }; response: void };
     saveToDownloads: {
       params: { baseName: string; extension: "csv"; content: string };
@@ -230,7 +258,7 @@ export interface RpcSchema {
     };
     openBoard: { params: { boardId: string }; response: void };
     toggleLauncher: {
-      params: { fromBoardId: string | null };
+      params: { fromWindowKey: string | null };
       response: void;
     };
     openWidgetInLauncher: { params: { widgetId: string }; response: void };
@@ -279,9 +307,100 @@ export interface RpcSchema {
     };
     listMcpAudit: { params: { limit?: number }; response: McpAuditEntry[] };
     clearMcpAudit: { params: Record<string, never>; response: void };
+    listMcpServers: {
+      params: Record<string, never>;
+      response: RedactedMcpServer[];
+    };
+    saveMcpServer: {
+      params: { server: McpServerInput };
+      response: RedactedMcpServer | null;
+    };
+    deleteMcpServer: {
+      params: { serverId: string };
+      response: { widgetNames: string[] };
+    };
+    testMcpServer: { params: { serverId: string }; response: SourceTestResult };
+    listMcpTools: {
+      params: { serverId: string };
+      response: McpToolSummary[];
+    };
+    setMcpToolRead: {
+      params: SetMcpToolReadRequest;
+      response: RedactedMcpServer | null;
+    };
+    listHttpEndpoints: {
+      params: Record<string, never>;
+      response: RedactedHttpEndpoint[];
+    };
+    saveHttpEndpoint: {
+      params: { endpoint: HttpEndpointInput };
+      response: RedactedHttpEndpoint;
+    };
+    deleteHttpEndpoint: {
+      params: { endpointId: string };
+      response: { widgetNames: string[] };
+    };
+    testHttpEndpoint: {
+      params: { endpointId: string };
+      response: SourceTestResult;
+    };
+    proposeSourceWidget: {
+      params: { target: SourceTarget; prompt: string };
+      response: SourceProposal;
+    };
+    previewSource: {
+      params: PreviewSourceRequest;
+      response: SourcePreviewResult;
+    };
+    listActions: { params: { widgetId: string }; response: ListedAction[] };
+    saveAction: { params: SaveActionRequest; response: ListedAction };
+    deleteAction: { params: { actionId: string }; response: void };
+    reviewAction: { params: ReviewActionRequest; response: ActionReview };
+    prepareAction: { params: PrepareActionRequest; response: ActionPreview };
+    executeAction: { params: { token: string }; response: ActionOutcome };
+    discardActionToken: { params: { token: string }; response: void };
+    proposeAction: { params: ProposeActionRequest; response: ActionProposal };
+    listWritePermissions: {
+      params: Record<string, never>;
+      response: { kind: WriteTargetKind; id: string }[];
+    };
+    setWriteActionsAllowed: {
+      params: SetWriteActionsRequest;
+      response: { allowed: boolean };
+    };
+    listActionActivity: {
+      params: { limit?: number };
+      response: ActionActivityPage;
+    };
+    listMiniApps: { params: Record<string, never>; response: MiniApp[] };
+    getMiniApp: { params: { appId: string }; response: MiniApp | null };
+    saveMiniApp: { params: SaveMiniAppRequest; response: MiniApp };
+    deleteMiniApp: { params: { appId: string }; response: void };
+    duplicateMiniApp: { params: { appId: string }; response: MiniApp };
+    setMiniAppValues: {
+      params: { appId: string; values: ParamValues };
+      response: MiniApp | null;
+    };
+    runMiniAppSource: {
+      params: RunMiniAppSourceRequest;
+      response: MiniAppSourceRun;
+    };
+    cancelMiniAppRun: { params: { runId: string }; response: void };
+    loadMiniAppInputOptions: {
+      params: MiniAppInputOptionsRequest;
+      response: string[];
+    };
+    generateMiniApp: { params: GenerateMiniAppRequest; response: void };
+    cancelMiniAppGeneration: { params: { genId: string }; response: void };
+    openMiniApp: { params: { appId: string }; response: void };
+    stageMiniAppAction: { params: MiniAppActionRequest; response: void };
+    prepareMiniAppAction: {
+      params: MiniAppActionRequest;
+      response: ActionPreview;
+    };
   };
   messages: {
-    launcherShown: { clipboard: LookupValue | null };
+    launcherShown: { clipboard: LookupValue | null; maxHeight?: number };
     launcherToggle: Record<string, never>;
     launcherDismiss: Record<string, never>;
     launcherNavigate: { view: LauncherNavigateView };
@@ -292,5 +411,8 @@ export interface RpcSchema {
     watchesChanged: Record<string, never>;
     widgetSampled: { widgetId: string; valuesKey: string };
     mcpActivity: { active: McpActivity[] };
+    miniAppGenEvent: MiniAppGenEventMessage;
+    miniAppChanged: { appId: string };
+    miniAppRefresh: { appId: string; sources: string[] };
   };
 }

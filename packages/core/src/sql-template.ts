@@ -34,7 +34,8 @@ export type TemplateValue =
   | { kind: "date"; value: string }
   | { kind: "dateRange"; from: string; to: string }
   | { kind: "number"; value: number }
-  | { kind: "text"; value: string };
+  | { kind: "text"; value: string }
+  | { kind: "value"; value: BindValue };
 
 export type RangePart = "from" | "to";
 
@@ -225,7 +226,7 @@ export const maskTemplateInputs = (
 const boundValue = (
   placeholder: Placeholder,
   values: Readonly<Record<string, TemplateValue>>
-): TemplateValue & { kind: "date" | "number" | "text" } => {
+): TemplateValue & { kind: "date" | "number" | "text" | "value" } => {
   const input = values[placeholder.name];
   if (!input) {
     throw templateError(`Unknown input "${placeholder.name}".`);
@@ -250,6 +251,7 @@ const CLICKHOUSE_TYPES = {
   date: "Date",
   number: "Float64",
   text: "String",
+  value: "String",
 } as const;
 
 const markerFor = (
