@@ -26,6 +26,7 @@ const {
   mcpServersPath,
   mcpSettingsPath,
   tabsPath,
+  themesPath,
   updateChannelPath,
   writePermissionsPath,
 } = await import("./paths.ts");
@@ -50,6 +51,7 @@ describe("paths", () => {
     ],
     ["actionsAuditPath", () => actionsAuditPath(), `${ROOT}/actions-audit.enc`],
     ["mcpServersPath", () => mcpServersPath(), `${ROOT}/mcp-servers.enc`],
+    ["themesPath", () => themesPath(), `${ROOT}/themes.enc`],
     [
       "httpEndpointsPath",
       () => httpEndpointsPath(),

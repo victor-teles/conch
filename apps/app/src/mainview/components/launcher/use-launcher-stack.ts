@@ -6,6 +6,7 @@ import type {
 } from "@/components/actions/action-targets";
 import type { BoardNameTarget } from "@/components/launcher/views/board-name-view";
 import type { GenerateTarget } from "@/components/mini-app/generate/generate-target";
+import type { ThemeEditSource } from "@/components/themes/theme-edit-source";
 import type {
   LookupValue,
   MiniApp,
@@ -49,7 +50,9 @@ export type LauncherView =
   | { kind: "activity-entry"; executionId: string }
   | { kind: "mini-app-generate"; target: GenerateTarget }
   | { kind: "mini-app-action"; request: MiniAppActionRequest }
-  | { kind: "mini-app-name"; app: MiniApp };
+  | { kind: "mini-app-name"; app: MiniApp }
+  | { kind: "themes"; selectedId?: string }
+  | { kind: "theme-edit"; source: ThemeEditSource };
 
 export type StackDirection = 1 | -1;
 
@@ -61,6 +64,7 @@ export interface LauncherStackState {
 export type LauncherStackAction =
   | { type: "push"; view: LauncherView }
   | { type: "pop" }
+  | { type: "returnTo"; view: LauncherView }
   | { type: "reset" };
 
 export const ROOT_VIEW: LauncherView = { kind: "root" };
@@ -89,6 +93,14 @@ export const launcherStackReducer = (
       const [root, ...rest] = state.stack;
       return { direction: -1, stack: [root, ...rest.slice(0, -1)] };
     }
+    case "returnTo": {
+      const popped = launcherStackReducer(state, { type: "pop" });
+      const [root, ...rest] = popped.stack;
+      if (popped === state || rest.at(-1)?.kind !== action.view.kind) {
+        return popped;
+      }
+      return { ...popped, stack: [root, ...rest.slice(0, -1), action.view] };
+    }
     case "reset": {
       return state.stack.length === 1
         ? state
@@ -108,6 +120,10 @@ export const useLauncherStack = () => {
     []
   );
   const pop = useCallback(() => dispatch({ type: "pop" }), []);
+  const returnTo = useCallback(
+    (view: LauncherView) => dispatch({ type: "returnTo", view }),
+    []
+  );
   const reset = useCallback(() => dispatch({ type: "reset" }), []);
   return {
     current,
@@ -116,5 +132,6 @@ export const useLauncherStack = () => {
     pop,
     push,
     reset,
+    returnTo,
   };
 };

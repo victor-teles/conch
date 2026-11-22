@@ -1,0 +1,397 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`themes view > lists themes by appearance and marks the ones in use 1`] = `
+<div
+  aria-label="Themes"
+  class="flex flex-col px-2"
+  id="launcher-themes"
+  role="listbox"
+>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Dark
+    </div>
+    <div
+      aria-selected="true"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+      data-tone="default"
+      id="launcher-option-conch-dark"
+      role="option"
+      tabindex="0"
+    >
+      <div
+        class="absolute inset-0 rounded-[10px] bg-row-active"
+      />
+      <span
+        class="relative"
+      >
+        <span
+          aria-hidden="true"
+          class="flex h-5 shrink-0 overflow-hidden rounded-[6px] ring-1 ring-panel-border"
+          data-slot="theme-swatches"
+        >
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.2 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.21 0 0 / 0.97)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.96 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.95 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.66 0.22 29)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.72 0.13 245)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.78 0.12 165)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.82 0.13 85)"
+          />
+        </span>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-center gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Conch Dark
+        </span>
+        <svg
+          aria-label="In use"
+          class="lucide lucide-check size-3.5 shrink-0 text-foreground"
+          fill="none"
+          height="24"
+          role="img"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 6 9 17l-5-5"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-panel-muted"
+      >
+        Built-in
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+      data-tone="default"
+      id="launcher-option-amber-dark"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative"
+      >
+        <span
+          aria-hidden="true"
+          class="flex h-5 shrink-0 overflow-hidden rounded-[6px] ring-1 ring-panel-border"
+          data-slot="theme-swatches"
+        >
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.182 0.00699 34.3)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.205 0.007 40 / 0.97)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.9491 0.004 41)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.9247 0.0524 66.1732)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.9247 0.0524 66.1732)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.82 0.12 70)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.76 0.09 185)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.74 0.13 30)"
+          />
+        </span>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-center gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Amber Dark
+        </span>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-panel-muted"
+      >
+        Built-in
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+      data-tone="default"
+      id="launcher-option-theme_ink"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative"
+      >
+        <span
+          aria-hidden="true"
+          class="flex h-5 shrink-0 overflow-hidden rounded-[6px] ring-1 ring-panel-border"
+          data-slot="theme-swatches"
+        >
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.2 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.21 0 0 / 0.97)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.96 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.95 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.66 0.22 29)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.72 0.13 245)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.78 0.12 165)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.82 0.13 85)"
+          />
+        </span>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-center gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Ink
+        </span>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-panel-muted"
+      >
+        Custom
+      </span>
+    </div>
+  </div>
+  <div
+    aria-labelledby="_r_id_"
+    role="group"
+  >
+    <div
+      class="px-2.5 pt-2 pb-1.5 type-micro text-panel-muted"
+      id="_r_id_"
+    >
+      Light
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+      data-tone="default"
+      id="launcher-option-conch-light"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative"
+      >
+        <span
+          aria-hidden="true"
+          class="flex h-5 shrink-0 overflow-hidden rounded-[6px] ring-1 ring-panel-border"
+          data-slot="theme-swatches"
+        >
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.975 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.985 0 0 / 0.97)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.21 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.22 0 0)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.58 0.23 29)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.55 0.15 250)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.55 0.11 170)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.6 0.13 80)"
+          />
+        </span>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-center gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Conch Light
+        </span>
+        <svg
+          aria-label="In use"
+          class="lucide lucide-check size-3.5 shrink-0 text-foreground"
+          fill="none"
+          height="24"
+          role="img"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20 6 9 17l-5-5"
+          />
+        </svg>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-panel-muted"
+      >
+        Built-in
+      </span>
+    </div>
+    <div
+      aria-selected="false"
+      class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+      data-tone="default"
+      id="launcher-option-amber-light"
+      role="option"
+      tabindex="0"
+    >
+      <span
+        class="relative"
+      >
+        <span
+          aria-hidden="true"
+          class="flex h-5 shrink-0 overflow-hidden rounded-[6px] ring-1 ring-panel-border"
+          data-slot="theme-swatches"
+        >
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.9821 0.003 70)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.985 0.003 70 / 0.97)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.2435 0.005 41)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.4341 0.0392 41.9938)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.4341 0.0392 41.9938)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.6 0.13 65)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.55 0.09 190)"
+          />
+          <span
+            class="h-full w-2.5"
+            style="background-color: oklch(0.58 0.14 30)"
+          />
+        </span>
+      </span>
+      <span
+        class="relative flex min-w-0 flex-1 items-center gap-2"
+      >
+        <span
+          class="truncate type-body text-foreground"
+        >
+          Amber Light
+        </span>
+      </span>
+      <span
+        class="relative shrink-0 type-meta text-panel-muted"
+      >
+        Built-in
+      </span>
+    </div>
+  </div>
+</div>
+`;

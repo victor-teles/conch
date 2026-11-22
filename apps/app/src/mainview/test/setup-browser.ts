@@ -1,7 +1,10 @@
 import "@/index.css";
 import "./setup";
+import { defaultThemeFor } from "@conch/rpc";
 import { afterEach, beforeEach, expect } from "vitest";
 import { commands } from "vitest/browser";
+
+import { applyTheme } from "@/lib/theme/apply-theme";
 
 const VOLATILE_STYLE_PROPS = new Set([
   "transform",
@@ -118,7 +121,7 @@ expect.addSnapshotSerializer({
 const pointer = { moved: false };
 
 if (typeof document !== "undefined") {
-  document.documentElement.classList.add("dark");
+  applyTheme(defaultThemeFor("dark"));
 
   const style = document.createElement("style");
   style.textContent = `
@@ -151,6 +154,7 @@ beforeEach(async () => {
 // Playwright's pointer outlives a test and hovers whatever renders under it next.
 // oxlint-disable-next-line jest/require-top-level-describe -- vitest setup file
 afterEach(async () => {
+  applyTheme(defaultThemeFor("dark"));
   if (!pointer.moved) {
     return;
   }

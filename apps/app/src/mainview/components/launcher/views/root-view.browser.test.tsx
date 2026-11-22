@@ -59,6 +59,7 @@ function Harness({
         openHistory: onOpenHistory,
         openImport: vi.fn(),
         openSettings: onOpenSettings,
+        openThemes: vi.fn(),
         renameApp: vi.fn(),
         renameBoard: vi.fn(),
         runWidget: onRunWidget,

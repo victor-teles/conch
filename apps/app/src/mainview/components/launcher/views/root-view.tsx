@@ -71,6 +71,7 @@ export interface RootNavigation extends Omit<
   newBoard: () => void;
   newSourceWidget: () => void;
   openActivity: () => void;
+  openThemes: () => void;
   buildApp: (prompt: string, connectionId: string | null) => void;
 }
 

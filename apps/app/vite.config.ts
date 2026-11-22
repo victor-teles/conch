@@ -24,7 +24,7 @@ export default defineConfig({
       "react-dom/client",
       "motion/react",
       "lucide-react",
-      "next-themes",
+      "react-colorful",
     ],
   },
   plugins: [

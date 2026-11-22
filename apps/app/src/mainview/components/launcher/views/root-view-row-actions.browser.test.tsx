@@ -58,6 +58,7 @@ function Harness({ ask }: { ask: AskSpies }) {
         openHistory: vi.fn(),
         openImport: vi.fn(),
         openSettings: vi.fn(),
+        openThemes: vi.fn(),
         renameApp: vi.fn(),
         renameBoard: vi.fn(),
         runWidget: vi.fn(),

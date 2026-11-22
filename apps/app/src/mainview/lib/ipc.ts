@@ -101,6 +101,11 @@ import type {
   WatchInterval,
   WatchState,
   WatchStatus,
+  ImportThemeResult,
+  Theme,
+  ThemeDraft,
+  ThemeSettings,
+  ThemeState,
   Widget,
   WidgetDraft,
   WidgetPlan,
@@ -344,6 +349,7 @@ const messageHandlers: {
   miniAppChanged: new Set(),
   miniAppGenEvent: new Set(),
   miniAppRefresh: new Set(),
+  themeChanged: new Set(),
   updateProgress: new Set(),
   watchesChanged: new Set(),
   widgetSampled: new Set(),
@@ -395,6 +401,7 @@ const definedRpc = Electroview.defineRPC<AppRpcSchema>({
       miniAppChanged: (payload) => dispatchMessage("miniAppChanged", payload),
       miniAppGenEvent: (payload) => dispatchMessage("miniAppGenEvent", payload),
       miniAppRefresh: (payload) => dispatchMessage("miniAppRefresh", payload),
+      themeChanged: (payload) => dispatchMessage("themeChanged", payload),
       updateProgress: (payload) => dispatchMessage("updateProgress", payload),
       watchesChanged: (payload) => dispatchMessage("watchesChanged", payload),
       widgetSampled: (payload) => dispatchMessage("widgetSampled", payload),
@@ -516,6 +523,10 @@ export const onBoardChanged = (
   handler: (boardId: string) => void
 ): (() => void) =>
   subscribe("boardChanged", (payload) => handler(payload.boardId));
+
+export const onThemeChanged = (
+  handler: (state: ThemeState) => void
+): (() => void) => subscribe("themeChanged", handler);
 
 export const onUpdateProgress = (
   handler: (progress: RpcMessages["updateProgress"]) => void
@@ -709,6 +720,27 @@ export const setClipboardLookups = async (
   const setting = await callRpc(() => request.setClipboardLookups({ enabled }));
   return setting.enabled;
 };
+
+export const getThemeState = (): Promise<ThemeState> =>
+  callRpc(() => request.getThemeState({} as never));
+
+export const setThemeSettings = (
+  settings: ThemeSettings
+): Promise<ThemeState> => callRpc(() => request.setThemeSettings({ settings }));
+
+export const saveTheme = (theme: ThemeDraft): Promise<Theme> =>
+  callRpc(() => request.saveTheme({ theme }));
+
+export const deleteTheme = (themeId: string): Promise<ThemeState> =>
+  callRpc(() => request.deleteTheme({ themeId }));
+
+export const exportTheme = (
+  themeId: string
+): Promise<{ fileName: string; savedId: string }> =>
+  callRpc(() => request.exportTheme({ themeId }));
+
+export const importTheme = (): Promise<ImportThemeResult> =>
+  callRpc(() => request.importTheme({} as never));
 
 export const listWidgets = (): Promise<Widget[]> =>
   callRpc(() => request.listWidgets({} as never));

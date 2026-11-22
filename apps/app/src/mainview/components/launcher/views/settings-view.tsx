@@ -15,6 +15,7 @@ import { SettingRow } from "./settings/setting-row";
 import { SettingsGroup } from "./settings/settings-group";
 import { SourcesSection } from "./settings/sources-section";
 import { ThemeControl } from "./settings/theme-control";
+import { ThemeSettingRow } from "./settings/theme-setting-row";
 
 const BACK_KEYS = ["esc"] as const;
 const STATUS = <span>Conch</span>;
@@ -25,6 +26,7 @@ interface SettingsViewProps {
   onOpenWatches: () => void;
   onOpenAgents: () => void;
   onOpenSource: (target: SourceEditTarget) => void;
+  onOpenThemes: () => void;
 }
 
 export function SettingsView({
@@ -33,6 +35,7 @@ export function SettingsView({
   onOpenWatches,
   onOpenAgents,
   onOpenSource,
+  onOpenThemes,
 }: SettingsViewProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -50,6 +53,7 @@ export function SettingsView({
           >
             <ThemeControl />
           </SettingRow>
+          <ThemeSettingRow onOpen={onOpenThemes} />
         </SettingsGroup>
         <SettingsGroup title="Background">
           <SettingRow

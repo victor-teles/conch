@@ -28,6 +28,7 @@ import {
   verifyAudit,
   writeMcpSettings,
 } from "@conch/core";
+import { createThemeStore } from "@conch/core/themes";
 import { ConnectionPoolManager, getDriver } from "@conch/drivers";
 import {
   Board,
@@ -41,6 +42,7 @@ import {
   McpAuditEntry,
   McpServerConfig,
   McpSettings,
+  parseStoredTheme,
   Watch,
   WidgetAction,
   WritePermission,
@@ -88,9 +90,11 @@ import {
   readActiveConnection,
   readClipboardLookups,
   readLauncherHotkey,
+  readThemeSettings,
   readWatchingPaused,
   writeActiveConnection,
   writeClipboardLookups,
+  writeThemeSettings,
   writeWatchingPaused,
 } from "./launcher-config.ts";
 import { createLookupService } from "./lookup-service.ts";
@@ -113,6 +117,7 @@ import { createSchemaCache } from "./schema-cache.ts";
 import { createSchemaPeek } from "./schema-peek.ts";
 import { createSourceRunner } from "./source-runner.ts";
 import { createSourceSettingsService } from "./source-settings-service.ts";
+import { createThemeService } from "./theme-service.ts";
 import {
   checkForUpdate as doCheckForUpdate,
   installUpdate as doInstallUpdate,
@@ -220,7 +225,12 @@ type LauncherOnlyMethod =
   | "proposeAction"
   | "reviewAction"
   | "saveAction"
-  | "setWriteActionsAllowed";
+  | "setWriteActionsAllowed"
+  | "setThemeSettings"
+  | "saveTheme"
+  | "deleteTheme"
+  | "exportTheme"
+  | "importTheme";
 
 const refuseOutsideLauncher = (): never => {
   throw new DbError("LAUNCHER_ONLY", "Actions run in the launcher.");
@@ -239,9 +249,12 @@ const refuseOutsideApp = (): never => {
 const boardRefusals = (): Pick<RequestHandlers, LauncherOnlyMethod> => ({
   deleteAction: refuseOutsideLauncher,
   deleteMiniApp: refuseOutsideLauncher,
+  deleteTheme: refuseOutsideLauncher,
   discardActionToken: refuseOutsideLauncher,
   duplicateMiniApp: refuseOutsideLauncher,
   executeAction: refuseOutsideLauncher,
+  exportTheme: refuseOutsideLauncher,
+  importTheme: refuseOutsideLauncher,
   listActionActivity: refuseOutsideLauncher,
   listActions: refuseOutsideLauncher,
   listWritePermissions: refuseOutsideLauncher,
@@ -250,6 +263,8 @@ const boardRefusals = (): Pick<RequestHandlers, LauncherOnlyMethod> => ({
   proposeAction: refuseOutsideLauncher,
   reviewAction: refuseOutsideLauncher,
   saveAction: refuseOutsideLauncher,
+  saveTheme: refuseOutsideLauncher,
+  setThemeSettings: refuseOutsideLauncher,
   setWriteActionsAllowed: refuseOutsideLauncher,
 });
 
@@ -531,6 +546,19 @@ export function createAppRpcs(host: AppHost) {
       watches.connectionUsed(connectionId);
     }
   };
+  const pickJsonFile = async (): Promise<string | null> => {
+    const pick = () =>
+      Utils.openFileDialog({
+        allowedFileTypes: "json",
+        allowsMultipleSelection: false,
+        canChooseDirectory: false,
+        canChooseFiles: true,
+        startingFolder: Utils.paths.downloads,
+      });
+    const launcher = host.launcher();
+    const paths = await (launcher ? launcher.runModal(pick) : pick());
+    return paths.find((path) => path.length > 0) ?? null;
+  };
   const boards = createBoardService({
     boards: createBoardStore(parseWith(Board)),
     getWidget: widgetStore.getWidget,
@@ -549,21 +577,23 @@ export function createAppRpcs(host: AppHost) {
     },
     downloads: { save: (file) => downloads.save(file, [BUNDLE_EXTENSION]) },
     now: () => new Date(),
-    pickFile: async () => {
-      const pick = () =>
-        Utils.openFileDialog({
-          allowedFileTypes: "json",
-          allowsMultipleSelection: false,
-          canChooseDirectory: false,
-          canChooseFiles: true,
-          startingFolder: Utils.paths.downloads,
-        });
-      const launcher = host.launcher();
-      const paths = await (launcher ? launcher.runModal(pick) : pick());
-      return paths.find((path) => path.length > 0) ?? null;
-    },
+    pickFile: pickJsonFile,
     readFile: readTextUpTo,
     widgets,
+  });
+  const themes = createThemeService({
+    broadcast: (state) => {
+      for (const rpc of live) {
+        rpc.send.themeChanged(state);
+      }
+    },
+    newId: () => crypto.randomUUID(),
+    pickFile: pickJsonFile,
+    readFile: readTextUpTo,
+    readSettings: readThemeSettings,
+    saveFile: (file) => downloads.save(file, ["conch-theme.json"]),
+    store: createThemeStore(parseStoredTheme),
+    writeSettings: writeThemeSettings,
   });
   const broadcastMcpActivity = () => {
     for (const rpc of live) {
@@ -770,6 +800,7 @@ export function createAppRpcs(host: AppHost) {
       schemas.get(connectionId, databaseName, force),
     getServerVersion: ({ connectionId }) =>
       pools.getPool(connectionId).fetchVersion(),
+    getThemeState: () => themes.getState(),
     getUpdateChannel: () => doReadChannel(),
     getWatchingPaused: () => watches.isPaused(),
     hideLauncher: () => {
@@ -881,6 +912,7 @@ export function createAppRpcs(host: AppHost) {
       await miniApps.deleteMiniApp(appId);
       host.panelWindows()?.close({ id: appId, kind: "app" });
     },
+    deleteTheme: ({ themeId }) => themes.deleteTheme(themeId),
     discardActionToken: ({ token }) => actions.discardToken(token),
     duplicateMiniApp: ({ appId }) => miniApps.duplicateMiniApp(appId),
     executeAction: async (request) => {
@@ -888,6 +920,8 @@ export function createAppRpcs(host: AppHost) {
       await miniApps.afterExecute(String(request.token), outcome);
       return outcome;
     },
+    exportTheme: ({ themeId }) => themes.exportTheme(themeId),
+    importTheme: () => themes.importTheme(),
     listActionActivity: (request) => actions.listActivity(request),
     listActions: ({ widgetId }) => actions.listActions(widgetId),
     listWritePermissions: () => writePermissions.list(),
@@ -896,6 +930,8 @@ export function createAppRpcs(host: AppHost) {
     proposeAction: (request) => actions.proposeAction(request),
     reviewAction: (request) => actions.reviewAction(request),
     saveAction: (request) => actions.saveAction(request),
+    saveTheme: ({ theme }) => themes.saveTheme(theme),
+    setThemeSettings: ({ settings }) => themes.setSettings(settings),
     setWriteActionsAllowed: (request) => writePermissions.setAllowed(request),
   };
   const launcherHandlers = wrapHandlers({

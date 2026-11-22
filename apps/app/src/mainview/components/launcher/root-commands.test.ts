@@ -19,6 +19,7 @@ const handlers = () => ({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
   startMode: vi.fn(),
 });
 
@@ -67,8 +68,8 @@ describe("rootCommands", () => {
 
 describe("filterCommands", () => {
   it("returns every command for an empty or blank query", () => {
-    expect(filterCommands(commands(), "")).toHaveLength(13);
-    expect(filterCommands(commands(), "   ")).toHaveLength(13);
+    expect(filterCommands(commands(), "")).toHaveLength(14);
+    expect(filterCommands(commands(), "   ")).toHaveLength(14);
   });
 
   it("matches titles fuzzily", () => {
@@ -79,7 +80,7 @@ describe("filterCommands", () => {
 
   it("matches keywords", () => {
     expect(filterCommands(commands(), "theme").map((c) => c.id)).toStrictEqual([
-      "settings",
+      "themes",
     ]);
     expect(filterCommands(commands(), "close").map((c) => c.id)).toStrictEqual([
       "hide",

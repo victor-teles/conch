@@ -24,6 +24,7 @@ const commands = rootCommands({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
   startMode: vi.fn(),
 });
 const aiSetup = aiSetupCommand(vi.fn());
@@ -60,6 +61,7 @@ describe("buildRootSections", () => {
       "history",
       "activity",
       "settings",
+      "themes",
       "export-bundle",
       "import-bundle",
       "hide",

@@ -1,3 +1,5 @@
+import type { Theme } from "@conch/rpc";
+
 import { AnimatePresence } from "motion/react";
 import {
   useCallback,
@@ -12,6 +14,7 @@ import type {
   ActionEditTarget,
   ActionReviewTarget,
 } from "@/components/actions/action-targets";
+import type { ThemeEditSource } from "@/components/themes/theme-edit-source";
 import type {
   Board,
   LauncherNavigateView,
@@ -61,6 +64,7 @@ const SETTINGS = { kind: "settings" } as const;
 const HISTORY = { kind: "history" } as const;
 const IMPORT = { kind: "import" } as const;
 const WATCHES = { kind: "watches" } as const;
+const THEMES = { kind: "themes" } as const;
 const AGENTS = { kind: "agents" } as const;
 const AGENTS_AUDIT = { kind: "agents-audit" } as const;
 const SOURCE_PICKER = { kind: "source-picker" } as const;
@@ -116,7 +120,7 @@ function LauncherStackView() {
     },
   });
 
-  const { push, pop: handleBack } = stack;
+  const { push, pop: handleBack, returnTo } = stack;
   const { openMatch, rootAsk, session } = useLauncherAsk(push);
   const {
     openRows: handleOpenRows,
@@ -255,6 +259,15 @@ function LauncherStackView() {
     },
     [handleBoardDone]
   );
+  const themeNavigation = useMemo(
+    () => ({
+      onEdit: (source: ThemeEditSource) => push({ kind: "theme-edit", source }),
+      onOpen: () => push(THEMES),
+      onSaved: (theme: Theme) =>
+        returnTo({ kind: "themes", selectedId: theme.id }),
+    }),
+    [push, returnTo]
+  );
   const appNavigation = useMemo(
     () => ({ onDone: handleBoardDone, onOpenSettings: handleOpenSettings }),
     [handleBoardDone, handleOpenSettings]
@@ -283,6 +296,7 @@ function LauncherStackView() {
         push(search ? { kind: "history", query: search } : HISTORY),
       openImport: () => push(IMPORT),
       openSettings: handleOpenSettings,
+      openThemes: () => push(THEMES),
       renameApp: (app: MiniApp) => push({ app, kind: "mini-app-name" }),
       renameBoard: (board: Board) =>
         push({
@@ -424,6 +438,7 @@ function LauncherStackView() {
               />
             ),
             sources: sourceNavigation,
+            themes: themeNavigation,
           })}
         </StackViewFrame>
       </AnimatePresence>

@@ -39,6 +39,7 @@ type CommandNavigation = Pick<
   | "newSourceWidget"
   | "openActivity"
   | "openImport"
+  | "openThemes"
 > & { exportAll: () => void; startMode: (prefix: string) => void };
 
 interface UseRootSectionsOptions {
@@ -81,6 +82,7 @@ export const useRootSections = ({
     newSourceWidget,
     openActivity,
     openImport,
+    openThemes,
     exportAll,
     startMode,
   } = navigate;
@@ -100,6 +102,7 @@ export const useRootSections = ({
         openHistory,
         openImport,
         openSettings,
+        openThemes,
         startMode,
       }),
     [
@@ -114,6 +117,7 @@ export const useRootSections = ({
       openHistory,
       openImport,
       openSettings,
+      openThemes,
       startMode,
     ]
   );

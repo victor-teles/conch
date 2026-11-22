@@ -1,4 +1,4 @@
-import type { ActiveConnection } from "@conch/rpc";
+import type { ActiveConnection, ThemeSettings } from "@conch/rpc";
 
 import { getConfig, saveConfig } from "@conch/core";
 import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
@@ -61,4 +61,16 @@ export const writeWatchingPaused = async (paused: boolean): Promise<void> => {
   const next = z.boolean().parse(paused);
   const config = await getConfig();
   await saveConfig({ ...config, watchingPaused: next });
+};
+
+export const readThemeSettings = async (): Promise<unknown> => {
+  const config = await getConfig();
+  return config.theme;
+};
+
+export const writeThemeSettings = async (
+  settings: ThemeSettings
+): Promise<void> => {
+  const config = await getConfig();
+  await saveConfig({ ...config, theme: settings });
 };

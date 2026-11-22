@@ -171,7 +171,7 @@ This system explicitly rejects: bureaucratic grey admin panels (DBeaver, phpMyAd
 
 ## 2. Colors
 
-Neutral grays with one vermilion brand color. Grays carry no chroma, so status, chart and connection colors are the only hues on screen besides the brand mark. Token values live in `apps/app/src/mainview/index.css`; `apps/app/docs/color-tokens.md` is the generated contrast audit.
+Neutral grays with one vermilion brand color. Grays carry no chroma, so status, chart and connection colors are the only hues on screen besides the brand mark. Token values live in the built-in themes (`packages/rpc/src/theme-builtins.ts`, Conch Dark and Conch Light here) and reach the page as inline custom properties on `<html>`; users can pick Amber or build their own in the theme editor. `apps/app/docs/color-tokens.md` is the generated contrast audit.
 
 ### Brand
 

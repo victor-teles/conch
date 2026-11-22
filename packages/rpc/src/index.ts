@@ -371,3 +371,57 @@ export type {
   ListedAction,
   Placeholder,
 } from "./action.ts";
+export {
+  appearanceOf,
+  BUILTIN_THEMES,
+  DEFAULT_THEME_IDS,
+  DEFAULT_THEME_SETTINGS,
+  DEFAULT_THEME_STATE,
+  defaultThemeFor,
+  findTheme,
+  isBuiltinThemeId,
+  MAX_CUSTOM_THEMES,
+  MAX_THEME_FILE_BYTES,
+  parseStoredTheme,
+  resolveTheme,
+  Theme,
+  THEME_APPEARANCES,
+  THEME_FILE_EXTENSION,
+  THEME_MODES,
+  THEME_TOKEN_GROUPS,
+  THEME_TOKENS,
+  THEME_VERSION,
+  ThemeAppearance,
+  ThemeColor,
+  ThemeDraft,
+  ThemeFile,
+  themeForAppearance,
+  themeIdFor,
+  ThemeMode,
+  ThemeSettings,
+  ThemeTokenName,
+  ThemeTokens,
+} from "./theme.ts";
+export type { ImportThemeResult, ThemeState, ThemeTokenInfo } from "./theme.ts";
+export {
+  compositeOver,
+  contrastRatio,
+  isThemeColor,
+  parseThemeColor,
+  toHex,
+} from "./theme-color.ts";
+export type { Rgb, Rgba } from "./theme-color.ts";
+export {
+  CONTRAST_PAIRS,
+  REFERENCE_WALLPAPER,
+  TEXT_CONTRAST,
+  themeContrastReport,
+  themeProblems,
+  UI_CONTRAST,
+} from "./theme-contrast.ts";
+export type {
+  ContrastEntry,
+  ContrastLevel,
+  ContrastPair,
+  ThemeColors,
+} from "./theme-contrast.ts";

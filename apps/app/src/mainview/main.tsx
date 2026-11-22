@@ -7,11 +7,15 @@ import ReactDOM from "react-dom/client";
 
 import Loader from "./components/loader";
 import { isMacOS } from "./lib/ipc";
+import { initTheme } from "./lib/theme/theme-store";
 import { routeTree } from "./routeTree.gen";
 
 if (isMacOS()) {
   document.documentElement.dataset.platform = "macos";
 }
+
+// oxlint-disable-next-line jest/require-hook -- applies the cached theme before the first paint
+initTheme();
 
 const router = createRouter({
   context: {},

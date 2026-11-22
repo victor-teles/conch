@@ -1,3 +1,4 @@
+import type { Theme } from "@conch/rpc";
 import type { ReactNode } from "react";
 
 import { lazy, Suspense } from "react";
@@ -6,6 +7,7 @@ import type {
   ActionEditTarget,
   ActionReviewTarget,
 } from "@/components/actions/action-targets";
+import type { ThemeEditSource } from "@/components/themes/theme-edit-source";
 import type { ActionDraft, SourceTarget, Widget, WidgetDraft } from "@/lib/ipc";
 
 import { ActionReviewView } from "@/components/actions/action-review-view";
@@ -21,6 +23,7 @@ import { MiniAppActionView } from "@/components/mini-app/launcher/mini-app-actio
 import { SourceDraftView } from "@/components/sources/draft/source-draft-view";
 import { SourceEditView } from "@/components/sources/editor/source-edit-view";
 import { SourcePickerView } from "@/components/sources/source-picker-view";
+import { ThemesView } from "@/components/themes/themes-view";
 import { WatchView } from "@/components/watches/watch-view";
 import { WatchesView } from "@/components/watches/watches-view";
 import { WidgetInputsView } from "@/components/widgets/widget-inputs-view";
@@ -32,6 +35,11 @@ import { BoardNameView } from "./views/board-name-view";
 import { BoardPickerView } from "./views/board-picker-view";
 import { ConnectionEditView } from "./views/connection-edit-view";
 import { SettingsView } from "./views/settings-view";
+
+const ThemeEditView = lazy(async () => {
+  const module = await import("@/components/themes/theme-edit-view");
+  return { default: module.ThemeEditView };
+});
 
 // The panel renderer only loads once someone builds an app.
 const MiniAppGenerateView = lazy(async () => {
@@ -71,7 +79,41 @@ export interface ViewSlots {
   sources: SourceNavigation;
   actions: ActionViewNavigation;
   apps: AppViewNavigation;
+  themes: ThemeViewNavigation;
 }
+
+export interface ThemeViewNavigation {
+  onOpen: () => void;
+  onEdit: (source: ThemeEditSource) => void;
+  onSaved: (theme: Theme) => void;
+}
+
+const renderThemeView = (
+  view: LauncherView,
+  themes: ThemeViewNavigation,
+  onBack: () => void
+): ReactNode => {
+  const { onEdit, onSaved } = themes;
+  switch (view.kind) {
+    case "themes": {
+      return <ThemesView onEdit={onEdit} selectedId={view.selectedId} />;
+    }
+    case "theme-edit": {
+      return (
+        <Suspense fallback={null}>
+          <ThemeEditView
+            onBack={onBack}
+            onSaved={onSaved}
+            source={view.source}
+          />
+        </Suspense>
+      );
+    }
+    default: {
+      return null;
+    }
+  }
+};
 
 export interface AppViewNavigation {
   onOpenSettings: () => void;
@@ -188,6 +230,19 @@ const renderActionView = (
   }
 };
 
+const renderFeatureView = (
+  view: LauncherView,
+  {
+    actions,
+    apps,
+    onBack,
+    themes,
+  }: Pick<ViewSlots, "actions" | "apps" | "onBack" | "themes">
+): ReactNode =>
+  renderActionView(view, actions, onBack) ??
+  renderAppView(view, apps, onBack) ??
+  renderThemeView(view, themes, onBack);
+
 export const renderView = (view: LauncherView, slots: ViewSlots) => {
   const {
     root,
@@ -208,6 +263,7 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
     sources,
     actions,
     apps,
+    themes,
   } = slots;
   const {
     onOpenSettings: onOpenSources,
@@ -220,6 +276,7 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
     onManage: onManageActions,
     onOpenActivity,
   } = actions;
+  const { onOpen: onOpenThemes } = themes;
   switch (view.kind) {
     case "ask": {
       return ask;
@@ -286,6 +343,7 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
           onOpenActivity={onOpenActivity}
           onOpenAgents={onOpenAgents}
           onOpenSource={onEditSource}
+          onOpenThemes={onOpenThemes}
           onOpenWatches={onOpenWatches}
         />
       );
@@ -326,11 +384,7 @@ export const renderView = (view: LauncherView, slots: ViewSlots) => {
       return <ImportView onBack={onBack} onDone={onImportDone} />;
     }
     default: {
-      return (
-        renderActionView(view, actions, onBack) ??
-        renderAppView(view, apps, onBack) ??
-        root
-      );
+      return renderFeatureView(view, { actions, apps, onBack, themes }) ?? root;
     }
   }
 };

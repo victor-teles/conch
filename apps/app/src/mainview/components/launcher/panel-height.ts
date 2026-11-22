@@ -18,6 +18,7 @@ const CONTENT_VIEWS: ReadonlySet<LauncherView["kind"]> = new Set([
   "mini-app-generate",
   "source-draft",
   "source-edit",
+  "theme-edit",
   "watch",
   "widget-run",
 ]);

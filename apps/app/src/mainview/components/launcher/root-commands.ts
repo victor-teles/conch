@@ -9,6 +9,7 @@ import {
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
+  PaletteIcon,
   PlugIcon,
   PlusIcon,
   SlidersHorizontalIcon,
@@ -43,6 +44,7 @@ interface RootCommandHandlers {
   openActivity: () => void;
   openHistory: () => void;
   openSettings: () => void;
+  openThemes: () => void;
   exportAll: () => void;
   openImport: () => void;
   dismiss: () => void;
@@ -57,6 +59,7 @@ export const rootCommands = ({
   openActivity,
   openHistory,
   openSettings,
+  openThemes,
   exportAll,
   openImport,
   dismiss,
@@ -151,11 +154,20 @@ export const rootCommands = ({
     actionLabel: "Open",
     icon: SlidersHorizontalIcon,
     id: "settings",
-    keywords: ["preferences", "hotkey", "theme", "appearance", "ai", "model"],
+    keywords: ["preferences", "hotkey", "appearance", "ai", "model"],
     run: openSettings,
     shortcut: ["⌘", ","],
     subtitle: "AI provider, hotkey and appearance",
     title: "Settings",
+  },
+  {
+    actionLabel: "Open",
+    icon: PaletteIcon,
+    id: "themes",
+    keywords: ["theme", "appearance", "color", "dark", "light"],
+    run: openThemes,
+    subtitle: "Pick one for dark and one for light, or make your own",
+    title: "Themes",
   },
   {
     actionLabel: "Export",

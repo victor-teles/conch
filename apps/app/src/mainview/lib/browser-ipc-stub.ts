@@ -39,6 +39,7 @@ import { createMcpEmulator } from "@/lib/browser-mcp-stub";
 import { recordedAssumptions } from "@/lib/browser-refine-stub";
 import { demoSchemaPeek } from "@/lib/browser-schema-stub";
 import { createSourceEmulator } from "@/lib/browser-source-stub";
+import { createThemeEmulator } from "@/lib/browser-theme-stub";
 import { createWatchEmulator } from "@/lib/browser-watch-stub";
 import { createWidgetEmulator } from "@/lib/browser-widget-stub";
 
@@ -366,6 +367,7 @@ const createDispatcher = (emit: EmitMessage) => {
     onAnswered: widgets.rememberAsk,
   });
 
+  const themes = createThemeEmulator((state) => emit("themeChanged", state));
   const miniApps = loadMiniAppEmulator(emit);
   const actionRequests = actionHandlers(actions);
   const handlers: Record<string, (payload: unknown) => unknown> = {
@@ -395,6 +397,8 @@ const createDispatcher = (emit: EmitMessage) => {
       sources.deleteMcpServer(payload as { serverId: string }),
     deleteRecentAsk: (payload) =>
       widgets.deleteRecentAsk(payload as { askId: string }),
+    deleteTheme: (payload) =>
+      themes.deleteTheme(payload as { themeId: string }),
     deleteWatch: (payload) =>
       watches.deleteWatch(payload as { watchId: string }),
     deleteWidget: (payload) => {
@@ -421,6 +425,8 @@ const createDispatcher = (emit: EmitMessage) => {
       );
     },
     exportBundle: (payload) => bundles.exportBundle(payload),
+    exportTheme: (payload) =>
+      themes.exportTheme(payload as { themeId: string }),
     getActiveConnection: () => readActiveConnection(),
     getAiSettings: () => ai.get(),
     getAllHistory: () => [],
@@ -431,9 +437,11 @@ const createDispatcher = (emit: EmitMessage) => {
     getHistory: () => [],
     getLauncherHotkey: () => DEFAULT_LAUNCHER_HOTKEY,
     getMcpSettings: () => mcp.getMcpSettings(),
+    getThemeState: () => themes.getThemeState(),
     getUpdateChannel: () => "stable",
     getWatchingPaused: () => watches.getWatchingPaused(),
     hideLauncher: () => launcher.hide(),
+    importTheme: () => themes.importTheme(),
     listBoards: () => boards.listBoards(),
     listHttpEndpoints: () => sources.listHttpEndpoints(),
     listMcpAudit: (payload) => mcp.listMcpAudit(payload as { limit?: number }),
@@ -489,6 +497,7 @@ const createDispatcher = (emit: EmitMessage) => {
       sources.saveMcpServer(payload as { server: McpServerInput }),
     saveMcpSettings: (payload) =>
       mcp.saveMcpSettings(payload as McpSettingsUpdate),
+    saveTheme: (payload) => themes.saveTheme(payload as { theme: unknown }),
     saveToDownloads: (payload) => ({
       fileName: `${(payload as { baseName: string }).baseName}.csv`,
       savedId: "stub",
@@ -504,6 +513,8 @@ const createDispatcher = (emit: EmitMessage) => {
       writeClipboardLookups((payload as { enabled: boolean }).enabled),
     setMcpToolRead: (payload) =>
       sources.setMcpToolRead(payload as SetMcpToolReadRequest),
+    setThemeSettings: (payload) =>
+      themes.setThemeSettings(payload as { settings: unknown }),
     setWatchingPaused: (payload) =>
       watches.setWatchingPaused(payload as { paused: boolean }),
     testAiSettings,

@@ -28,6 +28,32 @@ describe("launcherStackReducer", () => {
     );
   });
 
+  it("returns to the view below with new params", () => {
+    const themes = { kind: "themes" } as const;
+    const withThemes = launcherStackReducer(initialStackState, {
+      type: "push",
+      view: themes,
+    });
+    const stacked = launcherStackReducer(withThemes, {
+      type: "push",
+      view: SETTINGS,
+    });
+    const back = launcherStackReducer(stacked, {
+      type: "returnTo",
+      view: { kind: "themes", selectedId: "theme_1" },
+    });
+    expect(back.stack).toStrictEqual([
+      ROOT_VIEW,
+      { kind: "themes", selectedId: "theme_1" },
+    ]);
+    expect(back.direction).toBe(-1);
+    const elsewhere = launcherStackReducer(back, {
+      type: "returnTo",
+      view: SETTINGS,
+    });
+    expect(elsewhere.stack).toStrictEqual([ROOT_VIEW]);
+  });
+
   it("pops back toward root and moves backward", () => {
     const pushed = launcherStackReducer(initialStackState, {
       type: "push",

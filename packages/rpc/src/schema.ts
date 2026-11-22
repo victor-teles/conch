@@ -69,6 +69,13 @@ import type {
   SourceTestResult,
 } from "./source-config.ts";
 import type { RunSqlParams, SchemaPeek } from "./sql-run.ts";
+import type {
+  ImportThemeResult,
+  Theme,
+  ThemeDraft,
+  ThemeSettings,
+  ThemeState,
+} from "./theme.ts";
 import type { Watch, WatchDraft, WatchStatus, WidgetTrend } from "./watch.ts";
 import type {
   ParamValues,
@@ -212,6 +219,19 @@ export interface RpcSchema {
       response: { fileName: string; savedId: string };
     };
     revealSaved: { params: { savedId: string }; response: void };
+
+    getThemeState: { params: Record<string, never>; response: ThemeState };
+    setThemeSettings: {
+      params: { settings: ThemeSettings };
+      response: ThemeState;
+    };
+    saveTheme: { params: { theme: ThemeDraft }; response: Theme };
+    deleteTheme: { params: { themeId: string }; response: ThemeState };
+    exportTheme: {
+      params: { themeId: string };
+      response: { fileName: string; savedId: string };
+    };
+    importTheme: { params: Record<string, never>; response: ImportThemeResult };
 
     resizeLauncher: { params: { height: number }; response: void };
     hideLauncher: { params: Record<string, never>; response: void };
@@ -414,5 +434,6 @@ export interface RpcSchema {
     miniAppGenEvent: MiniAppGenEventMessage;
     miniAppChanged: { appId: string };
     miniAppRefresh: { appId: string; sources: string[] };
+    themeChanged: ThemeState;
   };
 }

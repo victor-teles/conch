@@ -98,3 +98,7 @@ export function actionsAuditPath(): string {
 export function miniAppsPath(): string {
   return path.join(appDir(), "mini-apps.enc");
 }
+
+export function themesPath(): string {
+  return path.join(appDir(), "themes.enc");
+}

@@ -2,31 +2,6 @@
 
 exports[`importView results > finishes on Enter with the first imported widget 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -161,31 +136,6 @@ exports[`importView results > finishes on Enter with the first imported widget 1
 
 exports[`importView results > lists what failed and what was skipped 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -386,31 +336,6 @@ exports[`importView results > lists what failed and what was skipped 1`] = `
 
 exports[`importView results > shows Importing… while a slow import runs 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -1024,31 +949,6 @@ exports[`importView results > shows Importing… while a slow import runs 1`] = 
 
 exports[`importView review > maps connections by name, leaves duplicates off and disables an unmapped connection's widgets 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -1744,31 +1644,6 @@ exports[`importView review > maps connections by name, leaves duplicates off and
 
 exports[`importView review > shows every widget on when each connection has a match 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -2474,31 +2349,6 @@ exports[`importView review > shows every widget on when each connection has a ma
 
 exports[`importView sources > explains an empty clipboard 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -2777,31 +2627,6 @@ exports[`importView sources > explains an empty clipboard 1`] = `
 
 exports[`importView sources > names the first invalid field of a file 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -3080,31 +2905,6 @@ exports[`importView sources > names the first invalid field of a file 1`] = `
 
 exports[`importView sources > offers the clipboard and a file, focusing the clipboard first 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >
@@ -3329,31 +3129,6 @@ exports[`importView sources > offers the clipboard and a file, focusing the clip
 
 exports[`importView sources > shows a reading hairline when the read takes a while 1`] = `
 <div>
-  <script
-    nonce=""
-  >
-    ((e, i, s, u, m, a, l, h) =&gt; {
-  let d = document.documentElement, w = ["light", "dark"];
-  function p(n) {
-    (Array.isArray(e) ? e : [e]).forEach((y) =&gt; {
-      let k = y === "class", S = k && a ? m.map((f) =&gt; a[f] || f) : m;
-      k ? (d.classList.remove(...S), d.classList.add(a && a[n] ? a[n] : n)) : d.setAttribute(y, n);
-    }), R(n);
-  }
-  function R(n) {
-    h && w.includes(n) && (d.style.colorScheme = n);
-  }
-  function c() {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  if (u) p(u);
-  else try {
-    let n = localStorage.getItem(i) || s, y = l && n === "system" ? c() : n;
-    p(y);
-  } catch (n) {
-  }
-})("class","vite-ui-theme","dark",null,["light","dark"],null,true,true)
-  </script>
   <div
     style="width: 760px"
   >

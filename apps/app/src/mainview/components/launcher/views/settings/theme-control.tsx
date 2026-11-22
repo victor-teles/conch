@@ -1,27 +1,29 @@
+import type { ThemeMode } from "@conch/rpc";
+
+import { useCallback } from "react";
+
 import type { SegmentOption } from "@/components/ui/segmented-control";
 
-import { useTheme } from "@/components/theme-provider";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { themeActions, useThemeState } from "@/lib/theme/theme-store";
 
-type ThemeValue = "system" | "dark" | "light";
-
-const THEMES: readonly SegmentOption<ThemeValue>[] = [
+const MODES: readonly SegmentOption<ThemeMode>[] = [
   { label: "System", value: "system" },
   { label: "Dark", value: "dark" },
   { label: "Light", value: "light" },
 ];
 
-const isThemeValue = (value: string | undefined): value is ThemeValue =>
-  THEMES.some((theme) => theme.value === value);
-
 export function ThemeControl() {
-  const { theme, setTheme } = useTheme();
+  const state = useThemeState();
+  const handleChange = useCallback((mode: ThemeMode) => {
+    themeActions.setMode(mode);
+  }, []);
   return (
     <SegmentedControl
-      label="Theme"
-      onChange={setTheme}
-      options={THEMES}
-      value={isThemeValue(theme) ? theme : "dark"}
+      label="Appearance"
+      onChange={handleChange}
+      options={MODES}
+      value={state?.settings.mode ?? "dark"}
     />
   );
 }

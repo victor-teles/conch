@@ -19,6 +19,7 @@ const [command] = rootCommands({
   openHistory: vi.fn(),
   openImport: vi.fn(),
   openSettings: vi.fn(),
+  openThemes: vi.fn(),
   startMode: vi.fn(),
 });
 if (!command) {
