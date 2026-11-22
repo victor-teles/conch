@@ -75,7 +75,7 @@ function SqlLine({ number, tokens, mark, caret, changeOrder }: SqlLineProps) {
           <span
             aria-hidden
             className={cn(
-              "ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1",
+              "ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-brand",
               !reduced && "ask-caret"
             )}
             data-testid="sql-caret"

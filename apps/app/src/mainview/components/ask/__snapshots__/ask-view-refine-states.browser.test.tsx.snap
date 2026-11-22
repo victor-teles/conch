@@ -46,7 +46,7 @@ exports[`refine states > matches the refine error over the restored card snapsho
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value="only Europe"
@@ -1300,7 +1300,7 @@ exports[`refine states > matches the refined with trail and assumptions snapshot
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""
@@ -2487,7 +2487,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
             aria-label="Ask a question"
             aria-placeholder="Refine — by month, only Europe, as a table…"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""
@@ -2866,7 +2866,7 @@ exports[`refine states > matches the refining snapshot 1`] = `
               data-testid="run-progress"
             >
               <div
-                class="h-full w-full bg-primary/40"
+                class="h-full w-full bg-brand/40"
               />
             </div>
             <div
@@ -3670,7 +3670,7 @@ exports[`refine states > matches the turn limit reached snapshot 1`] = `
             aria-label="Ask a question"
             aria-placeholder="Start a new question with ⌘↵"
             autocomplete="off"
-            class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+            class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
             spellcheck="false"
             type="text"
             value=""

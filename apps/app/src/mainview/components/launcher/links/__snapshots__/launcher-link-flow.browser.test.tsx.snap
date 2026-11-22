@@ -182,7 +182,7 @@ exports[`an ask link > stages the text and the named connection without asking 1
       aria-expanded="true"
       aria-label="Search commands"
       autocomplete="off"
-      class="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+      class="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
       placeholder="Search or ask…"
       role="combobox"
       spellcheck="false"

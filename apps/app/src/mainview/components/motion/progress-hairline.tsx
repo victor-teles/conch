@@ -17,11 +17,11 @@ export function ProgressHairline() {
       transition={fadeIn}
     >
       {reduced ? (
-        <div className="h-full w-full bg-primary/40" />
+        <div className="h-full w-full bg-brand/40" />
       ) : (
         <motion.div
           animate={{ x: ["-100%", "250%"] }}
-          className="h-full w-2/5 bg-primary"
+          className="h-full w-2/5 bg-brand"
           transition={{
             duration: 1.1,
             ease: "easeInOut",

@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const CSS_PATH = join(HERE, "..", "src", "index.css");
+const CSS_PATH = join(HERE, "..", "src", "mainview", "index.css");
 const OUT_PATH = join(HERE, "..", "docs", "color-tokens.md");
 
 interface Rgb {
@@ -13,496 +13,290 @@ interface Rgb {
   b: number;
 }
 type Color = Rgb & { a: number };
+type TokenMap = Map<string, Color>;
+type Scheme = "light" | "dark";
 
-function clamp01(value: number): number {
-  return Math.min(1, Math.max(0, value));
-}
+const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
 
-function oklchToRgb(l: number, c: number, h: number): Rgb {
+const encodeSrgb = (linear: number): number => {
+  const x = clamp01(linear);
+  return x <= 0.003_130_8 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055;
+};
+
+const decodeSrgb = (encoded: number): number =>
+  encoded <= 0.040_45 ? encoded / 12.92 : ((encoded + 0.055) / 1.055) ** 2.4;
+
+const oklchToRgb = (l: number, c: number, h: number): Rgb => {
   const hr = (h * Math.PI) / 180;
   const a = c * Math.cos(hr);
   const b = c * Math.sin(hr);
-
-  const lLms = l + 0.396_337_777_4 * a + 0.215_803_757_3 * b;
-  const mLms = l - 0.105_561_345_8 * a - 0.063_854_172_8 * b;
-  const sLms = l - 0.089_484_177_5 * a - 1.291_485_548 * b;
-
-  const lCubed = lLms ** 3;
-  const mCubed = mLms ** 3;
-  const sCubed = sLms ** 3;
-
-  const rLin =
-    4.076_741_661_2 * lCubed -
-    3.307_711_591_3 * mCubed +
-    0.230_969_929 * sCubed;
-  const gLin =
-    -1.268_438_004_6 * lCubed +
-    2.609_757_401_1 * mCubed -
-    0.341_319_396_5 * sCubed;
-  const bLin =
-    -0.004_196_086_3 * lCubed -
-    0.703_418_614_7 * mCubed +
-    1.707_614_701 * sCubed;
-
-  const toSrgb = (v: number): number => {
-    const x = clamp01(v);
-    return x <= 0.003_130_8 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055;
+  const lCubed = (l + 0.396_337_777_4 * a + 0.215_803_757_3 * b) ** 3;
+  const mCubed = (l - 0.105_561_345_8 * a - 0.063_854_172_8 * b) ** 3;
+  const sCubed = (l - 0.089_484_177_5 * a - 1.291_485_548 * b) ** 3;
+  return {
+    b: encodeSrgb(
+      -0.004_196_086_3 * lCubed -
+        0.703_418_614_7 * mCubed +
+        1.707_614_701 * sCubed
+    ),
+    g: encodeSrgb(
+      -1.268_438_004_6 * lCubed +
+        2.609_757_401_1 * mCubed -
+        0.341_319_396_5 * sCubed
+    ),
+    r: encodeSrgb(
+      4.076_741_661_2 * lCubed -
+        3.307_711_591_3 * mCubed +
+        0.230_969_929 * sCubed
+    ),
   };
+};
 
-  return { b: toSrgb(bLin), g: toSrgb(gLin), r: toSrgb(rLin) };
-}
+const OKLCH =
+  /^oklch\(\s*([\d.]+%?)\s+([\d.]+)\s+([\d.]+)(?:deg)?(?:\s*\/\s*([\d.]+%?))?\s*\)$/i;
 
-const OKLCH_RE =
-  /oklch\(\s*([\d.]+%?)\s+([\d.]+)\s+([\d.]+)(?:deg)?(?:\s*\/\s*([\d.]+%?))?\s*\)/i;
+const fraction = (raw: string): number =>
+  raw.endsWith("%") ? Number.parseFloat(raw) / 100 : Number.parseFloat(raw);
 
-function parseOklch(value: string): Color | null {
-  const match = value.match(OKLCH_RE);
+const parseOklch = (value: string): Color | null => {
+  const match = value.match(OKLCH);
   if (!match) {
     return null;
   }
-  const [, lRaw, cRaw, hRaw, aRaw] = match;
-  const lStr = lRaw ?? "";
-  const cStr = cRaw ?? "0";
-  const hStr = hRaw ?? "0";
-  const lNum = lStr.endsWith("%")
-    ? Number.parseFloat(lStr) / 100
-    : Number.parseFloat(lStr);
-  const cNum = Number.parseFloat(cStr);
-  const hNum = Number.parseFloat(hStr);
-  let alpha = 1;
-  if (aRaw) {
-    alpha = aRaw.endsWith("%")
-      ? Number.parseFloat(aRaw) / 100
-      : Number.parseFloat(aRaw);
+  const [, l = "0", c = "0", h = "0", alpha] = match;
+  const rgb = oklchToRgb(fraction(l), Number(c), Number(h));
+  return { ...rgb, a: alpha ? fraction(alpha) : 1 };
+};
+
+const blockAfter = (css: string, marker: string): string => {
+  const start = css.indexOf(marker);
+  if (start === -1) {
+    throw new Error(`index.css has no "${marker}" block`);
   }
-  const rgb = oklchToRgb(lNum, cNum, hNum);
-  return { ...rgb, a: alpha };
-}
+  const open = css.indexOf("{", start);
+  return css.slice(open + 1, css.indexOf("\n}", open));
+};
 
-function blockBetween(css: string, start: number, end: number): string {
-  return css.slice(start, end);
-}
-
-type TokenMap = Map<string, Color>;
-
-function parseTokens(css: string): { light: TokenMap; dark: TokenMap } {
-  const light = new Map<string, Color>();
-  const dark = new Map<string, Color>();
-
-  const lightStart = css.indexOf(":root,");
-  const darkStart = css.indexOf(".dark");
-  const themeStart = css.indexOf("@theme");
-
-  const lightCss = blockBetween(css, lightStart, darkStart);
-  const darkCss = blockBetween(css, darkStart, themeStart);
-
-  const tokenRe = /--([\w-]+):\s*([^;]+);/g;
-
-  for (const block of [
-    { css: lightCss, target: light },
-    { css: darkCss, target: dark },
-  ]) {
-    let match: RegExpExecArray | null;
-    match = tokenRe.exec(block.css);
-    while (match) {
-      const [, name, raw] = match;
-      const rawStr = (raw ?? "").trim();
-      if (rawStr.startsWith("oklch(")) {
-        const color = parseOklch(rawStr);
-        if (color && name) {
-          block.target.set(name, color);
-        }
-      }
-      match = tokenRe.exec(block.css);
-    }
-    tokenRe.lastIndex = 0;
-  }
-
-  resolveAlias(light, "sidebar-primary", "primary");
-  resolveAlias(light, "sidebar-primary-foreground", "primary-foreground");
-  resolveAlias(dark, "sidebar-primary", "primary");
-  resolveAlias(dark, "sidebar-primary-foreground", "primary-foreground");
-
-  return { dark, light };
-}
-
-function resolveAlias(map: TokenMap, name: string, target: string): void {
-  if (!map.has(name) && map.has(target)) {
-    const value = map.get(target);
-    if (value) {
-      map.set(name, value);
-    }
-  }
-}
-
-function compositeOver(top: Color, base: Rgb, opacity = 1): Rgb {
-  const a = clamp01(top.a * opacity);
-  return {
-    b: top.b * a + base.b * (1 - a),
-    g: top.g * a + base.g * (1 - a),
-    r: top.r * a + base.r * (1 - a),
-  };
-}
-
-function srgbToLinear(v: number): number {
-  return v <= 0.039_28 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-}
-
-function relativeLuminance({ r, g, b }: Rgb): number {
-  return (
-    0.2126 * srgbToLinear(r) +
-    0.7152 * srgbToLinear(g) +
-    0.0722 * srgbToLinear(b)
+const declarations = (block: string): Map<string, string> =>
+  new Map(
+    [...block.matchAll(/--([\w-]+):\s*([^;]+);/g)].map(
+      ([, name = "", raw = ""]) => [name, raw.trim().replaceAll(/\s+/g, " ")]
+    )
   );
-}
 
-function contrastRatio(fg: Rgb, bg: Rgb): number {
-  const lFg = relativeLuminance(fg);
-  const lBg = relativeLuminance(bg);
-  const [light, dark] = lFg > lBg ? [lFg, lBg] : [lBg, lFg];
-  return (light + 0.05) / (dark + 0.05);
-}
+const resolveTokens = (
+  shared: Map<string, string>,
+  scheme: Map<string, string>
+): TokenMap => {
+  const all = new Map([...shared, ...scheme]);
+  const resolve = (value: string, depth = 0): Color | null => {
+    const alias = value.match(/^var\(--([\w-]+)\)$/);
+    if (alias?.[1] && depth < 4) {
+      const target = all.get(alias[1]);
+      return target ? resolve(target, depth + 1) : null;
+    }
+    return parseOklch(value);
+  };
+  const tokens: TokenMap = new Map();
+  for (const [name, value] of all) {
+    const color = resolve(value);
+    if (color) {
+      tokens.set(name, color);
+    }
+  }
+  return tokens;
+};
 
-const VIBRANCY_DARK: Rgb = { b: 0.11, g: 0.105, r: 0.105 };
-const VIBRANCY_LIGHT: Rgb = { b: 0.945, g: 0.94, r: 0.94 };
+const parseSchemes = (css: string): Record<Scheme, TokenMap> => {
+  const shared = declarations(blockAfter(css, ":root {"));
+  return {
+    dark: resolveTokens(shared, declarations(blockAfter(css, "\n.dark {"))),
+    light: resolveTokens(
+      shared,
+      declarations(blockAfter(css, ":root,\n.light {"))
+    ),
+  };
+};
 
-type PairKind = "text" | "large-text" | "ui" | "decorative";
+const compositeOver = (top: Color, base: Rgb): Rgb => ({
+  b: top.b * top.a + base.b * (1 - top.a),
+  g: top.g * top.a + base.g * (1 - top.a),
+  r: top.r * top.a + base.r * (1 - top.a),
+});
 
-interface PairSpec {
+const luminance = ({ r, g, b }: Rgb): number =>
+  0.2126 * decodeSrgb(r) + 0.7152 * decodeSrgb(g) + 0.0722 * decodeSrgb(b);
+
+const contrastRatio = (one: Rgb, two: Rgb): number => {
+  const [light, dark] = [luminance(one), luminance(two)].toSorted(
+    (x, y) => y - x
+  );
+  return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05);
+};
+
+const hexOf = (value: number): string =>
+  Math.round(clamp01(value) * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+const WALLPAPER: Record<Scheme, Rgb> = {
+  dark: { b: 0x1c / 255, g: 0x1a / 255, r: 0x1a / 255 },
+  light: { b: 0xf1 / 255, g: 0xf0 / 255, r: 0xf0 / 255 },
+};
+
+const TEXT = 4.5;
+const UI = 3;
+
+interface Pair {
   fg: string;
-  bg: string;
-  bgOpacity?: number;
-  surface: string;
-  kind: PairKind;
+  // Backgrounds from the bottom up; translucent layers composite over the
+  // wallpaper and each other, the way the panel sits over the desktop.
+  over: readonly string[];
+  min: number;
 }
 
-const PAIRS: PairSpec[] = [
-  { bg: "background", fg: "foreground", kind: "text", surface: "page" },
-  { bg: "card", fg: "card-foreground", kind: "text", surface: "card" },
-  { bg: "popover", fg: "popover-foreground", kind: "text", surface: "popover" },
-  {
-    bg: "primary",
-    fg: "primary-foreground",
-    kind: "text",
-    surface: "primary fill",
-  },
-  {
-    bg: "secondary",
-    fg: "secondary-foreground",
-    kind: "text",
-    surface: "secondary fill",
-  },
-  { bg: "muted", fg: "muted-foreground", kind: "text", surface: "muted" },
-  { bg: "accent", fg: "accent-foreground", kind: "text", surface: "accent" },
-  {
-    bg: "destructive",
-    fg: "destructive-foreground",
-    kind: "text",
-    surface: "destructive fill",
-  },
-  {
-    bg: "warning",
-    fg: "warning-foreground",
-    kind: "text",
-    surface: "warning fill",
-  },
-  {
-    bg: "success",
-    fg: "success-foreground",
-    kind: "text",
-    surface: "success fill",
-  },
-  {
-    bg: "sidebar",
-    fg: "sidebar-foreground",
-    kind: "text",
-    surface: "sidebar (opaque)",
-  },
-  {
-    bg: "sidebar-accent",
-    fg: "sidebar-accent-foreground",
-    kind: "text",
-    surface: "sidebar accent",
-  },
-  {
-    bg: "sidebar",
-    bgOpacity: 0.8,
-    fg: "sidebar-foreground",
-    kind: "text",
-    surface: "sidebar (vibrancy 80%)",
-  },
-  {
-    bg: "sidebar",
-    bgOpacity: 0.8,
-    fg: "muted-foreground",
-    kind: "text",
-    surface: "muted text on vibrancy sidebar",
-  },
-  {
-    bg: "background",
-    bgOpacity: 0.85,
-    fg: "foreground",
-    kind: "text",
-    surface: "dynamic island (background 85%)",
-  },
-  {
-    bg: "background",
-    bgOpacity: 0.85,
-    fg: "muted-foreground",
-    kind: "text",
-    surface: "dynamic island muted",
-  },
-  {
-    bg: "input",
-    bgOpacity: 0.3,
-    fg: "foreground",
-    kind: "text",
-    surface: "input field (30% over vibrancy)",
-  },
-  {
-    bg: "background",
-    fg: "border",
-    kind: "decorative",
-    surface: "border on page",
-  },
-  {
-    bg: "sidebar",
-    bgOpacity: 0.8,
-    fg: "border",
-    kind: "decorative",
-    surface: "border on vibrancy sidebar",
-  },
-  {
-    bg: "sidebar",
-    bgOpacity: 0.8,
-    fg: "sidebar-border",
-    kind: "decorative",
-    surface: "sidebar border on vibrancy",
-  },
-  {
-    bg: "background",
-    fg: "ring",
-    kind: "ui",
-    surface: "focus ring on page",
-  },
-  {
-    bg: "sidebar",
-    bgOpacity: 0.8,
-    fg: "ring",
-    kind: "ui",
-    surface: "focus ring on vibrancy sidebar",
-  },
-  {
-    bg: "background",
-    bgOpacity: 0.85,
-    fg: "ring",
-    kind: "ui",
-    surface: "focus ring on dynamic island",
-  },
-  {
-    bg: "background",
-    fg: "json-key",
-    kind: "text",
-    surface: "json key on page",
-  },
-  {
-    bg: "background",
-    fg: "json-string",
-    kind: "text",
-    surface: "json string on page",
-  },
-  {
-    bg: "background",
-    fg: "json-number",
-    kind: "text",
-    surface: "json number on page",
-  },
-  {
-    bg: "background",
-    fg: "json-boolean",
-    kind: "text",
-    surface: "json boolean on page",
-  },
-  {
-    bg: "background",
-    fg: "conn-honey",
-    kind: "ui",
-    surface: "connection chip honey",
-  },
-  {
-    bg: "background",
-    fg: "conn-denim",
-    kind: "ui",
-    surface: "connection chip denim",
-  },
-  {
-    bg: "background",
-    fg: "conn-moss",
-    kind: "ui",
-    surface: "connection chip moss",
-  },
-  {
-    bg: "background",
-    fg: "conn-plum",
-    kind: "ui",
-    surface: "connection chip plum",
-  },
-  {
-    bg: "background",
-    fg: "conn-clay",
-    kind: "ui",
-    surface: "connection chip clay",
-  },
-  {
-    bg: "background",
-    fg: "conn-stone",
-    kind: "ui",
-    surface: "connection chip stone",
-  },
+const pair = (fg: string, over: string | string[], min = TEXT): Pair => ({
+  fg,
+  min,
+  over: Array.isArray(over) ? over : [over],
+});
+
+const PANEL_ROW = ["panel", "row-active"];
+const CHARTS = [1, 2, 3, 4, 5, 6].map((n) => `chart-${n}`);
+const CONNECTIONS = ["honey", "denim", "moss", "plum", "clay", "stone"].map(
+  (name) => `conn-${name}`
+);
+
+const PAIRS: readonly Pair[] = [
+  pair("foreground", "background"),
+  pair("foreground", "card"),
+  pair("foreground", "panel"),
+  pair("foreground", "panel-solid"),
+  pair("foreground", PANEL_ROW),
+  pair("panel-muted", "panel"),
+  pair("panel-muted", ["panel", "panel-raised"]),
+  pair("panel-muted", PANEL_ROW),
+  pair("primary-foreground", "primary"),
+  pair("secondary-foreground", "secondary"),
+  pair("muted-foreground", "muted"),
+  pair("muted-foreground", "background"),
+  pair("accent-foreground", "accent"),
+  pair("destructive-foreground", "destructive"),
+  pair("warning-foreground", "warning"),
+  pair("success-foreground", "success"),
+  pair("danger-ink", "panel"),
+  pair("success-ink", "panel"),
+  pair("warning-ink", "panel"),
+  pair("ring", "panel", UI),
+  pair("ring", "background", UI),
+  pair("brand", "panel", UI),
+  pair("brand", "background", UI),
+  ...CHARTS.flatMap((chart) => [
+    pair(chart, "card", UI),
+    pair(chart, "panel", UI),
+  ]),
+  ...CONNECTIONS.map((connection) => pair(connection, "panel", UI)),
 ];
 
-function thresholdFor(kind: PairKind): number {
-  if (kind === "ui") {
-    return 3;
-  }
-  if (kind === "large-text") {
-    return 3;
-  }
-  if (kind === "decorative") {
-    return 1.4;
-  }
-  return 4.5;
-}
-
 interface Row {
-  surface: string;
-  fg: string;
-  bg: string;
+  pair: Pair;
   ratio: number;
-  threshold: number;
-  pass: boolean;
 }
 
-function evaluate(
-  tokens: TokenMap,
-  vibrancyRef: Rgb,
-  pair: PairSpec
-): Row | null {
-  const fg = tokens.get(pair.fg);
-  const bgToken = tokens.get(pair.bg);
-  if (!(fg && bgToken)) {
-    return null;
+const evaluate = (tokens: TokenMap, scheme: Scheme, spec: Pair): Row => {
+  let base = WALLPAPER[scheme];
+  for (const layer of spec.over) {
+    const color = tokens.get(layer);
+    if (!color) {
+      throw new Error(`${scheme}: --${layer} is not an oklch token`);
+    }
+    base = compositeOver(color, base);
   }
-  const bgComposited = compositeOver(bgToken, vibrancyRef, pair.bgOpacity ?? 1);
-  const fgComposited = compositeOver(fg, bgComposited);
-  const ratio = contrastRatio(fgComposited, bgComposited);
-  const threshold = thresholdFor(pair.kind);
-  return {
-    bg: pair.bg,
-    fg: pair.fg,
-    pass: ratio >= threshold,
-    ratio,
-    surface: pair.surface,
-    threshold,
-  };
-}
-
-function renderTable(rows: Row[]): string {
-  const lines = [
-    "| Surface | Foreground | Background | Ratio | Threshold | Status |",
-    "|---|---|---|---:|---:|:---:|",
-  ];
-  for (const row of rows) {
-    const status = row.pass ? "PASS" : "FAIL";
-    const ratio = row.ratio.toFixed(2);
-    const threshold = row.threshold.toFixed(1);
-    lines.push(
-      `| ${row.surface} | \`--${row.fg}\` | \`--${row.bg}\` | ${ratio} | ${threshold} | ${status} |`
-    );
+  const fg = tokens.get(spec.fg);
+  if (!fg) {
+    throw new Error(`${scheme}: --${spec.fg} is not an oklch token`);
   }
-  return lines.join("\n");
-}
+  return { pair: spec, ratio: contrastRatio(compositeOver(fg, base), base) };
+};
 
-function dumpTokens(tokens: TokenMap): string {
-  const lines = ["| Token | sRGB | Alpha |", "|---|---|---:|"];
-  const entries = [...tokens.entries()].toSorted(([a], [b]) =>
-    a.localeCompare(b)
-  );
-  for (const [name, color] of entries) {
-    const hex = (n: number): string =>
-      Math.round(clamp01(n) * 255)
-        .toString(16)
-        .padStart(2, "0");
-    const swatch = `#${hex(color.r)}${hex(color.g)}${hex(color.b)}`;
-    lines.push(`| \`--${name}\` | \`${swatch}\` | ${color.a.toFixed(2)} |`);
-  }
-  return lines.join("\n");
-}
+const passes = (row: Row): boolean => row.ratio >= row.pair.min;
 
-function main(): void {
-  const css = readFileSync(CSS_PATH, "utf8");
-  const { light, dark } = parseTokens(css);
-
-  const lightRows = PAIRS.map((p) => evaluate(light, VIBRANCY_LIGHT, p)).filter(
-    (r): r is Row => r !== null
-  );
-  const darkRows = PAIRS.map((p) => evaluate(dark, VIBRANCY_DARK, p)).filter(
-    (r): r is Row => r !== null
-  );
-
-  const lightFails = lightRows.filter((r) => !r.pass);
-  const darkFails = darkRows.filter((r) => !r.pass);
-
-  const out = [
-    "# Color Token WCAG AA Audit",
-    "",
-    "Generated by `apps/app/scripts/audit-contrast.ts`. Re-run with",
-    "`bun run apps/app/scripts/audit-contrast.ts` after changing any token.",
-    "",
-    "Vibrancy reference values approximate macOS sidebar vibrancy:",
-    "dark `#1a1a1c`, light `#f0f0f1`. Where a background opacity is",
-    "noted, the token is composited over the vibrancy reference before",
-    "the contrast is measured.",
-    "",
-    "Thresholds: text 4.5:1, UI / large text 3:1.",
-    "",
-    "## Light mode",
-    "",
-    renderTable(lightRows),
-    "",
-    "## Dark mode",
-    "",
-    renderTable(darkRows),
-    "",
-    "## Light tokens (resolved sRGB)",
-    "",
-    dumpTokens(light),
-    "",
-    "## Dark tokens (resolved sRGB)",
-    "",
-    dumpTokens(dark),
-    "",
+const pairTable = (rows: readonly Row[]): string =>
+  [
+    "| Foreground | Over | Ratio | Minimum | Status |",
+    "| --- | --- | ---: | ---: | :---: |",
+    ...rows.map(
+      (row) =>
+        `| \`--${row.pair.fg}\` | ${row.pair.over.map((layer) => `\`--${layer}\``).join(" → ")} | ${row.ratio.toFixed(2)} | ${row.pair.min.toFixed(1)} | ${passes(row) ? "PASS" : "FAIL"} |`
+    ),
   ].join("\n");
 
-  writeFileSync(OUT_PATH, out);
+const tokenTable = (tokens: TokenMap): string =>
+  [
+    "| Token | sRGB | Alpha |",
+    "| --- | --- | ---: |",
+    ...[...tokens.entries()]
+      .toSorted(([a], [b]) => a.localeCompare(b))
+      .map(
+        ([name, color]) =>
+          `| \`--${name}\` | \`#${hexOf(color.r)}${hexOf(color.g)}${hexOf(color.b)}\` | ${color.a.toFixed(2)} |`
+      ),
+  ].join("\n");
 
-  const total = lightRows.length + darkRows.length;
-  const fails = lightFails.length + darkFails.length;
-  console.log(`Audited ${total} pairs. ${fails} failing.`);
-  for (const row of lightFails) {
-    console.log(
-      `  light  FAIL ${row.ratio.toFixed(2)} (need ${row.threshold}) — ${row.surface} (--${row.fg} on --${row.bg})`
-    );
-  }
-  for (const row of darkFails) {
-    console.log(
-      `  dark   FAIL ${row.ratio.toFixed(2)} (need ${row.threshold}) — ${row.surface} (--${row.fg} on --${row.bg})`
-    );
-  }
+const main = (): void => {
+  const schemes = parseSchemes(readFileSync(CSS_PATH, "utf8"));
+  const rows = {
+    dark: PAIRS.map((spec) => evaluate(schemes.dark, "dark", spec)),
+    light: PAIRS.map((spec) => evaluate(schemes.light, "light", spec)),
+  };
+
+  writeFileSync(
+    OUT_PATH,
+    [
+      "# Color Token WCAG AA Audit",
+      "",
+      "Generated by `apps/app/scripts/audit-contrast.ts` from",
+      "`apps/app/src/mainview/index.css`. Re-run with",
+      "`bun run apps/app/scripts/audit-contrast.ts` after changing any token.",
+      "",
+      "Translucent layers are composited in gamma-encoded sRGB, as CSS does,",
+      "from the bottom up over a reference wallpaper: dark `#1a1a1c`,",
+      "light `#f0f0f1`. Minimums: text 4.5:1, UI marks and focus rings 3:1.",
+      "",
+      "## Dark",
+      "",
+      pairTable(rows.dark),
+      "",
+      "## Light",
+      "",
+      pairTable(rows.light),
+      "",
+      "## Dark tokens (resolved sRGB)",
+      "",
+      tokenTable(schemes.dark),
+      "",
+      "## Light tokens (resolved sRGB)",
+      "",
+      tokenTable(schemes.light),
+      "",
+    ].join("\n")
+  );
+
+  const failures = (["dark", "light"] as const).flatMap((scheme) =>
+    rows[scheme]
+      .filter((row) => !passes(row))
+      .map(
+        (row) =>
+          `  ${scheme} FAIL ${row.ratio.toFixed(2)} (need ${row.pair.min}): --${row.pair.fg} over ${row.pair.over.join(" → ")}`
+      )
+  );
+  console.log(
+    `Audited ${PAIRS.length * 2} pairs. ${failures.length} failing.\n${failures.join("\n")}`.trimEnd()
+  );
   console.log(`Report written to ${OUT_PATH}`);
-  if (fails > 0) {
+  if (failures.length > 0) {
     process.exit(1);
   }
-}
+};
 
 main();

@@ -3528,7 +3528,7 @@ exports[`importView sources > shows a reading hairline when the read takes a whi
                   data-testid="run-progress"
                 >
                   <div
-                    class="h-full w-2/5 bg-primary"
+                    class="h-full w-2/5 bg-brand"
                   />
                 </div>
               </span>

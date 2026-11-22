@@ -202,7 +202,7 @@ exports[`asking MongoDB and Redis with full motion > streams a pipeline with the
       </span>
       <span
         aria-hidden="true"
-        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1 ask-caret"
+        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-brand ask-caret"
         data-testid="sql-caret"
       />
     </code>
@@ -822,7 +822,7 @@ exports[`asking MongoDB and Redis with reduced motion > streams a pipeline with 
       </span>
       <span
         aria-hidden="true"
-        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-chart-1"
+        class="ml-px inline-block h-[13px] w-[6px] translate-y-[2px] rounded-[1px] bg-brand"
         data-testid="sql-caret"
       />
     </code>

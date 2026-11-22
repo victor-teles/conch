@@ -65,7 +65,7 @@ const failed = (code: string, message: string): SheetState => ({
   preview: null,
 });
 describe("confirmSheet", () => {
-  it("names the connection in amber with its environment and every bound value", async () => {
+  it("names the connection in warning ink with its environment and every bound value", async () => {
     reduced.value = false;
     const { screen } = renderSheet(confirm());
     await expect

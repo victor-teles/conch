@@ -39,7 +39,7 @@ export function LauncherInput({
   const field = (
     <input
       autoComplete="off"
-      className="min-w-0 flex-1 bg-transparent type-input text-foreground outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
+      className="min-w-0 flex-1 bg-transparent type-input text-foreground caret-brand outline-none placeholder:text-panel-muted placeholder:opacity-80 focus-visible:outline-none"
       onPaste={pasteFlattened}
       spellCheck={false}
       type="text"

@@ -16,7 +16,7 @@ const PULSE = { duration: 0.9, ease: "easeOut" } as const;
 const CHIP_CLASS =
   "relative flex h-6 max-w-full items-center overflow-hidden rounded-[6px] border border-panel-border px-2 type-meta tabular-nums";
 
-// A chip whose text changes in place swaps it and pulses amber once.
+// A chip whose text changes in place swaps it and pulses once.
 const usePulse = (label: string): number => {
   const [seen, setSeen] = useState({ label, pulses: 0 });
   if (seen.label !== label) {

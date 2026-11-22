@@ -2,7 +2,7 @@ import { rowsPhrase } from "@conch/rpc";
 
 import type { ActionReview } from "@/lib/ipc";
 
-function Amber({ children }: { children: string }) {
+function WriteTarget({ children }: { children: string }) {
   return <strong className="font-medium text-warning-ink">{children}</strong>;
 }
 
@@ -22,7 +22,7 @@ const hostPath = (url: string): string => {
   return `${parsed.host}${parsed.pathname}${parsed.search}`;
 };
 
-// Names exactly what will change, with the target in amber every time.
+// Names exactly what will change, with the target in the same warning ink every time.
 export function TargetLine({ review }: { review: ActionReview }) {
   const { compiled, target, limits } = review;
   switch (compiled.kind) {
@@ -30,7 +30,7 @@ export function TargetLine({ review }: { review: ActionReview }) {
       return (
         <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 type-body text-foreground">
           <span>Writes to</span>
-          <Amber>{target.name}</Amber>
+          <WriteTarget>{target.name}</WriteTarget>
           <EnvironmentBadge environment={target.environment} />
           <span className="text-panel-muted">
             · at most {rowsPhrase(limits.maxAffectedRows ?? 1)}
@@ -43,7 +43,7 @@ export function TargetLine({ review }: { review: ActionReview }) {
         <p className="type-body text-foreground">
           Calls{" "}
           <strong className="font-mono font-medium">{compiled.tool}</strong> on{" "}
-          <Amber>{target.name}</Amber>
+          <WriteTarget>{target.name}</WriteTarget>
         </p>
       );
     }
@@ -53,7 +53,7 @@ export function TargetLine({ review }: { review: ActionReview }) {
           <strong className="font-mono font-medium">{compiled.method}</strong>
           <span className="font-mono break-all">{hostPath(compiled.url)}</span>
           <span className="text-panel-muted">on</span>
-          <Amber>{target.name}</Amber>
+          <WriteTarget>{target.name}</WriteTarget>
         </p>
       );
     }

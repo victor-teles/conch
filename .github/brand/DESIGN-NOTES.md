@@ -1,19 +1,22 @@
 # Conch identity
 
-Chosen direction: **Whorl**, concept 1. Its continuous spiral, broad negative-space channel and asymmetrical outer lip give the strongest compact silhouette. Spire has disconnected sections; Open Call relies on a finer rim. Whorl was redrawn manually as one filled Bézier path, retaining the generated concept's essential geometry while smoothing the contours and removing raster texture.
+The mark is **Whorl**: one continuous spiral with a broad negative-space channel, a compact circular core and a gently pointed outer lip at lower right. It is a single filled Bézier path in `conch-mark.svg` (square 1000-unit viewBox, `fill="currentColor"`), the source for every raster below and for the `ConchMark` component in the app.
 
-Final colors: Warm Ink #1a1614; Amber #f6dcc0. Wordmark: Optima Bold, rendered from the macOS system font into the transparent PNG lockups. No font file is distributed. The SVG uses currentColor and a square 1000-unit viewBox.
+## Colors
 
-The app-icon body occupies the centered 824-unit square from (100,100) to (924,924) on a 1024 canvas, with continuous-curvature corners, transparent margin and a soft shadow. This is a custom curve following the requested proportions, not a claim of a pixel-identical Apple template. The tray is a tightly framed one-color version of the same shell; every RGB pixel is black and alpha carries all edge antialiasing.
+- Ink `#121212`: the icon tile.
+- Vermilion `#fc4738` (`oklch(0.66 0.22 29)`): the shell on dark surfaces. It is the app's `--brand` token in dark mode.
+- Vermilion on light `#e31510` (`oklch(0.58 0.23 29)`): the shell on light surfaces, the `--brand` token in light mode.
+- Wordmark: Optima Bold, `#f2f2f2` on dark and `#181818` on light. It is rendered from the macOS system font into the transparent PNG lockups; no font file is distributed.
 
-Generation: built-in image_gen, three separate concept calls, transparent backgrounds. Original concept outputs are retained at their native 1254 × 1254 size. Final artwork is rebuilt from vector geometry and exported with Pillow, including all ten iconset PNGs and six ICO frames. Dimensions and alpha were checked using Pillow and sips. See verification.json for the complete inventory and asset-review.png for the visual review sheet.
+The warm ink and pale amber of the first identity (`#1a1614`, `#f6dcc0`) were retired with plan 024. The old app palette returns as the selectable Amber theme in plan 025.
 
-The raster small-size assets were inspected. Dock and menu-bar runtime rendering was not tested. No code, build configuration, root documentation, package names, commits or pushes were changed by this asset task.
+## Geometry
 
-## Generation prompt set
+The app-icon body is the centered 824-unit square from (100,100) to (924,924) on a 1024 canvas, drawn as an exponent-5 superellipse so the corners have continuous curvature, with transparent margin and a soft drop shadow. The shell is drawn at 1.024× its 1000-unit source, about 585 units wide. The tray icon is a tightly framed one-color version of the same shell; every RGB pixel is black and alpha carries the antialiasing.
 
-All three prompts specify logo-brand; one quiet, crafted, trustworthy macOS database launcher icon; pale amber #f6dcc0 on flat warm ink #1a1614; a centered 824-unit Big Sur continuous-curvature body in a transparent 1024 square; a roughly 530-unit centered symbol; readability at 16 px and in one color. Exclusions: text, letters, monograms, database cylinders, sparkles or AI cues, purple/cyan, neon, glossy 3D, emoji-looking or scallop shells, presentation boards.
+## How the files are made
 
-1. **Whorl:** a bold compact asymmetric spiral conch shell, a single flat silhouette with a broad negative-space spiral channel; organic precise curves, a gently pointed outer lip at lower right and a compact circular core.
-2. **Spire:** a bold conch gastropod shell viewed sideways on a diagonal upward-right axis; short tapered upper-left spire stepping into a generous rounded body and one wide curved aperture at lower right; sculptural cut-paper silhouette with at most two broad carved grooves.
-3. **Open Call:** an asymmetric teardrop conch flaring toward upper right; generous open spiral aperture and compact coiled lower-left heel; smooth, confident woodblock-like geometry without hatching or texture, one broad negative-space channel and tapered lip.
+`bun run apps/app/scripts/build-brand-assets.ts` renders the SVG with Playwright's Chromium and writes the iconset, `icon.png`, `icon.ico` (16, 32, 48, 64, 128 and 256 PNG frames), `icon-1024.png`, both lockups and `asset-review.png`. Edit the path in `conch-mark.svg` or the colors in the script, then rerun it. The tray templates are not generated and stay as they are.
+
+`verification.json` lists every output with its pixel size. The raster small sizes were inspected; Dock and menu-bar rendering in a running build was not tested.

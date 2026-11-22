@@ -11,7 +11,7 @@ interface FilledFieldProps {
   children: ReactNode;
 }
 
-// A one-shot amber pulse marks the fields a proposal just filled.
+// A one-shot pulse marks the fields a proposal just filled.
 export function FilledField({ filled, index, children }: FilledFieldProps) {
   const [settled, setSettled] = useState(0);
   const handleDone = useCallback(() => setSettled(filled), [filled]);
