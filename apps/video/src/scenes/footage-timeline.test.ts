@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import type { Shot } from "@/data/footage";
 
-import { SHOTS } from "@/data/footage";
+import { LAUNCH_EDIT, REUSE_EDIT, TOUR_EDIT } from "@/data/footage";
 
-import { DIP_FRAMES, FOOTAGE, timeFootage } from "./footage-timeline";
+import { DIP_FRAMES, timeFootage } from "./footage-timeline";
 
 const HEADLINE = { body: "Body.", eyebrow: "Ask", title: "Title." };
 
@@ -71,21 +71,27 @@ describe("timeFootage", () => {
   });
 });
 
-describe("recorded edit", () => {
+describe.each([
+  ["launch", LAUNCH_EDIT, 33],
+  ["reuse", REUSE_EDIT, 33],
+  ["tour", TOUR_EDIT, 60],
+])("recorded %s edit", (_name, edit, maxSeconds) => {
+  const footage = timeFootage(edit.shots);
+
   it("plays every clip forward through the take, in order", () => {
-    const edges = SHOTS.flatMap((item) =>
+    const edges = edit.shots.flatMap((item) =>
       item.clips.flatMap((clip) => [clip.from, clip.to])
     );
     expect(edges).toStrictEqual(edges.toSorted((a, b) => a - b));
   });
 
   it("holds every clip for at least a second", () => {
-    for (const clip of FOOTAGE.clips) {
+    for (const clip of footage.clips) {
       expect(clip.duration).toBeGreaterThanOrEqual(30);
     }
   });
 
   it("stays short enough for a feed", () => {
-    expect(FOOTAGE.duration / 30).toBeLessThan(33);
+    expect(footage.duration / 30).toBeLessThan(maxSeconds);
   });
 });

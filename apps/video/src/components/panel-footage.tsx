@@ -1,6 +1,6 @@
 import { OffthreadVideo, staticFile } from "remotion";
 
-import { PANEL_CROP, SCREEN, TAKE } from "@/data/footage";
+import { PANEL_CROP, SCREEN } from "@/data/footage";
 
 const FEATHER = 18;
 
@@ -8,11 +8,12 @@ const edgeMask = (direction: "to right" | "to bottom") =>
   `linear-gradient(${direction}, transparent 0, #000 ${FEATHER}px, #000 calc(100% - ${FEATHER}px), transparent 100%)`;
 
 interface PanelFootageProps {
+  take: string;
   trimBefore: number;
   scale: number;
 }
 
-export function PanelFootage({ trimBefore, scale }: PanelFootageProps) {
+export function PanelFootage({ take, trimBefore, scale }: PanelFootageProps) {
   const mask = `${edgeMask("to right")}, ${edgeMask("to bottom")}`;
   return (
     <div
@@ -29,7 +30,7 @@ export function PanelFootage({ trimBefore, scale }: PanelFootageProps) {
     >
       <OffthreadVideo
         muted
-        src={staticFile(TAKE)}
+        src={staticFile(take)}
         style={{
           height: SCREEN.height * scale,
           left: -PANEL_CROP.x * scale,
