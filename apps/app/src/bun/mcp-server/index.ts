@@ -7,7 +7,7 @@ import type {
 } from "@conch/rpc";
 import type { Socket } from "node:net";
 
-import { newMcpToken } from "@conch/core";
+import { DbError, newMcpToken } from "@conch/core";
 import {
   ListMcpAuditRequest,
   McpClientKind as McpClientKindSchema,
@@ -176,6 +176,14 @@ export const createMcpServerHost = (deps: McpHostDeps) => {
     },
 
     async copyClientConfig(kind: McpClientKind): Promise<void> {
+      // macOS runs a quarantined app from a random read-only path that
+      // changes on every launch, so a copied bridge path would stop working.
+      if (deps.paths.bridgePath.includes("/AppTranslocation/")) {
+        throw new DbError(
+          "APP_NOT_INSTALLED",
+          "Move Conch to the Applications folder and open it from there, then copy the setup again."
+        );
+      }
       const { token } = await settings();
       deps.writeClipboard(
         clientConfig(McpClientKindSchema.parse(kind), {
