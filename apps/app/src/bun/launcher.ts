@@ -14,6 +14,7 @@ import type { TrayStatus } from "./tray-status.ts";
 
 import { createMacAccessibility } from "./accessibility-native.ts";
 import { requireAccessibility } from "./accessibility.ts";
+import { createSystemHotkey } from "./hotkey-native.ts";
 import { blurResponse } from "./launcher-blur.ts";
 import {
   heightRoom,
@@ -22,6 +23,7 @@ import {
   resizedFrame,
   workAreaForPoint,
 } from "./launcher-geometry.ts";
+import { registerLauncherHotkey } from "./launcher-hotkey.ts";
 import { createNavigationGate } from "./launcher-navigation.ts";
 import { summonPayload } from "./summon-payload.ts";
 import {
@@ -53,6 +55,7 @@ interface CreateLauncherOptions {
   summonOffer: () => LookupValue | null;
   onWatchedOpened: (watchId: string) => void;
   onInstallUpdate: () => void;
+  onHotkeyPressed: () => void;
 }
 
 const cursorWorkArea = () => {
@@ -69,6 +72,7 @@ export function createLauncher({
   summonOffer,
   onWatchedOpened,
   onInstallUpdate,
+  onHotkeyPressed,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
   let room = heightRoom(cursorWorkArea());
@@ -203,14 +207,24 @@ export function createLauncher({
     }
   });
 
-  if (!GlobalShortcut.register(hotkey, controller.toggle)) {
-    console.error(`[launcher] could not register global shortcut ${hotkey}`);
-  }
-  const accessibility = createMacAccessibility();
+  const onHotkey = () => {
+    onHotkeyPressed();
+    controller.toggle();
+  };
+  const registration = registerLauncherHotkey({
+    accelerator: hotkey,
+    monitor: GlobalShortcut,
+    onPress: onHotkey,
+    system: createSystemHotkey(),
+  });
+  console.info(`[launcher] hotkey ${hotkey}: ${registration}`);
+  // Only the event monitor needs Accessibility trust to see keys.
+  const accessibility =
+    registration === "monitor" ? createMacAccessibility() : null;
   if (accessibility) {
     requireAccessibility(accessibility, () => {
       GlobalShortcut.unregister(hotkey);
-      GlobalShortcut.register(hotkey, controller.toggle);
+      GlobalShortcut.register(hotkey, onHotkey);
     });
   }
 
