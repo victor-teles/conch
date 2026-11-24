@@ -9,6 +9,10 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # Rolling release that holds the in-app update feed (see electrobun.config.ts).
+  UPDATE_FEED_TAG: updates
+
 jobs:
   resolve-channel:
     name: Resolve release channel
@@ -67,10 +71,42 @@ jobs:
           git commit -m "chore: bump version to ${{ needs.resolve-channel.outputs.version }}"
           git push origin main
 
+  prepare-releases:
+    name: Create the release and the update feed
+    needs: resolve-channel
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Create the release for this tag
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            exit 0
+          fi
+          FLAGS=(--generate-notes --title "Conch ${{ needs.resolve-channel.outputs.version }}")
+          if [ "${{ needs.resolve-channel.outputs.prerelease }}" = "true" ]; then
+            FLAGS+=(--prerelease)
+          fi
+          gh release create "$GITHUB_REF_NAME" "${FLAGS[@]}"
+
+      - name: Create the update feed release
+        run: |
+          if gh release view "$UPDATE_FEED_TAG" > /dev/null 2>&1; then
+            exit 0
+          fi
+          gh release create "$UPDATE_FEED_TAG" \
+            --prerelease \
+            --target "$GITHUB_SHA" \
+            --title "Update feed" \
+            --notes "Files the in-app updater downloads. Each release replaces them. Do not delete this release; download Conch from the newest versioned release instead."
+
   build-macos:
-    name: Build macOS (${{ matrix.label }}) [${{ needs.resolve-channel.outputs.channel }}]
-    needs: [resolve-channel, bump-version]
-    if: always() && needs.resolve-channel.result == 'success' && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
+    name: Build macOS (${{ matrix.arch }}) [${{ needs.resolve-channel.outputs.channel }}]
+    needs: [resolve-channel, bump-version, prepare-releases]
+    if: always() && needs.resolve-channel.result == 'success' && needs.prepare-releases.result == 'success' && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
     permissions:
       contents: write
     strategy:
@@ -78,18 +114,27 @@ jobs:
       matrix:
         include:
           - arch: arm64
-            label: arm64
-            tauri-arch: aarch64
             runner: macos-latest
           - arch: x64
-            label: x64
-            tauri-arch: x64
             runner: macos-15-intel
     runs-on: ${{ matrix.runner }}
+    env:
+      APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.resolve-channel.outputs.channel == 'stable' && 'main' || github.ref }}
+
+      - name: Require signing for a stable release
+        if: needs.resolve-channel.outputs.channel == 'stable' && env.APPLE_CERTIFICATE == ''
+        run: |
+          echo "::error::A stable release must be signed and notarized. Add the APPLE_CERTIFICATE, APPLE_CERTIFICATE_PASSWORD, APPLE_SIGNING_IDENTITY, APPLE_ID, APPLE_PASSWORD and APPLE_TEAM_ID secrets (see RELEASING.md)."
+          exit 1
+
+      - name: Note unsigned beta build
+        if: needs.resolve-channel.outputs.channel == 'beta' && env.APPLE_CERTIFICATE == ''
+        run: |
+          echo "::warning::This beta is unsigned: macOS will block it until the tester removes the quarantine flag. Add the Apple signing secrets (see RELEASING.md)."
 
       - name: Stamp beta version
         if: needs.resolve-channel.outputs.channel == 'beta'
@@ -114,8 +159,8 @@ jobs:
         run: bun run build
 
       - name: Import Apple signing certificate
+        if: env.APPLE_CERTIFICATE != ''
         env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: |
           set -euo pipefail
@@ -144,11 +189,10 @@ jobs:
           bun run desktop:package
           bunx electrobun build --env=${{ needs.resolve-channel.outputs.electrobun_env }}
 
-      - name: Rename and upload artifact
+      - name: Upload the installer
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ needs.resolve-channel.outputs.version }}
-          ARCH_LABEL: ${{ matrix.tauri-arch }}
           BUILD_ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
@@ -158,88 +202,27 @@ jobs:
             ls -la apps/app/artifacts/ || true
             exit 1
           fi
-          DEST="oh_my_query_${VERSION}_${ARCH_LABEL}.dmg"
+          DEST="Conch_${VERSION}_${BUILD_ARCH}.dmg"
           cp "$SRC" "$DEST"
-          gh release upload "${{ github.ref_name }}" "$DEST" --clobber
+          gh release upload "$GITHUB_REF_NAME" "$DEST" --clobber
 
-  build-windows:
-    name: Build Windows (${{ matrix.label }}) [${{ needs.resolve-channel.outputs.channel }}]
-    needs: [resolve-channel, bump-version]
-    if: always() && needs.resolve-channel.result == 'success' && (needs.bump-version.result == 'success' || needs.bump-version.result == 'skipped')
-    permissions:
-      contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: x64
-            label: x64
-            runner: windows-latest
-          - arch: arm64
-            label: arm64
-            runner: windows-11-arm
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.resolve-channel.outputs.channel == 'stable' && 'main' || github.ref }}
-
-      - name: Stamp beta version
-        if: needs.resolve-channel.outputs.channel == 'beta'
-        shell: pwsh
-        run: |
-          $version = "${{ needs.resolve-channel.outputs.version }}"
-          (Get-Content apps/app/electrobun.config.ts) `
-            -replace 'version: "[^"]*"', "version: `"$version`"" `
-            | Set-Content apps/app/electrobun.config.ts
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.4.4"
-
-      - name: Cache Electrobun toolchain
-        uses: actions/cache@v4
-        with:
-          path: ~/.hutch
-          key: hutch-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('bun.lock') }}
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build workspace packages
-        run: bun run build
-
-      - name: Build Electrobun app
-        working-directory: apps/app
-        run: |
-          bun run desktop:package
-          bunx electrobun build --env=${{ needs.resolve-channel.outputs.electrobun_env }}
-
-      - name: Note unsigned Windows build
-        if: vars.WINDOWS_SIGNING_ENABLED != 'true'
-        shell: bash
-        run: |
-          echo "::warning::Windows artifact is unsigned. Set repo variable WINDOWS_SIGNING_ENABLED=true and add WINDOWS_CERTIFICATE secrets to enable signing."
-
-      - name: Upload Windows artifact
-        shell: pwsh
+      - name: Publish the update feed
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/app/artifacts
         run: |
-          $version = "${{ needs.resolve-channel.outputs.version }}"
-          $label = "${{ matrix.label }}"
-          $arch = "${{ matrix.arch }}"
-          $candidate = Get-ChildItem -Path "apps/app/artifacts" -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -like "*win-${arch}*" -and $_.Extension -in @(".zip", ".exe") } |
-            Select-Object -First 1
-          if (-not $candidate) {
-            Write-Error "No Electrobun Windows installer found in apps/app/artifacts/"
-            Get-ChildItem -Path "apps/app/artifacts" -ErrorAction SilentlyContinue
+          set -euo pipefail
+          shopt -s nullglob
+          BUNDLES=(*.tar.zst *.patch)
+          MANIFESTS=(*-update-v2.json *-update.json)
+          if [ "${#BUNDLES[@]}" -eq 0 ] || [ "${#MANIFESTS[@]}" -eq 0 ]; then
+            echo "::error::The build produced no update bundle or manifest"
+            ls -la
             exit 1
-          }
-          $dest = "oh_my_query_${version}_${label}_setup$($candidate.Extension)"
-          Copy-Item $candidate.FullName $dest
-          gh release upload "${{ github.ref_name }}" $dest --clobber
+          fi
+          # Bundles first: a manifest must never point at a bundle that is not there yet.
+          gh release upload "$UPDATE_FEED_TAG" "${BUNDLES[@]}" --clobber
+          gh release upload "$UPDATE_FEED_TAG" "${MANIFESTS[@]}" --clobber
 
   update-homebrew-tap:
     name: Update Homebrew tap
@@ -247,31 +230,29 @@ jobs:
     if: needs.resolve-channel.outputs.channel == 'stable'
     runs-on: ubuntu-latest
     steps:
-      - name: Get version
-        id: version
-        run: echo "version=${{ needs.resolve-channel.outputs.version }}" >> $GITHUB_OUTPUT
-
       - name: Download DMGs and compute SHA256
         id: hashes
+        env:
+          VERSION: ${{ needs.resolve-channel.outputs.version }}
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          BASE="https://github.com/victor-teles/oh-my-query/releases/download/${{ github.ref_name }}"
+          set -euo pipefail
+          BASE="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}"
 
-          curl -sL "${BASE}/oh_my_query_${VERSION}_aarch64.dmg" -o arm64.dmg
-          curl -sL "${BASE}/oh_my_query_${VERSION}_x64.dmg" -o x64.dmg
+          curl -fsSL "${BASE}/Conch_${VERSION}_arm64.dmg" -o arm64.dmg
+          curl -fsSL "${BASE}/Conch_${VERSION}_x64.dmg" -o x64.dmg
 
-          echo "aarch64_sha=$(shasum -a 256 arm64.dmg | awk '{print $1}')" >> $GITHUB_OUTPUT
-          echo "x64_sha=$(shasum -a 256 x64.dmg | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "arm64_sha=$(shasum -a 256 arm64.dmg | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+          echo "x64_sha=$(shasum -a 256 x64.dmg | awk '{print $1}')" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch tap update
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           repository: victor-teles/homebrew-tap
-          event-type: update-cask
+          event-type: update-conch-cask
           client-payload: |
             {
-              "version": "${{ steps.version.outputs.version }}",
-              "aarch64_sha": "${{ steps.hashes.outputs.aarch64_sha }}",
+              "version": "${{ needs.resolve-channel.outputs.version }}",
+              "arm64_sha": "${{ steps.hashes.outputs.arm64_sha }}",
               "x64_sha": "${{ steps.hashes.outputs.x64_sha }}"
             }

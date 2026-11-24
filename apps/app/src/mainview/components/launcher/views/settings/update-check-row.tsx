@@ -12,10 +12,12 @@ import { useUpdateCheck } from "./use-update-check";
 
 const BUTTON = "h-7 rounded-[8px] px-3 type-meta text-foreground";
 
+const IDLE_COPY = "Conch also checks on its own, a few times a day.";
+
 const describe = (check: UpdateCheck, showBusy: boolean): string => {
   switch (check.status) {
     case "checking": {
-      return showBusy ? "Checking…" : "Downloads from the selected channel.";
+      return showBusy ? "Checking…" : IDLE_COPY;
     }
     case "current": {
       return "You're on the latest version.";
@@ -30,7 +32,7 @@ const describe = (check: UpdateCheck, showBusy: boolean): string => {
       return check.message;
     }
     default: {
-      return "Downloads from the selected channel.";
+      return IDLE_COPY;
     }
   }
 };

@@ -8,6 +8,7 @@ export const TRAY_ACTIONS = {
   openWatched: "watch:open",
   quit: "launcher:quit",
   settings: "launcher:settings",
+  update: "launcher:update",
   watches: "watch:list",
 } as const;
 
@@ -110,12 +111,21 @@ export const TRAY_IMAGES = {
   idle: "views://assets/tray-template.png",
 } as const;
 
+const updateItem = (version: string): MenuItemConfig => ({
+  action: TRAY_ACTIONS.update,
+  label: `Restart to Update to ${version}`,
+  type: "normal",
+});
+
 export const trayMenu = (
   status: TrayStatus,
-  agentLine: string | null = null
+  agentLine: string | null = null,
+  updateVersion: string | null = null
 ): MenuItemConfig[] => {
   const { pinned, alerts, now } = status;
-  const watchItems: MenuItemConfig[] = [];
+  const watchItems: MenuItemConfig[] = updateVersion
+    ? [updateItem(updateVersion)]
+    : [];
   if (agentLine) {
     watchItems.push({ enabled: false, label: agentLine, type: "normal" });
   }
@@ -150,6 +160,7 @@ export type TrayAction =
   | { kind: "open" }
   | { kind: "settings" }
   | { kind: "quit" }
+  | { kind: "update" }
   | { kind: "watches" }
   | { kind: "open-watched"; watchId: string; widgetId: string };
 
@@ -177,6 +188,9 @@ export const trayActionOf = (event: unknown): TrayAction | null => {
     }
     case TRAY_ACTIONS.quit: {
       return { kind: "quit" };
+    }
+    case TRAY_ACTIONS.update: {
+      return { kind: "update" };
     }
     case TRAY_ACTIONS.watches: {
       return { kind: "watches" };

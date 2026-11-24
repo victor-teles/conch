@@ -40,6 +40,7 @@ export interface LauncherController {
   runModal<T>(openPanel: () => Promise<T>): Promise<T>;
   setTrayStatus(status: TrayStatus): void;
   setTrayActivity(line: string | null): void;
+  setTrayUpdate(version: string | null): void;
   show(): void;
   toggle(): void;
 }
@@ -51,6 +52,7 @@ interface CreateLauncherOptions {
   releaseFocus: () => void;
   summonOffer: () => LookupValue | null;
   onWatchedOpened: (watchId: string) => void;
+  onInstallUpdate: () => void;
 }
 
 const cursorWorkArea = () => {
@@ -66,6 +68,7 @@ export function createLauncher({
   releaseFocus,
   summonOffer,
   onWatchedOpened,
+  onInstallUpdate,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
   let room = heightRoom(cursorWorkArea());
@@ -74,6 +77,7 @@ export function createLauncher({
   const trayState = {
     agentLine: null as string | null,
     status: EMPTY_TRAY_STATUS,
+    updateVersion: null as string | null,
   };
 
   const window = new BrowserWindow({
@@ -113,9 +117,9 @@ export function createLauncher({
   });
   // Native menu rebuilds are not free; skip them when nothing visible changed.
   const renderTray = () => {
-    const { status, agentLine } = trayState;
+    const { status, agentLine, updateVersion } = trayState;
     const title = trayTitle(status);
-    const menu = trayMenu(status, agentLine);
+    const menu = trayMenu(status, agentLine, updateVersion);
     const menuKey = JSON.stringify(menu);
     const image = agentLine ? TRAY_IMAGES.active : TRAY_IMAGES.idle;
     if (title !== shownTray.title) {
@@ -137,6 +141,10 @@ export function createLauncher({
   };
   const setTrayActivity = (line: string | null) => {
     trayState.agentLine = line;
+    renderTray();
+  };
+  const setTrayUpdate = (version: string | null) => {
+    trayState.updateVersion = version;
     renderTray();
   };
   renderTray();
@@ -171,6 +179,7 @@ export function createLauncher({
     },
     setTrayActivity,
     setTrayStatus,
+    setTrayUpdate,
     show,
     toggle: () => {
       if (window.isVisible()) {
@@ -218,6 +227,10 @@ export function createLauncher({
       }
       case "quit": {
         Utils.quit();
+        break;
+      }
+      case "update": {
+        onInstallUpdate();
         break;
       }
       case "watches": {

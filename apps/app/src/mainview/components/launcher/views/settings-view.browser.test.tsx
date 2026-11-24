@@ -319,32 +319,18 @@ describe("settings view — launcher", () => {
 describe("settings view — about", () => {
   beforeEach(resetMotion);
 
-  it("shows the version and changes the update channel", async () => {
-    const setChannel = vi.fn(
-      (payload: Record<string, unknown>) => payload.channel
-    );
-    const screen = renderSettings({ setUpdateChannel: setChannel });
-
-    await expect.element(screen.getByText("1.4.0")).toBeVisible();
-    const channels = screen.getByRole("radiogroup", { name: "Update channel" });
-    await channels.getByRole("radio", { name: "Beta" }).click();
+  it("shows the version alone on a stable build", async () => {
+    const screen = renderSettings({});
 
     await expect
-      .element(channels.getByRole("radio", { name: "Beta" }))
-      .toHaveAttribute("aria-checked", "true");
-    expect(setChannel).toHaveBeenCalledWith({ channel: "beta" });
+      .element(screen.getByText("1.4.0", { exact: true }))
+      .toBeVisible();
   });
 
-  it("reverts the channel when it cannot be saved", async () => {
-    const screen = renderSettings({
-      setUpdateChannel: vi.fn().mockRejectedValue(new Error("nope")),
-    });
-    const channels = screen.getByRole("radiogroup", { name: "Update channel" });
-    await channels.getByRole("radio", { name: "Nightly" }).click();
+  it("names the channel of a beta build", async () => {
+    const screen = renderSettings({ getUpdateChannel: () => "beta" });
 
-    await expect
-      .element(channels.getByRole("radio", { name: "Stable" }))
-      .toHaveAttribute("aria-checked", "true");
+    await expect.element(screen.getByText("1.4.0 · Beta")).toBeVisible();
   });
 
   it("checks for updates and reports being current", async () => {

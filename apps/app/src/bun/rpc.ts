@@ -118,12 +118,7 @@ import { createSchemaPeek } from "./schema-peek.ts";
 import { createSourceRunner } from "./source-runner.ts";
 import { createSourceSettingsService } from "./source-settings-service.ts";
 import { createThemeService } from "./theme-service.ts";
-import {
-  checkForUpdate as doCheckForUpdate,
-  installUpdate as doInstallUpdate,
-  readChannel as doReadChannel,
-  writeChannel as doWriteChannel,
-} from "./updater.ts";
+import { createUpdateService } from "./updater.ts";
 import { createWatchService } from "./watch-service.ts";
 import {
   createWidgetService,
@@ -656,6 +651,11 @@ export function createAppRpcs(host: AppHost) {
     }
   };
   let launcherRpc: AppRpc | null = null;
+  const updates = createUpdateService({
+    onProgress: (progress) => launcherRpc?.send.updateProgress(progress),
+    onReady: (version) => host.launcher()?.setTrayUpdate(version),
+    updater: Updater,
+  });
   const asks = createAskService({
     loadModel: loadAskModel,
     pools,
@@ -734,7 +734,7 @@ export function createAppRpcs(host: AppHost) {
     cancelMiniAppGeneration: (request) => miniAppGen.cancel(request),
     cancelMiniAppRun: ({ runId }) => miniApps.cancelRun(runId),
     cancelWidgetRun: ({ runId }) => widgets.cancelRun(runId),
-    checkForUpdate: () => doCheckForUpdate(),
+    checkForUpdate: () => updates.check(),
     clearAiKey: () => removeAiKey(),
     clearMcpAudit: () => mcp.clearAudit(),
     clearRecentAsks: () => widgets.clearRecentAsks(),
@@ -801,12 +801,12 @@ export function createAppRpcs(host: AppHost) {
     getServerVersion: ({ connectionId }) =>
       pools.getPool(connectionId).fetchVersion(),
     getThemeState: () => themes.getState(),
-    getUpdateChannel: () => doReadChannel(),
+    getUpdateChannel: () => updates.channel(),
     getWatchingPaused: () => watches.isPaused(),
     hideLauncher: () => {
       getLauncher()?.hide();
     },
-    installUpdate: () => doInstallUpdate(),
+    installUpdate: () => updates.install(),
     listBoards: () => boards.listBoards(),
     listConnectionDatabases: ({ connectionId }) =>
       pools.getPool(connectionId).listDatabases(),
@@ -891,7 +891,6 @@ export function createAppRpcs(host: AppHost) {
     },
     setMcpToolRead: (request) => sourceSettings.setMcpToolRead(request),
     setMiniAppValues: (request) => miniApps.setValues(request),
-    setUpdateChannel: ({ channel }) => doWriteChannel(channel),
     setWatchingPaused: ({ paused }) => watches.setPaused(paused),
     testAiSettings: (input) => testAiSettings(input),
     testConnection: ({ params }) =>
@@ -979,6 +978,13 @@ export function createAppRpcs(host: AppHost) {
           console.error(`[watch] could not acknowledge ${watchId}`, error);
         }
       },
+      installUpdate: async () => {
+        try {
+          await updates.install();
+        } catch (error) {
+          console.error(`[updater] could not install: ${String(error)}`);
+        }
+      },
       start: async () => {
         try {
           await mcp.start();
@@ -986,8 +992,10 @@ export function createAppRpcs(host: AppHost) {
           console.error(`[mcp] could not start: ${String(error)}`);
         }
         await watches.start();
+        updates.start();
       },
       stop: () => {
+        updates.stop();
         watches.stop();
         mcpClients.closeAll();
         notifier.dispose();

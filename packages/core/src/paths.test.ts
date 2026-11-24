@@ -27,7 +27,6 @@ const {
   mcpSettingsPath,
   tabsPath,
   themesPath,
-  updateChannelPath,
   writePermissionsPath,
 } = await import("./paths.ts");
 
@@ -56,11 +55,6 @@ describe("paths", () => {
       "httpEndpointsPath",
       () => httpEndpointsPath(),
       `${ROOT}/http-endpoints.enc`,
-    ],
-    [
-      "updateChannelPath",
-      () => updateChannelPath(),
-      `${ROOT}/update-channel.txt`,
     ],
   ])("%s returns the expected path", (_name, builder, expected) => {
     expect(builder()).toBe(expected);

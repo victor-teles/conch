@@ -105,7 +105,7 @@ export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
 
 export const DEFAULT_CLIPBOARD_LOOKUPS = false;
 
-export type UpdateChannel = "stable" | "beta" | "nightly";
+export type UpdateChannel = "stable" | "beta" | "dev";
 
 export interface AvailableUpdate {
   version: string;
@@ -201,10 +201,6 @@ export interface RpcSchema {
 
     getUpdateChannel: {
       params: Record<string, never>;
-      response: UpdateChannel;
-    };
-    setUpdateChannel: {
-      params: { channel: UpdateChannel };
       response: UpdateChannel;
     };
     checkForUpdate: {

@@ -31,10 +31,6 @@ export function historyPath(connectionId: string): string {
   return path.join(historyDir(), `${connectionId}.jsonl`);
 }
 
-export function updateChannelPath(): string {
-  return path.join(appDir(), "update-channel.txt");
-}
-
 export function aiConfigPath(): string {
   return path.join(appDir(), "ai.enc");
 }

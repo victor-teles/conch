@@ -1,56 +1,142 @@
 import type { AvailableUpdate, UpdateChannel } from "@conch/rpc";
 
-import { DbError, updateChannelPath } from "@conch/core";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { DbError } from "@conch/core";
 
-const APPCAST_BASE =
-  "https://github.com/victor-teles/oh-my-query/releases/download";
+export const FIRST_CHECK_MS = 30 * 1000;
+export const CHECK_EVERY_MS = 6 * 60 * 60 * 1000;
 
-const VALID_CHANNELS = new Set<UpdateChannel>(["stable", "beta", "nightly"]);
+interface UpdateState {
+  version: string;
+  updateAvailable: boolean;
+  updateReady: boolean;
+  error: string;
+}
 
-function normalize(value: string | null | undefined): UpdateChannel {
-  if (!value) {
+interface UpdateStatus {
+  status: string;
+  details?: {
+    progress?: number;
+    bytesDownloaded?: number;
+    totalBytes?: number;
+  };
+}
+
+export interface UpdaterPort {
+  checkForUpdate(): Promise<UpdateState>;
+  downloadUpdate(): Promise<void>;
+  applyUpdate(): Promise<void>;
+  updateInfo(): UpdateState;
+  getLocalInfo(): Promise<{ version: string; channel: string }>;
+  onStatusChange(listener: ((entry: UpdateStatus) => void) | null): void;
+}
+
+export interface UpdateProgress {
+  percent: number;
+  downloaded: number;
+  total: number;
+}
+
+export interface UpdateServiceOptions {
+  updater: UpdaterPort;
+  onProgress: (progress: UpdateProgress) => void;
+  onReady: (version: string | null) => void;
+}
+
+export const channelOf = (buildChannel: string): UpdateChannel => {
+  if (buildChannel === "stable") {
     return "stable";
   }
-  const lower = value.trim().toLowerCase() as UpdateChannel;
-  return VALID_CHANNELS.has(lower) ? lower : "stable";
-}
+  return buildChannel === "canary" ? "beta" : "dev";
+};
 
-export async function readChannel(): Promise<UpdateChannel> {
-  try {
-    const content = await fs.readFile(updateChannelPath(), "utf8");
-    return normalize(content);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return "stable";
+const progressOf = ({ status, details }: UpdateStatus): UpdateProgress | null =>
+  status === "download-progress" && details?.progress !== undefined
+    ? {
+        downloaded: details.bytesDownloaded ?? 0,
+        percent: details.progress,
+        total: details.totalBytes ?? 0,
+      }
+    : null;
+
+export const createUpdateService = ({
+  updater,
+  onProgress,
+  onReady,
+}: UpdateServiceOptions) => {
+  let timers: ReturnType<typeof setTimeout>[] = [];
+
+  const check = async (): Promise<AvailableUpdate | null> => {
+    const [info, local] = await Promise.all([
+      updater.checkForUpdate(),
+      updater.getLocalInfo(),
+    ]);
+    if (info.error) {
+      throw new DbError("UPDATE_CHECK_FAILED", "Could not check for updates.");
     }
-    throw error;
-  }
-}
+    return info.updateAvailable
+      ? {
+          currentVersion: local.version,
+          date: null,
+          notes: null,
+          version: info.version,
+        }
+      : null;
+  };
 
-export async function writeChannel(channel: string): Promise<UpdateChannel> {
-  if (!VALID_CHANNELS.has(channel as UpdateChannel)) {
-    throw new DbError("INVALID_CHANNEL", `Unknown update channel: ${channel}`);
-  }
-  const filePath = updateChannelPath();
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, channel);
-  return channel as UpdateChannel;
-}
+  const download = async (): Promise<string | null> => {
+    await updater.downloadUpdate();
+    const info = updater.updateInfo();
+    return info.updateReady ? info.version : null;
+  };
 
-export function appcastUrl(channel: UpdateChannel): string {
-  return `${APPCAST_BASE}/updater-${channel}/latest.json`;
-}
+  const install = async (): Promise<boolean> => {
+    if ((await download()) === null) {
+      throw new DbError(
+        "UPDATE_DOWNLOAD_FAILED",
+        "The update could not be downloaded."
+      );
+    }
+    await updater.applyUpdate();
+    return true;
+  };
 
-// NOTE: Electrobun's Updater API integration is deferred to a follow-up.
-// Today we only persist/read the channel and expose the appcast URL — the
-// actual `check`/`installAndRestart` calls land alongside the GitHub
-// release-pipeline manifest work (see migration plan section 15).
-export function checkForUpdate(): Promise<AvailableUpdate | null> {
-  return Promise.resolve(null);
-}
+  const prepareInBackground = async () => {
+    try {
+      if ((await check()) !== null) {
+        onReady(await download());
+      }
+    } catch (error) {
+      console.error(`[updater] background check failed: ${String(error)}`);
+    }
+  };
 
-export function installUpdate(): Promise<boolean> {
-  return Promise.resolve(false);
-}
+  return {
+    channel: async (): Promise<UpdateChannel> => {
+      const local = await updater.getLocalInfo();
+      return channelOf(local.channel);
+    },
+    check,
+    install,
+    start: () => {
+      updater.onStatusChange((entry) => {
+        const progress = progressOf(entry);
+        if (progress) {
+          onProgress(progress);
+        }
+      });
+      timers = [
+        setTimeout(prepareInBackground, FIRST_CHECK_MS),
+        setInterval(prepareInBackground, CHECK_EVERY_MS),
+      ];
+    },
+    stop: () => {
+      updater.onStatusChange(null);
+      for (const timer of timers) {
+        clearTimeout(timer);
+      }
+      timers = [];
+    },
+  };
+};
+
+export type UpdateService = ReturnType<typeof createUpdateService>;

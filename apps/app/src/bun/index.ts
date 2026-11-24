@@ -85,6 +85,7 @@ async function main(): Promise<void> {
   try {
     launcher = createLauncher({
       hotkey: await readLauncherHotkey(),
+      onInstallUpdate: rpcs.background.installUpdate,
       onWatchedOpened: rpcs.background.acknowledge,
       releaseFocus,
       rpc: rpcs.launcherRpc,

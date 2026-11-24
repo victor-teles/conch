@@ -72,6 +72,18 @@ describe("trayMenu", () => {
     ]);
   });
 
+  it("leads with the restart item once an update is ready", () => {
+    const menu = trayMenu(status(), null, "0.2.0");
+    expect(menu[0]).toStrictEqual({
+      action: TRAY_ACTIONS.update,
+      label: "Restart to Update to 0.2.0",
+      type: "normal",
+    });
+    expect(
+      trayActionOf({ data: { action: TRAY_ACTIONS.update } })
+    ).toStrictEqual({ kind: "update" });
+  });
+
   it("leads with a disabled line while an agent call runs", () => {
     const menu = trayMenu(
       status({ pinned: pinned() }),
