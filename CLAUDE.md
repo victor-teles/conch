@@ -27,7 +27,7 @@ bun run --cwd apps/app test              # all tests — once, before declaring 
   - Once, before declaring done: `bun run check`, `bun run check-types`, `bun run --cwd apps/app test`. Rerun only the files that failed, not the whole suite.
   - Coverage (`test:coverage`) and e2e (`bun run --cwd apps/app e2e`) only when asked, or when the change touches a flow under `apps/app/e2e/`. CI gates both.
   - Never poll with `sleep` loops. Start long commands in the background and wait for the completion notice.
-  - Formatting runs per edited file through the Claude hook and on staged files at commit, and tests run on `pre-push`, so don't re-run them just to satisfy the hooks.
+  - Formatting runs per edited file through the Claude hook. There are no git hooks; GitHub CI gates lint, types and tests.
 - Do not stop mid-implementation. Execute all tasks of a plan sequentially; pause only for explicit user questions.
 - Fix CI failures at the root cause. Never loosen thresholds or disable checks.
 - Before implementing a GitHub issue, verify the branch and create a feature branch if on `main`.
