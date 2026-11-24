@@ -8,6 +8,7 @@ import { rootCommands } from "./root-commands";
 
 const commands = rootCommands({
   addConnection: vi.fn(),
+  addSample: null,
   dismiss: vi.fn(),
   exportAll: vi.fn(),
   newApp: vi.fn(),

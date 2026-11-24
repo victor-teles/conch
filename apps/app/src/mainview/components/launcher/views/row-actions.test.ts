@@ -13,6 +13,7 @@ import { isRowMenuItem, rowActions, rowMenuTitle } from "./row-actions";
 const connection = makeConnection({ id: "analytics", name: "analytics" });
 const [command] = rootCommands({
   addConnection: vi.fn(),
+  addSample: null,
   dismiss: vi.fn(),
   exportAll: vi.fn(),
   newApp: vi.fn(),

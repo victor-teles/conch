@@ -1,3 +1,4 @@
+import type { DatabaseConnection } from "@conch/core";
 import type { RpcSchema } from "@conch/rpc";
 
 import { runAsk } from "@conch/agent";
@@ -23,6 +24,7 @@ import {
   readAudit,
   readMcpSettings,
   resetSecrets,
+  sampleDatabasePath,
   saveConnections,
   supportsGuardedWrites,
   verifyAudit,
@@ -113,6 +115,9 @@ import { windowKey } from "./panel-ref.ts";
 import { createPasteboardTypes } from "./pasteboard-types-native.ts";
 import { createPowerProbe } from "./power-native.ts";
 import { createRunCache } from "./run-cache.ts";
+import { buildSampleData } from "./sample-data.ts";
+import { writeSampleDatabase } from "./sample-database.ts";
+import { createSampleService } from "./sample-service.ts";
 import { createSchemaCache } from "./schema-cache.ts";
 import { createSchemaPeek } from "./schema-peek.ts";
 import { createSourceRunner } from "./source-runner.ts";
@@ -650,6 +655,23 @@ export function createAppRpcs(host: AppHost) {
       console.error(`[mcp] could not stop: ${String(error)}`);
     }
   };
+  const persistConnections = async (connections: DatabaseConnection[]) => {
+    await saveConnections(connections);
+    await writePermissions.keepConnections(
+      connections.map((connection) => connection.id)
+    );
+    watches.connectionsChanged();
+  };
+  const sample = createSampleService({
+    fileExists: (filePath) => Bun.file(filePath).exists(),
+    filePath: sampleDatabasePath(),
+    getConnections,
+    now: () => new Date(),
+    saveConnections: persistConnections,
+    saveWidget: (draft) => widgets.saveWidget(draft),
+    writeDatabase: (filePath, now) =>
+      writeSampleDatabase(filePath, buildSampleData(now)),
+  });
   let launcherRpc: AppRpc | null = null;
   const updates = createUpdateService({
     onProgress: (progress) => launcherRpc?.send.updateProgress(progress),
@@ -721,6 +743,7 @@ export function createAppRpcs(host: AppHost) {
   const common: Omit<RequestHandlers, LauncherOnlyMethod | WindowMethod> = {
     acknowledgeAlert: ({ watchId }) => watches.acknowledge(watchId),
     addBoardTile: ({ boardId, widgetId }) => boards.addTile(boardId, widgetId),
+    addSampleDatabase: () => sample.add(),
     appendHistory: async ({ entry }) => {
       await appendHistory(entry);
     },
@@ -868,13 +891,7 @@ export function createAppRpcs(host: AppHost) {
         ?.setTitle({ id: saved.id, kind: "board" }, panelTitle(saved));
       return saved;
     },
-    saveConnections: async ({ connections }) => {
-      await saveConnections(connections);
-      await writePermissions.keepConnections(
-        connections.map((connection) => connection.id)
-      );
-      watches.connectionsChanged();
-    },
+    saveConnections: ({ connections }) => persistConnections(connections),
     saveHttpEndpoint: ({ endpoint }) =>
       sourceSettings.saveHttpEndpoint(endpoint),
     saveMcpServer: ({ server }) => sourceSettings.saveMcpServer(server),

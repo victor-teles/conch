@@ -128,6 +128,50 @@ describe("rootView without connections", () => {
     expect(screen.container).toMatchSnapshot();
   });
 
+  it("adds the sample database, activates it and stops offering it", async () => {
+    const sample = makeConnection({
+      database: "/tmp/store.sqlite",
+      id: "sample-store",
+      name: "Sample Store",
+      type: "sqlite",
+    });
+    const addSampleDatabase = vi.fn(() => sample);
+    const store = mockLauncherIpc({ handlers: { addSampleDatabase } });
+    const screen = renderRoot();
+
+    await option(screen, /Try the Sample Database/).click();
+
+    await expect.element(option(screen, /Sample Store/)).toBeVisible();
+    await expect
+      .element(screen.getByText("Sample Store is ready"))
+      .toBeVisible();
+    expect(addSampleDatabase).toHaveBeenCalledOnce();
+    expect(store.active).toStrictEqual({
+      connectionId: "sample-store",
+      database: "/tmp/store.sqlite",
+    });
+    await expect
+      .poll(() => option(screen, /Try the Sample Database/).query())
+      .toBeNull();
+    expect(screen.getByText("No databases yet").query()).toBeNull();
+  });
+
+  it("says so when the sample database cannot be added", async () => {
+    mockLauncherIpc({
+      handlers: {
+        addSampleDatabase: vi.fn().mockRejectedValue(new Error("disk full")),
+      },
+    });
+    const screen = renderRoot();
+
+    await option(screen, /Try the Sample Database/).click();
+
+    await expect.element(screen.getByText("disk full")).toBeVisible();
+    await expect
+      .element(option(screen, /Try the Sample Database/))
+      .toBeVisible();
+  });
+
   it("opens History with ⌘Y and loads only the recents it shows", async () => {
     const listRecentAsks = vi.fn(() => []);
     mockLauncherIpc({ handlers: { listRecentAsks } });

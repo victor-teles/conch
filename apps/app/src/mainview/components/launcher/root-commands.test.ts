@@ -10,6 +10,7 @@ import {
 
 const handlers = () => ({
   addConnection: vi.fn(),
+  addSample: null,
   dismiss: vi.fn(),
   exportAll: vi.fn(),
   newApp: vi.fn(),
@@ -31,11 +32,32 @@ describe("rootCommands", () => {
     for (const command of rootCommands(wired)) {
       command.run();
     }
-    const { startMode, ...rest } = wired;
+    const { addSample: _notOffered, startMode, ...rest } = wired;
     for (const handler of Object.values(rest)) {
       expect(handler).toHaveBeenCalledOnce();
     }
     expect(startMode.mock.calls).toStrictEqual([["> "], ["#"], ["@"]]);
+  });
+
+  it("offers the sample database right after Add Connection", () => {
+    const addSample = vi.fn();
+    const offered = rootCommands({ ...handlers(), addSample });
+
+    expect(offered.slice(0, 2).map((command) => command.id)).toStrictEqual([
+      "add-connection",
+      "add-sample-database",
+    ]);
+    offered[1]?.run();
+    expect(addSample).toHaveBeenCalledOnce();
+    expect(filterCommands(offered, "demo").at(0)?.title).toBe(
+      "Try the Sample Database"
+    );
+  });
+
+  it("leaves the sample database out once it is not offered", () => {
+    const ids = commands().map((command) => command.id);
+
+    expect(ids).not.toContain("add-sample-database");
   });
 
   it("offers export and import of widgets and boards", () => {

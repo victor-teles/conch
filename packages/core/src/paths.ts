@@ -31,6 +31,10 @@ export function historyPath(connectionId: string): string {
   return path.join(historyDir(), `${connectionId}.jsonl`);
 }
 
+export function sampleDatabasePath(): string {
+  return path.join(appDir(), "sample", "store.sqlite");
+}
+
 export function aiConfigPath(): string {
   return path.join(appDir(), "ai.enc");
 }

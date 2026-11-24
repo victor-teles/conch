@@ -4,6 +4,7 @@ import {
   ActivityIcon,
   AppWindowIcon,
   ArrowLeftRightIcon,
+  DatabaseZapIcon,
   DownloadIcon,
   EyeOffIcon,
   HistoryIcon,
@@ -37,6 +38,7 @@ export interface LauncherCommand {
 }
 
 interface RootCommandHandlers {
+  addSample: (() => void) | null;
   addConnection: () => void;
   newBoard: () => void;
   newApp: () => void;
@@ -51,7 +53,18 @@ interface RootCommandHandlers {
   startMode: (prefix: string) => void;
 }
 
+const sampleCommand = (run: () => void): LauncherCommand => ({
+  actionLabel: "Add",
+  icon: DatabaseZapIcon,
+  id: "add-sample-database",
+  keywords: ["sample", "demo", "example", "try", "test", "data"],
+  run,
+  subtitle: "A small store to ask questions of, with three widgets",
+  title: "Try the Sample Database",
+});
+
 export const rootCommands = ({
+  addSample,
   addConnection,
   newBoard,
   newApp,
@@ -74,6 +87,7 @@ export const rootCommands = ({
     subtitle: "PostgreSQL, MySQL, SQLite and more",
     title: "Add Connection",
   },
+  ...(addSample ? [sampleCommand(addSample)] : []),
   {
     actionLabel: "Create",
     icon: LayoutGridIcon,

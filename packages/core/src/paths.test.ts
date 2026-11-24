@@ -25,6 +25,7 @@ const {
   mcpRunDir,
   mcpServersPath,
   mcpSettingsPath,
+  sampleDatabasePath,
   tabsPath,
   themesPath,
   writePermissionsPath,
@@ -55,6 +56,11 @@ describe("paths", () => {
       "httpEndpointsPath",
       () => httpEndpointsPath(),
       `${ROOT}/http-endpoints.enc`,
+    ],
+    [
+      "sampleDatabasePath",
+      () => sampleDatabasePath(),
+      `${ROOT}/sample/store.sqlite`,
     ],
   ])("%s returns the expected path", (_name, builder, expected) => {
     expect(builder()).toBe(expected);

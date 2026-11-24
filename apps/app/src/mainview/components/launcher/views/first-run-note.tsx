@@ -15,7 +15,7 @@ function FirstRunCopy() {
     <>
       <p className="type-body text-foreground">No databases yet</p>
       <p className="type-meta text-panel-muted">
-        Add one and it stays a keystroke away.
+        Add yours, or try the sample database to look around.
       </p>
     </>
   );

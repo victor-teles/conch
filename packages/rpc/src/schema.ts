@@ -102,6 +102,7 @@ export type LauncherNavigateView =
   | { kind: "mini-app-action"; request: MiniAppActionRequest };
 
 export const DEFAULT_LAUNCHER_HOTKEY = "Option+Shift+Space";
+export const SAMPLE_CONNECTION_ID = "sample-store";
 
 export const DEFAULT_CLIPBOARD_LOOKUPS = false;
 
@@ -197,6 +198,11 @@ export interface RpcSchema {
     resetSecrets: {
       params: Record<string, never>;
       response: void;
+    };
+
+    addSampleDatabase: {
+      params: Record<string, never>;
+      response: DatabaseConnection;
     };
 
     getUpdateChannel: {

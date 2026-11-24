@@ -5954,7 +5954,7 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
           <p
             class="type-meta text-panel-muted"
           >
-            Add one and it stays a keystroke away.
+            Add yours, or try the sample database to look around.
           </p>
         </div>
         <p
@@ -6024,6 +6024,68 @@ exports[`rootView without connections > leads with a first-run note and Add Conn
                   class="truncate type-meta text-panel-muted"
                 >
                   PostgreSQL, MySQL, SQLite and more
+                </span>
+              </span>
+              <span
+                class="relative flex shrink-0 items-center gap-2 type-meta whitespace-nowrap text-panel-muted tabular-nums"
+              />
+            </div>
+            <div
+              aria-selected="false"
+              class="relative flex cursor-default items-center gap-3 px-2.5 h-10"
+              data-tone="default"
+              id="launcher-option-add-sample-database"
+              role="option"
+              tabindex="0"
+            >
+              <span
+                class="relative grid size-6 place-items-center rounded-[7px] bg-row-hover text-panel-muted"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-database-zap size-3.5"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <ellipse
+                    cx="12"
+                    cy="5"
+                    rx="9"
+                    ry="3"
+                  />
+                  <path
+                    d="M3 5V19A9 3 0 0 0 15 21.84"
+                  />
+                  <path
+                    d="M21 5V8"
+                  />
+                  <path
+                    d="M21 12L18 17H22L19 22"
+                  />
+                  <path
+                    d="M3 12A9 3 0 0 0 14.59 14.87"
+                  />
+                </svg>
+              </span>
+              <span
+                class="relative flex min-w-0 flex-1 items-baseline gap-2"
+              >
+                <span
+                  class="truncate type-body text-foreground"
+                >
+                  Try the Sample Database
+                </span>
+                <span
+                  class="truncate type-meta text-panel-muted"
+                >
+                  A small store to ask questions of, with three widgets
                 </span>
               </span>
               <span

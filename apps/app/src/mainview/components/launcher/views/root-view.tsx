@@ -43,6 +43,7 @@ import { footerFor, useRootKeyboard } from "./use-root-keyboard";
 import { useRootMenus } from "./use-root-menus";
 import { useRootRun } from "./use-root-run";
 import { useRootSections } from "./use-root-sections";
+import { useSampleDatabase } from "./use-sample-database";
 
 const PLACEHOLDER = "Search or ask…";
 
@@ -135,13 +136,15 @@ export function RootView({
     },
     [inputRef, onQueryChange]
   );
+  const sample = useSampleDatabase();
   const commandNavigation = useMemo(
     () => ({
       ...navigate,
+      addSample: sample.add,
       exportAll: () => exportScope({ kind: "all" }),
       startMode,
     }),
-    [exportScope, navigate, startMode]
+    [exportScope, navigate, sample.add, startMode]
   );
   const linkAsk = useLinkAsk(link.staged, query);
   const view = useRootSections({
@@ -384,7 +387,7 @@ export function RootView({
         hints={footer.hints}
         status={
           <RootStatus
-            notice={menus.notice ?? linkNotice}
+            notice={menus.notice ?? linkNotice ?? sample.notice}
             onReveal={handleReveal}
             outcome={exportOutcome}
           />
