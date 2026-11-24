@@ -172,6 +172,33 @@ describe("rootView without connections", () => {
       .toBeVisible();
   });
 
+  it("opens the feedback page and gets out of the way", async () => {
+    const sendFeedback = vi.fn(() => null);
+    mockLauncherIpc({ handlers: { sendFeedback } });
+    const onDismiss = vi.fn();
+    const screen = renderRoot({ initialQuery: "bug", onDismiss });
+
+    await option(screen, /Send Feedback/).click();
+
+    await expect.poll(() => onDismiss.mock.calls.length).toBe(1);
+    expect(sendFeedback).toHaveBeenCalledOnce();
+  });
+
+  it("stays open and says so when the feedback page cannot open", async () => {
+    mockLauncherIpc({
+      handlers: {
+        sendFeedback: vi.fn().mockRejectedValue(new Error("no browser")),
+      },
+    });
+    const onDismiss = vi.fn();
+    const screen = renderRoot({ initialQuery: "feedback", onDismiss });
+
+    await option(screen, /Send Feedback/).click();
+
+    await expect.element(screen.getByText("no browser")).toBeVisible();
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
   it("opens History with ⌘Y and loads only the recents it shows", async () => {
     const listRecentAsks = vi.fn(() => []);
     mockLauncherIpc({ handlers: { listRecentAsks } });

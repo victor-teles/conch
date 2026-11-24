@@ -540,6 +540,7 @@ const createDispatcher = (emit: EmitMessage) => {
     saveWatch: (payload) => watches.saveWatch(payload as { watch: WatchDraft }),
     saveWidget: (payload) =>
       widgets.saveWidget(payload as { widget: WidgetDraft }),
+    sendFeedback: () => null,
     setActiveConnection: (payload) =>
       writeActiveConnection(
         (payload as { active: ActiveConnection | null }).active

@@ -38,6 +38,7 @@ import { ROOT_LIST_ID } from "./root-list";
 import { RootMenusLayer } from "./root-menus-layer";
 import { RootStatus } from "./root-status";
 import { useConnectionToken } from "./use-connection-token";
+import { useFeedback } from "./use-feedback";
 import { useRootArguments } from "./use-root-arguments";
 import { footerFor, useRootKeyboard } from "./use-root-keyboard";
 import { useRootMenus } from "./use-root-menus";
@@ -137,14 +138,16 @@ export function RootView({
     [inputRef, onQueryChange]
   );
   const sample = useSampleDatabase();
+  const feedback = useFeedback(navigate.dismiss);
   const commandNavigation = useMemo(
     () => ({
       ...navigate,
       addSample: sample.add,
       exportAll: () => exportScope({ kind: "all" }),
+      sendFeedback: feedback.send,
       startMode,
     }),
-    [exportScope, navigate, sample.add, startMode]
+    [exportScope, feedback.send, navigate, sample.add, startMode]
   );
   const linkAsk = useLinkAsk(link.staged, query);
   const view = useRootSections({
@@ -387,7 +390,9 @@ export function RootView({
         hints={footer.hints}
         status={
           <RootStatus
-            notice={menus.notice ?? linkNotice ?? sample.notice}
+            notice={
+              menus.notice ?? linkNotice ?? sample.notice ?? feedback.notice
+            }
             onReveal={handleReveal}
             outcome={exportOutcome}
           />

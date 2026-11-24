@@ -42,6 +42,7 @@ type CommandNavigation = Pick<
   | "openThemes"
 > & {
   addSample: (() => void) | null;
+  sendFeedback: () => void;
   exportAll: () => void;
   startMode: (prefix: string) => void;
 };
@@ -88,6 +89,7 @@ export const useRootSections = ({
     openImport,
     openThemes,
     addSample,
+    sendFeedback,
     exportAll,
     startMode,
   } = navigate;
@@ -109,6 +111,7 @@ export const useRootSections = ({
         openImport,
         openSettings,
         openThemes,
+        sendFeedback,
         startMode,
       }),
     [
@@ -125,6 +128,7 @@ export const useRootSections = ({
       openImport,
       openSettings,
       openThemes,
+      sendFeedback,
       startMode,
     ]
   );

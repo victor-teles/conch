@@ -26,6 +26,7 @@ const commands = rootCommands({
   openImport: vi.fn(),
   openSettings: vi.fn(),
   openThemes: vi.fn(),
+  sendFeedback: vi.fn(),
   startMode: vi.fn(),
 });
 const aiSetup = aiSetupCommand(vi.fn());
@@ -65,6 +66,7 @@ describe("buildRootSections", () => {
       "themes",
       "export-bundle",
       "import-bundle",
+      "send-feedback",
       "hide",
     ]);
   });

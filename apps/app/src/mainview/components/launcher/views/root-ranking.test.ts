@@ -21,6 +21,7 @@ const [command] = rootCommands({
   openImport: vi.fn(),
   openSettings: vi.fn(),
   openThemes: vi.fn(),
+  sendFeedback: vi.fn(),
   startMode: vi.fn(),
 });
 if (!command) {

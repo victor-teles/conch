@@ -205,6 +205,8 @@ export interface RpcSchema {
       response: DatabaseConnection;
     };
 
+    sendFeedback: { params: Record<string, never>; response: void };
+
     getUpdateChannel: {
       params: Record<string, never>;
       response: UpdateChannel;

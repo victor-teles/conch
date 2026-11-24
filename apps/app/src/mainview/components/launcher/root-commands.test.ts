@@ -21,6 +21,7 @@ const handlers = () => ({
   openImport: vi.fn(),
   openSettings: vi.fn(),
   openThemes: vi.fn(),
+  sendFeedback: vi.fn(),
   startMode: vi.fn(),
 });
 
@@ -90,8 +91,8 @@ describe("rootCommands", () => {
 
 describe("filterCommands", () => {
   it("returns every command for an empty or blank query", () => {
-    expect(filterCommands(commands(), "")).toHaveLength(14);
-    expect(filterCommands(commands(), "   ")).toHaveLength(14);
+    expect(filterCommands(commands(), "")).toHaveLength(15);
+    expect(filterCommands(commands(), "   ")).toHaveLength(15);
   });
 
   it("matches titles fuzzily", () => {

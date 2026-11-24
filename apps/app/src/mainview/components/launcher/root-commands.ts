@@ -10,6 +10,7 @@ import {
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
+  MessageSquareIcon,
   PaletteIcon,
   PlugIcon,
   PlusIcon,
@@ -47,6 +48,7 @@ interface RootCommandHandlers {
   openHistory: () => void;
   openSettings: () => void;
   openThemes: () => void;
+  sendFeedback: () => void;
   exportAll: () => void;
   openImport: () => void;
   dismiss: () => void;
@@ -73,6 +75,7 @@ export const rootCommands = ({
   openHistory,
   openSettings,
   openThemes,
+  sendFeedback,
   exportAll,
   openImport,
   dismiss,
@@ -200,6 +203,15 @@ export const rootCommands = ({
     run: openImport,
     subtitle: "From the clipboard or a .conch.json file",
     title: "Import Widgets and Boards…",
+  },
+  {
+    actionLabel: "Open",
+    icon: MessageSquareIcon,
+    id: "send-feedback",
+    keywords: ["bug", "problem", "report", "issue", "crash", "idea", "help"],
+    run: sendFeedback,
+    subtitle: "Opens a GitHub issue with your version filled in",
+    title: "Send Feedback",
   },
   {
     actionLabel: "Hide",

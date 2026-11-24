@@ -51,6 +51,7 @@ import {
 } from "@conch/rpc";
 import { defineElectrobunRPC, PATHS, Updater, Utils } from "electrobun/main";
 import { createHash } from "node:crypto";
+import os from "node:os";
 import path from "node:path";
 import { z } from "zod";
 
@@ -82,6 +83,7 @@ import {
   resolveSchemaName,
 } from "./connection-access.ts";
 import { createDownloads, writeExclusive } from "./downloads.ts";
+import { feedbackUrl } from "./feedback.ts";
 import {
   ACTION_RESPONSE_BYTES,
   fetchJson,
@@ -899,6 +901,17 @@ export function createAppRpcs(host: AppHost) {
     saveToDownloads: (params) => downloads.save(params, ["csv"]),
     saveWatch: ({ watch }) => watches.save(watch),
     saveWidget: ({ widget }) => widgets.saveWidget(widget),
+    sendFeedback: async () => {
+      const local = await Updater.getLocalInfo();
+      await Utils.openExternal(
+        feedbackUrl({
+          arch: process.arch,
+          channel: local.channel,
+          system: `macOS (Darwin ${os.release()})`,
+          version: local.version,
+        })
+      );
+    },
     setActiveConnection: async ({ active }) => {
       await writeActiveConnection(active);
     },
