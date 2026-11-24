@@ -37,11 +37,11 @@ function Keycap({
     <div
       style={{
         alignItems: "center",
-        background: `linear-gradient(180deg, oklch(0.31 0.008 48) 0%, oklch(0.26 0.007 45) 100%)`,
+        background: `linear-gradient(180deg, oklch(0.31 0 0) 0%, oklch(0.26 0 0) 100%)`,
         border: `1px solid ${COLOR.panelBorder}`,
         borderRadius: size * 0.2,
-        boxShadow: `inset 0 1px 0 ${COLOR.panelHighlight}, 0 ${TRAVEL * (1 - depth) + 2}px 0 oklch(0.14 0.006 34), 0 ${18 * (1 - depth) + 6}px ${36 - depth * 16}px -10px oklch(0 0 0 / 0.6)`,
-        color: depth > 0.5 ? COLOR.amber : COLOR.foreground,
+        boxShadow: `inset 0 1px 0 ${COLOR.panelHighlight}, 0 ${TRAVEL * (1 - depth) + 2}px 0 oklch(0.14 0 0), 0 ${18 * (1 - depth) + 6}px ${36 - depth * 16}px -10px oklch(0 0 0 / 0.6)`,
+        color: depth > 0.5 ? COLOR.brand : COLOR.foreground,
         display: "flex",
         fontFamily: FONT.sans,
         fontSize: size * 0.4,

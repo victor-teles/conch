@@ -20,7 +20,7 @@ export function ProgressHairline({ start }: { start: number }) {
     >
       <div
         style={{
-          background: `linear-gradient(90deg, transparent, ${COLOR.amber}, transparent)`,
+          background: `linear-gradient(90deg, transparent, ${COLOR.brand}, transparent)`,
           height: "100%",
           transform: `translateX(${phase * 140 - 40}%)`,
           width: "40%",

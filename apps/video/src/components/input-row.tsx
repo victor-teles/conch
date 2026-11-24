@@ -42,7 +42,7 @@ export function InputRow({ text, busy, caret, pressed }: InputRowProps) {
         {caret ? (
           <span
             style={{
-              background: COLOR.amber,
+              background: COLOR.brand,
               borderRadius: 1,
               height: 20,
               marginLeft: 1,
