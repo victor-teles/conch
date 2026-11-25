@@ -25,9 +25,9 @@ const {
   mcpRunDir,
   mcpServersPath,
   mcpSettingsPath,
+  sampleDatabasePath,
   tabsPath,
   themesPath,
-  updateChannelPath,
   writePermissionsPath,
 } = await import("./paths.ts");
 
@@ -58,9 +58,9 @@ describe("paths", () => {
       `${ROOT}/http-endpoints.enc`,
     ],
     [
-      "updateChannelPath",
-      () => updateChannelPath(),
-      `${ROOT}/update-channel.txt`,
+      "sampleDatabasePath",
+      () => sampleDatabasePath(),
+      `${ROOT}/sample/store.sqlite`,
     ],
   ])("%s returns the expected path", (_name, builder, expected) => {
     expect(builder()).toBe(expected);

@@ -26,7 +26,6 @@
     "fix": "ultracite fix",
     "fixtures:up": "docker compose -f infra/docker-compose.yaml up -d postgres",
     "fixtures:down": "docker compose -f infra/docker-compose.yaml stop postgres",
-    "prepare": "lefthook install",
     "test": "turbo test",
     "test:watch": "turbo test:watch"
   },
@@ -38,7 +37,6 @@
   "devDependencies": {
     "@conch/config": "workspace:*",
     "@typescript/native-preview": "catalog:",
-    "lefthook": "^2.1.6",
     "oxfmt": "latest",
     "oxlint": "latest",
     "turbo": "^2.6.3",

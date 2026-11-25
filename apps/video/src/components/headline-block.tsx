@@ -35,7 +35,7 @@ export function HeadlineBlock({
         style={{
           ...line(0),
           alignItems: "center",
-          color: COLOR.amber,
+          color: COLOR.brand,
           display: "flex",
           fontFamily: FONT.sans,
           fontSize: 22,
@@ -47,7 +47,7 @@ export function HeadlineBlock({
       >
         <span
           style={{
-            background: COLOR.amber,
+            background: COLOR.brand,
             borderRadius: 999,
             height: 8,
             width: 8,

@@ -85,6 +85,12 @@ async function main(): Promise<void> {
   try {
     launcher = createLauncher({
       hotkey: await readLauncherHotkey(),
+      // A system hot key fires while a board has focus, with no renderer to forward it.
+      onHotkeyPressed: () => {
+        returnWindowKey =
+          windows?.state(returnWindowKey).focusedWindowKey ?? returnWindowKey;
+      },
+      onInstallUpdate: rpcs.background.installUpdate,
       onWatchedOpened: rpcs.background.acknowledge,
       releaseFocus,
       rpc: rpcs.launcherRpc,

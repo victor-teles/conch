@@ -22,7 +22,11 @@ import type {
   WidgetDraft,
 } from "@conch/rpc";
 
-import { DEFAULT_CLIPBOARD_LOOKUPS, DEFAULT_LAUNCHER_HOTKEY } from "@conch/rpc";
+import {
+  DEFAULT_CLIPBOARD_LOOKUPS,
+  DEFAULT_LAUNCHER_HOTKEY,
+  SAMPLE_CONNECTION_ID,
+} from "@conch/rpc";
 
 import type { createMiniAppEmulator } from "@/lib/browser-mini-app-stub";
 
@@ -72,6 +76,36 @@ const readJson = (key: string): unknown => {
 const readConnections = (): DatabaseConnection[] => {
   const parsed = readJson(CONNECTIONS_KEY);
   return Array.isArray(parsed) ? (parsed as DatabaseConnection[]) : [];
+};
+
+const addSampleConnection = (): DatabaseConnection => {
+  const connections = readConnections();
+  const existing = connections.find(
+    (connection) => connection.id === SAMPLE_CONNECTION_ID
+  );
+  if (existing) {
+    return existing;
+  }
+  const sample: DatabaseConnection = {
+    createdAt: new Date().toISOString(),
+    database: "sample/store.sqlite",
+    emoji: "☕",
+    environment: "dev",
+    host: "",
+    id: SAMPLE_CONNECTION_ID,
+    lastConnectedAt: null,
+    name: "Sample Store",
+    password: "",
+    pinned: false,
+    port: 0,
+    type: "sqlite",
+    username: "",
+  };
+  localStorage.setItem(
+    CONNECTIONS_KEY,
+    JSON.stringify([...connections, sample])
+  );
+  return sample;
 };
 
 // Browser mode only backs vite-only dev and e2e; never persist credentials.
@@ -377,6 +411,7 @@ const createDispatcher = (emit: EmitMessage) => {
       watches.acknowledgeAlert(payload as { watchId: string }),
     addBoardTile: (payload) =>
       boards.addBoardTile(payload as { boardId: string; widgetId: string }),
+    addSampleDatabase: () => addSampleConnection(),
     applyImport: (payload) => bundles.applyImport(payload),
     ask: (payload) => asks.ask(payload as AskParams),
     cancelAsk: (payload) => asks.cancel((payload as { askId: string }).askId),
@@ -505,6 +540,7 @@ const createDispatcher = (emit: EmitMessage) => {
     saveWatch: (payload) => watches.saveWatch(payload as { watch: WatchDraft }),
     saveWidget: (payload) =>
       widgets.saveWidget(payload as { widget: WidgetDraft }),
+    sendFeedback: () => null,
     setActiveConnection: (payload) =>
       writeActiveConnection(
         (payload as { active: ActiveConnection | null }).active

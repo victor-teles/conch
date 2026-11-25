@@ -33,6 +33,28 @@ const renderLauncher = () =>
     </AppProviders>
   );
 
+const opacityOf = (element: HTMLElement | null) =>
+  element ? getComputedStyle(element).opacity : "";
+
+const sampleMidwayOpacities = (element: HTMLElement | null) => {
+  const midway = new Set<string>();
+  let sampling = true;
+  const sample = () => {
+    const opacity = opacityOf(element);
+    if (opacity !== "0" && opacity !== "1") {
+      midway.add(opacity);
+    }
+    if (sampling) {
+      requestAnimationFrame(sample);
+    }
+  };
+  sample();
+  return () => {
+    sampling = false;
+    return [...midway];
+  };
+};
+
 const presenceOf = (screen: ReturnType<typeof render>) =>
   screen.container.querySelector<HTMLElement>("[data-presence]")?.dataset
     .presence;
@@ -258,10 +280,15 @@ describe("launcherPanel", () => {
       .element(screen.getByRole("combobox", { name: "Search commands" }))
       .toBeVisible();
 
-    const started = performance.now();
+    const panel =
+      screen.container.querySelector<HTMLElement>("[data-presence]");
+    await expect.poll(() => opacityOf(panel)).toBe("1");
+    const stopSampling = sampleMidwayOpacities(panel);
+
     emitIpcMessage("launcherDismiss");
     await expect.poll(() => hideLauncher.mock.calls.length).toBe(1);
-    expect(performance.now() - started).toBeLessThan(150);
+
+    expect(stopSampling()).toStrictEqual([]);
   });
 
   it("fits the panel inside the window room bun reports", async () => {

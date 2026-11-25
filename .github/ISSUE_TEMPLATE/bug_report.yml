@@ -1,0 +1,51 @@
+name: Bug report
+description: Something in Conch does not work the way it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. Please do not paste passwords, connection strings or private data.
+        For a security problem, use "Report a vulnerability" under the Security tab instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, and what Conch did.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Conch version
+      description: Settings → About. The "Send Feedback" command fills this in for you.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Database engine
+      options:
+        - Not about a database
+        - PostgreSQL
+        - MySQL
+        - SQLite
+        - DuckDB
+        - MongoDB
+        - Redis
+        - Microsoft SQL Server
+        - ClickHouse
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: "macOS 15.2, MacBook Pro M3"

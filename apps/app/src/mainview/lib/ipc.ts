@@ -656,10 +656,10 @@ export const getAppVersion = (): Promise<string> =>
 
 export const getUpdateChannel = (): Promise<UpdateChannel> =>
   callRpc(() => request.getUpdateChannel({} as never));
-export const setUpdateChannel = (
-  channel: UpdateChannel
-): Promise<UpdateChannel> =>
-  callRpc(() => request.setUpdateChannel({ channel }));
+export const addSampleDatabase = (): Promise<DatabaseConnection> =>
+  callRpc(() => request.addSampleDatabase({} as never));
+export const sendFeedback = (): Promise<void> =>
+  callRpc(() => request.sendFeedback({} as never));
 export const checkForUpdate = (): Promise<AvailableUpdate | null> =>
   callRpc(() => request.checkForUpdate({} as never));
 export const installUpdate = (): Promise<boolean> =>

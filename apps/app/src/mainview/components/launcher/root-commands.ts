@@ -4,11 +4,13 @@ import {
   ActivityIcon,
   AppWindowIcon,
   ArrowLeftRightIcon,
+  DatabaseZapIcon,
   DownloadIcon,
   EyeOffIcon,
   HistoryIcon,
   KeyRoundIcon,
   LayoutGridIcon,
+  MessageSquareIcon,
   PaletteIcon,
   PlugIcon,
   PlusIcon,
@@ -37,6 +39,7 @@ export interface LauncherCommand {
 }
 
 interface RootCommandHandlers {
+  addSample: (() => void) | null;
   addConnection: () => void;
   newBoard: () => void;
   newApp: () => void;
@@ -45,13 +48,25 @@ interface RootCommandHandlers {
   openHistory: () => void;
   openSettings: () => void;
   openThemes: () => void;
+  sendFeedback: () => void;
   exportAll: () => void;
   openImport: () => void;
   dismiss: () => void;
   startMode: (prefix: string) => void;
 }
 
+const sampleCommand = (run: () => void): LauncherCommand => ({
+  actionLabel: "Add",
+  icon: DatabaseZapIcon,
+  id: "add-sample-database",
+  keywords: ["sample", "demo", "example", "try", "test", "data"],
+  run,
+  subtitle: "A small store to ask questions of, with three widgets",
+  title: "Try the Sample Database",
+});
+
 export const rootCommands = ({
+  addSample,
   addConnection,
   newBoard,
   newApp,
@@ -60,6 +75,7 @@ export const rootCommands = ({
   openHistory,
   openSettings,
   openThemes,
+  sendFeedback,
   exportAll,
   openImport,
   dismiss,
@@ -74,6 +90,7 @@ export const rootCommands = ({
     subtitle: "PostgreSQL, MySQL, SQLite and more",
     title: "Add Connection",
   },
+  ...(addSample ? [sampleCommand(addSample)] : []),
   {
     actionLabel: "Create",
     icon: LayoutGridIcon,
@@ -186,6 +203,15 @@ export const rootCommands = ({
     run: openImport,
     subtitle: "From the clipboard or a .conch.json file",
     title: "Import Widgets and Boards…",
+  },
+  {
+    actionLabel: "Open",
+    icon: MessageSquareIcon,
+    id: "send-feedback",
+    keywords: ["bug", "problem", "report", "issue", "crash", "idea", "help"],
+    run: sendFeedback,
+    subtitle: "Opens a GitHub issue with your version filled in",
+    title: "Send Feedback",
   },
   {
     actionLabel: "Hide",

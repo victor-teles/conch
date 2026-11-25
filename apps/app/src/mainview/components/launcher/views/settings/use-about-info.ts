@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { UpdateChannel } from "@/lib/ipc";
 
-import { getAppVersion, getUpdateChannel, setUpdateChannel } from "@/lib/ipc";
+import { getAppVersion, getUpdateChannel } from "@/lib/ipc";
 
 const settle = async <T>(promise: Promise<T>): Promise<T | null> => {
   try {
@@ -34,15 +34,5 @@ export const useAboutInfo = () => {
     };
   }, []);
 
-  const changeChannel = useCallback(
-    async (next: UpdateChannel) => {
-      const previous = channel;
-      setChannel(next);
-      const confirmed = await settle(setUpdateChannel(next));
-      setChannel(confirmed ?? previous);
-    },
-    [channel]
-  );
-
-  return { changeChannel, channel, version };
+  return { channel, version };
 };

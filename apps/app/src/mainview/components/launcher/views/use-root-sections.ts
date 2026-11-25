@@ -40,7 +40,12 @@ type CommandNavigation = Pick<
   | "openActivity"
   | "openImport"
   | "openThemes"
-> & { exportAll: () => void; startMode: (prefix: string) => void };
+> & {
+  addSample: (() => void) | null;
+  sendFeedback: () => void;
+  exportAll: () => void;
+  startMode: (prefix: string) => void;
+};
 
 interface UseRootSectionsOptions {
   query: string;
@@ -83,6 +88,8 @@ export const useRootSections = ({
     openActivity,
     openImport,
     openThemes,
+    addSample,
+    sendFeedback,
     exportAll,
     startMode,
   } = navigate;
@@ -93,6 +100,7 @@ export const useRootSections = ({
     () =>
       rootCommands({
         addConnection: () => editConnection(null),
+        addSample,
         dismiss,
         exportAll,
         newApp: () => buildApp("", activeId),
@@ -103,10 +111,12 @@ export const useRootSections = ({
         openImport,
         openSettings,
         openThemes,
+        sendFeedback,
         startMode,
       }),
     [
       activeId,
+      addSample,
       buildApp,
       dismiss,
       editConnection,
@@ -118,6 +128,7 @@ export const useRootSections = ({
       openImport,
       openSettings,
       openThemes,
+      sendFeedback,
       startMode,
     ]
   );

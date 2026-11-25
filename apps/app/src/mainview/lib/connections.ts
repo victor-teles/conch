@@ -1,6 +1,7 @@
 import type { DatabaseConnection as IpcDatabaseConnection } from "@/lib/ipc";
 
 import {
+  addSampleDatabase as ipcAddSampleDatabase,
   getConnections as ipcGetConnections,
   saveConnections as ipcSaveConnections,
 } from "@/lib/ipc";
@@ -82,6 +83,11 @@ export const getConnections = async (): Promise<DatabaseConnection[]> => {
   return connections.map((c) =>
     normalizeConnection(c as unknown as DatabaseConnection)
   );
+};
+
+export const addSampleConnection = async (): Promise<DatabaseConnection> => {
+  const connection = await ipcAddSampleDatabase();
+  return normalizeConnection(connection as unknown as DatabaseConnection);
 };
 
 const writeConnections = async (

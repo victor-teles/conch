@@ -10,6 +10,7 @@ import { rankRootItems } from "./root-ranking";
 
 const [command] = rootCommands({
   addConnection: vi.fn(),
+  addSample: null,
   dismiss: vi.fn(),
   exportAll: vi.fn(),
   newApp: vi.fn(),
@@ -20,6 +21,7 @@ const [command] = rootCommands({
   openImport: vi.fn(),
   openSettings: vi.fn(),
   openThemes: vi.fn(),
+  sendFeedback: vi.fn(),
   startMode: vi.fn(),
 });
 if (!command) {

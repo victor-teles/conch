@@ -1,5 +1,7 @@
 import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from "remotion";
 
+import type { Edit } from "@/data/footage";
+
 import { HeadlineBlock } from "@/components/headline-block";
 import { PanelFootage } from "@/components/panel-footage";
 import { Stage } from "@/components/stage";
@@ -8,7 +10,7 @@ import { fadeIn, fadeOut } from "@/lib/anim";
 
 import type { TimedClip, TimedShot } from "./footage-timeline";
 
-import { DIP_FRAMES, FOOTAGE } from "./footage-timeline";
+import { DIP_FRAMES, timeFootage } from "./footage-timeline";
 
 const PANEL_SCALE = 0.82;
 const PANEL_RIGHT = 72;
@@ -18,7 +20,7 @@ const HEADLINE_TOP = PANEL_TOP + 60;
 const HEADLINE_WIDTH = 430;
 const DRIFT = 0.012;
 
-function ClipFootage({ clip }: { clip: TimedClip }) {
+function ClipFootage({ clip, take }: { clip: TimedClip; take: string }) {
   const frame = useCurrentFrame();
   const opacity = Math.min(
     clip.fadeIn === 0 ? 1 : fadeIn(frame, 0, clip.fadeIn),
@@ -28,14 +30,24 @@ function ClipFootage({ clip }: { clip: TimedClip }) {
   );
   return (
     <div style={{ opacity }}>
-      <PanelFootage scale={PANEL_SCALE} trimBefore={clip.trimBefore} />
+      <PanelFootage
+        scale={PANEL_SCALE}
+        take={take}
+        trimBefore={clip.trimBefore}
+      />
     </div>
   );
 }
 
-function Panel() {
+interface PanelProps {
+  clips: readonly TimedClip[];
+  duration: number;
+  take: string;
+}
+
+function Panel({ clips, duration, take }: PanelProps) {
   const frame = useCurrentFrame();
-  const drift = interpolate(frame, [0, FOOTAGE.duration], [1, 1 + DRIFT]);
+  const drift = interpolate(frame, [0, duration], [1, 1 + DRIFT]);
   return (
     <AbsoluteFill
       style={{
@@ -53,13 +65,13 @@ function Panel() {
           width: PANEL_CROP.width * PANEL_SCALE,
         }}
       >
-        {FOOTAGE.clips.map((clip) => (
+        {clips.map((clip) => (
           <Sequence
             durationInFrames={clip.duration}
             from={clip.start}
             key={clip.id}
           >
-            <ClipFootage clip={clip} />
+            <ClipFootage clip={clip} take={take} />
           </Sequence>
         ))}
       </div>
@@ -85,11 +97,16 @@ function ShotHeadline({ timed }: { timed: TimedShot }) {
   );
 }
 
-export function DemoScene() {
+export function DemoScene({ edit }: { edit: Edit }) {
+  const footage = timeFootage(edit.shots);
   return (
     <Stage>
-      <Panel />
-      {FOOTAGE.shots.map((timed) => (
+      <Panel
+        clips={footage.clips}
+        duration={footage.duration}
+        take={edit.take}
+      />
+      {footage.shots.map((timed) => (
         <Sequence
           durationInFrames={timed.duration}
           from={timed.start}

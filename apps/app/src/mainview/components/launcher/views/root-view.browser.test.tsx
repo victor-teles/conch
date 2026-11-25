@@ -128,6 +128,77 @@ describe("rootView without connections", () => {
     expect(screen.container).toMatchSnapshot();
   });
 
+  it("adds the sample database, activates it and stops offering it", async () => {
+    const sample = makeConnection({
+      database: "/tmp/store.sqlite",
+      id: "sample-store",
+      name: "Sample Store",
+      type: "sqlite",
+    });
+    const addSampleDatabase = vi.fn(() => sample);
+    const store = mockLauncherIpc({ handlers: { addSampleDatabase } });
+    const screen = renderRoot();
+
+    await option(screen, /Try the Sample Database/).click();
+
+    await expect.element(option(screen, /Sample Store/)).toBeVisible();
+    await expect
+      .element(screen.getByText("Sample Store is ready"))
+      .toBeVisible();
+    expect(addSampleDatabase).toHaveBeenCalledOnce();
+    expect(store.active).toStrictEqual({
+      connectionId: "sample-store",
+      database: "/tmp/store.sqlite",
+    });
+    await expect
+      .poll(() => option(screen, /Try the Sample Database/).query())
+      .toBeNull();
+    expect(screen.getByText("No databases yet").query()).toBeNull();
+  });
+
+  it("says so when the sample database cannot be added", async () => {
+    mockLauncherIpc({
+      handlers: {
+        addSampleDatabase: vi.fn().mockRejectedValue(new Error("disk full")),
+      },
+    });
+    const screen = renderRoot();
+
+    await option(screen, /Try the Sample Database/).click();
+
+    await expect.element(screen.getByText("disk full")).toBeVisible();
+    await expect
+      .element(option(screen, /Try the Sample Database/))
+      .toBeVisible();
+  });
+
+  it("opens the feedback page and gets out of the way", async () => {
+    const sendFeedback = vi.fn(() => null);
+    mockLauncherIpc({ handlers: { sendFeedback } });
+    const onDismiss = vi.fn();
+    const screen = renderRoot({ initialQuery: "bug", onDismiss });
+
+    await option(screen, /Send Feedback/).click();
+
+    await expect.poll(() => onDismiss.mock.calls.length).toBe(1);
+    expect(sendFeedback).toHaveBeenCalledOnce();
+  });
+
+  it("stays open and says so when the feedback page cannot open", async () => {
+    mockLauncherIpc({
+      handlers: {
+        sendFeedback: vi.fn().mockRejectedValue(new Error("no browser")),
+      },
+    });
+    const onDismiss = vi.fn();
+    const screen = renderRoot({ initialQuery: "feedback", onDismiss });
+
+    await option(screen, /Send Feedback/).click();
+
+    await expect.element(screen.getByText("no browser")).toBeVisible();
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
   it("opens History with ⌘Y and loads only the recents it shows", async () => {
     const listRecentAsks = vi.fn(() => []);
     mockLauncherIpc({ handlers: { listRecentAsks } });

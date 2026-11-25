@@ -14,6 +14,7 @@ import type { TrayStatus } from "./tray-status.ts";
 
 import { createMacAccessibility } from "./accessibility-native.ts";
 import { requireAccessibility } from "./accessibility.ts";
+import { createSystemHotkey } from "./hotkey-native.ts";
 import { blurResponse } from "./launcher-blur.ts";
 import {
   heightRoom,
@@ -22,6 +23,7 @@ import {
   resizedFrame,
   workAreaForPoint,
 } from "./launcher-geometry.ts";
+import { registerLauncherHotkey } from "./launcher-hotkey.ts";
 import { createNavigationGate } from "./launcher-navigation.ts";
 import { summonPayload } from "./summon-payload.ts";
 import {
@@ -40,6 +42,7 @@ export interface LauncherController {
   runModal<T>(openPanel: () => Promise<T>): Promise<T>;
   setTrayStatus(status: TrayStatus): void;
   setTrayActivity(line: string | null): void;
+  setTrayUpdate(version: string | null): void;
   show(): void;
   toggle(): void;
 }
@@ -51,6 +54,8 @@ interface CreateLauncherOptions {
   releaseFocus: () => void;
   summonOffer: () => LookupValue | null;
   onWatchedOpened: (watchId: string) => void;
+  onInstallUpdate: () => void;
+  onHotkeyPressed: () => void;
 }
 
 const cursorWorkArea = () => {
@@ -66,6 +71,8 @@ export function createLauncher({
   releaseFocus,
   summonOffer,
   onWatchedOpened,
+  onInstallUpdate,
+  onHotkeyPressed,
 }: CreateLauncherOptions): LauncherController {
   let contentHeight = LAUNCHER_MIN_HEIGHT;
   let room = heightRoom(cursorWorkArea());
@@ -74,6 +81,7 @@ export function createLauncher({
   const trayState = {
     agentLine: null as string | null,
     status: EMPTY_TRAY_STATUS,
+    updateVersion: null as string | null,
   };
 
   const window = new BrowserWindow({
@@ -113,9 +121,9 @@ export function createLauncher({
   });
   // Native menu rebuilds are not free; skip them when nothing visible changed.
   const renderTray = () => {
-    const { status, agentLine } = trayState;
+    const { status, agentLine, updateVersion } = trayState;
     const title = trayTitle(status);
-    const menu = trayMenu(status, agentLine);
+    const menu = trayMenu(status, agentLine, updateVersion);
     const menuKey = JSON.stringify(menu);
     const image = agentLine ? TRAY_IMAGES.active : TRAY_IMAGES.idle;
     if (title !== shownTray.title) {
@@ -137,6 +145,10 @@ export function createLauncher({
   };
   const setTrayActivity = (line: string | null) => {
     trayState.agentLine = line;
+    renderTray();
+  };
+  const setTrayUpdate = (version: string | null) => {
+    trayState.updateVersion = version;
     renderTray();
   };
   renderTray();
@@ -171,6 +183,7 @@ export function createLauncher({
     },
     setTrayActivity,
     setTrayStatus,
+    setTrayUpdate,
     show,
     toggle: () => {
       if (window.isVisible()) {
@@ -194,14 +207,24 @@ export function createLauncher({
     }
   });
 
-  if (!GlobalShortcut.register(hotkey, controller.toggle)) {
-    console.error(`[launcher] could not register global shortcut ${hotkey}`);
-  }
-  const accessibility = createMacAccessibility();
+  const onHotkey = () => {
+    onHotkeyPressed();
+    controller.toggle();
+  };
+  const registration = registerLauncherHotkey({
+    accelerator: hotkey,
+    monitor: GlobalShortcut,
+    onPress: onHotkey,
+    system: createSystemHotkey(),
+  });
+  console.info(`[launcher] hotkey ${hotkey}: ${registration}`);
+  // Only the event monitor needs Accessibility trust to see keys.
+  const accessibility =
+    registration === "monitor" ? createMacAccessibility() : null;
   if (accessibility) {
     requireAccessibility(accessibility, () => {
       GlobalShortcut.unregister(hotkey);
-      GlobalShortcut.register(hotkey, controller.toggle);
+      GlobalShortcut.register(hotkey, onHotkey);
     });
   }
 
@@ -218,6 +241,10 @@ export function createLauncher({
       }
       case "quit": {
         Utils.quit();
+        break;
+      }
+      case "update": {
+        onInstallUpdate();
         break;
       }
       case "watches": {

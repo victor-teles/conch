@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "render:real": "remotion render src/index.ts ShowcaseReal out/showcase-real.mp4",
+    "render:reuse": "remotion render src/index.ts ShowcaseReuse out/showcase-reuse.mp4",
+    "render:tour": "remotion render src/index.ts ShowcaseTour out/showcase-tour.mp4",
     "capture:seed": "./capture/seed.sh"
   },
   "dependencies": {

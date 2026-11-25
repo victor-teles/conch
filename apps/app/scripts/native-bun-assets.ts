@@ -5,6 +5,7 @@ export const APP_DIR = path.dirname(
   path.dirname(fileURLToPath(import.meta.url))
 );
 export const ASSETS_BUN_DIR = path.join(APP_DIR, "assets", "bun");
+export const HOTKEY_LIBRARY = "libconch-hotkey.dylib";
 
 const PACKAGES_DIR = path.join(APP_DIR, "..", "..", "packages");
 

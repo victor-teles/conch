@@ -15,6 +15,7 @@ import { buildRootSections, flattenSections } from "./root-items";
 
 const commands = rootCommands({
   addConnection: vi.fn(),
+  addSample: null,
   dismiss: vi.fn(),
   exportAll: vi.fn(),
   newApp: vi.fn(),
@@ -25,6 +26,7 @@ const commands = rootCommands({
   openImport: vi.fn(),
   openSettings: vi.fn(),
   openThemes: vi.fn(),
+  sendFeedback: vi.fn(),
   startMode: vi.fn(),
 });
 const aiSetup = aiSetupCommand(vi.fn());
@@ -64,6 +66,7 @@ describe("buildRootSections", () => {
       "themes",
       "export-bundle",
       "import-bundle",
+      "send-feedback",
       "hide",
     ]);
   });

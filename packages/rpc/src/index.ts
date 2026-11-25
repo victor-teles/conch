@@ -65,6 +65,7 @@ export type { SchemaPeek } from "./sql-run.ts";
 export {
   DEFAULT_CLIPBOARD_LOOKUPS,
   DEFAULT_LAUNCHER_HOTKEY,
+  SAMPLE_CONNECTION_ID,
 } from "./schema.ts";
 export type {
   AvailableUpdate,

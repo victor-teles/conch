@@ -1,7 +1,5 @@
 import type { Shot } from "@/data/footage";
 
-import { SHOTS } from "@/data/footage";
-
 export const FPS = 30;
 export const DIP_FRAMES = 4;
 
@@ -53,6 +51,3 @@ export const timeFootage = (shots: readonly Shot[]): FootageTimeline => {
   }
   return { clips, duration: cursor, shots: timedShots };
 };
-
-export const FOOTAGE = timeFootage(SHOTS);
-export const FOOTAGE_DURATION = FOOTAGE.duration;

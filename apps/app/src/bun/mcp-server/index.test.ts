@@ -212,6 +212,23 @@ describe("createMcpServerHost", () => {
     );
   });
 
+  it("refuses to copy a setup that points into a translocated app", async () => {
+    const { host, writeClipboard } = setup({
+      paths: {
+        bridgePath:
+          "/private/var/folders/x/T/AppTranslocation/1A2B/d/Conch.app/Contents/Resources/app/bun/mcp-bridge.js",
+        bunPath: "/Applications/Conch.app/Contents/MacOS/bun",
+        runDir: "",
+        socketPath: "",
+      },
+    });
+
+    await expect(host.copyClientConfig("json")).rejects.toMatchObject({
+      code: "APP_NOT_INSTALLED",
+    });
+    expect(writeClipboard).not.toHaveBeenCalled();
+  });
+
   it("reports a start failure and retries on the next save", async () => {
     const { host, runDir } = setup();
     await fs.mkdir(runDir, { recursive: true });

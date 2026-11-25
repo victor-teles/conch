@@ -1,0 +1,19 @@
+name: Idea
+description: Something Conch could do
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The situation you are in, not the feature. "When I debug a failed order, I need to…"
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: How do you do it today?
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?

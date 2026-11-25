@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   APP_DIR,
   ASSETS_BUN_DIR,
+  HOTKEY_LIBRARY,
   nativeBunModules,
 } from "./native-bun-assets.ts";
 
@@ -35,3 +36,44 @@ if (!bridge.success) {
 console.log(
   `[mcp-bridge] src/mcp-bridge/main.ts → ${path.relative(APP_DIR, path.join(ASSETS_BUN_DIR, "mcp-bridge.js"))}`
 );
+
+// Without clang (no Xcode command line tools) the app still runs: the launcher
+// falls back to Electrobun's event monitor.
+const buildHotkeyLibrary = (): void => {
+  if (process.platform !== "darwin") {
+    return;
+  }
+  const source = path.join(APP_DIR, "native", "hotkey.c");
+  const output = path.join(ASSETS_BUN_DIR, HOTKEY_LIBRARY);
+  const clang = Bun.spawnSync([
+    "xcrun",
+    "clang",
+    "-dynamiclib",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-arch",
+    "arm64",
+    "-arch",
+    "x86_64",
+    "-mmacosx-version-min=11.0",
+    "-framework",
+    "Carbon",
+    "-o",
+    output,
+    source,
+  ]);
+  if (clang.exitCode !== 0) {
+    if (process.env.CI) {
+      throw new Error(`[hotkey] clang failed: ${clang.stderr.toString()}`);
+    }
+    console.warn(
+      `[hotkey] skipped, clang is unavailable: ${clang.stderr.toString().trim()}`
+    );
+    return;
+  }
+  console.log(`[hotkey] native/hotkey.c → ${path.relative(APP_DIR, output)}`);
+};
+
+buildHotkeyLibrary();
